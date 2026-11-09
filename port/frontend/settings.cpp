@@ -886,12 +886,14 @@ namespace ps5settings
 			const N3ds& from = Handheld(after, side);
 			to.motion = from.motion;
 			to.deadzone = from.deadzone;
-			to.performance = from.performance;
 			to.buttons = from.buttons;
-			to.nxDeadzone = from.nxDeadzone;
-			// the Switch menu's Vibration is Settings > Controls' own, every side's
 			if (side == "switch" || side == "switch2")
-				merged.rumble = after.rumble;
+				merged.rumble = after.rumble; // the Switch menu's Vibration is shared by every side
+			else
+			{
+				to.performance = from.performance;
+				to.nxDeadzone = from.nxDeadzone;
+			}
 		}
 		const std::string key = GameKey(side, titleId);
 		const auto own = all.games.find(key);

@@ -50,5 +50,13 @@ int main()
 	Check(Value(perGame, "switch2", "nxDeadzone", value) && value == 20 &&
 		  Value(perGame, "switch2", "performance", value) && value == 1,
 		"Switch 2 deadzone and HUD resolve through the shared per-game settings adapter");
+	auto after = perGame;
+	SetValue(after, "switch2", "volume", 30);
+	SaveChanges("switch2", title, perGame, after);
+	const auto saved = Load();
+	Check(saved.nx2.nxDeadzone == 8 && !saved.nx2.performance,
+		"Changing another menu setting does not copy the game's controls or HUD to side defaults");
+	Check(ForGame(saved, "switch2", title).nx2.nxDeadzone == 20 && ForGame(saved, "switch2", title).nx2.performance,
+		"Saving menu changes preserves the game's controls and HUD overrides");
 	return failures ? 1 : 0;
 }
