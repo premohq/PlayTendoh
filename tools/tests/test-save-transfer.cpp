@@ -103,9 +103,10 @@ int main(int argc, char** argv)
 	const std::string profileB = "FFEEDDCCBBAA99887766554433221100";
 	Put(standalone / profileA / "0100ABCDEF123000/main", "standalone player A");
 	Put(standalone / profileB / "0100ABCDEF124000/main", "other game");
+	Put(standalone / std::string(32, '0') / "0100ABCDEF123000/main", "standalone device save");
 	const auto standaloneChoices = ProsperoEdenChoices(standalone.string(), id, error);
 	Check(standaloneChoices.size() == 1 && standaloneChoices[0].profileId == profileA,
-		"standalone ProsperoEden discovery lists only profiles with this game's save");
+		"standalone ProsperoEden discovery lists only account profiles with this game's save");
 	sources = standaloneChoices.empty() ? std::vector<Source>{} : Discover(standaloneChoices[0].folder, id, error);
 	Check(sources.size() == 1 && sources[0].kind == Kind::Account, "standalone profile save is imported as the account save");
 	Check(Import(sources, account.string(), device.string(), recovery.string(), kept, error) &&

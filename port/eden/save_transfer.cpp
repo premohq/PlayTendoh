@@ -182,7 +182,8 @@ namespace ps5eden::transfer
 			for (const auto& entry : entries)
 			{
 				const std::string profile = entry.path().filename().string();
-				if (profile.size() != 32 || !std::all_of(profile.begin(), profile.end(), [](unsigned char c) { return std::isxdigit(c); }))
+				if (profile.size() != 32 || profile == std::string(32, '0') ||
+					!std::all_of(profile.begin(), profile.end(), [](unsigned char c) { return std::isxdigit(c); }))
 					continue;
 				const auto profileStatus = ps5files::OwnStatus(entry.path(), statusError);
 				if (statusError == std::errc::no_such_file_or_directory) { statusError.clear(); continue; }
