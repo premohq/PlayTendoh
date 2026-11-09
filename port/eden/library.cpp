@@ -434,7 +434,7 @@ namespace ps5eden
 
 	std::string DefaultGamesFolder(bool switch2Side)
 	{
-		return (switch2Side ? Switch2FilesFolder() : GameFilesFolder()) + "/roms";
+		return (switch2Side ? Switch2FilesFolder() : DataFolder()) + "/roms";
 	}
 
 	std::string Switch2FilesFolder()
@@ -473,7 +473,7 @@ namespace ps5eden
 
 	std::string ScanFolder(const std::string& folder, bool switch2Side)
 	{
-		return folder.empty() || folder == DefaultGamesFolder(switch2Side) ? DefaultGamesFolder(switch2Side) : folder;
+		return folder.empty() || folder == DefaultGamesFolder(switch2Side) ? GameFilesFolder(switch2Side) + "/roms" : folder;
 	}
 
 	bool KeysFound()
