@@ -6,6 +6,7 @@
 
 #include "shell_internal.h"
 #include "../actions.h"
+#include "../../app/boxart.h"
 #include "../../app/emulator.h"
 
 #include <algorithm>
@@ -30,6 +31,11 @@ namespace ps5shell
 			m_hubFrom = ScreenId::Library;
 		m_hubAction = 0;
 		m_hubAbout = false;
+		m_caseInspect = false;
+		m_caseOpen = false;
+		m_caseDisc = false;
+		m_caseAngle = 0;
+		m_caseZoom = 1;
 		m_hubScroll.Snap(0);
 		m_onBar = false;
 		Show(ScreenId::Hub);
@@ -44,11 +50,50 @@ namespace ps5shell
 			return;
 		}
 		const Button b = press.button;
+		if (m_caseInspect)
+		{
+			switch (b)
+			{
+			case Button::Circle:
+				if (m_caseDisc) { m_caseDisc = false; m_feedback.Play(ui::Cue::Back); break; }
+				[[fallthrough]];
+			case Button::Triangle: m_caseInspect = false; m_feedback.Play(ui::Cue::Back); break;
+			case Button::Left: m_caseAngle -= 0.22f; m_feedback.Play(ui::Cue::Focus); break;
+			case Button::Right: m_caseAngle += 0.22f; m_feedback.Play(ui::Cue::Focus); break;
+			case Button::Up: m_caseZoom = std::min(1.5f, m_caseZoom + 0.12f); m_feedback.Play(ui::Cue::Focus); break;
+			case Button::Down: m_caseZoom = std::max(0.65f, m_caseZoom - 0.12f); m_feedback.Play(ui::Cue::Focus); break;
+			case Button::Square:
+				m_caseDisc = !m_caseDisc;
+				m_caseOpen = true;
+				m_caseAngle = 0;
+				m_caseZoom = 1;
+				m_feedback.Play(ui::Cue::Select);
+				break;
+			case Button::Cross: m_caseOpen = !m_caseOpen; m_feedback.Play(ui::Cue::Select); break;
+			default: break;
+			}
+			return;
+		}
 		// Play, Graphic packs (the Wii U's), Game settings, the Game menu
 		const bool packs = IsWiiU() && m_status.coreReady;
 		const int actions = packs ? 4 : 3;
 		switch (b)
 		{
+		case Button::Triangle:
+			if (!IsRetro() || IsPorpoise())
+			{
+				const auto& game = m_games[m_hubGame].entry.game;
+				const auto system = BoxOf(game);
+				ps5boxart::Fetch(system, {game.gameId}, ps5boxart::Art::Back);
+				if (IsWiiU() || IsPorpoise()) ps5boxart::Fetch(system, {game.gameId}, ps5boxart::Art::Disc);
+			}
+			m_caseInspect = true;
+			m_caseOpen = false;
+			m_caseDisc = false;
+			m_caseAngle = 0;
+			m_caseZoom = 1;
+			m_feedback.Play(ui::Cue::Select);
+			break;
 		case Button::Circle:
 			if (m_hubAbout)
 			{
@@ -148,6 +193,114 @@ namespace ps5shell
 		}
 	}
 
+	void Shell::CaseDraw(Canvas& canvas, Game& game)
+	{
+		// A small projected case inside the native launcher. The cover is a textured face; the
+		// tray, spine and disc are drawn by the same Vulkan UI kit as the rest of the shell.
+		canvas.Rect({0, 0, 1920, 1080}, 0, 0xe80d0f18);
+		canvas.Text(Style({28, ui::Weight::SemiBold, 1.0f}), kSafeX, 74, game.entry.game.name, 0xffffffff, 1700, 1);
+		const auto system = BoxOf(game.entry.game);
+		const std::string& id = game.entry.game.gameId;
+		const bool discMedia = IsWiiU() || IsPorpoise();
+		const bool remoteArt = !IsRetro() || IsPorpoise();
+		const ui::Picture& backArt = m_images->Get(!remoteArt ? std::string() : ps5boxart::Path(system, id, ps5boxart::Art::Back));
+		const ui::Picture& discArt = m_images->Get(!remoteArt ? std::string() : ps5boxart::Path(system, id, ps5boxart::Art::Disc));
+		const float w = IsWiiU() ? 420.0f : 490.0f, h = IsWiiU() ? 610.0f : 500.0f;
+		const float angle = m_caseAngle, cs = std::cos(angle), sn = std::sin(angle);
+		auto project = [&](float x, float y, float z) -> ui::Point {
+			const float rx = x * cs + z * sn, rz = z * cs - x * sn;
+			const float scale = 850.0f / (850.0f - rz) * m_caseZoom;
+			return {960 + rx * scale, 530 + y * scale};
+		};
+		auto plane = [&](float z) {
+			return std::array<ui::Point, 4>{project(-w / 2, -h / 2, z), project(w / 2, -h / 2, z),
+				project(w / 2, h / 2, z), project(-w / 2, h / 2, z)};
+		};
+		if (m_caseDisc && !discMedia)
+		{
+			// Every other side can inspect its media too, using the game's existing cover.
+			const auto media = plane(0);
+			const ui::Picture& art = Cover(game);
+			if (cs >= 0) canvas.ImageQuad(art.texture, media, art.texture ? 0xffffffff : Accent());
+			else canvas.ImageQuad(0, media, 0xff343946);
+			if (!art.texture && cs > 0.6f)
+				canvas.Text(Style({24, ui::Weight::SemiBold, 1.0f}), media[0].x + 24, media[0].y + 60,
+					game.entry.game.name, 0xffffffff, std::max(1.0f, media[1].x - media[0].x - 48), 3);
+			return;
+		}
+		if (m_caseDisc)
+		{
+			// Lift the disc out of its tray for an unobstructed view of either face.
+			const float radius = 250 * m_caseZoom;
+			const float width = std::max(3.0f, radius * std::fabs(cs));
+			const Box disc{960 - width, 530 - radius, width * 2, radius * 2};
+			canvas.EllipseGradient(disc, cs >= 0 ? Accent() : 0xffe8ebef, cs >= 0 ? 0xff344052 : 0xff8c99ac);
+			const Box hub{960 - width * 0.14f, 530 - radius * 0.14f, width * 0.28f, radius * 0.28f};
+			canvas.EllipseGradient(hub, 0xff0d0f18, 0xff0d0f18);
+			if (cs > 0 && discArt.texture)
+				canvas.Image(discArt.texture, disc, 0);
+			if (!discArt.texture && cs > 0.6f)
+				canvas.Text(Style({22, ui::Weight::SemiBold, 1.0f}), 960 - width * 0.7f,
+					530 - radius * 0.5f, game.entry.game.name, 0xffffffff, width * 1.4f, 2);
+			return;
+		}
+		const auto back = plane(-24), rim = plane(12);
+		canvas.Shadow({700, 850, 520, 80}, 36, 12, 45, 0x99000000);
+		if (cs < 0 && backArt.texture)
+		{
+			const std::array<ui::Point, 4> reverse{back[1], back[0], back[3], back[2]};
+			canvas.ImageQuad(backArt.texture, reverse);
+			return;
+		}
+		canvas.ImageQuad(0, back, 0xff30333d);
+		// The tray edge has depth when the case turns.
+		const int edge = sn >= 0 ? 1 : 0;
+		const int other = edge == 1 ? 2 : 3;
+		canvas.Triangle(back[edge].x, back[edge].y, rim[edge].x, rim[edge].y, rim[other].x, rim[other].y, 0xff242a37);
+		canvas.Triangle(back[edge].x, back[edge].y, rim[other].x, rim[other].y, back[other].x, back[other].y, 0xff242a37);
+		if (m_caseOpen && !discMedia)
+		{
+			const ui::Picture& art = Cover(game);
+			const ui::Point centre = project(0, 0, 18);
+			const float mediaWidth = w * 0.38f * m_caseZoom * std::max(0.03f, std::fabs(cs));
+			const float mediaHeight = h * 0.36f * m_caseZoom;
+			const Box media{centre.x - mediaWidth / 2, centre.y - mediaHeight / 2, mediaWidth, mediaHeight};
+			canvas.Rect(media, 8, 0xff343946);
+			if (art.texture && cs > 0) canvas.ImageCover(art.texture, art.width, art.height, media.Inset(6, 6), 4);
+		}
+		if (m_caseOpen && discMedia)
+		{
+			// A disc in the tray. Its apparent width follows the case's turn.
+			const ui::Point centre = project(0, 0, 18);
+			const float radius = std::min(w, h) * 0.36f * m_caseZoom;
+			const float width = std::max(10.0f, radius * std::fabs(cs));
+			const Box disc{centre.x - width, centre.y - radius, width * 2, radius * 2};
+			canvas.EllipseGradient(disc, 0xffe8ebef, 0xfff7f7f4);
+			canvas.EllipseGradient(disc.Inset(width * 0.04f, radius * 0.04f), 0xffeceef2, 0xff8c99ac);
+			if (cs > 0 && discArt.texture) canvas.Image(discArt.texture, disc, 0);
+			const Box hub{centre.x - width * 0.14f, centre.y - radius * 0.14f, width * 0.28f, radius * 0.28f};
+			canvas.EllipseGradient(hub, 0xff252b39, 0xff252b39);
+		}
+		// The lid pivots on the left edge; its cover faces out when closed.
+		const float opened = m_caseOpen ? -2.0f : 0.0f;
+		auto lid = [&](float x, float y) {
+			const float fromHinge = x + w / 2;
+			return project(-w / 2 + fromHinge * std::cos(opened), y, 29 + fromHinge * std::sin(opened));
+		};
+		const std::array<ui::Point, 4> front{lid(-w / 2, -h / 2), lid(w / 2, -h / 2), lid(w / 2, h / 2), lid(-w / 2, h / 2)};
+		const ui::Picture& art = Cover(game);
+		const bool pictureFacesUs = front[1].x > front[0].x; // the hinge is vertical, so this is the projected winding
+		canvas.ImageQuad(pictureFacesUs ? art.texture : 0, front,
+			pictureFacesUs && art.texture ? 0xffffffff : ui::Mix(Accent(), 0xff1a1c27, 0.75f));
+		canvas.Line(front[0].x, front[0].y, front[3].x, front[3].y, 5, 0xffd8dbe2);
+		if (!art.texture && pictureFacesUs && !m_caseOpen && std::fabs(angle) < 0.6f)
+		{
+			canvas.Rect({front[0].x + 20, front[0].y + 20, front[1].x - front[0].x - 40, 48}, 2, Accent());
+			canvas.Text(Style({24, ui::Weight::SemiBold, 1.0f}), front[0].x + 32, front[0].y + 92,
+				game.entry.game.name, 0xffffffff, front[1].x - front[0].x - 64, 3);
+		}
+	}
+
 	void Shell::HubDraw(Canvas& canvas)
 	{
 		if (m_hubGame < 0 || m_hubGame >= (int)m_games.size())
@@ -155,6 +308,11 @@ namespace ps5shell
 		Game& game = m_games[m_hubGame];
 		const auto& g = game.entry.game;
 		WantBackdrop(&game);
+		if (m_caseInspect)
+		{
+			CaseDraw(canvas, game);
+			return;
+		}
 
 		// the games either side, named at the top
 		std::vector<int> order = m_shelf;

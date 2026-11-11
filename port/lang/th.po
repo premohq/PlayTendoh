@@ -119,7 +119,7 @@ msgstr "ทัชแพด"
 #, menu
 msgctxt "button"
 msgid "Touchpad click"
-msgstr ""
+msgstr "คลิกทัชแพด"
 
 #: port/app/buttons_menu.h:90 port/frontend/actions.cpp:479
 #, menu
@@ -384,12 +384,12 @@ msgstr "ปุ่ม DualSense ปุ่ม​ไหน​กด​ปุ่ม�
 #: port/app/buttons_menu.h:153 port/frontend/shell/porpoise_rows.cpp:870 port/frontend/shell/porpoise_rows.cpp:949
 #, menu
 msgid "Controller test"
-msgstr ""
+msgstr "การทดสอบคอนโทรลเลอร์"
 
 #: port/app/buttons_menu.h:155 port/frontend/shell/porpoise_rows.cpp:871
 #, menu
 msgid "This player's DualSense input, live."
-msgstr ""
+msgstr "อินพุต DualSense ของเครื่องเล่นนี้แสดงสด"
 
 #: port/app/buttons_menu.h:160 port/app/side_menu.h:522 port/frontend/shell/pages.cpp:965
 #, menu
@@ -405,7 +405,7 @@ msgstr "ไม่ได้​ตั้ง"
 #: port/app/buttons_menu.h:162
 #, menu
 msgid "Press Cross, then the DualSense button to use. If another button already uses it, the two swap."
-msgstr ""
+msgstr "กด กากบาท จากนั้นกดปุ่ม DualSense เพื่อใช้งาน หากมีปุ่มอื่นใช้งานอยู่แล้ว ทั้งสองจะสลับกัน"
 
 #. {0} is a button of the console's controller
 #. {0} is a button of the Wii U's or the 3DS's controller
@@ -530,15 +530,15 @@ msgstr "หยุด​เพื่อ​เล่น​เกม"
 
 #: port/app/esde_get.cpp:183
 msgid "EmulationStation could not be downloaded. Is the PS5 online?"
-msgstr ""
+msgstr "ไม่สามารถดาวน์โหลด EmulationStation ได้ PS5 ออนไลน์อยู่หรือเปล่า?"
 
 #: port/app/esde_get.cpp:189
 msgid "Playtendoh runs from an image that can't be changed. Copy the es-de folder into it yourself."
-msgstr ""
+msgstr "Playtendoh ทำงานจากรูปภาพที่ไม่สามารถเปลี่ยนแปลงได้ คัดลอกโฟลเดอร์ es-de ลงไปด้วยตัวเอง"
 
 #: port/app/esde_get.cpp:195
 msgid "EmulationStation needs {0} MB free on the drive Playtendoh is on"
-msgstr ""
+msgstr "EmulationStation ต้องการ {0} MB ฟรีบนไดรฟ์ Playtendoh เปิดอยู่"
 
 #: port/app/esde_get.cpp:214 port/app/updates.cpp:505
 msgid "The download could not start"
@@ -546,7 +546,7 @@ msgstr "เริ่ม​ดาวน์โหลด​ไม่ได้"
 
 #: port/app/esde_get.cpp:231
 msgid "Stopped"
-msgstr ""
+msgstr "หยุดแล้ว"
 
 #: port/app/esde_get.cpp:231 port/app/updates.cpp:524
 msgid "The download did not finish: is the PS5 online?"
@@ -562,7 +562,7 @@ msgstr "แตก​ไฟล์​ไม่ได้: {0}"
 
 #: port/app/esde_get.cpp:262
 msgid "EmulationStation could not be installed ({0})"
-msgstr ""
+msgstr "ไม่สามารถติดตั้ง EmulationStation ได้ ({0})"
 
 #: port/app/esde_get.cpp:283 port/app/pack_updates.cpp:194 port/app/updates.cpp:621
 msgid "GitHub could not be found: is the PS5 online?"
@@ -570,15 +570,15 @@ msgstr "ไม่พบ GitHub: PS5 เชื่อมต่อ​อินเ�
 
 #: port/app/esde_get.cpp:340
 msgid "EmulationStation is downloading"
-msgstr ""
+msgstr "กำลังดาวน์โหลด EmulationStation"
 
 #: port/app/esde_get.cpp:346
 msgid "Playtendoh runs from an image that can't be changed"
-msgstr ""
+msgstr "Playtendoh ทำงานจากรูปภาพที่ไม่สามารถเปลี่ยนแปลงได้"
 
 #: port/app/esde_get.cpp:352
 msgid "Its folder could not be removed"
-msgstr ""
+msgstr "ไม่สามารถลบโฟลเดอร์ของมันได้"
 
 #: port/app/forwarders.cpp:151
 msgid "Home screen tiles need elfldr, which is not answering on port 9021. Load elfldr, then try again."
@@ -1889,27 +1889,27 @@ msgstr "เมื่อ​แสดง​เฉพาะ​หน้าจอ​
 #: port/app/ingame3ds.cpp:566
 #, menu
 msgid "How big the picture is on the TV, and its shape."
-msgstr ""
+msgstr "ภาพใหญ่ของ TV และรูปร่างของมันใหญ่ขนาดไหน"
 
 #: port/app/ingame3ds.cpp:567
 #, menu
 msgid "Size"
-msgstr ""
+msgstr "ขนาด"
 
 #: port/app/ingame3ds.cpp:568
 #, menu
 msgid "Fit makes it as large as the screen allows. Whole pixels keeps every pixel the same size, with a frame around it. Fill screen stretches it edge to edge."
-msgstr ""
+msgstr "Fit ทำให้มีขนาดใหญ่เท่าที่หน้าจออนุญาต พิกเซลทั้งหมดทำให้ทุกพิกเซลมีขนาดเท่ากัน โดยมีกรอบล้อมรอบ หน้าจอเติมจะขยายออกไปจนสุดขอบ"
 
 #: port/app/ingame3ds.cpp:569
 #, menu
 msgid "Shape"
-msgstr ""
+msgstr "รูปร่าง"
 
 #: port/app/ingame3ds.cpp:570
 #, menu
 msgid "Original is the console's own. 4:3 is an old TV's. Square pixels shows them as the game draws them."
-msgstr ""
+msgstr "ต้นฉบับเป็นคอนโซลของตัวเอง 4:3 เป็น TV รุ่นเก่า พิกเซลสี่เหลี่ยมจะแสดงเมื่อเกมดึงพวกมัน"
 
 #: port/app/ingame3ds.cpp:580 port/frontend/shell/settings.cpp:295 port/frontend/shell/settings.cpp:511 port/frontend/shell/settings.cpp:1722
 #, menu
@@ -1921,12 +1921,12 @@ msgstr "อีมูเลเตอร์"
 #, menu
 msgid "{0} option"
 msgid_plural "{0} options"
-msgstr[0] ""
+msgstr[0] "ตัวเลือก {0} รายการ"
 
 #: port/app/ingame3ds.cpp:581
 #, menu
 msgid "Every option of this console's emulator. Changes apply now and are kept for every game on it."
-msgstr ""
+msgstr "ทุกตัวเลือกของโปรแกรมจำลองคอนโซลนี้ การเปลี่ยนแปลงมีผลทันทีและจะถูกเก็บไว้สำหรับทุกเกมที่เล่นอยู่"
 
 #: port/app/ingame3ds.cpp:589 port/app/ingame3ds.cpp:596
 #, menu
@@ -1941,7 +1941,7 @@ msgstr "ฟิลเตอร์​หน้าจอ"
 #: port/app/ingame3ds.cpp:591
 #, menu
 msgid "Sharp keeps pixels crisp and even. Smooth blends them. CRT draws the lines and colours of a tube TV, Curved CRT its rounded glass too."
-msgstr ""
+msgstr "Sharp ช่วยให้พิกเซลคมชัดและสม่ำเสมอ ผสมผสานได้อย่างราบรื่น CRT วาดเส้นและสีของท่อ TV, CRT แบบโค้งก็เป็นกระจกโค้งมนเช่นกัน"
 
 #: port/app/ingame3ds.cpp:593 port/app/ingame3ds.cpp:600 port/app/ingame3ds.cpp:613 port/frontend/shell/settings.cpp:711 port/frontend/shell/settings.cpp:712 port/frontend/shell/settings.cpp:784 port/frontend/shell/settings.cpp:785 port/frontend/shell/settings.cpp:798 port/frontend/shell/settings.cpp:799
 #, menu
@@ -2241,7 +2241,7 @@ msgstr "A ที่​ปุ่มวงกลม​และ B ที่​ป�
 #: port/app/ingame3ds.cpp:721 port/eden/ingame.cpp:653
 #, menu
 msgid "Puts every button back to default. Hold Cross to confirm."
-msgstr ""
+msgstr "ทำให้ทุกปุ่มกลับสู่ค่าเริ่มต้น กด กากบาท ค้างไว้เพื่อยืนยัน"
 
 #: port/app/ingame3ds.cpp:731
 #, menu
@@ -2291,7 +2291,7 @@ msgstr "ช่อง {0} ว่าง"
 #: port/app/ingame3ds.cpp:773
 #, menu
 msgid "Reset"
-msgstr ""
+msgstr "รีเซ็ต"
 
 #. {0} is the version the last update replaced, as in 5.0.0
 #. no save of this Switch game in standalone ProsperoEden or on a USB drive
@@ -2303,7 +2303,7 @@ msgstr "กด​ปุ่มกากบาท​ค้าง"
 #: port/app/ingame3ds.cpp:774
 #, menu
 msgid "Restarts the game, as the console's reset button does. What isn't saved is lost."
-msgstr ""
+msgstr "รีสตาร์ทเกมเหมือนกับที่ปุ่มรีเซ็ตของคอนโซลทำ สิ่งที่ไม่ได้บันทึกไว้จะหายไป"
 
 #: port/app/ingame3ds.cpp:780
 #, menu
@@ -2353,12 +2353,12 @@ msgstr "พิกเซล​สี่เหลี่ยม"
 #: port/app/ingame3ds.h:69
 #, menu
 msgid "CRT"
-msgstr ""
+msgstr "CRT"
 
 #: port/app/ingame3ds.h:69
 #, menu
 msgid "Curved CRT"
-msgstr ""
+msgstr "โค้ง CRT"
 
 #: port/app/ingame3ds.h:74 port/frontend/shell/settings.cpp:121
 #, menu
@@ -2383,17 +2383,17 @@ msgstr "ซ้าย 90°"
 #: port/app/ingame3ds.h:79
 #, menu
 msgid "Fit"
-msgstr ""
+msgstr "พอดี"
 
 #: port/app/ingame3ds.h:79
 #, menu
 msgid "Whole pixels"
-msgstr ""
+msgstr "พิกเซลทั้งหมด"
 
 #: port/app/ingame3ds.h:79
 #, menu
 msgid "Fill screen"
-msgstr ""
+msgstr "เติมหน้าจอ"
 
 #. the 3DS borders' names (artwork around the screens)
 #: port/app/ingame3ds.h:161 port/frontend/shell/settings.cpp:52
@@ -2898,12 +2898,12 @@ msgstr "กด​ปุ่มกากบาท​ค้าง​ไว้​จ
 #: port/app/side_menu.h:503
 #, menu
 msgid "Your controller"
-msgstr ""
+msgstr "ผู้ควบคุมของคุณ"
 
 #: port/app/side_menu.h:505
 #, menu
 msgid "Each button shows the console's button it presses."
-msgstr ""
+msgstr "แต่ละปุ่มจะแสดงปุ่มของคอนโซลที่กด"
 
 #: port/app/update_files.cpp:93
 msgid "the download has no eboot.bin"
@@ -2911,7 +2911,7 @@ msgstr "ไฟล์​ที่​ดาวน์โหลด​ไม่มี
 
 #: port/app/update_files.cpp:93
 msgid "the download has no {0}"
-msgstr ""
+msgstr "ดาวน์โหลดไม่มี {0}"
 
 #: port/app/update_files.cpp:118
 msgid "{0} could not be written (is /data full?)"
@@ -4236,7 +4236,7 @@ msgstr "EmulationStation จะเปิดเมื่อ Playtendoh เริ�
 
 #: port/frontend/shell/orbit.cpp:542 port/frontend/shell/settings.cpp:2235
 msgid "Downloading EmulationStation. It opens next time Playtendoh starts."
-msgstr ""
+msgstr "กำลังดาวน์โหลด EmulationStation จะเปิดขึ้นในครั้งถัดไปที่ Playtendoh เริ่มทำงาน"
 
 #: port/frontend/shell/orbit.cpp:695 port/frontend/shell/reports.cpp:73 port/frontend/shell/settings.cpp:1532 port/frontend/shell/welcome.cpp:222
 msgid "Make it yours"
@@ -4301,12 +4301,12 @@ msgstr "ใช้ {0}"
 #. the first start's layout question: Triangle turns the covers flat or into 3D boxes
 #: port/frontend/shell/orbit.cpp:763
 msgid "Box art: 3D"
-msgstr ""
+msgstr "ปกกล่อง: 3D"
 
 #. the first start's layout question: Triangle turns the covers flat or into 3D boxes
 #: port/frontend/shell/orbit.cpp:763
 msgid "Box art: flat"
-msgstr ""
+msgstr "ศิลปะบนกล่อง: แบน"
 
 #: port/frontend/shell/orbit.cpp:774
 msgid "Hold L1 while Playtendoh starts to use its own launcher. Switch back any time in Settings > Launcher > Layout."
@@ -4508,15 +4508,15 @@ msgstr "ไม่มี DualSense"
 
 #: port/frontend/shell/pages.cpp:793 port/frontend/shell/pages.cpp:813
 msgid "Built-in layouts can't be changed. Choose one of your own at the top."
-msgstr ""
+msgstr "เค้าโครงในตัวไม่สามารถเปลี่ยนแปลงได้ เลือกหนึ่งของคุณเองที่ด้านบน"
 
 #: port/frontend/shell/pages.cpp:797 port/frontend/shell/pages.cpp:797 port/frontend/shell/porpoise_rows.cpp:734
 msgid "Clear all"
-msgstr ""
+msgstr "เคลียร์ทั้งหมด"
 
 #: port/frontend/shell/pages.cpp:797 port/frontend/shell/porpoise_rows.cpp:1568
 msgid "Keep them"
-msgstr ""
+msgstr "เก็บไว้"
 
 #: port/frontend/shell/pages.cpp:847
 msgid "Cleared. No DualSense button is set for it."
@@ -4540,18 +4540,20 @@ msgstr "ปุ่ม​นี้"
 
 #: port/frontend/shell/pages.cpp:973
 msgid "Press the DualSense button or trigger for {0} now."
-msgstr ""
+msgstr "กดปุ่ม DualSense หรือทริกเกอร์สำหรับ {0} ทันที"
 
 #. a GameCube or GBA button's mapping: a DualSense button, never a stick's direction or the touchpad
 #: port/frontend/shell/pages.cpp:983
 msgid "Left and Right, or Cross, choose the layout. Built-in layouts can't be changed; choose one of your own to set buttons."
-msgstr ""
+msgstr "ซ้ายและขวาหรือ กากบาท ให้เลือกเค้าโครง เค้าโครงในตัวไม่สามารถเปลี่ยนแปลงได้ เลือกปุ่มของคุณเองเพื่อตั้งค่า"
 
 #: port/frontend/shell/pages.cpp:984 port/frontend/shell/pages.cpp:985
 msgid ""
 "Cross chooses what this DualSense button does. If another button already did that, the two swap.\n"
 "Square makes it do nothing."
 msgstr ""
+"Cross เลือกสิ่งที่ปุ่ม DualSense นี้ทำ หากปุ่มอื่นทำอย่างนั้นแล้ว ทั้งสองจะสลับกัน\n"
+"Square ทำให้มันไม่ทำอะไรเลย"
 
 #. a Switch button's mapping: each is on a DualSense button (the touchpad's click too), never on none
 #: port/frontend/shell/pages.cpp:988
@@ -4862,87 +4864,87 @@ msgstr "เหมือน​ด้านบน จาก New 3DS หรือ N
 
 #: port/frontend/shell/porpoise_rows.cpp:71
 msgid "Enhancements"
-msgstr ""
+msgstr "การปรับปรุง"
 
 #: port/frontend/shell/porpoise_rows.cpp:71
 msgid "Bloom, colour, texture filtering, resampling, lighting and fog."
-msgstr ""
+msgstr "การบาน สี การกรองพื้นผิว การสุ่มตัวอย่างใหม่ แสง และหมอก"
 
 #: port/frontend/shell/porpoise_rows.cpp:72
 msgid "Rendering"
-msgstr ""
+msgstr "กำลังเรนเดอร์"
 
 #: port/frontend/shell/porpoise_rows.cpp:72
 msgid "Shaders, the texture cache and texture packs."
-msgstr ""
+msgstr "Shaders แคชพื้นผิว และแพ็คพื้นผิว"
 
 #: port/frontend/shell/porpoise_rows.cpp:73
 msgid "Button layout, vibration, sticks, turbo and the triggers."
-msgstr ""
+msgstr "รูปแบบปุ่ม การสั่นสะเทือน แท่ง เทอร์โบ และทริกเกอร์"
 
 #: port/frontend/shell/porpoise_rows.cpp:74 port/frontend/shell/porpoise_rows.cpp:75 port/frontend/shell/porpoise_rows.cpp:76
 msgid "This player's light bar. Buttons are the same as player 1's."
-msgstr ""
+msgstr "แถบแสงของผู้เล่นคนนี้ ปุ่มจะเหมือนกับของผู้เล่น 1"
 
 #: port/frontend/shell/porpoise_rows.cpp:75 port/frontend/shell/porpoise_rows.cpp:195 port/frontend/shell/porpoise_rows.cpp:197 port/frontend/shell/porpoise_rows.cpp:207 port/frontend/shell/porpoise_rows.cpp:209 port/frontend/shell/porpoise_rows.cpp:219 port/frontend/shell/porpoise_rows.cpp:221 port/frontend/shell/porpoise_rows.cpp:231 port/frontend/shell/porpoise_rows.cpp:233
 msgid "Player 3"
-msgstr ""
+msgstr "ผู้เล่นคนที่ 3"
 
 #: port/frontend/shell/porpoise_rows.cpp:76 port/frontend/shell/porpoise_rows.cpp:195 port/frontend/shell/porpoise_rows.cpp:197 port/frontend/shell/porpoise_rows.cpp:207 port/frontend/shell/porpoise_rows.cpp:209 port/frontend/shell/porpoise_rows.cpp:219 port/frontend/shell/porpoise_rows.cpp:221 port/frontend/shell/porpoise_rows.cpp:231 port/frontend/shell/porpoise_rows.cpp:233
 msgid "Player 4"
-msgstr ""
+msgstr "ผู้เล่นคนที่ 4"
 
 #: port/frontend/shell/porpoise_rows.cpp:77 port/frontend/shell/porpoise_rows.cpp:83 port/frontend/shell/porpoise_rows.cpp:87 port/frontend/shell/porpoise_rows.cpp:257
 msgid "Port 1"
-msgstr ""
+msgstr "ท่าเรือ 1"
 
 #: port/frontend/shell/porpoise_rows.cpp:77 port/frontend/shell/porpoise_rows.cpp:78 port/frontend/shell/porpoise_rows.cpp:79 port/frontend/shell/porpoise_rows.cpp:80
 msgid "What's plugged into this port, and who plays it."
-msgstr ""
+msgstr "สิ่งที่เสียบอยู่ในพอร์ตนี้ และใครเป็นคนเล่น"
 
 #: port/frontend/shell/porpoise_rows.cpp:78 port/frontend/shell/porpoise_rows.cpp:84 port/frontend/shell/porpoise_rows.cpp:88 port/frontend/shell/porpoise_rows.cpp:257
 msgid "Port 2"
-msgstr ""
+msgstr "พอร์ต 2"
 
 #: port/frontend/shell/porpoise_rows.cpp:79 port/frontend/shell/porpoise_rows.cpp:85 port/frontend/shell/porpoise_rows.cpp:89 port/frontend/shell/porpoise_rows.cpp:257
 msgid "Port 3"
-msgstr ""
+msgstr "ท่าเรือ 3"
 
 #: port/frontend/shell/porpoise_rows.cpp:80 port/frontend/shell/porpoise_rows.cpp:86 port/frontend/shell/porpoise_rows.cpp:90 port/frontend/shell/porpoise_rows.cpp:257
 msgid "Port 4"
-msgstr ""
+msgstr "พอร์ต 4"
 
 #: port/frontend/shell/porpoise_rows.cpp:81 port/frontend/shell/porpoise_rows.cpp:1114
 msgid "GBA video"
-msgstr ""
+msgstr "วิดีโอ GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:81 port/frontend/shell/porpoise_rows.cpp:1115
 msgid "Each GBA's screen on the TV."
-msgstr ""
+msgstr "หน้าจอ GBA แต่ละตัวบนทีวี"
 
 #: port/frontend/shell/porpoise_rows.cpp:82 port/frontend/shell/porpoise_rows.cpp:1114
 msgid "GBA sound"
-msgstr ""
+msgstr "เสียงจีบีเอ"
 
 #: port/frontend/shell/porpoise_rows.cpp:82 port/frontend/shell/porpoise_rows.cpp:1115
 msgid "Each GBA's sound."
-msgstr ""
+msgstr "เสียงของ GBA แต่ละตัว"
 
 #: port/frontend/shell/porpoise_rows.cpp:83 port/frontend/shell/porpoise_rows.cpp:84 port/frontend/shell/porpoise_rows.cpp:85 port/frontend/shell/porpoise_rows.cpp:86
 msgid "This port's GBA screen."
-msgstr ""
+msgstr "หน้าจอ GBA ของพอร์ตนี้"
 
 #: port/frontend/shell/porpoise_rows.cpp:87 port/frontend/shell/porpoise_rows.cpp:88 port/frontend/shell/porpoise_rows.cpp:89 port/frontend/shell/porpoise_rows.cpp:90
 msgid "This port's GBA sound."
-msgstr ""
+msgstr "เสียง GBA ของพอร์ตนี้"
 
 #: port/frontend/shell/porpoise_rows.cpp:91
 msgid "The pointer's reach, your grip, motion and real Wii Remotes."
-msgstr ""
+msgstr "การเอื้อมมือของพอยน์เตอร์ การยึดเกาะ การเคลื่อนไหว และรีโมท Wii ของจริง"
 
 #: port/frontend/shell/porpoise_rows.cpp:92
 msgid "Settings that may not work on PS5 or need extra setup."
-msgstr ""
+msgstr "การตั้งค่าที่อาจใช้งานไม่ได้บน PS5 หรือต้องมีการตั้งค่าเพิ่มเติม"
 
 #: port/frontend/shell/porpoise_rows.cpp:99
 msgid "Higher is sharper but can slow games down."
@@ -5050,35 +5052,35 @@ msgstr "เมื่อ​เปิด​การ​สร้าง​เฟร
 
 #: port/frontend/shell/porpoise_rows.cpp:125
 msgid "Color filter"
-msgstr ""
+msgstr "ฟิลเตอร์สี"
 
 #: port/frontend/shell/porpoise_rows.cpp:125
 msgid "For color blindness: moves the colors you may not tell apart to ones you can."
-msgstr ""
+msgstr "สำหรับตาบอดสี: ย้ายสีที่คุณไม่สามารถแยกออกจากกันไปยังสีที่คุณสามารถทำได้"
 
 #: port/frontend/shell/porpoise_rows.cpp:126
 msgid "Red-weak"
-msgstr ""
+msgstr "แดงอ่อนแอ"
 
 #: port/frontend/shell/porpoise_rows.cpp:126
 msgid "Green-weak"
-msgstr ""
+msgstr "กรีนอ่อนแอ"
 
 #: port/frontend/shell/porpoise_rows.cpp:126
 msgid "Blue-weak"
-msgstr ""
+msgstr "สีฟ้าอ่อนแอ"
 
 #: port/frontend/shell/porpoise_rows.cpp:126
 msgid "Grayscale"
-msgstr ""
+msgstr "ระดับสีเทา"
 
 #: port/frontend/shell/porpoise_rows.cpp:127
 msgid "Color filter in games"
-msgstr ""
+msgstr "ฟิลเตอร์สีในเกม"
 
 #: port/frontend/shell/porpoise_rows.cpp:127
 msgid "Applies the color filter to games too."
-msgstr ""
+msgstr "ใช้ฟิลเตอร์สีกับเกมด้วย"
 
 #: port/frontend/shell/porpoise_rows.cpp:128
 msgid "Frame rate counter"
@@ -5106,235 +5108,235 @@ msgstr "ตาม PS5"
 
 #: port/frontend/shell/porpoise_rows.cpp:134
 msgid "Aspect ratio"
-msgstr ""
+msgstr "อัตราส่วนภาพ"
 
 #: port/frontend/shell/porpoise_rows.cpp:134
 msgid "The picture's shape. Automatic follows the game."
-msgstr ""
+msgstr "รูปร่างของภาพ อัตโนมัติตามเกม"
 
 #: port/frontend/shell/porpoise_rows.cpp:135
 msgid "Force 16:9"
-msgstr ""
+msgstr "บังคับ 16:9"
 
 #: port/frontend/shell/porpoise_rows.cpp:135
 msgid "Force 4:3"
-msgstr ""
+msgstr "บังคับ 4:3"
 
 #: port/frontend/shell/porpoise_rows.cpp:135
 msgid "Stretch to fill"
-msgstr ""
+msgstr "ยืดให้เต็ม."
 
 #: port/frontend/shell/porpoise_rows.cpp:136
 msgid "Fills the bars beside a 4:3 picture. Your own 1920x1080 PNGs go in /data/porpoise/borders."
-msgstr ""
+msgstr "เติมแถบข้างภาพ 4:3 PNG ของคุณเองขนาด 1920x1080 จะอยู่ใน /data/porpoise/borders"
 
 #: port/frontend/shell/porpoise_rows.cpp:137
 msgid "V-Sync"
-msgstr ""
+msgstr "V-ซิงค์"
 
 #: port/frontend/shell/porpoise_rows.cpp:137
 msgid "Syncs frames to the TV's refresh for the smoothest motion."
-msgstr ""
+msgstr "ซิงค์เฟรมกับการรีเฟรชของ TV เพื่อการเคลื่อนไหวที่ราบรื่นที่สุด"
 
 #: port/frontend/shell/porpoise_rows.cpp:138
 msgid "Syncs frames to the TV's refresh for the smoothest motion. Off uses the emulator's own timing."
-msgstr ""
+msgstr "ซิงค์เฟรมกับการรีเฟรชของ TV เพื่อการเคลื่อนไหวที่ราบรื่นที่สุด Off ใช้เวลาของโปรแกรมจำลองเอง"
 
 #: port/frontend/shell/porpoise_rows.cpp:140
 msgid "Shader compilation"
-msgstr ""
+msgstr "การรวบรวม Shader"
 
 #: port/frontend/shell/porpoise_rows.cpp:140
 msgid "Ubershaders prevent stutter when something new is drawn, but use more GPU."
-msgstr ""
+msgstr "Ubershader ป้องกันการพูดติดอ่างเมื่อมีการดึงสิ่งใหม่ออกมา แต่ใช้ GPU มากกว่า"
 
 #: port/frontend/shell/porpoise_rows.cpp:141
 msgid "Synchronous"
-msgstr ""
+msgstr "ซิงโครนัส"
 
 #: port/frontend/shell/porpoise_rows.cpp:141
 msgid "Ubershaders"
-msgstr ""
+msgstr "Ubershaders"
 
 #: port/frontend/shell/porpoise_rows.cpp:141
 msgid "Async ubershaders"
-msgstr ""
+msgstr "ผู้ใช้ Async"
 
 #: port/frontend/shell/porpoise_rows.cpp:141
 msgid "Async, skip drawing"
-msgstr ""
+msgstr "Async ข้ามการวาดภาพ"
 
 #: port/frontend/shell/porpoise_rows.cpp:142
 msgid "Build shaders before starting"
-msgstr ""
+msgstr "สร้างเชเดอร์ก่อนเริ่มต้น"
 
 #: port/frontend/shell/porpoise_rows.cpp:142
 msgid "Shaders the game used last time are built while it loads. It starts a moment later."
-msgstr ""
+msgstr "Shaders เกมที่ใช้ครั้งล่าสุดถูกสร้างขึ้นในขณะที่โหลด มันเริ่มต้นในอีกสักครู่"
 
 #: port/frontend/shell/porpoise_rows.cpp:143
 msgid "Builds the shaders the game used last time while it loads, so effects don't stutter. The game takes a moment longer to start."
-msgstr ""
+msgstr "สร้างเชเดอร์ที่เกมใช้ครั้งล่าสุดในขณะที่โหลด เอฟเฟกต์จึงไม่กระตุก เกมจะใช้เวลานานกว่าเล็กน้อยในการเริ่มต้น"
 
 #: port/frontend/shell/porpoise_rows.cpp:145
 msgid "Threaded GPU recording"
-msgstr ""
+msgstr "การบันทึก GPU แบบเธรด"
 
 #: port/frontend/shell/porpoise_rows.cpp:145
 msgid "The driver records drawing on its own thread. Turn it off if a game crashes."
-msgstr ""
+msgstr "บันทึกไดรเวอร์ที่วาดบนเธรดของตัวเอง ปิดมันหากเกมล่ม"
 
 #: port/frontend/shell/porpoise_rows.cpp:146
 msgid "Records drawing on a separate thread. Can speed up demanding games. Turn it off if a game crashes or looks wrong. Applies next time a game starts."
-msgstr ""
+msgstr "บันทึกการวาดภาพบนเธรดแยกต่างหาก สามารถเร่งความเร็วเกมที่ต้องการได้ ปิดการทำงานหากเกมล่มหรือดูผิดปกติ ใช้ในครั้งถัดไปที่เกมเริ่ม"
 
 #: port/frontend/shell/porpoise_rows.cpp:148
 msgid "Texture cache accuracy"
-msgstr ""
+msgstr "ความแม่นยำของแคชพื้นผิว"
 
 #: port/frontend/shell/porpoise_rows.cpp:148
 msgid "Safe fixes some games' text and effects; Fast is quickest."
-msgstr ""
+msgstr "Safe แก้ไขข้อความและเอฟเฟกต์ของเกมบางเกม รวดเร็วคือเร็วที่สุด"
 
 #: port/frontend/shell/porpoise_rows.cpp:149
 msgid "Fast"
-msgstr ""
+msgstr "รวดเร็ว"
 
 #: port/frontend/shell/porpoise_rows.cpp:149
 msgid "Middle"
-msgstr ""
+msgstr "กลาง"
 
 #: port/frontend/shell/porpoise_rows.cpp:149 port/frontend/shell/porpoise_rows.cpp:313
 msgid "Safe"
-msgstr ""
+msgstr "ปลอดภัย"
 
 #: port/frontend/shell/porpoise_rows.cpp:150
 msgid "Crop overscan"
-msgstr ""
+msgstr "ครอบตัดโอเวอร์สแกน"
 
 #: port/frontend/shell/porpoise_rows.cpp:150
 msgid "Hides the black borders some games draw at the edges."
-msgstr ""
+msgstr "ซ่อนขอบสีดำบางเกมวาดที่ขอบ"
 
 #: port/frontend/shell/porpoise_rows.cpp:152
 msgid "Crop left"
-msgstr ""
+msgstr "ครอบตัดไปทางซ้าย"
 
 #: port/frontend/shell/porpoise_rows.cpp:152
 msgid "Trims the left edge of the picture."
-msgstr ""
+msgstr "ตัดขอบด้านซ้ายของรูปภาพ"
 
 #: port/frontend/shell/porpoise_rows.cpp:154
 msgid "Crop right"
-msgstr ""
+msgstr "ครอบตัดไปทางขวา"
 
 #: port/frontend/shell/porpoise_rows.cpp:154
 msgid "Trims the right edge of the picture."
-msgstr ""
+msgstr "ตัดขอบด้านขวาของรูปภาพ"
 
 #: port/frontend/shell/porpoise_rows.cpp:156
 msgid "Crop top"
-msgstr ""
+msgstr "เสื้อครอป"
 
 #: port/frontend/shell/porpoise_rows.cpp:156
 msgid "Trims the top edge of the picture."
-msgstr ""
+msgstr "ตัดขอบด้านบนของรูปภาพ"
 
 #: port/frontend/shell/porpoise_rows.cpp:158
 msgid "Crop bottom"
-msgstr ""
+msgstr "ครอบตัดด้านล่าง"
 
 #: port/frontend/shell/porpoise_rows.cpp:158
 msgid "Trims the bottom edge of the picture."
-msgstr ""
+msgstr "ตัดขอบด้านล่างของรูปภาพ"
 
 #: port/frontend/shell/porpoise_rows.cpp:160
 msgid "Skip duplicate frames"
-msgstr ""
+msgstr "ข้ามเฟรมที่ซ้ำกัน"
 
 #: port/frontend/shell/porpoise_rows.cpp:160
 msgid "Saves work when a game shows the same frame twice."
-msgstr ""
+msgstr "บันทึกงานเมื่อเกมแสดงเฟรมเดียวกันสองครั้ง"
 
 #: port/frontend/shell/porpoise_rows.cpp:162
 msgid "Anisotropic filtering"
-msgstr ""
+msgstr "การกรองแบบแอนไอโซทรอปิก"
 
 #: port/frontend/shell/porpoise_rows.cpp:162
 msgid "Sharper textures on floors and walls seen at an angle."
-msgstr ""
+msgstr "พื้นผิวที่คมชัดยิ่งขึ้นบนพื้นและผนังเมื่อมองจากมุมหนึ่ง"
 
 #: port/frontend/shell/porpoise_rows.cpp:164
 msgid "Extra bloom"
-msgstr ""
+msgstr "บานเสริม"
 
 #: port/frontend/shell/porpoise_rows.cpp:164
 msgid "Adds a soft glow around bright areas."
-msgstr ""
+msgstr "เพิ่มความนุ่มนวลบริเวณที่สว่าง"
 
 #: port/frontend/shell/porpoise_rows.cpp:165 port/frontend/shell/porpoise_rows.cpp:263 port/frontend/shell/porpoise_rows.cpp:313
 msgid "Low"
-msgstr ""
+msgstr "ต่ำ"
 
 #: port/frontend/shell/porpoise_rows.cpp:165 port/frontend/shell/porpoise_rows.cpp:265
 msgid "Medium"
-msgstr ""
+msgstr "ปานกลาง"
 
 #: port/frontend/shell/porpoise_rows.cpp:165
 msgid "High"
-msgstr ""
+msgstr "สูง"
 
 #: port/frontend/shell/porpoise_rows.cpp:166
 msgid "Saturation"
-msgstr ""
+msgstr "ความอิ่มตัว"
 
 #: port/frontend/shell/porpoise_rows.cpp:166
 msgid "How rich the colours are. 0 is as the game has them."
-msgstr ""
+msgstr "สีสันจะอุดมสมบูรณ์ขนาดไหน.. 0 เป็นเหมือนเกมที่มี"
 
 #: port/frontend/shell/porpoise_rows.cpp:168
 msgid "Contrast"
-msgstr ""
+msgstr "คอนทราสต์"
 
 #: port/frontend/shell/porpoise_rows.cpp:168
 msgid "How far apart the darks and the lights are. 0 is as the game has them."
-msgstr ""
+msgstr "ความมืดและแสงสว่างอยู่ห่างกันแค่ไหน 0 เป็นเหมือนเกมที่มี"
 
 #: port/frontend/shell/porpoise_rows.cpp:170
 msgid "Warmth"
-msgstr ""
+msgstr "ความอบอุ่น"
 
 #: port/frontend/shell/porpoise_rows.cpp:170
 msgid "Warmer (more red) or cooler (more blue). 0 is as the game has it."
-msgstr ""
+msgstr "อุ่นขึ้น (สีแดงมากขึ้น) หรือเย็นกว่า (สีน้ำเงินมากขึ้น) 0 เป็นไปตามที่เกมมี"
 
 #: port/frontend/shell/porpoise_rows.cpp:172
 msgid "Texture filtering"
-msgstr ""
+msgstr "การกรองพื้นผิว"
 
 #: port/frontend/shell/porpoise_rows.cpp:172
 msgid "Force sharp or smooth textures, or leave it to the game."
-msgstr ""
+msgstr "บังคับพื้นผิวให้คมชัดหรือเรียบเนียน หรือปล่อยให้เป็นไปตามเกม"
 
 #: port/frontend/shell/porpoise_rows.cpp:173 port/frontend/shell/porpoise_rows.cpp:182 port/frontend/shell/porpoise_rows.cpp:184
 msgid "The game's own"
-msgstr ""
+msgstr "เกมของตัวเอง"
 
 #: port/frontend/shell/porpoise_rows.cpp:173
 msgid "Nearest (sharp)"
-msgstr ""
+msgstr "ใกล้ที่สุด (คม)"
 
 #: port/frontend/shell/porpoise_rows.cpp:173
 msgid "Linear (smooth)"
-msgstr ""
+msgstr "เชิงเส้น (เรียบ)"
 
 #: port/frontend/shell/porpoise_rows.cpp:174
 msgid "Output resampling"
-msgstr ""
+msgstr "การสุ่มตัวอย่างเอาต์พุต"
 
 #: port/frontend/shell/porpoise_rows.cpp:174
 msgid "How the picture is scaled. Sharp bilinear keeps pixels crisp."
-msgstr ""
+msgstr "วิธีการปรับขนาดภาพ ไบลิเนียร์ที่คมชัดช่วยให้พิกเซลคมชัด"
 
 #. Settings > Screens: a row that opens the touch screen's settings (where the touchpad's cursor lands, the right stick as the stylus)
 #. Settings > Performance: a row that opens Eden's accuracy shortcuts (Fast GPU, Unsafe CPU, ...); its value: how many are changed
@@ -5345,67 +5347,67 @@ msgstr "ค่า​เริ่มต้น"
 
 #: port/frontend/shell/porpoise_rows.cpp:175
 msgid "Sharp bilinear"
-msgstr ""
+msgstr "ไบลิเนียร์ที่คมชัด"
 
 #: port/frontend/shell/porpoise_rows.cpp:175
 msgid "Area sampling"
-msgstr ""
+msgstr "การสุ่มตัวอย่างพื้นที่"
 
 #: port/frontend/shell/porpoise_rows.cpp:177
 msgid "Per-pixel lighting"
-msgstr ""
+msgstr "แสงต่อพิกเซล"
 
 #: port/frontend/shell/porpoise_rows.cpp:177
 msgid "Smoother lighting on surfaces. A little heavier."
-msgstr ""
+msgstr "แสงบนพื้นผิวที่นุ่มนวลยิ่งขึ้น หนักกว่าเล็กน้อย"
 
 #: port/frontend/shell/porpoise_rows.cpp:179
 msgid "Disable fog"
-msgstr ""
+msgstr "ปิดการใช้งานหมอก"
 
 #: port/frontend/shell/porpoise_rows.cpp:179
 msgid "Removes distance fog. Some games use fog for their look."
-msgstr ""
+msgstr "กำจัดหมอกระยะไกล เกมบางเกมใช้หมอกเพื่อรูปลักษณ์"
 
 #: port/frontend/shell/porpoise_rows.cpp:181
 msgid "Bloom"
-msgstr ""
+msgstr "บลูม"
 
 #: port/frontend/shell/porpoise_rows.cpp:181
 msgid "A graphics mod for this game's glow. Applies next time it starts."
-msgstr ""
+msgstr "ม็อดกราฟิกเพื่อความเปล่งประกายของเกมนี้ ใช้ครั้งต่อไปที่เริ่มต้น"
 
 #: port/frontend/shell/porpoise_rows.cpp:182 port/frontend/shell/porpoise_rows.cpp:184
 msgid "Blurred"
-msgstr ""
+msgstr "เบลอ"
 
 #: port/frontend/shell/porpoise_rows.cpp:182 port/frontend/shell/porpoise_rows.cpp:184
 msgid "Native resolution"
-msgstr ""
+msgstr "ความละเอียดดั้งเดิม"
 
 #: port/frontend/shell/porpoise_rows.cpp:183
 msgid "Depth of field"
-msgstr ""
+msgstr "ความชัดลึก"
 
 #: port/frontend/shell/porpoise_rows.cpp:183
 msgid "A graphics mod for the blur on faraway things. Applies next time it starts."
-msgstr ""
+msgstr "ม็อดกราฟิกสำหรับการเบลอสิ่งที่อยู่ห่างไกล ใช้ครั้งต่อไปที่เริ่มต้น"
 
 #: port/frontend/shell/porpoise_rows.cpp:185
 msgid "Hide the HUD"
-msgstr ""
+msgstr "ซ่อน HUD"
 
 #: port/frontend/shell/porpoise_rows.cpp:185
 msgid "Hides the game's HUD, for clean screenshots. Applies the next time it starts."
-msgstr ""
+msgstr "ซ่อน HUD ของเกมเพื่อภาพหน้าจอที่สะอาดตา ใช้ในครั้งถัดไปที่เริ่มต้น"
 
 #: port/frontend/shell/porpoise_rows.cpp:186
 msgid "Native resolution goop"
-msgstr ""
+msgstr "goop ความละเอียดดั้งเดิม"
 
 #: port/frontend/shell/porpoise_rows.cpp:186
 msgid "Super Mario Sunshine's goop at the game's own resolution. Applies the next time it starts."
-msgstr ""
+msgstr "Goop ของ Super Mario Sunshine ตามความละเอียดของเกม ใช้ในครั้งถัดไปที่เริ่มต้น"
 
 #: port/frontend/shell/porpoise_rows.cpp:187 port/frontend/shell/settings.cpp:678 port/frontend/shell/settings.cpp:685
 msgid "Custom textures"
@@ -5413,107 +5415,107 @@ msgstr "พื้นผิว​กำหนดเอง"
 
 #: port/frontend/shell/porpoise_rows.cpp:187
 msgid "Loads HD texture packs."
-msgstr ""
+msgstr "โหลดแพ็คพื้นผิว HD"
 
 #: port/frontend/shell/porpoise_rows.cpp:188
 msgid "Loads HD texture packs. Put each pack's folder, named with the game's ID (like GALE01), in /data/porpoise/saves/User/Load/Textures."
-msgstr ""
+msgstr "โหลดแพ็คพื้นผิว HD ใส่โฟลเดอร์ของแต่ละแพ็คที่ตั้งชื่อด้วย ID ของเกม (เช่น GALE01) ใน /data/porpoise/saves/User/Load/Textures"
 
 #: port/frontend/shell/porpoise_rows.cpp:190 port/frontend/shell/porpoise_rows.cpp:202 port/frontend/shell/porpoise_rows.cpp:214 port/frontend/shell/porpoise_rows.cpp:226
 msgid "Device"
-msgstr ""
+msgstr "อุปกรณ์"
 
 #: port/frontend/shell/porpoise_rows.cpp:190 port/frontend/shell/porpoise_rows.cpp:202 port/frontend/shell/porpoise_rows.cpp:214 port/frontend/shell/porpoise_rows.cpp:226
 msgid "What's plugged into this controller port."
-msgstr ""
+msgstr "สิ่งที่เสียบเข้ากับพอร์ตคอนโทรลเลอร์นี้"
 
 #: port/frontend/shell/porpoise_rows.cpp:191 port/frontend/shell/porpoise_rows.cpp:203 port/frontend/shell/porpoise_rows.cpp:215 port/frontend/shell/porpoise_rows.cpp:227
 msgid "What's plugged into this controller port. GBA (Integrated) is a Game Boy Advance on the link cable, for games like Four Swords Adventures. It needs the GBA BIOS at /data/porpoise/saves/User/GBA/gba_bios.bin. Best set per game."
-msgstr ""
+msgstr "สิ่งที่เสียบเข้ากับพอร์ตคอนโทรลเลอร์นี้ GBA (บูรณาการ) คือ Game Boy Advance บนสายเชื่อมต่อ สำหรับเกมเช่น Four Swords Adventures จำเป็นต้องมี GBA BIOS ที่ /data/porpoise/saves/User/GBA/gba_bios.bin ชุดที่ดีที่สุดต่อเกม"
 
 #: port/frontend/shell/porpoise_rows.cpp:192 port/frontend/shell/porpoise_rows.cpp:204 port/frontend/shell/porpoise_rows.cpp:216 port/frontend/shell/porpoise_rows.cpp:228 port/frontend/shell/porpoise_rows.cpp:1162
 msgid "GameCube Controller"
-msgstr ""
+msgstr "คอนโทรลเลอร์เกมคิวบ์"
 
 #: port/frontend/shell/porpoise_rows.cpp:192 port/frontend/shell/porpoise_rows.cpp:204 port/frontend/shell/porpoise_rows.cpp:216 port/frontend/shell/porpoise_rows.cpp:228 port/frontend/shell/porpoise_rows.cpp:1162
 msgid "GBA (Integrated)"
-msgstr ""
+msgstr "GBA (บูรณาการ)"
 
 #: port/frontend/shell/porpoise_rows.cpp:193 port/frontend/shell/porpoise_rows.cpp:196 port/frontend/shell/porpoise_rows.cpp:205 port/frontend/shell/porpoise_rows.cpp:208 port/frontend/shell/porpoise_rows.cpp:217 port/frontend/shell/porpoise_rows.cpp:220 port/frontend/shell/porpoise_rows.cpp:229 port/frontend/shell/porpoise_rows.cpp:232
 msgid "Controlled by"
-msgstr ""
+msgstr "ควบคุมโดย"
 
 #: port/frontend/shell/porpoise_rows.cpp:193 port/frontend/shell/porpoise_rows.cpp:205 port/frontend/shell/porpoise_rows.cpp:217 port/frontend/shell/porpoise_rows.cpp:229
 msgid "Who plays this GBA by holding their GBA button."
-msgstr ""
+msgstr "ใครเล่น GBA นี้โดยกดปุ่ม GBA ค้างไว้"
 
 #: port/frontend/shell/porpoise_rows.cpp:194 port/frontend/shell/porpoise_rows.cpp:206 port/frontend/shell/porpoise_rows.cpp:218 port/frontend/shell/porpoise_rows.cpp:230
 msgid "A player: they play it while holding their GBA button, with its sound on their controller. Its own controller: the controller in this port is the GBA, no button needed. Nobody: only from the web page."
-msgstr ""
+msgstr "ผู้เล่น: พวกเขาเล่นโดยกดปุ่ม GBA ค้างไว้ โดยมีเสียงบนตัวควบคุม คอนโทรลเลอร์ของตัวเอง: คอนโทรลเลอร์ในพอร์ตนี้คือ GBA ไม่จำเป็นต้องใช้ปุ่ม ไม่มีใคร: จากหน้าเว็บเท่านั้น"
 
 #: port/frontend/shell/porpoise_rows.cpp:195 port/frontend/shell/porpoise_rows.cpp:207 port/frontend/shell/porpoise_rows.cpp:219 port/frontend/shell/porpoise_rows.cpp:231 port/frontend/shell/porpoise_rows.cpp:1153
 msgid "Its own controller"
-msgstr ""
+msgstr "ผู้ควบคุมของตัวเอง"
 
 #: port/frontend/shell/porpoise_rows.cpp:196 port/frontend/shell/porpoise_rows.cpp:208 port/frontend/shell/porpoise_rows.cpp:220 port/frontend/shell/porpoise_rows.cpp:232
 msgid "Whose controller is in this port."
-msgstr ""
+msgstr "ผู้ควบคุมอยู่ในพอร์ตนี้"
 
 #: port/frontend/shell/porpoise_rows.cpp:198 port/frontend/shell/porpoise_rows.cpp:210 port/frontend/shell/porpoise_rows.cpp:222 port/frontend/shell/porpoise_rows.cpp:234 port/frontend/shell/porpoise_rows.cpp:621
 msgid "GBA button"
-msgstr ""
+msgstr "ปุ่ม GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:198 port/frontend/shell/porpoise_rows.cpp:210 port/frontend/shell/porpoise_rows.cpp:222 port/frontend/shell/porpoise_rows.cpp:234
 msgid "Hold the GBA button, press it to toggle, or keep it always on or off."
-msgstr ""
+msgstr "กดปุ่ม GBA ค้างไว้ กดเพื่อสลับ หรือเปิดหรือปิดไว้ตลอดเวลา"
 
 #: port/frontend/shell/porpoise_rows.cpp:199 port/frontend/shell/porpoise_rows.cpp:211 port/frontend/shell/porpoise_rows.cpp:223 port/frontend/shell/porpoise_rows.cpp:235 port/frontend/shell/porpoise_rows.cpp:369 port/frontend/shell/porpoise_rows.cpp:381 port/frontend/shell/porpoise_rows.cpp:393 port/frontend/shell/porpoise_rows.cpp:405
 msgid "Toggle"
-msgstr ""
+msgstr "สลับ"
 
 #: port/frontend/shell/porpoise_rows.cpp:199 port/frontend/shell/porpoise_rows.cpp:211 port/frontend/shell/porpoise_rows.cpp:223 port/frontend/shell/porpoise_rows.cpp:235 port/frontend/shell/porpoise_rows.cpp:369 port/frontend/shell/porpoise_rows.cpp:381 port/frontend/shell/porpoise_rows.cpp:393 port/frontend/shell/porpoise_rows.cpp:405
 msgid "Always on"
-msgstr ""
+msgstr "เปิดอยู่เสมอ"
 
 #: port/frontend/shell/porpoise_rows.cpp:199 port/frontend/shell/porpoise_rows.cpp:211 port/frontend/shell/porpoise_rows.cpp:223 port/frontend/shell/porpoise_rows.cpp:235 port/frontend/shell/porpoise_rows.cpp:369 port/frontend/shell/porpoise_rows.cpp:381 port/frontend/shell/porpoise_rows.cpp:393 port/frontend/shell/porpoise_rows.cpp:405
 msgid "Always off"
-msgstr ""
+msgstr "ปิดเสมอ"
 
 #: port/frontend/shell/porpoise_rows.cpp:200 port/frontend/shell/porpoise_rows.cpp:212 port/frontend/shell/porpoise_rows.cpp:224 port/frontend/shell/porpoise_rows.cpp:236
 msgid "GBA game"
-msgstr ""
+msgstr "เกมจีบีเอ"
 
 #: port/frontend/shell/porpoise_rows.cpp:200
 msgid "The GBA game loaded at start, from games/gba/port1. None: BIOS only."
-msgstr ""
+msgstr "เกม GBA โหลดตั้งแต่เริ่มต้น จาก games/gba/port1 ไม่มี: BIOS เท่านั้น"
 
 #: port/frontend/shell/porpoise_rows.cpp:201 port/frontend/shell/porpoise_rows.cpp:213 port/frontend/shell/porpoise_rows.cpp:225 port/frontend/shell/porpoise_rows.cpp:237
 msgid "Save beside the game"
-msgstr ""
+msgstr "บันทึกข้างเกม"
 
 #: port/frontend/shell/porpoise_rows.cpp:201 port/frontend/shell/porpoise_rows.cpp:213 port/frontend/shell/porpoise_rows.cpp:225 port/frontend/shell/porpoise_rows.cpp:237
 msgid "Keeps this GBA's save next to its game instead of with the other saves."
-msgstr ""
+msgstr "เก็บการบันทึกของ GBA นี้ไว้ข้างเกม แทนที่จะเก็บไว้กับการบันทึกอื่นๆ"
 
 #: port/frontend/shell/porpoise_rows.cpp:212
 msgid "The GBA game loaded at start, from games/gba/port2. None: BIOS only."
-msgstr ""
+msgstr "เกม GBA โหลดตั้งแต่เริ่มต้น จาก games/gba/port2 ไม่มี: BIOS เท่านั้น"
 
 #: port/frontend/shell/porpoise_rows.cpp:224
 msgid "The GBA game loaded at start, from games/gba/port3. None: BIOS only."
-msgstr ""
+msgstr "เกม GBA โหลดตั้งแต่เริ่มต้น จาก games/gba/port3 ไม่มี: BIOS เท่านั้น"
 
 #: port/frontend/shell/porpoise_rows.cpp:236
 msgid "The GBA game loaded at start, from games/gba/port4. None: BIOS only."
-msgstr ""
+msgstr "เกม GBA โหลดตั้งแต่เริ่มต้น จาก games/gba/port4 ไม่มี: BIOS เท่านั้น"
 
 #: port/frontend/shell/porpoise_rows.cpp:238
 msgid "Console"
-msgstr ""
+msgstr "คอนโซล"
 
 #: port/frontend/shell/porpoise_rows.cpp:238
 msgid "Which console's controls to use, if a game is detected wrongly."
-msgstr ""
+msgstr "จะใช้การควบคุมของคอนโซลใด หากตรวจพบเกมอย่างไม่ถูกต้อง"
 
 #: port/frontend/shell/porpoise_rows.cpp:240
 msgid "Button layout"
@@ -5525,7 +5527,7 @@ msgstr "PlayStation: ปุ่มกากบาท​คือ A และ​�
 
 #: port/frontend/shell/porpoise_rows.cpp:242
 msgid "PlayStation: Cross is A and Circle is B. GameCube: Circle is A and Cross is B. My layouts are the ones you make on the Buttons page. For GameCube games and Wii games played with a GameCube controller."
-msgstr ""
+msgstr "PlayStation: กากบาท คือ A และ วงกลม คือ B GameCube: วงกลม คือ A และ กากบาท คือ B เค้าโครงของฉันคือเค้าโครงที่คุณสร้างในหน้าปุ่ม สำหรับเกม GameCube และเกม Wii ที่เล่นด้วยคอนโทรลเลอร์ GameCube"
 
 #: port/frontend/shell/porpoise_rows.cpp:244
 msgid "Controller rumble."
@@ -5589,95 +5591,95 @@ msgstr "สติ๊ก​ขวา"
 
 #: port/frontend/shell/porpoise_rows.cpp:255
 msgid "Player 1's port"
-msgstr ""
+msgstr "พอร์ตของผู้เล่นคนที่ 1"
 
 #: port/frontend/shell/porpoise_rows.cpp:255
 msgid "The GameCube port your controller is in, for the few games that want another."
-msgstr ""
+msgstr "พอร์ต GameCube ที่คอนโทรลเลอร์ของคุณอยู่ สำหรับเกมบางเกมที่ต้องการเกมอื่น"
 
 #: port/frontend/shell/porpoise_rows.cpp:256
 msgid "The GameCube port your controller is in. A few games briefly need it in another port."
-msgstr ""
+msgstr "พอร์ต GameCube ที่คอนโทรลเลอร์ของคุณอยู่ เกมบางเกมจำเป็นต้องใช้พอร์ตอื่นในช่วงสั้นๆ"
 
 #: port/frontend/shell/porpoise_rows.cpp:258
 msgid "Invert the control stick"
-msgstr ""
+msgstr "พลิกกลับแท่งควบคุม"
 
 #: port/frontend/shell/porpoise_rows.cpp:258
 msgid "For a game whose controls feel reversed. Best set per game."
-msgstr ""
+msgstr "สำหรับเกมที่รู้สึกว่าการควบคุมกลับกัน ชุดที่ดีที่สุดต่อเกม"
 
 #: port/frontend/shell/porpoise_rows.cpp:259 port/frontend/shell/porpoise_rows.cpp:261
 msgid "Up and down"
-msgstr ""
+msgstr "ขึ้นและลง"
 
 #: port/frontend/shell/porpoise_rows.cpp:259 port/frontend/shell/porpoise_rows.cpp:261
 msgid "Left and right"
-msgstr ""
+msgstr "ซ้ายและขวา"
 
 #: port/frontend/shell/porpoise_rows.cpp:259 port/frontend/shell/porpoise_rows.cpp:261
 msgid "Both"
-msgstr ""
+msgstr "ทั้งสองอย่าง"
 
 #: port/frontend/shell/porpoise_rows.cpp:260
 msgid "Invert the C-stick"
-msgstr ""
+msgstr "กลับด้านแท่ง C"
 
 #: port/frontend/shell/porpoise_rows.cpp:260
 msgid "For a game whose camera feels reversed. Best set per game."
-msgstr ""
+msgstr "สำหรับเกมที่รู้สึกว่ากล้องกลับด้าน ชุดที่ดีที่สุดต่อเกม"
 
 #: port/frontend/shell/porpoise_rows.cpp:262
 msgid "Stick sensitivity"
-msgstr ""
+msgstr "ติดความไว"
 
 #: port/frontend/shell/porpoise_rows.cpp:262
 msgid "Lower makes small pushes gentler. A full push still turns fully."
-msgstr ""
+msgstr "ส่วนล่างทำให้การกดเล็กน้อยนุ่มนวลขึ้น การผลักเต็มที่ยังคงหมุนได้เต็มที่"
 
 #: port/frontend/shell/porpoise_rows.cpp:263 port/frontend/shell/porpoise_rows.cpp:313
 msgid "Normal"
-msgstr ""
+msgstr "ปกติ"
 
 #: port/frontend/shell/porpoise_rows.cpp:263
 msgid "Lower"
-msgstr ""
+msgstr "ล่าง"
 
 #: port/frontend/shell/porpoise_rows.cpp:263
 msgid "Lowest"
-msgstr ""
+msgstr "ต่ำสุด"
 
 #: port/frontend/shell/porpoise_rows.cpp:264
 msgid "Stick dead zone"
-msgstr ""
+msgstr "ติดโซนตาย"
 
 #: port/frontend/shell/porpoise_rows.cpp:264
 msgid "How far the stick moves before the game sees it, for a stick that drifts."
-msgstr ""
+msgstr "ไม้เท้าจะเคลื่อนที่ไปไกลแค่ไหนก่อนที่เกมจะเห็น ไม้เท้าที่ลอยได้"
 
 #: port/frontend/shell/porpoise_rows.cpp:265
 msgid "Small"
-msgstr ""
+msgstr "เล็ก"
 
 #: port/frontend/shell/porpoise_rows.cpp:265
 msgid "Large"
-msgstr ""
+msgstr "ใหญ่"
 
 #: port/frontend/shell/porpoise_rows.cpp:266
 msgid "Fast forward buttons"
-msgstr ""
+msgstr "ปุ่มกรอไปข้างหน้า"
 
 #: port/frontend/shell/porpoise_rows.cpp:266
 msgid "Touchpad + R1 steps fast forward; touchpad + R2 fast-forwards while held."
-msgstr ""
+msgstr "ทัชแพด + R1 ก้าวไปข้างหน้าอย่างรวดเร็ว ทัชแพด + R2 กรอไปข้างหน้าขณะถือ"
 
 #: port/frontend/shell/porpoise_rows.cpp:268
 msgid "Quick save buttons"
-msgstr ""
+msgstr "ปุ่มบันทึกด่วน"
 
 #: port/frontend/shell/porpoise_rows.cpp:268
 msgid "Touchpad + L1 saves to this slot and touchpad + L2 loads it."
-msgstr ""
+msgstr "ทัชแพด + L1 บันทึกลงในช่องนี้ และทัชแพด + L2 จะโหลด"
 
 #: port/frontend/shell/porpoise_rows.cpp:270 port/frontend/shell/settings.cpp:868
 msgid "Turbo button"
@@ -5685,39 +5687,39 @@ msgstr "ปุ่ม​เทอร์โบ"
 
 #: port/frontend/shell/porpoise_rows.cpp:270
 msgid "Holding this button presses it repeatedly."
-msgstr ""
+msgstr "การกดปุ่มนี้ค้างไว้จะกดซ้ำๆ"
 
 #: port/frontend/shell/porpoise_rows.cpp:271
 msgid "Cross"
-msgstr ""
+msgstr "ข้าม"
 
 #: port/frontend/shell/porpoise_rows.cpp:271
 msgid "Circle"
-msgstr ""
+msgstr "วงกลม"
 
 #: port/frontend/shell/porpoise_rows.cpp:271
 msgid "Square"
-msgstr ""
+msgstr "สี่เหลี่ยม"
 
 #: port/frontend/shell/porpoise_rows.cpp:271
 msgid "Triangle"
-msgstr ""
+msgstr "สามเหลี่ยม"
 
 #: port/frontend/shell/porpoise_rows.cpp:272
 msgid "Screenshot buttons"
-msgstr ""
+msgstr "ปุ่มสกรีนช็อต"
 
 #: port/frontend/shell/porpoise_rows.cpp:272
 msgid "In a game, touchpad + Square takes a screenshot."
-msgstr ""
+msgstr "ในเกม ทัชแพด + สี่เหลี่ยม จะจับภาพหน้าจอ"
 
 #: port/frontend/shell/porpoise_rows.cpp:274
 msgid "Trigger click"
-msgstr ""
+msgstr "ทริกเกอร์การคลิก"
 
 #: port/frontend/shell/porpoise_rows.cpp:274
 msgid "L2 and R2 click near the bottom, like the GameCube's triggers."
-msgstr ""
+msgstr "L2 และ R2 คลิกใกล้ด้านล่าง เช่นเดียวกับทริกเกอร์ของ GameCube"
 
 #: port/frontend/shell/porpoise_rows.cpp:275 port/frontend/shell/settings.cpp:168
 msgid "Light"
@@ -5725,175 +5727,175 @@ msgstr "สว่าง"
 
 #: port/frontend/shell/porpoise_rows.cpp:275
 msgid "Firm"
-msgstr ""
+msgstr "บริษัท"
 
 #: port/frontend/shell/porpoise_rows.cpp:275
 msgid "Extra firm"
-msgstr ""
+msgstr "แน่นเป็นพิเศษ"
 
 #: port/frontend/shell/porpoise_rows.cpp:276 port/frontend/shell/porpoise_rows.cpp:278 port/frontend/shell/porpoise_rows.cpp:280 port/frontend/shell/porpoise_rows.cpp:282
 msgid "Light bar"
-msgstr ""
+msgstr "แถบไฟ"
 
 #: port/frontend/shell/porpoise_rows.cpp:276 port/frontend/shell/porpoise_rows.cpp:278 port/frontend/shell/porpoise_rows.cpp:280 port/frontend/shell/porpoise_rows.cpp:282
 msgid "The colour of this player's light bar."
-msgstr ""
+msgstr "สีของแถบแสงของเครื่องเล่นนี้"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Blue"
-msgstr ""
+msgstr "สีฟ้า"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Red"
-msgstr ""
+msgstr "สีแดง"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Green"
-msgstr ""
+msgstr "สีเขียว"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Pink"
-msgstr ""
+msgstr "สีชมพู"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Purple"
-msgstr ""
+msgstr "สีม่วง"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Orange"
-msgstr ""
+msgstr "ส้ม"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Yellow"
-msgstr ""
+msgstr "สีเหลือง"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Cyan"
-msgstr ""
+msgstr "สีฟ้า"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "White"
-msgstr ""
+msgstr "ขาว"
 
 #: port/frontend/shell/porpoise_rows.cpp:284
 msgid "Wii Remotes"
-msgstr ""
+msgstr "รีโมท Wii"
 
 #: port/frontend/shell/porpoise_rows.cpp:284
 msgid "Use your DualSense, or real Remotes through a Mayflash DolphinBar."
-msgstr ""
+msgstr "ใช้ DualSense ของคุณหรือรีโมทจริงผ่าน Mayflash DolphinBar"
 
 #: port/frontend/shell/porpoise_rows.cpp:285
 msgid "DualSense: your controller is the Wii Remote. Real Wii Remotes: up to four through a Mayflash DolphinBar (mode 4) in a USB port, with their own attachments, pointer and motion. Applies when the game starts."
-msgstr ""
+msgstr "DualSense: คอนโทรลเลอร์ของคุณคือ Wii Remote รีโมท Wii จริง: สูงสุดสี่ตัวผ่าน Mayflash DolphinBar (โหมด 4) ในพอร์ต USB พร้อมด้วยไฟล์แนบ ตัวชี้ และการเคลื่อนไหวของตัวเอง ใช้งานเมื่อเกมเริ่ม"
 
 #: port/frontend/shell/porpoise_rows.cpp:286
 msgid "Real Wii Remotes (DolphinBar)"
-msgstr ""
+msgstr "รีโมท Wii จริง (DolphinBar)"
 
 #: port/frontend/shell/porpoise_rows.cpp:287
 msgid "Wii buttons"
-msgstr ""
+msgstr "ปุ่มวีไอ"
 
 #: port/frontend/shell/porpoise_rows.cpp:287
 msgid "Which buttons the Wii controllers use."
-msgstr ""
+msgstr "ปุ่มใดที่คอนโทรลเลอร์ Wii ใช้"
 
 #: port/frontend/shell/porpoise_rows.cpp:288 port/frontend/shell/porpoise_rows.cpp:363 port/frontend/shell/porpoise_rows.cpp:674
 msgid "Default set"
-msgstr ""
+msgstr "ชุดเริ่มต้น"
 
 #: port/frontend/shell/porpoise_rows.cpp:288 port/frontend/shell/porpoise_rows.cpp:363 port/frontend/shell/porpoise_rows.cpp:674
 msgid "Mine 1"
-msgstr ""
+msgstr "ของฉัน 1"
 
 #: port/frontend/shell/porpoise_rows.cpp:288 port/frontend/shell/porpoise_rows.cpp:363 port/frontend/shell/porpoise_rows.cpp:674
 msgid "Mine 2"
-msgstr ""
+msgstr "ของฉัน 2"
 
 #: port/frontend/shell/porpoise_rows.cpp:289
 msgid "Pointer speed"
-msgstr ""
+msgstr "ความเร็วของตัวชี้"
 
 #: port/frontend/shell/porpoise_rows.cpp:289
 msgid "How far you turn the controller to reach the screen's edge."
-msgstr ""
+msgstr "คุณหมุนคอนโทรลเลอร์ไปไกลแค่ไหนถึงขอบหน้าจอ"
 
 #: port/frontend/shell/porpoise_rows.cpp:290
 msgid "Your screen"
-msgstr ""
+msgstr "หน้าจอของคุณ"
 
 #: port/frontend/shell/porpoise_rows.cpp:291
 msgid "Pointer range"
-msgstr ""
+msgstr "ช่วงตัวชี้"
 
 #: port/frontend/shell/porpoise_rows.cpp:291
 msgid "Widen it if the pointer can't reach the screen's edge."
-msgstr ""
+msgstr "ขยายให้กว้างขึ้นหากตัวชี้ไปไม่ถึงขอบหน้าจอ"
 
 #: port/frontend/shell/porpoise_rows.cpp:292
 msgid "Standard"
-msgstr ""
+msgstr "มาตรฐาน"
 
 #: port/frontend/shell/porpoise_rows.cpp:292
 msgid "Wide"
-msgstr ""
+msgstr "กว้าง"
 
 #: port/frontend/shell/porpoise_rows.cpp:292
 msgid "Extra wide"
-msgstr ""
+msgstr "กว้างเป็นพิเศษ"
 
 #: port/frontend/shell/porpoise_rows.cpp:293
 msgid "Grip"
-msgstr ""
+msgstr "ด้ามจับ"
 
 #: port/frontend/shell/porpoise_rows.cpp:293
 msgid "How you hold the DualSense. Automatic detects it."
-msgstr ""
+msgstr "วิธีจับ DualSense ตรวจจับได้อัตโนมัติ"
 
 #: port/frontend/shell/porpoise_rows.cpp:294
 msgid "Both hands"
-msgstr ""
+msgstr "มือทั้งสองข้าง"
 
 #: port/frontend/shell/porpoise_rows.cpp:294
 msgid "Upright, trigger to the TV"
-msgstr ""
+msgstr "ตั้งตรง เรียกไปที่ทีวี"
 
 #: port/frontend/shell/porpoise_rows.cpp:294
 msgid "Upright, facing you"
-msgstr ""
+msgstr "ตั้งตรงหันหน้าเข้าหาคุณ"
 
 #: port/frontend/shell/porpoise_rows.cpp:295
 msgid "Motion"
-msgstr ""
+msgstr "การเคลื่อนไหว"
 
 #: port/frontend/shell/porpoise_rows.cpp:295
 msgid "Tilt, swing and point with the DualSense."
-msgstr ""
+msgstr "เอียง แกว่ง และชี้ด้วย DualSense"
 
 #: port/frontend/shell/porpoise_rows.cpp:297
 msgid "Flick to shake"
-msgstr ""
+msgstr "ปัดเพื่อเขย่า"
 
 #: port/frontend/shell/porpoise_rows.cpp:297
 msgid "A quick flick of the controller shakes the Remote."
-msgstr ""
+msgstr "การสะบัดตัวควบคุมอย่างรวดเร็วจะทำให้รีโมทสั่น"
 
 #: port/frontend/shell/porpoise_rows.cpp:299
 msgid "Wii MotionPlus"
-msgstr ""
+msgstr "เครื่อง Wii MotionPlus"
 
 #: port/frontend/shell/porpoise_rows.cpp:299
 msgid "Adds MotionPlus using the gyroscope. Automatic: for games that need it."
-msgstr ""
+msgstr "เพิ่ม MotionPlus โดยใช้ไจโรสโคป อัตโนมัติ: สำหรับเกมที่ต้องการ"
 
 #: port/frontend/shell/porpoise_rows.cpp:301
 msgid "Setup before each game"
-msgstr ""
+msgstr "ตั้งค่าก่อนแต่ละเกม"
 
 #: port/frontend/shell/porpoise_rows.cpp:301
 msgid "Shows the Wii Remote's setup when a game starts."
-msgstr ""
+msgstr "แสดงการตั้งค่าของ Wii Remote เมื่อเกมเริ่ม"
 
 #: port/frontend/shell/porpoise_rows.cpp:303
 msgid "The game's sound."
@@ -5901,75 +5903,75 @@ msgstr "เสียง​ของ​เกม"
 
 #: port/frontend/shell/porpoise_rows.cpp:304
 msgid "Mute the game"
-msgstr ""
+msgstr "ปิดเสียงเกม"
 
 #: port/frontend/shell/porpoise_rows.cpp:304
 msgid "Silences the game."
-msgstr ""
+msgstr "ปิดเสียงเกม"
 
 #: port/frontend/shell/porpoise_rows.cpp:305
 msgid "Accurate sound"
-msgstr ""
+msgstr "เสียงที่แม่นยำ"
 
 #: port/frontend/shell/porpoise_rows.cpp:305
 msgid "Exact sound emulation. Fixes a few games but is much slower."
-msgstr ""
+msgstr "การจำลองเสียงที่แม่นยำ แก้ไขบางเกมแต่ช้ากว่ามาก"
 
 #: port/frontend/shell/porpoise_rows.cpp:307
 msgid "Wii Remote speaker"
-msgstr ""
+msgstr "ลำโพงรีโมท Wii"
 
 #: port/frontend/shell/porpoise_rows.cpp:307
 msgid "The Remote's sounds: from the TV, or from each player's controller."
-msgstr ""
+msgstr "เสียงของรีโมท: จาก TV หรือจากตัวควบคุมของผู้เล่นแต่ละคน"
 
 #: port/frontend/shell/porpoise_rows.cpp:308
 msgid "Controller"
-msgstr ""
+msgstr "คอนโทรลเลอร์"
 
 #: port/frontend/shell/porpoise_rows.cpp:309
 msgid "Sound preset"
-msgstr ""
+msgstr "เสียงที่ตั้งไว้ล่วงหน้า"
 
 #: port/frontend/shell/porpoise_rows.cpp:309
 msgid "How sound handles a game running slow."
-msgstr ""
+msgstr "เสียงจัดการกับเกมที่ทำงานช้าได้อย่างไร"
 
 #: port/frontend/shell/porpoise_rows.cpp:310
 msgid "Smooth fills gaps when a game runs slow instead of crackling. Responsive has a little less delay. Extra smooth suits games that slow down often. Classic is the older sound; changing to or from it applies next time a game starts."
-msgstr ""
+msgstr "เติมเต็มช่องว่างอย่างราบรื่นเมื่อเกมดำเนินไปอย่างช้าๆ แทนที่จะเกิดเสียงแตก การตอบสนองมีความล่าช้าน้อยกว่าเล็กน้อย ลื่นไหลเป็นพิเศษเหมาะกับเกมที่ช้าลงบ่อยครั้ง คลาสสิกคือเสียงที่เก่ากว่า เปลี่ยนเป็นหรือเปลี่ยนมาใช้ในครั้งถัดไปที่เกมเริ่ม"
 
 #: port/frontend/shell/porpoise_rows.cpp:311
 msgid "Responsive"
-msgstr ""
+msgstr "ตอบสนอง"
 
 #: port/frontend/shell/porpoise_rows.cpp:311
 msgid "Extra smooth"
-msgstr ""
+msgstr "เรียบเนียนเป็นพิเศษ"
 
 #: port/frontend/shell/porpoise_rows.cpp:312
 msgid "Audio buffer"
-msgstr ""
+msgstr "บัฟเฟอร์เสียง"
 
 #: port/frontend/shell/porpoise_rows.cpp:312
 msgid "More prevents crackling but adds a little delay."
-msgstr ""
+msgstr "ป้องกันการแตกร้าวมากขึ้นแต่เพิ่มความล่าช้าเล็กน้อย"
 
 #: port/frontend/shell/porpoise_rows.cpp:314
 msgid "Fill audio gaps"
-msgstr ""
+msgstr "เติมช่องว่างด้านเสียง"
 
 #: port/frontend/shell/porpoise_rows.cpp:314
 msgid "Fills gaps with a faded repeat when a game runs slow."
-msgstr ""
+msgstr "เติมเต็มช่องว่างด้วยการทำซ้ำที่จางลงเมื่อเกมดำเนินไปอย่างช้าๆ"
 
 #: port/frontend/shell/porpoise_rows.cpp:315
 msgid "Audio stretching"
-msgstr ""
+msgstr "การยืดเสียง"
 
 #: port/frontend/shell/porpoise_rows.cpp:315
 msgid "When a game slows down, its sound slows with it, instead of crackling."
-msgstr ""
+msgstr "เมื่อเกมช้าลง เสียงก็จะช้าลงตามไปด้วย แทนที่จะดังแคร็ก"
 
 #: port/frontend/shell/porpoise_rows.cpp:316 port/frontend/shell/settings.cpp:1051
 msgid "Microphone"
@@ -5977,7 +5979,7 @@ msgstr "ไมโครโฟน"
 
 #: port/frontend/shell/porpoise_rows.cpp:316
 msgid "Use the DualSense mic as the GameCube Microphone and Wii Speak."
-msgstr ""
+msgstr "ใช้ไมโครโฟน DualSense เป็นไมโครโฟน GameCube และพูด Wii"
 
 #: port/frontend/shell/porpoise_rows.cpp:318 port/frontend/shell/shell.cpp:2043
 msgid "Resume where you left off"
@@ -6045,319 +6047,319 @@ msgstr "ภาษา​เกาหลี"
 
 #: port/frontend/shell/porpoise_rows.cpp:327
 msgid "Fast save states"
-msgstr ""
+msgstr "บันทึกสถานะอย่างรวดเร็ว"
 
 #: port/frontend/shell/porpoise_rows.cpp:327
 msgid "Quicker and smaller states. Turn it off if a game looks wrong after loading one."
-msgstr ""
+msgstr "รัฐที่เร็วกว่าและเล็กกว่า ปิดการทำงานหากเกมดูผิดปกติหลังจากโหลดแล้ว"
 
 #: port/frontend/shell/porpoise_rows.cpp:329
 msgid "Progressive scan"
-msgstr ""
+msgstr "การสแกนแบบก้าวหน้า"
 
 #: port/frontend/shell/porpoise_rows.cpp:329
 msgid "480p output, as on a component cable."
-msgstr ""
+msgstr "เอาต์พุต 480p เช่นเดียวกับสายเคเบิลคอมโพเนนต์"
 
 #: port/frontend/shell/porpoise_rows.cpp:331
 msgid "Wii widescreen"
-msgstr ""
+msgstr "เครื่องวีไวด์สกรีน"
 
 #: port/frontend/shell/porpoise_rows.cpp:331
 msgid "The Wii's 16:9 setting, used by Wii games."
-msgstr ""
+msgstr "การตั้งค่า 16:9 ของ Wii ซึ่งใช้โดยเกม Wii"
 
 #: port/frontend/shell/porpoise_rows.cpp:333
 msgid "PAL games at 60 Hz"
-msgstr ""
+msgstr "เกม PAL ที่ 60 Hz"
 
 #: port/frontend/shell/porpoise_rows.cpp:333
 msgid "European Wii games at 60 Hz, as a Wii set to EURGB60. Off: 50 Hz."
-msgstr ""
+msgstr "European Wii games at 60 Hz, as a Wii set to EURGB60. ปิด: 50 เฮิรตซ์"
 
 #: port/frontend/shell/porpoise_rows.cpp:335
 msgid "Sensor bar"
-msgstr ""
+msgstr "แถบเซ็นเซอร์"
 
 #: port/frontend/shell/porpoise_rows.cpp:335
 msgid "Where the sensor bar is."
-msgstr ""
+msgstr "แถบเซ็นเซอร์อยู่ที่ไหน"
 
 #: port/frontend/shell/porpoise_rows.cpp:336
 msgid "Below the TV"
-msgstr ""
+msgstr "ด้านล่างทีวี"
 
 #: port/frontend/shell/porpoise_rows.cpp:336
 msgid "Above the TV"
-msgstr ""
+msgstr "เหนือทีวี"
 
 #: port/frontend/shell/porpoise_rows.cpp:337
 msgid "GameCube boot animation"
-msgstr ""
+msgstr "แอนิเมชั่นการบูต GameCube"
 
 #: port/frontend/shell/porpoise_rows.cpp:337
 msgid "Shows the GameCube start-up before games. Needs your own IPL.bin."
-msgstr ""
+msgstr "แสดงการสตาร์ทเครื่อง GameCube ก่อนเกม ต้องการ IPL.bin ของคุณเอง"
 
 #: port/frontend/shell/porpoise_rows.cpp:339
 msgid "WiiConnect24 channels"
-msgstr ""
+msgstr "ช่อง WiiConnect24"
 
 #: port/frontend/shell/porpoise_rows.cpp:339
 msgid "Forecast, News, Check Mii Out and more through WiiLink. Needs the PS5 online."
-msgstr ""
+msgstr "พยากรณ์อากาศ ข่าวสาร เช็ค Mii Out และอื่นๆ อีกมากมายผ่าน WiiLink ต้องการ PS5 ออนไลน์"
 
 #: port/frontend/shell/porpoise_rows.cpp:341
 msgid "Overclocking can smooth a game that slows down. 100% is the real console."
-msgstr ""
+msgstr "การโอเวอร์คล็อกสามารถทำให้เกมช้าลงได้ 100% คือคอนโซลจริง"
 
 #: port/frontend/shell/porpoise_rows.cpp:343 port/frontend/shell/porpoise_rows.cpp:1774 port/frontend/shell/settings.cpp:285
 msgid "Auto Boost"
-msgstr ""
+msgstr "บูสต์อัตโนมัติ"
 
 #: port/frontend/shell/porpoise_rows.cpp:343
 msgid "New games start with the settings that run them best on PS5. Turn it off for a game in its own settings."
-msgstr ""
+msgstr "เกมใหม่เริ่มต้นด้วยการตั้งค่าที่ทำงานได้ดีที่สุดบน PS5 ปิดมันสำหรับเกมในการตั้งค่าของตัวเอง"
 
 #: port/frontend/shell/porpoise_rows.cpp:346 port/frontend/shell/porpoise_rows.cpp:1784
 msgid "Riptide Boost"
-msgstr ""
+msgstr "ริปไทด์บูสต์"
 
 #: port/frontend/shell/porpoise_rows.cpp:346 port/frontend/shell/porpoise_rows.cpp:1784
 msgid "Speeds up the emulated processor's 3D math. Turn it off if a game misbehaves."
-msgstr ""
+msgstr "เร่งความเร็วคณิตศาสตร์ 3 มิติของโปรเซสเซอร์จำลอง ปิดมันหากเกมทำงานผิดปกติ"
 
 #: port/frontend/shell/porpoise_rows.cpp:348
 msgid "Performance profiler"
-msgstr ""
+msgstr "เครื่องมือสร้างโปรไฟล์ประสิทธิภาพ"
 
 #: port/frontend/shell/porpoise_rows.cpp:348
 msgid "For reporting a slow game: logs where the CPU spends its time. Costs a little speed; turn it off after."
-msgstr ""
+msgstr "สำหรับการรายงานเกมที่ช้า: บันทึกที่ CPU ใช้เวลาอยู่ เสียความเร็วเล็กน้อย ปิดมันทีหลัง"
 
 #: port/frontend/shell/porpoise_rows.cpp:350
 msgid "Debug logs"
-msgstr ""
+msgstr "บันทึกการแก้ไขข้อบกพร่อง"
 
 #: port/frontend/shell/porpoise_rows.cpp:350
 msgid "Keeps detailed logs for reporting a problem. Can slow games a little."
-msgstr ""
+msgstr "เก็บบันทึกโดยละเอียดเพื่อรายงานปัญหา สามารถชะลอเกมได้เล็กน้อย"
 
 #: port/frontend/shell/porpoise_rows.cpp:352
 msgid "Dual core"
-msgstr ""
+msgstr "แกนคู่"
 
 #: port/frontend/shell/porpoise_rows.cpp:352
 msgid "Faster. Turn it off for a game that freezes or glitches."
-msgstr ""
+msgstr "เร็วขึ้น ปิดมันสำหรับเกมที่ค้างหรือผิดพลาด"
 
 #: port/frontend/shell/porpoise_rows.cpp:354
 msgid "Emulator on its own cores"
-msgstr ""
+msgstr "โปรแกรมจำลองบนคอร์ของตัวเอง"
 
 #: port/frontend/shell/porpoise_rows.cpp:354
 msgid "A PS5 core each for the emulated processor and graphics. Usually faster."
-msgstr ""
+msgstr "แกน PS5 แต่ละแกนสำหรับโปรเซสเซอร์และกราฟิกจำลอง มักจะเร็วกว่า"
 
 #: port/frontend/shell/porpoise_rows.cpp:356
 msgid "Exact multiply-add"
-msgstr ""
+msgstr "คูณ-บวก แน่นอน"
 
 #: port/frontend/shell/porpoise_rows.cpp:356
 msgid "Exact floating-point rounding. Much slower, and very few games need it."
-msgstr ""
+msgstr "การปัดเศษจุดลอยตัวที่แน่นอน ช้ากว่ามากและมีเกมเพียงไม่กี่เกมที่ต้องการ"
 
 #: port/frontend/shell/porpoise_rows.cpp:358
 msgid "Fast disc loading"
-msgstr ""
+msgstr "โหลดแผ่นดิสก์อย่างรวดเร็ว"
 
 #: port/frontend/shell/porpoise_rows.cpp:358
 msgid "Shorter loading screens. A few games need real disc speed."
-msgstr ""
+msgstr "หน้าจอโหลดสั้นลง เกมบางเกมต้องใช้ความเร็วดิสก์จริง"
 
 #: port/frontend/shell/porpoise_rows.cpp:360
 msgid "Cheat codes, for games that have them."
-msgstr ""
+msgstr "รหัสโกงสำหรับเกมที่มี"
 
 #: port/frontend/shell/porpoise_rows.cpp:362
 msgid "GBA buttons in use"
-msgstr ""
+msgstr "ปุ่ม GBA ที่ใช้งานอยู่"
 
 #: port/frontend/shell/porpoise_rows.cpp:362
 msgid "The default set, or one of your own."
-msgstr ""
+msgstr "ชุดเริ่มต้นหรือชุดของคุณเอง"
 
 #: port/frontend/shell/porpoise_rows.cpp:364
 msgid "GBA web page"
-msgstr ""
+msgstr "หน้าเว็บ GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:364
 msgid "Play the GBA in a browser on the same network, on port 6771."
-msgstr ""
+msgstr "เล่น GBA ในเบราว์เซอร์บนเครือข่ายเดียวกันบนพอร์ต 6771"
 
 #: port/frontend/shell/porpoise_rows.cpp:366 port/frontend/shell/porpoise_rows.cpp:378 port/frontend/shell/porpoise_rows.cpp:390 port/frontend/shell/porpoise_rows.cpp:402
 msgid "Position"
-msgstr ""
+msgstr "ตำแหน่ง"
 
 #: port/frontend/shell/porpoise_rows.cpp:366 port/frontend/shell/porpoise_rows.cpp:378 port/frontend/shell/porpoise_rows.cpp:390 port/frontend/shell/porpoise_rows.cpp:402
 msgid "Where its screen sits on the TV. Moving it in a game makes it Manual."
-msgstr ""
+msgstr "ที่หน้าจอวางอยู่บนทีวี การย้ายมันในเกมทำให้เป็นแบบแมนนวล"
 
 #: port/frontend/shell/porpoise_rows.cpp:367 port/frontend/shell/porpoise_rows.cpp:379 port/frontend/shell/porpoise_rows.cpp:391 port/frontend/shell/porpoise_rows.cpp:403
 msgid "Top left"
-msgstr ""
+msgstr "ซ้ายบน"
 
 #: port/frontend/shell/porpoise_rows.cpp:367 port/frontend/shell/porpoise_rows.cpp:379 port/frontend/shell/porpoise_rows.cpp:391 port/frontend/shell/porpoise_rows.cpp:403
 msgid "Top right"
-msgstr ""
+msgstr "ขวาบน"
 
 #: port/frontend/shell/porpoise_rows.cpp:367 port/frontend/shell/porpoise_rows.cpp:379 port/frontend/shell/porpoise_rows.cpp:391 port/frontend/shell/porpoise_rows.cpp:403
 msgid "Bottom left"
-msgstr ""
+msgstr "ซ้ายล่าง"
 
 #: port/frontend/shell/porpoise_rows.cpp:367 port/frontend/shell/porpoise_rows.cpp:379 port/frontend/shell/porpoise_rows.cpp:391 port/frontend/shell/porpoise_rows.cpp:403
 msgid "Bottom right"
-msgstr ""
+msgstr "ล่างขวา"
 
 #: port/frontend/shell/porpoise_rows.cpp:367 port/frontend/shell/porpoise_rows.cpp:379 port/frontend/shell/porpoise_rows.cpp:391 port/frontend/shell/porpoise_rows.cpp:403
 msgid "Manual"
-msgstr ""
+msgstr "คู่มือ"
 
 #: port/frontend/shell/porpoise_rows.cpp:368 port/frontend/shell/porpoise_rows.cpp:380 port/frontend/shell/porpoise_rows.cpp:392 port/frontend/shell/porpoise_rows.cpp:404 port/frontend/shell/porpoise_rows.cpp:617
 msgid "Show the GBA's screen"
-msgstr ""
+msgstr "แสดงหน้าจอ GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:368 port/frontend/shell/porpoise_rows.cpp:380 port/frontend/shell/porpoise_rows.cpp:392 port/frontend/shell/porpoise_rows.cpp:404
 msgid "Shows it over the game while held, toggled with each press, or always on or off."
-msgstr ""
+msgstr "แสดงผ่านเกมในขณะที่กดค้าง สลับกับการกดแต่ละครั้ง หรือเปิดหรือปิดตลอดเวลา"
 
 #: port/frontend/shell/porpoise_rows.cpp:369 port/frontend/shell/porpoise_rows.cpp:381 port/frontend/shell/porpoise_rows.cpp:393 port/frontend/shell/porpoise_rows.cpp:405
 msgid "While held"
-msgstr ""
+msgstr "ขณะถือ"
 
 #: port/frontend/shell/porpoise_rows.cpp:370 port/frontend/shell/porpoise_rows.cpp:382 port/frontend/shell/porpoise_rows.cpp:394 port/frontend/shell/porpoise_rows.cpp:406
 msgid "Position across"
-msgstr ""
+msgstr "ตำแหน่งขวาง"
 
 #: port/frontend/shell/porpoise_rows.cpp:370 port/frontend/shell/porpoise_rows.cpp:372 port/frontend/shell/porpoise_rows.cpp:382 port/frontend/shell/porpoise_rows.cpp:384 port/frontend/shell/porpoise_rows.cpp:394 port/frontend/shell/porpoise_rows.cpp:396 port/frontend/shell/porpoise_rows.cpp:406 port/frontend/shell/porpoise_rows.cpp:408
 msgid "Where its screen sits on the TV. Automatic picks a corner."
-msgstr ""
+msgstr "โดยที่หน้าจอจะอยู่ที่ TV เลือกมุมอัตโนมัติ"
 
 #: port/frontend/shell/porpoise_rows.cpp:372 port/frontend/shell/porpoise_rows.cpp:384 port/frontend/shell/porpoise_rows.cpp:396 port/frontend/shell/porpoise_rows.cpp:408
 msgid "Position down"
-msgstr ""
+msgstr "ตำแหน่งลง"
 
 #: port/frontend/shell/porpoise_rows.cpp:374 port/frontend/shell/porpoise_rows.cpp:386 port/frontend/shell/porpoise_rows.cpp:398 port/frontend/shell/porpoise_rows.cpp:410
 msgid "Screen size"
-msgstr ""
+msgstr "ขนาดหน้าจอ"
 
 #: port/frontend/shell/porpoise_rows.cpp:374 port/frontend/shell/porpoise_rows.cpp:386 port/frontend/shell/porpoise_rows.cpp:398 port/frontend/shell/porpoise_rows.cpp:410
 msgid "How big its screen is: 1 to 4 times the GBA's size."
-msgstr ""
+msgstr "ขนาดหน้าจอ: 1 ถึง 4 เท่าของขนาดของ GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:375 port/frontend/shell/porpoise_rows.cpp:387 port/frontend/shell/porpoise_rows.cpp:399 port/frontend/shell/porpoise_rows.cpp:411
 msgid "Opacity"
-msgstr ""
+msgstr "ความทึบ"
 
 #: port/frontend/shell/porpoise_rows.cpp:375 port/frontend/shell/porpoise_rows.cpp:387 port/frontend/shell/porpoise_rows.cpp:399 port/frontend/shell/porpoise_rows.cpp:411
 msgid "How much of the game shows through its screen on the TV."
-msgstr ""
+msgstr "เกมดังกล่าวแสดงผ่านหน้าจอบนทีวีมากน้อยเพียงใด"
 
 #: port/frontend/shell/porpoise_rows.cpp:376 port/frontend/shell/porpoise_rows.cpp:388 port/frontend/shell/porpoise_rows.cpp:400 port/frontend/shell/porpoise_rows.cpp:412
 msgid "Sharp or soft pixels. The web page has its own setting."
-msgstr ""
+msgstr "พิกเซลที่คมชัดหรือนุ่มนวล หน้าเว็บมีการตั้งค่าของตัวเอง"
 
 #: port/frontend/shell/porpoise_rows.cpp:376 port/frontend/shell/porpoise_rows.cpp:388 port/frontend/shell/porpoise_rows.cpp:400 port/frontend/shell/porpoise_rows.cpp:412
 msgid "Soft pixels"
-msgstr ""
+msgstr "พิกเซลแบบนุ่มนวล"
 
 #: port/frontend/shell/porpoise_rows.cpp:377 port/frontend/shell/porpoise_rows.cpp:389 port/frontend/shell/porpoise_rows.cpp:401 port/frontend/shell/porpoise_rows.cpp:413
 msgid "Interframe blending"
-msgstr ""
+msgstr "การผสมอินเตอร์เฟรม"
 
 #: port/frontend/shell/porpoise_rows.cpp:377 port/frontend/shell/porpoise_rows.cpp:389 port/frontend/shell/porpoise_rows.cpp:401 port/frontend/shell/porpoise_rows.cpp:413
 msgid "Blends each frame with the last, for games that flicker sprites. TV only."
-msgstr ""
+msgstr "ผสมผสานแต่ละเฟรมเข้ากับเฟรมสุดท้าย สำหรับเกมที่สไปรท์สั่นไหว TV เท่านั้น"
 
 #: port/frontend/shell/porpoise_rows.cpp:414 port/frontend/shell/porpoise_rows.cpp:418 port/frontend/shell/porpoise_rows.cpp:422 port/frontend/shell/porpoise_rows.cpp:426
 msgid "Its sound, on the TV or its player's controller."
-msgstr ""
+msgstr "เสียงบนทีวีหรือตัวควบคุมเครื่องเล่น"
 
 #: port/frontend/shell/porpoise_rows.cpp:415 port/frontend/shell/porpoise_rows.cpp:419 port/frontend/shell/porpoise_rows.cpp:423 port/frontend/shell/porpoise_rows.cpp:427
 msgid "Mute"
-msgstr ""
+msgstr "ปิดเสียง"
 
 #: port/frontend/shell/porpoise_rows.cpp:415 port/frontend/shell/porpoise_rows.cpp:419 port/frontend/shell/porpoise_rows.cpp:423 port/frontend/shell/porpoise_rows.cpp:427
 msgid "Turns its sound off."
-msgstr ""
+msgstr "ปิดเสียงของมัน"
 
 #: port/frontend/shell/porpoise_rows.cpp:416 port/frontend/shell/porpoise_rows.cpp:420 port/frontend/shell/porpoise_rows.cpp:424 port/frontend/shell/porpoise_rows.cpp:428
 msgid "Sound on the controller"
-msgstr ""
+msgstr "เสียงบนคอนโทรลเลอร์"
 
 #: port/frontend/shell/porpoise_rows.cpp:416 port/frontend/shell/porpoise_rows.cpp:420 port/frontend/shell/porpoise_rows.cpp:424 port/frontend/shell/porpoise_rows.cpp:428
 msgid "From its player's controller speaker instead of the TV."
-msgstr ""
+msgstr "จากลำโพงคอนโทรลเลอร์ของเครื่องเล่นแทนทีวี"
 
 #: port/frontend/shell/porpoise_rows.cpp:417 port/frontend/shell/porpoise_rows.cpp:421 port/frontend/shell/porpoise_rows.cpp:425 port/frontend/shell/porpoise_rows.cpp:429
 msgid "Speaker resampling"
-msgstr ""
+msgstr "การสุ่มตัวอย่างลำโพง"
 
 #: port/frontend/shell/porpoise_rows.cpp:417 port/frontend/shell/porpoise_rows.cpp:421 port/frontend/shell/porpoise_rows.cpp:425 port/frontend/shell/porpoise_rows.cpp:429
 msgid "Simple is sharper; Smooth is a little softer."
-msgstr ""
+msgstr "ความเรียบง่ายนั้นคมชัดกว่า ความนุ่มนวลจะนุ่มนวลขึ้นเล็กน้อย"
 
 #: port/frontend/shell/porpoise_rows.cpp:417 port/frontend/shell/porpoise_rows.cpp:421 port/frontend/shell/porpoise_rows.cpp:425 port/frontend/shell/porpoise_rows.cpp:429
 msgid "Simple"
-msgstr ""
+msgstr "เรียบง่าย"
 
 #: port/frontend/shell/porpoise_rows.cpp:452
 msgid "Arcade Cabinet"
-msgstr ""
+msgstr "ตู้อาร์เคด"
 
 #: port/frontend/shell/porpoise_rows.cpp:452
 msgid "Retro Cabinet"
-msgstr ""
+msgstr "คณะรัฐมนตรีย้อนยุค"
 
 #: port/frontend/shell/porpoise_rows.cpp:452
 msgid "Synthwave Cabinet"
-msgstr ""
+msgstr "ตู้ซินธ์เวฟ"
 
 #: port/frontend/shell/porpoise_rows.cpp:452
 msgid "80s TV"
-msgstr ""
+msgstr "ทีวียุค 80"
 
 #: port/frontend/shell/porpoise_rows.cpp:453
 msgid "Wood-Grain TV"
-msgstr ""
+msgstr "ทีวีลายไม้"
 
 #: port/frontend/shell/porpoise_rows.cpp:453
 msgid "90s TV"
-msgstr ""
+msgstr "ทีวียุค 90"
 
 #: port/frontend/shell/porpoise_rows.cpp:453
 msgid "Black TV"
-msgstr ""
+msgstr "ทีวีสีดำ"
 
 #: port/frontend/shell/porpoise_rows.cpp:453
 msgid "Beige Monitor"
-msgstr ""
+msgstr "จอภาพสีเบจ"
 
 #: port/frontend/shell/porpoise_rows.cpp:613 port/frontend/shell/porpoise_rows.cpp:616
 msgid "D-pad up"
-msgstr ""
+msgstr "ดีแพดขึ้น"
 
 #: port/frontend/shell/porpoise_rows.cpp:613 port/frontend/shell/porpoise_rows.cpp:616
 msgid "D-pad down"
-msgstr ""
+msgstr "D-pad ลง"
 
 #: port/frontend/shell/porpoise_rows.cpp:613 port/frontend/shell/porpoise_rows.cpp:616
 msgid "D-pad left"
-msgstr ""
+msgstr "ดีแพดด้านซ้าย"
 
 #: port/frontend/shell/porpoise_rows.cpp:613 port/frontend/shell/porpoise_rows.cpp:616
 msgid "D-pad right"
-msgstr ""
+msgstr "ดีแพด ด้านขวา"
 
 #: port/frontend/shell/porpoise_rows.cpp:616 port/frontend/shell/shell.cpp:2852 port/frontend/shell/shell.cpp:2890
 msgid "Select"
@@ -6365,35 +6367,35 @@ msgstr "ตกลง"
 
 #: port/frontend/shell/porpoise_rows.cpp:617
 msgid "Move the GBA's screen"
-msgstr ""
+msgstr "ย้ายหน้าจอ GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:617
 msgid "Adjust the GBA's opacity"
-msgstr ""
+msgstr "ปรับความทึบของ GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:617
 msgid "Reset the GBA"
-msgstr ""
+msgstr "รีเซ็ต GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:617
 msgid "Mute the GBA"
-msgstr ""
+msgstr "ปิดเสียง GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:618
 msgid "GBA volume"
-msgstr ""
+msgstr "ปริมาณ GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:618
 msgid "GBA link cable"
-msgstr ""
+msgstr "สายลิงค์ GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:618
 msgid "Quick save the GBA"
-msgstr ""
+msgstr "บันทึก GBA อย่างรวดเร็ว"
 
 #: port/frontend/shell/porpoise_rows.cpp:618
 msgid "Quick load the GBA"
-msgstr ""
+msgstr "โหลด GBA อย่างรวดเร็ว"
 
 #. a button layout of the player's own, made in Porpoise's Customize Buttons: {0} is its number
 #: port/frontend/shell/porpoise_rows.cpp:677 port/frontend/shell/porpoise_rows.cpp:1267
@@ -6402,11 +6404,11 @@ msgstr "รูปแบบ​ของ​ฉัน {0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:713
 msgid "Left stick as the D-pad"
-msgstr ""
+msgstr "ก้านซ้ายเป็นดีแพด"
 
 #: port/frontend/shell/porpoise_rows.cpp:733
 msgid "GBA Buttons"
-msgstr ""
+msgstr "ปุ่ม GBA"
 
 #. {0} is why, in the system's words
 #: port/frontend/shell/porpoise_rows.cpp:778 port/frontend/shell/porpoise_rows.cpp:841 port/frontend/shell/porpoise_rows.cpp:1404 port/frontend/shell/porpoise_rows.cpp:1475 port/frontend/shell/porpoise_rows.cpp:1498 port/frontend/shell/porpoise_rows.cpp:1837
@@ -6415,31 +6417,31 @@ msgstr "บันทึก​การ​ตั้งค่า​ของ Porpo
 
 #: port/frontend/shell/porpoise_rows.cpp:810
 msgid "Nothing"
-msgstr ""
+msgstr "ไม่มีอะไร"
 
 #: port/frontend/shell/porpoise_rows.cpp:950
 msgid "This DualSense's input, live. Hold Circle to leave."
-msgstr ""
+msgstr "อินพุตของ DualSense นี้แสดงสด กด วงกลม ค้างไว้เพื่อออก"
 
 #: port/frontend/shell/porpoise_rows.cpp:950
 msgid "No DualSense for this player: turn it on and sign in. Hold Circle on yours to leave."
-msgstr ""
+msgstr "ไม่มี DualSense สำหรับเครื่องเล่นนี้: เปิดเครื่องและลงชื่อเข้าใช้ กดวงกลมบนเครื่องของคุณเพื่อออก"
 
 #: port/frontend/shell/porpoise_rows.cpp:978
 msgid "Left stick"
-msgstr ""
+msgstr "ก้านซ้าย"
 
 #: port/frontend/shell/porpoise_rows.cpp:990
 msgid "Motion (g):"
-msgstr ""
+msgstr "การเคลื่อนไหว (กรัม):"
 
 #: port/frontend/shell/porpoise_rows.cpp:991
 msgid "Fingers on the touchpad: {0}"
-msgstr ""
+msgstr "นิ้วบนทัชแพด: {0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:1005
 msgid "This player's DualSense."
-msgstr ""
+msgstr "DualSense ของเครื่องเล่นนี้"
 
 #: port/frontend/shell/porpoise_rows.cpp:1005 port/frontend/shell/settings.cpp:893
 msgid "No DualSense for this player yet."
@@ -6447,86 +6449,86 @@ msgstr "ผู้เล่น​นี้​ยัง​ไม่มี DualSens
 
 #: port/frontend/shell/porpoise_rows.cpp:1028
 msgid "P{0}"
-msgstr ""
+msgstr "ป{0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:1132
 msgid "Ports"
-msgstr ""
+msgstr "พอร์ต"
 
 #: port/frontend/shell/porpoise_rows.cpp:1133
 msgid "What's plugged into each controller port, and who plays it."
-msgstr ""
+msgstr "สิ่งที่เสียบอยู่ในพอร์ตคอนโทรลเลอร์แต่ละพอร์ต และใครเป็นคนเล่น"
 
 #: port/frontend/shell/porpoise_rows.cpp:1229
 msgid "None (BIOS)"
-msgstr ""
+msgstr "ไม่มี (ไบออส)"
 
 #. {0} is a file kept in the settings, not in its folder now
 #: port/frontend/shell/porpoise_rows.cpp:1240
 msgid "{0} (missing)"
-msgstr ""
+msgstr "{0} (หายไป)"
 
 #: port/frontend/shell/porpoise_rows.cpp:1264
 msgid "Custom"
-msgstr ""
+msgstr "กำหนดเอง"
 
 #: port/frontend/shell/porpoise_rows.cpp:1286
 msgid "Pack folder"
-msgstr ""
+msgstr "แพ็คโฟลเดอร์"
 
 #: port/frontend/shell/porpoise_rows.cpp:1288
 msgid "Each pack goes in /data/porpoise/saves/User/Load/Textures, in a folder named with the game's ID, like GALE01."
-msgstr ""
+msgstr "แต่ละแพ็กจะอยู่ใน /data/porpoise/saves/User/Load/Textures ในโฟลเดอร์ที่มีชื่อเป็น ID ของเกม เช่น GALE01"
 
 #: port/frontend/shell/porpoise_rows.cpp:1309
 msgid "A texture pack. Custom textures turns packs on or off."
-msgstr ""
+msgstr "แพ็คพื้นผิว พื้นผิวแบบกำหนดเองจะเปิดหรือปิดแพ็ก"
 
 #: port/frontend/shell/porpoise_rows.cpp:1320
 msgid "No packs found"
-msgstr ""
+msgstr "ไม่พบแพ็ค"
 
 #: port/frontend/shell/porpoise_rows.cpp:1334
 msgid "Which layout, and what each DualSense button does."
-msgstr ""
+msgstr "รูปแบบใด และปุ่ม DualSense แต่ละปุ่มทำหน้าที่อะไร"
 
 #: port/frontend/shell/porpoise_rows.cpp:1531
 msgid "No saves on a USB drive."
-msgstr ""
+msgstr "ไม่มีการบันทึกบนไดรฟ์ USB"
 
 #: port/frontend/shell/porpoise_rows.cpp:1537 port/frontend/shell/porpoise_rows.cpp:2027 port/frontend/shell/porpoise_rows.cpp:2046
 msgid "Copy a save from USB"
-msgstr ""
+msgstr "คัดลอกบันทึกจาก USB"
 
 #. {0} is why, in the system's words
 #: port/frontend/shell/porpoise_rows.cpp:1542 port/frontend/shell/porpoise_rows.cpp:1589 port/frontend/shell/porpoise_rows.cpp:2079
 msgid "The save could not be copied: {0}"
-msgstr ""
+msgstr "ไม่สามารถคัดลอกบันทึก: {0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:1551
 msgid "No cards on a USB drive."
-msgstr ""
+msgstr "ไม่มีการ์ดในไดรฟ์ USB"
 
 #: port/frontend/shell/porpoise_rows.cpp:1557 port/frontend/shell/porpoise_rows.cpp:2028
 msgid "Copy a card from USB"
-msgstr ""
+msgstr "คัดลอกการ์ดจาก USB"
 
 #. {0} is how many saves came in, {1} how many were already here
 #: port/frontend/shell/porpoise_rows.cpp:1561 port/frontend/shell/porpoise_rows.cpp:2107
 msgid "{0} saves copied, {1} already here"
-msgstr ""
+msgstr "{0} บันทึกที่คัดลอกแล้ว {1} อยู่ที่นี่แล้ว"
 
 #: port/frontend/shell/porpoise_rows.cpp:1563 port/frontend/shell/porpoise_rows.cpp:2103
 msgid "The saves could not be copied: {0}"
-msgstr ""
+msgstr "ไม่สามารถคัดลอกบันทึกได้: {0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:1568 port/frontend/shell/porpoise_rows.cpp:2029
 msgid "Delete every save on this card"
-msgstr ""
+msgstr "ลบทุกการบันทึกในการ์ดใบนี้"
 
 #: port/frontend/shell/porpoise_rows.cpp:1587 port/frontend/shell/porpoise_rows.cpp:2076
 msgid "Copied to {0}"
-msgstr ""
+msgstr "คัดลอกไปยัง {0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:1612 port/frontend/shell/settings.cpp:1312
 msgid "Downloading: {0} left"
@@ -6553,7 +6555,7 @@ msgstr "RetroAchievements"
 
 #: port/frontend/shell/porpoise_rows.cpp:1621
 msgid "{1}: {0} points"
-msgstr ""
+msgstr "{1}: {0} คะแนน"
 
 #: port/frontend/shell/porpoise_rows.cpp:1621 port/frontend/shell/settings.cpp:1409
 msgid "Signing in…"
@@ -6561,11 +6563,11 @@ msgstr "กำลัง​ลงชื่อ​เข้า​ใช้…"
 
 #: port/frontend/shell/porpoise_rows.cpp:1621
 msgid "Sign in"
-msgstr ""
+msgstr "เข้าสู่ระบบ"
 
 #: port/frontend/shell/porpoise_rows.cpp:1622
 msgid "Earn achievements in supported games. See them in the in-game menu."
-msgstr ""
+msgstr "รับความสำเร็จในเกมที่รองรับ ดูได้ในเมนูในเกม"
 
 #: port/frontend/shell/porpoise_rows.cpp:1628 port/frontend/shell/settings.cpp:1321
 msgid "Box art from GameTDB"
@@ -6577,19 +6579,19 @@ msgstr "ภาพ​ปก​สำหรับ​คลัง​เกม ด�
 
 #: port/frontend/shell/porpoise_rows.cpp:1637
 msgid "SteamGridDB key"
-msgstr ""
+msgstr "คีย์ SteamGridDB"
 
 #: port/frontend/shell/porpoise_rows.cpp:1638
 msgid "Yours"
-msgstr ""
+msgstr "ของคุณ"
 
 #: port/frontend/shell/porpoise_rows.cpp:1638
 msgid "Built in"
-msgstr ""
+msgstr "สร้างขึ้นใน"
 
 #: port/frontend/shell/porpoise_rows.cpp:1639
 msgid "Wide art shown as a game starts. Your own key from steamgriddb.com is used first; leave it empty to remove it."
-msgstr ""
+msgstr "ศิลปะแบบกว้างที่แสดงเมื่อเกมเริ่ม คีย์ของคุณจาก Steamgriddb.com จะถูกใช้งานก่อน ปล่อยว่างไว้เพื่อลบออก"
 
 #: port/frontend/shell/porpoise_rows.cpp:1645 port/frontend/shell/settings.cpp:1327
 msgid "Download missing box art"
@@ -6610,192 +6612,192 @@ msgstr "แทนที่​ภาพ​ปก​ทุก​ภาพ​ใน
 #. a saved set of Graphics settings: {0} is its number
 #: port/frontend/shell/porpoise_rows.cpp:1703
 msgid "Use setup {0}"
-msgstr ""
+msgstr "ใช้การตั้งค่า {0}"
 
 #. a saved set of Graphics settings: {0} is its number
 #: port/frontend/shell/porpoise_rows.cpp:1703
 msgid "Applies this setup's Graphics settings to this game."
-msgstr ""
+msgstr "ใช้การตั้งค่ากราฟิกของการตั้งค่านี้กับเกมนี้"
 
 #: port/frontend/shell/porpoise_rows.cpp:1707 port/frontend/shell/porpoise_rows.cpp:1915
 msgid "Save as a setup"
-msgstr ""
+msgstr "บันทึกเป็นการตั้งค่า"
 
 #: port/frontend/shell/porpoise_rows.cpp:1707
 msgid "Saves this game's Graphics settings to use on other games."
-msgstr ""
+msgstr "บันทึกการตั้งค่ากราฟิกของเกมนี้เพื่อใช้ในเกมอื่น"
 
 #: port/frontend/shell/porpoise_rows.cpp:1720
 msgid "Wii games are 16:9 when Wii widescreen is on in Settings."
-msgstr ""
+msgstr "เกม Wii คือ 16:9 เมื่อเปิดจอไวด์สกรีน Wii ในการตั้งค่า"
 
 #: port/frontend/shell/porpoise_rows.cpp:1721
 msgid "This game has a widescreen code: Automatic and On show it in 16:9."
-msgstr ""
+msgstr "เกมนี้มีรหัสไวด์สกรีน: อัตโนมัติและเปิดแสดงใน 16:9"
 
 #: port/frontend/shell/porpoise_rows.cpp:1722
 msgid "This game has its own 16:9 option. Turn it on in the game's options."
-msgstr ""
+msgstr "เกมนี้มีตัวเลือก 16:9 เป็นของตัวเอง เปิดใช้งานในตัวเลือกของเกม"
 
 #: port/frontend/shell/porpoise_rows.cpp:1723
 msgid "This game has no widescreen code. On uses a widescreen hack, which can glitch at the edges."
-msgstr ""
+msgstr "เกมนี้ไม่มีโค้ดไวด์สกรีน On ใช้การแฮ็กแบบไวด์สกรีน ซึ่งอาจผิดพลาดที่ขอบได้"
 
 #: port/frontend/shell/porpoise_rows.cpp:1724
 msgid "The Wii's setting"
-msgstr ""
+msgstr "การตั้งค่าของเครื่อง Wii"
 
 #: port/frontend/shell/porpoise_rows.cpp:1724
 msgid "16:9 code"
-msgstr ""
+msgstr "รหัส 16:9"
 
 #: port/frontend/shell/porpoise_rows.cpp:1724
 msgid "In the game's options"
-msgstr ""
+msgstr "ในตัวเลือกของเกม"
 
 #: port/frontend/shell/porpoise_rows.cpp:1724
 msgid "4:3 only"
-msgstr ""
+msgstr "4:3 เท่านั้น"
 
 #: port/frontend/shell/porpoise_rows.cpp:1729
 msgid "Your own code"
-msgstr ""
+msgstr "รหัสของคุณเอง"
 
 #: port/frontend/shell/porpoise_rows.cpp:1729
 msgid "Type a Gecko code and a name. It's saved in /data/porpoise/cheats and turned on."
-msgstr ""
+msgstr "พิมพ์รหัสตุ๊กแกและชื่อ มันถูกบันทึกไว้ใน /data/porpoise/cheats และเปิดใช้งานแล้ว"
 
 #: port/frontend/shell/porpoise_rows.cpp:1730
 msgid "Add a code"
-msgstr ""
+msgstr "เพิ่มรหัส"
 
 #: port/frontend/shell/porpoise_rows.cpp:1740
 msgid "Your code, from /data/porpoise/cheats."
-msgstr ""
+msgstr "รหัสของคุณจาก /data/porpoise/cheats"
 
 #: port/frontend/shell/porpoise_rows.cpp:1741
 msgid "From the widescreen collection for this game."
-msgstr ""
+msgstr "จากคอลเลกชันไวด์สกรีนของเกมนี้"
 
 #: port/frontend/shell/porpoise_rows.cpp:1742
 msgid "A patch for this game."
-msgstr ""
+msgstr "แพทช์สำหรับเกมนี้"
 
 #: port/frontend/shell/porpoise_rows.cpp:1742
 msgid "A cheat for this game."
-msgstr ""
+msgstr "สูตรโกงสำหรับเกมนี้"
 
 #: port/frontend/shell/porpoise_rows.cpp:1749
 msgid "No codes for this game"
-msgstr ""
+msgstr "ไม่มีรหัสสำหรับเกมนี้"
 
 #: port/frontend/shell/porpoise_rows.cpp:1749
 msgid "Put your own in /data/porpoise/cheats, named with the game's ID."
-msgstr ""
+msgstr "ใส่ของคุณเองใน /data/porpoise/cheats โดยตั้งชื่อตาม ID ของเกม"
 
 #: port/frontend/shell/porpoise_rows.cpp:1766
 msgid "Your own settings file"
-msgstr ""
+msgstr "ไฟล์การตั้งค่าของคุณเอง"
 
 #: port/frontend/shell/porpoise_rows.cpp:1766
 msgid "This game uses your own settings file, so the options below have no effect. Remove it to use them."
-msgstr ""
+msgstr "เกมนี้ใช้ไฟล์การตั้งค่าของคุณเอง ดังนั้นตัวเลือกด้านล่างจึงไม่มีผลใดๆ ถอดออกเพื่อใช้."
 
 #: port/frontend/shell/porpoise_rows.cpp:1774
 msgid "Settings that run this game best on PS5."
-msgstr ""
+msgstr "การตั้งค่าที่รันเกมนี้ได้ดีที่สุดบน PS5"
 
 #: port/frontend/shell/porpoise_rows.cpp:1798
 msgid "Recommended for this game."
-msgstr ""
+msgstr "แนะนำสำหรับเกมนี้"
 
 #: port/frontend/shell/porpoise_rows.cpp:1807
 msgid "A known fix for this game."
-msgstr ""
+msgstr "การแก้ไขที่ทราบสำหรับเกมนี้"
 
 #: port/frontend/shell/porpoise_rows.cpp:1811
 msgid "Applied"
-msgstr ""
+msgstr "ประยุกต์แล้ว"
 
 #: port/frontend/shell/porpoise_rows.cpp:1823
 msgid "No changes needed"
-msgstr ""
+msgstr "ไม่จำเป็นต้องเปลี่ยนแปลง"
 
 #: port/frontend/shell/porpoise_rows.cpp:1823
 msgid "This game runs well with the default settings."
-msgstr ""
+msgstr "เกมนี้ทำงานได้ดีกับการตั้งค่าเริ่มต้น"
 
 #: port/frontend/shell/porpoise_rows.cpp:1883
 msgid "A name for your code"
-msgstr ""
+msgstr "ชื่อรหัสของคุณ"
 
 #: port/frontend/shell/porpoise_rows.cpp:1886
 msgid "{0}: the code's digits"
-msgstr ""
+msgstr "{0}: ตัวเลขของรหัส"
 
 #: port/frontend/shell/porpoise_rows.cpp:1899
 msgid "The code could not be saved."
-msgstr ""
+msgstr "ไม่สามารถบันทึกรหัสได้"
 
 #: port/frontend/shell/porpoise_rows.cpp:1899
 msgid "A Gecko code is digits 0-9 and A-F, sixteen to a line."
-msgstr ""
+msgstr "รหัสตุ๊กแกคือตัวเลข 0-9 และ A-F สิบหกต่อบรรทัด"
 
 #: port/frontend/shell/porpoise_rows.cpp:1914
 msgid "Setup {0}"
-msgstr ""
+msgstr "ตั้งค่า {0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:1920
 msgid "The setup could not be saved."
-msgstr ""
+msgstr "ไม่สามารถบันทึกการตั้งค่าได้"
 
 #. a GameCube memory card: {0} its slot, A or B, {1} its region, USA, EUR or JAP
 #: port/frontend/shell/porpoise_rows.cpp:1945
 msgid "Memory card {0} ({1})"
-msgstr ""
+msgstr "การ์ดหน่วยความจำ {0} ({1})"
 
 #. {0} and {1} are counts of a memory card's blocks
 #: port/frontend/shell/porpoise_rows.cpp:1955 port/frontend/shell/porpoise_rows.cpp:1969
 msgid "{0} of {1} blocks free"
-msgstr ""
+msgstr "ฟรี {0} จาก {1} บล็อก"
 
 #: port/frontend/shell/porpoise_rows.cpp:1967
 msgid "{0} save"
 msgid_plural "{0} saves"
-msgstr[0] ""
+msgstr[0] "การบันทึก {0} รายการ"
 
 #: port/frontend/shell/porpoise_rows.cpp:1997
 msgid "{0} block"
 msgid_plural "{0} blocks"
-msgstr[0] ""
+msgstr[0] "{0} บล็อก"
 
 #: port/frontend/shell/porpoise_rows.cpp:1997
 msgid "{0} KB"
-msgstr ""
+msgstr "{0} กิโลไบต์"
 
 #: port/frontend/shell/porpoise_rows.cpp:2002
 msgid "This card is a single image file, so saves can't be copied one by one. Use Copy the whole card to USB instead."
-msgstr ""
+msgstr "การ์ดใบนี้เป็นไฟล์ภาพเดียว ดังนั้นจึงไม่สามารถคัดลอกทีละไฟล์ได้ ใช้การคัดลอกการ์ดทั้งหมดไปที่ USB แทน"
 
 #: port/frontend/shell/porpoise_rows.cpp:2013
 msgid "Copy the whole card to USB"
-msgstr ""
+msgstr "คัดลอกการ์ดทั้งหมดไปยัง USB"
 
 #: port/frontend/shell/porpoise_rows.cpp:2014
 msgid "Backs up every save on this card at once."
-msgstr ""
+msgstr "สำรองข้อมูลทุกการบันทึกบนการ์ดใบนี้ในครั้งเดียว"
 
 #: port/frontend/shell/porpoise_rows.cpp:2027
 msgid "Copy one save from the drive to this card."
-msgstr ""
+msgstr "คัดลอกหนึ่งบันทึกจากไดรฟ์ไปยังการ์ดนี้"
 
 #: port/frontend/shell/porpoise_rows.cpp:2028
 msgid "Copy every save from a card on the drive to this card. Saves already here are kept."
-msgstr ""
+msgstr "คัดลอกทุกบันทึกจากการ์ดบนไดรฟ์ไปยังการ์ดนี้ บันทึกไว้แล้วที่นี่ถูกเก็บไว้"
 
 #: port/frontend/shell/porpoise_rows.cpp:2029
 msgid "A copy is kept in saves/before."
-msgstr ""
+msgstr "สำเนาจะถูกเก็บไว้ใน saves/before"
 
 #: port/frontend/shell/porpoise_rows.cpp:2038 port/frontend/shell/settings.cpp:1948
 msgid "No saves yet"
@@ -6803,84 +6805,84 @@ msgstr "ยัง​ไม่มี​เซฟ"
 
 #: port/frontend/shell/porpoise_rows.cpp:2047
 msgid "Copy one save from the drive."
-msgstr ""
+msgstr "คัดลอกหนึ่งบันทึกจากไดรฟ์"
 
 #: port/frontend/shell/porpoise_rows.cpp:2054
 msgid "Copy every save from USB"
-msgstr ""
+msgstr "คัดลอกทุกการบันทึกจาก USB"
 
 #: port/frontend/shell/porpoise_rows.cpp:2055
 msgid "From a USB drive's backups and Porpoise Saves folder. Saves already here are kept."
-msgstr ""
+msgstr "จากการสำรองข้อมูลของไดรฟ์ USB และโฟลเดอร์บันทึก Porpoise บันทึกไว้แล้วที่นี่ถูกเก็บไว้"
 
 #: port/frontend/shell/porpoise_rows.cpp:2070
 msgid "Copy to USB"
-msgstr ""
+msgstr "คัดลอกไปยัง USB"
 
 #: port/frontend/shell/porpoise_rows.cpp:2084
 msgid "The save could not be moved: {0}"
-msgstr ""
+msgstr "ไม่สามารถย้ายการบันทึก: {0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:2086
 msgid "Moved to {0}"
-msgstr ""
+msgstr "ย้ายไปที่ {0}"
 
 #. the first start's question: whether the app may send reports of how games run to the project
 #: port/frontend/shell/reports.cpp:75
 msgid "Help Playtendoh get better?"
-msgstr ""
+msgstr "ช่วยปรับปรุง Playtendoh ให้ดีขึ้นหรือไม่?"
 
 #: port/frontend/shell/reports.cpp:77
 msgid "When a game ends, Playtendoh can send a short report on how it ran, to help fix problems and grow the list of working games. It has nothing about you, and nothing is sent while you play."
-msgstr ""
+msgstr "เมื่อเกมจบลง Playtendoh สามารถส่งรายงานสั้นๆ เกี่ยวกับวิธีการทำงาน เพื่อช่วยแก้ไขปัญหาและเพิ่มรายชื่อเกมที่ใช้งานได้ มันไม่มีอะไรเกี่ยวกับคุณ และไม่มีอะไรถูกส่งไปในขณะที่คุณเล่น"
 
 #: port/frontend/shell/reports.cpp:88
 msgid "What a report has"
-msgstr ""
+msgstr "มีรายงานอะไรบ้าง."
 
 #: port/frontend/shell/reports.cpp:89
 msgid "The game and its console, how it ended, and for how long"
-msgstr ""
+msgstr "เกมและคอนโซลของเกม จบลงอย่างไร และนานแค่ไหน"
 
 #: port/frontend/shell/reports.cpp:89
 msgid "The settings it ran with, and the PS5's firmware and model"
-msgstr ""
+msgstr "การตั้งค่าที่ใช้ รวมถึงเฟิร์มแวร์และรุ่นของ PS5"
 
 #: port/frontend/shell/reports.cpp:90
 msgid "The last lines of Playtendoh's log, with addresses and folder names removed"
-msgstr ""
+msgstr "บรรทัดสุดท้ายของบันทึกของ Playtendoh โดยลบที่อยู่และชื่อโฟลเดอร์ออก"
 
 #: port/frontend/shell/reports.cpp:91
 msgid "What it never has"
-msgstr ""
+msgstr "สิ่งที่มันไม่เคยมี"
 
 #: port/frontend/shell/reports.cpp:92
 msgid "Your PSN name or ID, your console's serial, its IP or MAC address"
-msgstr ""
+msgstr "ชื่อหรือ ID PSN ของคุณ ซีเรียลของคอนโซลของคุณ ที่อยู่ IP หรือ MAC"
 
 #: port/frontend/shell/reports.cpp:93
 msgid "Your RetroAchievements and SteamGridDB accounts, room names, nicknames and Wi-Fi names"
-msgstr ""
+msgstr "บัญชี RetroAchievements และ SteamGridDB ชื่อห้อง ชื่อเล่น และชื่อ Wi-Fi ของคุณ"
 
 #: port/frontend/shell/reports.cpp:93
 msgid "Your folders, your saves and your game list"
-msgstr ""
+msgstr "โฟลเดอร์ของคุณ บันทึกของคุณ และรายการเกมของคุณ"
 
 #: port/frontend/shell/reports.cpp:123
 msgid "Every field a report has"
-msgstr ""
+msgstr "ทุกสาขามีรายงาน"
 
 #: port/frontend/shell/reports.cpp:130
 msgid "You can change this any time in Settings > Online. Turning it off deletes the reports waiting to be sent."
-msgstr ""
+msgstr "คุณสามารถเปลี่ยนได้ตลอดเวลาในการตั้งค่า > ออนไลน์ การปิดระบบจะลบรายงานที่รอส่ง"
 
 #: port/frontend/shell/reports.cpp:131
 msgid "Not now"
-msgstr ""
+msgstr "ไม่ใช่ตอนนี้"
 
 #: port/frontend/shell/reports.cpp:131
 msgid "Yes, send reports"
-msgstr ""
+msgstr "ใช่ ส่งรายงาน"
 
 #: port/frontend/shell/settings.cpp:54
 msgid "Japan"
@@ -7145,59 +7147,59 @@ msgstr "DualSense เป็น​คอนโทรลเลอร์ GameCube"
 
 #: port/frontend/shell/settings.cpp:277
 msgid "Sound"
-msgstr ""
+msgstr "เสียง"
 
 #: port/frontend/shell/settings.cpp:277
 msgid "Game sound, and how it handles slowdowns."
-msgstr ""
+msgstr "เสียงของเกม และวิธีจัดการกับการชะลอตัว"
 
 #: port/frontend/shell/settings.cpp:279 port/frontend/shell/settings.cpp:300
 msgid "GBA"
-msgstr ""
+msgstr "จีบีเอ"
 
 #: port/frontend/shell/settings.cpp:280
 msgid "The emulated console, and how it runs."
-msgstr ""
+msgstr "คอนโซลจำลอง และวิธีการทำงาน"
 
 #: port/frontend/shell/settings.cpp:283
 msgid "Setups"
-msgstr ""
+msgstr "การตั้งค่า"
 
 #: port/frontend/shell/settings.cpp:284
 msgid "Cheats and patches"
-msgstr ""
+msgstr "กลโกงและแพทช์"
 
 #: port/frontend/shell/settings.cpp:289
 msgid "Box art for the library."
-msgstr ""
+msgstr "กล่องศิลปะสำหรับห้องสมุด"
 
 #: port/frontend/shell/settings.cpp:290
 msgid "Memory cards and saves"
-msgstr ""
+msgstr "การ์ดหน่วยความจำและการบันทึก"
 
 #: port/frontend/shell/settings.cpp:291
 msgid "Copy each game's save to a USB drive, or move it aside."
-msgstr ""
+msgstr "คัดลอกบันทึกของแต่ละเกมไปยังไดรฟ์ USB หรือย้ายไปไว้ข้างๆ"
 
 #: port/frontend/shell/settings.cpp:291
 msgid "Copy saves on your cards to a USB drive, or move them aside."
-msgstr ""
+msgstr "คัดลอกบันทึกบนการ์ดของคุณไปยังไดรฟ์ USB หรือย้ายไปไว้ข้างๆ"
 
 #: port/frontend/shell/settings.cpp:296
 msgid "All of {0}'s options, for every game on this system."
-msgstr ""
+msgstr "ตัวเลือกทั้งหมดของ {0} สำหรับทุกเกมบนระบบนี้"
 
 #: port/frontend/shell/settings.cpp:297
 msgid "Which emulator plays this system's games."
-msgstr ""
+msgstr "โปรแกรมจำลองใดที่เล่นเกมของระบบนี้"
 
 #: port/frontend/shell/settings.cpp:300
 msgid "A Game Boy Advance on a GameCube port: set one in Controls, under Ports."
-msgstr ""
+msgstr "Game Boy Advance บนพอร์ต GameCube: ตั้งค่าไว้ในส่วนควบคุม ใต้พอร์ต"
 
 #: port/frontend/shell/settings.cpp:305
 msgid "RetroAchievements and Playtendoh's updates."
-msgstr ""
+msgstr "การอัปเดตของ RetroAchievements และ Playtendoh"
 
 #: port/frontend/shell/settings.cpp:318
 msgid "{0}'s saves only. Settings has every system's."
@@ -7327,11 +7329,11 @@ msgstr[0] "เพิ่ม​ม็อด {0} รายการ​แล้ว:
 
 #: port/frontend/shell/settings.cpp:484
 msgid "Reset all settings"
-msgstr ""
+msgstr "รีเซ็ตการตั้งค่าทั้งหมด"
 
 #: port/frontend/shell/settings.cpp:486
 msgid "Puts every setting back to default. Games, folders and saves are kept."
-msgstr ""
+msgstr "ทำให้ทุกการตั้งค่ากลับเป็นค่าเริ่มต้น เกม โฟลเดอร์ และบันทึกจะถูกเก็บไว้"
 
 #: port/frontend/shell/settings.cpp:516 port/frontend/shell/settings.cpp:1725
 msgid "Which emulator plays this system's games, from the next game. Each keeps its own settings and saves."
@@ -7359,7 +7361,7 @@ msgstr "อีมูเลเตอร์​ของ​ฝั่ง​นี้
 
 #: port/frontend/shell/settings.cpp:530
 msgid "Porpoise's other settings, your button layouts and Wii Remote setup. Circle at the top comes back here."
-msgstr ""
+msgstr "การตั้งค่าอื่นๆ ของ Porpoise รูปแบบปุ่มของคุณ และการตั้งค่า Wii Remote วงกลม ตัวท็อปกลับมาที่นี่"
 
 #: port/frontend/shell/settings.cpp:533 port/frontend/shell/settings.cpp:1283 port/frontend/shell/settings.cpp:1956
 msgid "Back up to USB"
@@ -7858,7 +7860,7 @@ msgstr "ปุ่มกากบาท: คอนโทรลเลอร์ ก
 
 #: port/frontend/shell/settings.cpp:893
 msgid "Set to a real Wii Remote, but none found. Cross to change it."
-msgstr ""
+msgstr "ตั้งเป็น Wii Remote จริงแล้ว แต่หาไม่เจอ กากบาท ที่จะเปลี่ยนครับ."
 
 #: port/frontend/shell/settings.cpp:894
 msgid "This player's controller, motion, vibration, deadzones and buttons. Player 1 is the user who started Playtendoh; other signed-in users are players 2 to 4."
@@ -8308,36 +8310,36 @@ msgstr "โฟลเดอร์​แยก​สำหรับ​แต่ล
 #. Settings > Game files: a row opening the list of every system's folder; {0} how many have a folder of their own, {1} how many systems
 #: port/frontend/shell/settings.cpp:1163
 msgid "{0} of {1} on their own"
-msgstr ""
+msgstr "{0} ของ {1} ด้วยตัวเอง"
 
 #: port/frontend/shell/settings.cpp:1164
 msgid "Keep a system's files together with the rest, or in a folder of its own."
-msgstr ""
+msgstr "เก็บไฟล์ของระบบไว้ร่วมกับไฟล์ที่เหลือหรือในโฟลเดอร์ของมันเอง"
 
 #: port/frontend/shell/settings.cpp:1165
 msgid "Saves, BIOS files and settings for every system are kept together in {0}, unless you give a system its own folder. Moving is quick and nothing is deleted. Playtendoh restarts to do it. Some emulators always use their own folder."
-msgstr ""
+msgstr "บันทึก ไฟล์ BIOS และการตั้งค่าสำหรับทุกระบบจะถูกเก็บไว้ด้วยกันใน {0} เว้นแต่คุณจะให้ระบบมีโฟลเดอร์เป็นของตัวเอง การย้ายทำได้รวดเร็วและไม่มีอะไรถูกลบ Playtendoh รีสตาร์ทเพื่อทำสิ่งนี้ อีมูเลเตอร์บางตัวจะใช้โฟลเดอร์ของตัวเองเสมอ"
 
 #. Settings > Game files: a system whose emulator always keeps a folder of its own
 #: port/frontend/shell/settings.cpp:1172
 msgid "Its emulator always keeps its own folder."
-msgstr ""
+msgstr "โปรแกรมจำลองจะเก็บโฟลเดอร์ของตัวเองไว้เสมอ"
 
 #: port/frontend/shell/settings.cpp:1179
 msgid "Moves the next time Playtendoh starts."
-msgstr ""
+msgstr "ย้ายในครั้งถัดไปที่ Playtendoh เริ่มทำงาน"
 
 #: port/frontend/shell/settings.cpp:1180
 msgid "On: this system's files get their own folder. Off: kept with the rest."
-msgstr ""
+msgstr "เปิด: ไฟล์ของระบบนี้มีโฟลเดอร์ของตัวเอง ปิด: เก็บไว้กับส่วนที่เหลือ"
 
 #: port/frontend/shell/settings.cpp:1181
 msgid "Own folder"
-msgstr ""
+msgstr "โฟลเดอร์ของตัวเอง"
 
 #: port/frontend/shell/settings.cpp:1181
 msgid "Together"
-msgstr ""
+msgstr "กัน"
 
 #. {0} is a file or folder already where one would be moved to
 #: port/frontend/shell/settings.cpp:1186
@@ -8494,7 +8496,7 @@ msgstr "ภาพ​ปก"
 
 #: port/frontend/shell/settings.cpp:1318
 msgid "Covers for the library, from libretro's thumbnails."
-msgstr ""
+msgstr "หน้าปกห้องสมุด จากภาพขนาดย่อของ libretro"
 
 #: port/frontend/shell/settings.cpp:1318
 msgid "Covers for the library, from GameTDB."
@@ -8534,16 +8536,16 @@ msgstr "ดาวน์โหลด​ภาพ​ปก​ของ​ทุก
 
 #: port/frontend/shell/settings.cpp:1335
 msgid "Send reports"
-msgstr ""
+msgstr "ส่งรายงาน"
 
 #: port/frontend/shell/settings.cpp:1335
 msgid "How games run, with nothing about you."
-msgstr ""
+msgstr "เกมดำเนินไปอย่างไรโดยไม่มีอะไรเกี่ยวกับคุณเลย"
 
 #. {0} is the address of the page that lists every field a report has
 #: port/frontend/shell/settings.cpp:1337
 msgid "When a game ends, a short report is sent: the game, how it ended, its settings, the PS5's firmware and model, and the end of the log with addresses and folder names removed. Never your PSN name, serial, addresses, accounts or saves. Nothing is sent while you play. Off deletes reports waiting to be sent. Every field: {0}"
-msgstr ""
+msgstr "เมื่อเกมจบลง รายงานสั้นๆ จะถูกส่งไป ได้แก่ เกม วิธีการจบเกม การตั้งค่า เฟิร์มแวร์และรุ่นของ PS5 และการสิ้นสุดบันทึกโดยลบที่อยู่และชื่อโฟลเดอร์ออก ห้ามใช้ชื่อ PSN, อนุกรม, ที่อยู่, บัญชีหรือบันทึกของคุณ ไม่มีการส่งสิ่งใดในขณะที่คุณเล่น ปิด ลบรายงานที่รอส่ง ทุกช่อง: {0}"
 
 #: port/frontend/shell/settings.cpp:1341
 msgid "Play from your 3DS, or copy its system files."
@@ -8663,7 +8665,7 @@ msgstr "แพ็ก​กราฟิก​ชุมชน​ของ Cemu จ
 
 #: port/frontend/shell/settings.cpp:1400
 msgid "Earn achievements in DS, GameCube, Wii, N64, SNES, NES, Game Boy, Virtual Boy and Pokémon mini games. Only a sign-in token is kept on the PS5, never your password. Save states, cheats and speed still work."
-msgstr ""
+msgstr "รับความสำเร็จในเกมสำหรับ DS, GameCube, Wii, N64, SNES, NES, Game Boy, Virtual Boy, Pokémon mini มีเพียงโทเค็นการลงชื่อเข้าใช้เท่านั้นที่จะเก็บไว้ใน PS5 จะไม่มีรหัสผ่านของคุณ บันทึกสถานะ สูตรโกงและความเร็วยังคงใช้งานได้"
 
 #: port/frontend/shell/settings.cpp:1405
 msgid "{1} · {0} point"
@@ -8676,7 +8678,7 @@ msgstr "กด​ปุ่มกากบาท​ค้าง​เพื่อ
 
 #: port/frontend/shell/settings.cpp:1406
 msgid "Signed in on every console that has achievements."
-msgstr ""
+msgstr "ลงชื่อเข้าใช้ทุกคอนโซลที่มีความสำเร็จ"
 
 #: port/frontend/shell/settings.cpp:1409
 msgid "Cross to sign in"
@@ -8684,7 +8686,7 @@ msgstr "ปุ่มกากบาท​เพื่อ​ลงชื่อ​
 
 #: port/frontend/shell/settings.cpp:1410
 msgid "Sign in once for every console that has achievements."
-msgstr ""
+msgstr "ลงชื่อเข้าใช้หนึ่งครั้งสำหรับทุกคอนโซลที่มีความสำเร็จ"
 
 #: port/frontend/shell/settings.cpp:1411
 msgid "Unlock notices"
@@ -8741,31 +8743,31 @@ msgstr "วิธีจัดวางคลังเกม"
 
 #: port/frontend/shell/settings.cpp:1456
 msgid "Classic shows one console at a time, with Recently played on top. Orbit is a dial for picking a console, with recent games in the centre. EmulationStation (ES-DE) is a separate launcher, downloaded the first time you choose it. Your games, settings and saves stay the same."
-msgstr ""
+msgstr "คลาสสิกจะแสดงทีละคอนโซล โดยเล่นล่าสุดอยู่ด้านบน Orbit เป็นปุ่มหมุนสำหรับเลือกคอนโซล โดยมีเกมล่าสุดอยู่ตรงกลาง EmulationStation (ES-DE) เป็นตัวเรียกใช้งานแยกต่างหาก ซึ่งดาวน์โหลดในครั้งแรกที่คุณเลือก เกม การตั้งค่า และการบันทึกของคุณจะยังคงเหมือนเดิม"
 
 #: port/frontend/shell/settings.cpp:1461
 msgid "EmulationStation (ES-DE) shows the same games with its own themes. It's a separate download of about 850 MB and stays through updates. Games still play here with the same settings, saves and in-game menu. Hold L1 while Playtendoh starts to use this launcher instead."
-msgstr ""
+msgstr "EmulationStation (ES-DE) แสดงเกมเดียวกันโดยมีธีมเป็นของตัวเอง เป็นการดาวน์โหลดแยกต่างหากประมาณ 850 MB และคงอยู่ตลอดการอัปเดต เกมยังคงเล่นที่นี่ด้วยการตั้งค่า บันทึก และเมนูในเกมเหมือนเดิม กด L1 ค้างไว้ในขณะที่ Playtendoh เริ่มใช้ Launcher นี้แทน"
 
 #: port/frontend/shell/settings.cpp:1465
 msgid "Asking GitHub…"
-msgstr ""
+msgstr "กำลังถาม GitHub…"
 
 #: port/frontend/shell/settings.cpp:1472
 msgid "Hold Cross to remove"
-msgstr ""
+msgstr "กด กากบาท ค้างไว้เพื่อถอดออก"
 
 #: port/frontend/shell/settings.cpp:1472
 msgid "Cross to download · {0} MB"
-msgstr ""
+msgstr "กากบาท เพื่อดาวน์โหลด · {0} MB"
 
 #: port/frontend/shell/settings.cpp:1475
 msgid "Installed. Choose it as the Layout above."
-msgstr ""
+msgstr "ติดตั้งแล้ว เลือกเป็นเค้าโครงด้านบน"
 
 #: port/frontend/shell/settings.cpp:1475
 msgid "A separate launcher, as a download."
-msgstr ""
+msgstr "ตัวเรียกใช้งานแยกต่างหากสำหรับการดาวน์โหลด"
 
 #. Settings > Launcher: a row that opens which sides the bar shows (Wii U, Switch, DS, 3DS)
 #: port/frontend/shell/settings.cpp:1483
@@ -8839,15 +8841,15 @@ msgstr "แถบ​แสดง​ฝั่ง 3DS (Azahar) หรือไม�
 
 #: port/frontend/shell/settings.cpp:1500
 msgid "3D box art"
-msgstr ""
+msgstr "อาร์ตบ็อกซ์ 3D"
 
 #: port/frontend/shell/settings.cpp:1500
 msgid "Covers as boxes, with a spine."
-msgstr ""
+msgstr "คลุมเป็นกล่องมีสัน"
 
 #: port/frontend/shell/settings.cpp:1501
 msgid "Each cover drawn as its box, turned a little, with its spine. Off: flat covers."
-msgstr ""
+msgstr "ปกแต่ละใบถูกวาดเป็นกล่อง หันเล็กน้อยพร้อมสัน ปิด: ปกเรียบ"
 
 #: port/frontend/shell/settings.cpp:1502
 msgid "Game pictures behind menus"
@@ -9138,15 +9140,15 @@ msgstr "ล้าง​การ​ตั้งค่า​เฉพาะ​ข
 
 #: port/frontend/shell/settings.cpp:1792
 msgid "Back to the emulator's own values"
-msgstr ""
+msgstr "กลับไปที่ค่าของตัวจำลองเอง"
 
 #: port/frontend/shell/settings.cpp:1793
 msgid "Nothing changed"
-msgstr ""
+msgstr "ไม่มีอะไรเปลี่ยนแปลง"
 
 #: port/frontend/shell/settings.cpp:1795
 msgid "Resets every option above to {0}'s default, for every game on this system."
-msgstr ""
+msgstr "รีเซ็ตทุกตัวเลือกข้างต้นเป็นค่าเริ่มต้นของ {0} สำหรับทุกเกมบนระบบนี้"
 
 #. a Wii U account by its number, when its name cannot be read
 #: port/frontend/shell/settings.cpp:1870
@@ -9337,11 +9339,11 @@ msgstr "ภาษา: {0}"
 
 #: port/frontend/shell/settings.cpp:2296
 msgid "Playtendoh cannot write to {0}"
-msgstr ""
+msgstr "Playtendoh ไม่สามารถเขียนไปยัง {0} ได้"
 
 #: port/frontend/shell/settings.cpp:2300
 msgid "Playtendoh restarts to move the files"
-msgstr ""
+msgstr "Playtendoh รีสตาร์ทเพื่อย้ายไฟล์"
 
 #: port/frontend/shell/settings.cpp:2311
 msgid "At least one system must stay on"
@@ -9386,7 +9388,7 @@ msgstr "กำลัง​สำรอง​เซฟ​ของ​ทุก​
 
 #: port/frontend/shell/settings.cpp:2839
 msgid "EmulationStation's download stopped"
-msgstr ""
+msgstr "การดาวน์โหลดของ EmulationStation หยุดลง"
 
 #. the loading screen's name for a retro side's own emulator menus: {0} is the side (Nintendo 64)
 #: port/frontend/shell/settings.cpp:2851
@@ -9399,12 +9401,12 @@ msgstr "กำลัง​เปิด​การ​ตั้งค่า​อ
 
 #: port/frontend/shell/settings.cpp:2878
 msgid "Every game has its cover"
-msgstr ""
+msgstr "ทุกเกมมีปกของมัน"
 
 #: port/frontend/shell/settings.cpp:2878
 msgid "Looking for {0} cover"
 msgid_plural "Looking for {0} covers"
-msgstr[0] ""
+msgstr[0] "กำลังค้นหาปก {0} ภาพ"
 
 #: port/frontend/shell/settings.cpp:2943
 msgid "Switch games play offline"
@@ -9475,23 +9477,23 @@ msgstr "กำลัง​ลงชื่อ​เข้า​ใช้ RetroAch
 
 #: port/frontend/shell/settings.cpp:3049
 msgid "Your SteamGridDB key"
-msgstr ""
+msgstr "คีย์ SteamGridDB ของคุณ"
 
 #: port/frontend/shell/settings.cpp:3052
 msgid "Your SteamGridDB key is removed"
-msgstr ""
+msgstr "คีย์ SteamGridDB ของคุณถูกลบออก"
 
 #: port/frontend/shell/settings.cpp:3052
 msgid "Used next time Playtendoh starts"
-msgstr ""
+msgstr "ใช้ครั้งต่อไปที่ Playtendoh สตาร์ท"
 
 #: port/frontend/shell/settings.cpp:3072
 msgid "EmulationStation removed. Its scraped data is kept."
-msgstr ""
+msgstr "นำ EmulationStation ออกแล้ว ข้อมูลเมตาของเกมที่ดาวน์โหลดจะถูกเก็บไว้"
 
 #: port/frontend/shell/settings.cpp:3082
 msgid "{0} reset to defaults"
-msgstr ""
+msgstr "{0} รีเซ็ตเป็นค่าเริ่มต้น"
 
 #: port/frontend/shell/settings.cpp:3093
 msgid "Player removed: their saves and settings are kept"
@@ -9838,25 +9840,25 @@ msgstr "เปิด: ภาพ​ปก​มา​เมื่อ​เกม�
 
 #: port/frontend/shell/setup.cpp:375
 msgid "System folders"
-msgstr ""
+msgstr "โฟลเดอร์ระบบ"
 
 #: port/frontend/shell/setup.cpp:378
 msgid "Together in {0}"
-msgstr ""
+msgstr "กันใน {0}"
 
 #. the Setup check: how many of the systems that can move have a folder of their own
 #: port/frontend/shell/setup.cpp:380
 msgid "{0} system in its own folder"
 msgid_plural "{0} systems in their own folders"
-msgstr[0] ""
+msgstr[0] "{0} ระบบอยู่ในโฟลเดอร์ของตนเอง"
 
 #: port/frontend/shell/setup.cpp:382
 msgid "Where each system's files go"
-msgstr ""
+msgstr "ไฟล์ของแต่ละระบบไปอยู่ที่ไหน"
 
 #: port/frontend/shell/setup.cpp:383
 msgid "Saves, BIOS files and settings for every system are kept together in {0}. You can give the Wii U, 3DS, DS or Switch a folder of its own instead. Cross shows them, each with its own switch."
-msgstr ""
+msgstr "บันทึก ไฟล์ BIOS และการตั้งค่าสำหรับทุกระบบจะถูกเก็บไว้ด้วยกันใน {0} คุณสามารถให้โฟลเดอร์ของตัวเองแก่ Wii U, 3DS, DS หรือ Switch แทนได้ กากบาท แสดงให้เห็น โดยแต่ละอันมีสวิตช์ของตัวเอง"
 
 #: port/frontend/shell/setup.cpp:480
 msgid "Checked again"
@@ -9878,17 +9880,17 @@ msgstr "มา​ตรวจ​ความ​พร้อม​กัน"
 #: port/frontend/shell/setup.cpp:516
 msgid "{0} thing needs you"
 msgid_plural "{0} things need you"
-msgstr[0] ""
+msgstr[0] "{0} รายการต้องให้คุณดำเนินการ"
 
 #. the Setup check's summary: how many checks need the player, or that every one is ready
 #: port/frontend/shell/setup.cpp:516
 msgid "Everything is ready"
-msgstr ""
+msgstr "ทุกอย่างพร้อมแล้ว"
 
 #. the Setup check's summary: {0} checks ready of {1}
 #: port/frontend/shell/setup.cpp:519
 msgid "{0} of {1} ready"
-msgstr ""
+msgstr "{0} ของ {1} พร้อมแล้ว"
 
 #: port/frontend/shell/setup.cpp:533
 msgid "{0} · same as the PS5"
@@ -9897,17 +9899,17 @@ msgstr "{0} · ตาม PS5"
 #. the Setup check's groups: what needs the player, what is optional, what is ready; {0} how many
 #: port/frontend/shell/setup.cpp:588
 msgid "Needs you · {0}"
-msgstr ""
+msgstr "ต้องการคุณ · {0}"
 
 #. the Setup check's groups: what needs the player, what is optional, what is ready; {0} how many
 #: port/frontend/shell/setup.cpp:588
 msgid "Optional · {0}"
-msgstr ""
+msgstr "อุปกรณ์เสริม · {0}"
 
 #. the Setup check's groups: what needs the player, what is optional, what is ready; {0} how many
 #: port/frontend/shell/setup.cpp:588
 msgid "Ready · {0}"
-msgstr ""
+msgstr "พร้อม · {0}"
 
 #: port/frontend/shell/setup.cpp:641
 msgid "The menus' language"
@@ -10288,11 +10290,11 @@ msgstr "การ​ตั้งค่า"
 
 #: port/frontend/shell/shell.cpp:1662
 msgid "Hide"
-msgstr ""
+msgstr "ซ่อน"
 
 #: port/frontend/shell/shell.cpp:1662
 msgid "Show"
-msgstr ""
+msgstr "แสดง"
 
 #: port/frontend/shell/shell.cpp:1662 port/frontend/shell/shell.cpp:1664 port/frontend/shell/shell.cpp:1717 port/frontend/shell/shell.cpp:2765
 msgid "Done"
@@ -10746,82 +10748,82 @@ msgstr "รายการ​นี้"
 #. What's new in 6.0: the Library's two new ways to browse
 #: port/frontend/shell/whatsnew.cpp:28
 msgid "Orbit and the Timeline"
-msgstr ""
+msgstr "วงโคจรและไทม์ไลน์"
 
 #. What's new in 6.0: the Library's two new ways to browse
 #: port/frontend/shell/whatsnew.cpp:28
 msgid "Turn a dial to pick a console, or see every console's games on one shelf."
-msgstr ""
+msgstr "หมุนปุ่มเพื่อเลือกคอนโซล หรือดูเกมคอนโซลทุกเกมบนชั้นวางเดียว"
 
 #. What's new in 6.0: how many consoles the app plays now
 #: port/frontend/shell/whatsnew.cpp:30
 msgid "21 consoles"
-msgstr ""
+msgstr "21 คอนโซล"
 
 #. What's new in 6.0: how many consoles the app plays now
 #: port/frontend/shell/whatsnew.cpp:30
 msgid "From the Game & Watch to the Switch 2, each with its own settings and saves."
-msgstr ""
+msgstr "ตั้งแต่ Game & Watch ไปจนถึง Switch 2 โดยแต่ละตัวมีการตั้งค่าและบันทึกของตัวเอง"
 
 #. What's new in 6.0: Switch 2 games; Lichii is the emulator's name, left as it is
 #: port/frontend/shell/whatsnew.cpp:32
 msgid "Switch 2"
-msgstr ""
+msgstr "Switch 2"
 
 #. What's new in 6.0: Switch 2 games; Lichii is the emulator's name, left as it is
 #: port/frontend/shell/whatsnew.cpp:32
 msgid "Switch 2 games on Lichii, with your own keys and firmware."
-msgstr ""
+msgstr "เกม Switch 2 บน Lichii พร้อมคีย์และเฟิร์มแวร์ของคุณเอง"
 
 #. What's new in 6.0: GameCube and Wii games; Porpoise X is the emulator's name, left as it is
 #: port/frontend/shell/whatsnew.cpp:34
 msgid "GameCube and Wii"
-msgstr ""
+msgstr "GameCube และ Wii"
 
 #. What's new in 6.0: GameCube and Wii games; Porpoise X is the emulator's name, left as it is
 #: port/frontend/shell/whatsnew.cpp:34
 msgid "Played by Porpoise X, with menus in Playtendoh's style."
-msgstr ""
+msgstr "บรรเลงโดย Porpoise X พร้อมเมนูสไตล์ Playtendoh"
 
 #. What's new in 6.0: Settings > Emulator lists every option of a console's emulator
 #: port/frontend/shell/whatsnew.cpp:36
 msgid "Every emulator option"
-msgstr ""
+msgstr "ทุกตัวเลือกของโปรแกรมจำลอง"
 
 #. What's new in 6.0: Settings > Emulator lists every option of a console's emulator
 #: port/frontend/shell/whatsnew.cpp:36
 msgid "Settings > Emulator has every option for each console's emulator."
-msgstr ""
+msgstr "การตั้งค่า > โปรแกรมจำลองมีตัวเลือกทุกรายการสำหรับโปรแกรมจำลองคอนโซลแต่ละตัว"
 
 #. What's new in 6.0: EmulationStation (ES-DE) as a launcher, downloaded when chosen
 #: port/frontend/shell/whatsnew.cpp:38
 msgid "Choose ES-DE as your launcher: it downloads when you pick it."
-msgstr ""
+msgstr "เลือก ES-DE เป็นตัวเรียกใช้งานของคุณ: มันจะดาวน์โหลดเมื่อคุณเลือก"
 
 #. What's new in 6.0: collections, groups of games the player makes
 #: port/frontend/shell/whatsnew.cpp:40
 msgid "Group your games your way, and find them from the Library's filters."
-msgstr ""
+msgstr "จัดกลุ่มเกมของคุณในแบบของคุณและค้นหาจากตัวกรองของไลบรารี"
 
 #. What's new in 6.0: the menu over a game, redesigned, with button mapping in every emulator
 #: port/frontend/shell/whatsnew.cpp:42
 msgid "A new in-game menu"
-msgstr ""
+msgstr "เมนูใหม่ในเกม"
 
 #. What's new in 6.0: the menu over a game, redesigned, with button mapping in every emulator
 #: port/frontend/shell/whatsnew.cpp:42
 msgid "One menu for every game, with your own button layout in each emulator."
-msgstr ""
+msgstr "เมนูเดียวสำหรับทุกเกม พร้อมรูปแบบปุ่มของคุณเองในโปรแกรมจำลองแต่ละตัว"
 
 #. What's new in 6.0: the launcher's music and sounds, quieter
 #: port/frontend/shell/whatsnew.cpp:44
 msgid "Calmer sound"
-msgstr ""
+msgstr "เสียงที่สงบยิ่งขึ้น"
 
 #. What's new in 6.0: the launcher's music and sounds, quieter
 #: port/frontend/shell/whatsnew.cpp:44
 msgid "New, quieter music and soft menu sounds."
-msgstr ""
+msgstr "เพลงใหม่ที่เงียบกว่าและเสียงเมนูที่นุ่มนวล"
 
 #. the heading of the screen a new version opens on, once: what it brings
 #: port/frontend/shell/whatsnew.cpp:85

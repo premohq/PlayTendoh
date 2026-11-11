@@ -124,7 +124,7 @@ msgstr "لوحة اللمس"
 #, menu
 msgctxt "button"
 msgid "Touchpad click"
-msgstr ""
+msgstr "انقر على لوحة اللمس"
 
 #: port/app/buttons_menu.h:90 port/frontend/actions.cpp:479
 #, menu
@@ -394,12 +394,12 @@ msgstr "أي زر في DualSense يضغط كل زر."
 #: port/app/buttons_menu.h:153 port/frontend/shell/porpoise_rows.cpp:870 port/frontend/shell/porpoise_rows.cpp:949
 #, menu
 msgid "Controller test"
-msgstr ""
+msgstr "اختبار وحدة التحكم"
 
 #: port/app/buttons_menu.h:155 port/frontend/shell/porpoise_rows.cpp:871
 #, menu
 msgid "This player's DualSense input, live."
-msgstr ""
+msgstr "إدخال DualSense لهذا اللاعب، مباشر."
 
 #: port/app/buttons_menu.h:160 port/app/side_menu.h:522 port/frontend/shell/pages.cpp:965
 #, menu
@@ -415,7 +415,7 @@ msgstr "غير معين"
 #: port/app/buttons_menu.h:162
 #, menu
 msgid "Press Cross, then the DualSense button to use. If another button already uses it, the two swap."
-msgstr ""
+msgstr "اضغط على أكس، ثم زر DualSense للاستخدام. إذا كان هناك زر آخر يستخدمه بالفعل، فسيتم تبديل الاثنين."
 
 #. {0} is a button of the console's controller
 #. {0} is a button of the Wii U's or the 3DS's controller
@@ -550,15 +550,15 @@ msgstr "توقف من أجل لعبة"
 
 #: port/app/esde_get.cpp:183
 msgid "EmulationStation could not be downloaded. Is the PS5 online?"
-msgstr ""
+msgstr "تعذر تنزيل EmulationStation. هل PS5 متصل بالإنترنت؟"
 
 #: port/app/esde_get.cpp:189
 msgid "Playtendoh runs from an image that can't be changed. Copy the es-de folder into it yourself."
-msgstr ""
+msgstr "يتم تشغيل Playtendoh من صورة لا يمكن تغييرها. انسخ المجلد es-de إليه بنفسك."
 
 #: port/app/esde_get.cpp:195
 msgid "EmulationStation needs {0} MB free on the drive Playtendoh is on"
-msgstr ""
+msgstr "يحتاج EmulationStation إلى {0} MB مجانًا على محرك الأقراص Playtendoh قيد التشغيل"
 
 #: port/app/esde_get.cpp:214 port/app/updates.cpp:505
 msgid "The download could not start"
@@ -566,7 +566,7 @@ msgstr "تعذر بدء التنزيل"
 
 #: port/app/esde_get.cpp:231
 msgid "Stopped"
-msgstr ""
+msgstr "توقف"
 
 #: port/app/esde_get.cpp:231 port/app/updates.cpp:524
 msgid "The download did not finish: is the PS5 online?"
@@ -582,7 +582,7 @@ msgstr "تعذر فك الضغط: {0}"
 
 #: port/app/esde_get.cpp:262
 msgid "EmulationStation could not be installed ({0})"
-msgstr ""
+msgstr "لا يمكن تثبيت EmulationStation ({0})"
 
 #: port/app/esde_get.cpp:283 port/app/pack_updates.cpp:194 port/app/updates.cpp:621
 msgid "GitHub could not be found: is the PS5 online?"
@@ -590,15 +590,15 @@ msgstr "تعذر الوصول إلى GitHub: هل PS5 متصل بالإنترن�
 
 #: port/app/esde_get.cpp:340
 msgid "EmulationStation is downloading"
-msgstr ""
+msgstr "يتم الآن تنزيل EmulationStation"
 
 #: port/app/esde_get.cpp:346
 msgid "Playtendoh runs from an image that can't be changed"
-msgstr ""
+msgstr "يتم تشغيل Playtendoh من صورة لا يمكن تغييرها"
 
 #: port/app/esde_get.cpp:352
 msgid "Its folder could not be removed"
-msgstr ""
+msgstr "لا يمكن إزالة المجلد الخاص به"
 
 #: port/app/forwarders.cpp:151
 msgid "Home screen tiles need elfldr, which is not answering on port 9021. Load elfldr, then try again."
@@ -1914,27 +1914,27 @@ msgstr "مع الشاشة العلوية وحدها، تلمس لوحة اللم
 #: port/app/ingame3ds.cpp:566
 #, menu
 msgid "How big the picture is on the TV, and its shape."
-msgstr ""
+msgstr "ما حجم الصورة على TV وشكلها."
 
 #: port/app/ingame3ds.cpp:567
 #, menu
 msgid "Size"
-msgstr ""
+msgstr "الحجم"
 
 #: port/app/ingame3ds.cpp:568
 #, menu
 msgid "Fit makes it as large as the screen allows. Whole pixels keeps every pixel the same size, with a frame around it. Fill screen stretches it edge to edge."
-msgstr ""
+msgstr "Fit يجعلها كبيرة بقدر ما تسمح به الشاشة. تحافظ وحدات البكسل الكاملة على كل بكسل بنفس الحجم، مع وجود إطار حوله. تعمل شاشة التعبئة على تمديدها من الحافة إلى الحافة."
 
 #: port/app/ingame3ds.cpp:569
 #, menu
 msgid "Shape"
-msgstr ""
+msgstr "الشكل"
 
 #: port/app/ingame3ds.cpp:570
 #, menu
 msgid "Original is the console's own. 4:3 is an old TV's. Square pixels shows them as the game draws them."
-msgstr ""
+msgstr "الأصل هو وحدة التحكم الخاصة. 4:3 هو TV قديم. تُظهرها وحدات البكسل المربعة أثناء رسمها للعبة."
 
 #: port/app/ingame3ds.cpp:580 port/frontend/shell/settings.cpp:295 port/frontend/shell/settings.cpp:511 port/frontend/shell/settings.cpp:1722
 #, menu
@@ -1946,17 +1946,17 @@ msgstr "المحاكي"
 #, menu
 msgid "{0} option"
 msgid_plural "{0} options"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "لا خيارات ({0})"
+msgstr[1] "خيار واحد ({0})"
+msgstr[2] "خياران ({0})"
+msgstr[3] "{0} خيارات"
+msgstr[4] "{0} خيارًا"
+msgstr[5] "{0} خيار"
 
 #: port/app/ingame3ds.cpp:581
 #, menu
 msgid "Every option of this console's emulator. Changes apply now and are kept for every game on it."
-msgstr ""
+msgstr "كل خيار من محاكي وحدة التحكم هذه. تنطبق التغييرات الآن ويتم الاحتفاظ بها لكل لعبة عليها."
 
 #: port/app/ingame3ds.cpp:589 port/app/ingame3ds.cpp:596
 #, menu
@@ -1971,7 +1971,7 @@ msgstr "مرشح الشاشة"
 #: port/app/ingame3ds.cpp:591
 #, menu
 msgid "Sharp keeps pixels crisp and even. Smooth blends them. CRT draws the lines and colours of a tube TV, Curved CRT its rounded glass too."
-msgstr ""
+msgstr "تعمل Sharp على الحفاظ على وحدات البكسل واضحة ومتساوية. يمزجهم بسلاسة. CRT يرسم خطوط وألوان أنبوب TV، CRT منحني وزجاجه المستدير أيضًا."
 
 #: port/app/ingame3ds.cpp:593 port/app/ingame3ds.cpp:600 port/app/ingame3ds.cpp:613 port/frontend/shell/settings.cpp:711 port/frontend/shell/settings.cpp:712 port/frontend/shell/settings.cpp:784 port/frontend/shell/settings.cpp:785 port/frontend/shell/settings.cpp:798 port/frontend/shell/settings.cpp:799
 #, menu
@@ -2276,7 +2276,7 @@ msgstr "A على زر دائرة وB على زر أكس، حيث هما في 3DS
 #: port/app/ingame3ds.cpp:721 port/eden/ingame.cpp:653
 #, menu
 msgid "Puts every button back to default. Hold Cross to confirm."
-msgstr ""
+msgstr "يعيد كل زر إلى الوضع الافتراضي. اضغط باستمرار على أكس للتأكيد."
 
 #: port/app/ingame3ds.cpp:731
 #, menu
@@ -2326,7 +2326,7 @@ msgstr "الخانة {0} فارغة"
 #: port/app/ingame3ds.cpp:773
 #, menu
 msgid "Reset"
-msgstr ""
+msgstr "إعادة تعيين"
 
 #. {0} is the version the last update replaced, as in 5.0.0
 #. no save of this Switch game in standalone ProsperoEden or on a USB drive
@@ -2338,7 +2338,7 @@ msgstr "استمر في الضغط على زر أكس"
 #: port/app/ingame3ds.cpp:774
 #, menu
 msgid "Restarts the game, as the console's reset button does. What isn't saved is lost."
-msgstr ""
+msgstr "إعادة تشغيل اللعبة، كما يفعل زر إعادة تعيين وحدة التحكم. ما لم يتم حفظه قد ضاع."
 
 #: port/app/ingame3ds.cpp:780
 #, menu
@@ -2388,12 +2388,12 @@ msgstr "بكسلات مربعة"
 #: port/app/ingame3ds.h:69
 #, menu
 msgid "CRT"
-msgstr ""
+msgstr "CRT"
 
 #: port/app/ingame3ds.h:69
 #, menu
 msgid "Curved CRT"
-msgstr ""
+msgstr "منحني CRT"
 
 #: port/app/ingame3ds.h:74 port/frontend/shell/settings.cpp:121
 #, menu
@@ -2418,17 +2418,17 @@ msgstr "90° لليسار"
 #: port/app/ingame3ds.h:79
 #, menu
 msgid "Fit"
-msgstr ""
+msgstr "صالح"
 
 #: port/app/ingame3ds.h:79
 #, menu
 msgid "Whole pixels"
-msgstr ""
+msgstr "بكسلات كاملة"
 
 #: port/app/ingame3ds.h:79
 #, menu
 msgid "Fill screen"
-msgstr ""
+msgstr "ملء الشاشة"
 
 #. the 3DS borders' names (artwork around the screens)
 #: port/app/ingame3ds.h:161 port/frontend/shell/settings.cpp:52
@@ -2933,12 +2933,12 @@ msgstr "استمر في الضغط على زر أكس حتى تمتلئ الحل
 #: port/app/side_menu.h:503
 #, menu
 msgid "Your controller"
-msgstr ""
+msgstr "وحدة التحكم الخاصة بك"
 
 #: port/app/side_menu.h:505
 #, menu
 msgid "Each button shows the console's button it presses."
-msgstr ""
+msgstr "يعرض كل زر زر وحدة التحكم الذي يضغط عليه."
 
 #: port/app/update_files.cpp:93
 msgid "the download has no eboot.bin"
@@ -2946,7 +2946,7 @@ msgstr "الملف المنزل لا يحتوي على eboot.bin"
 
 #: port/app/update_files.cpp:93
 msgid "the download has no {0}"
-msgstr ""
+msgstr "التنزيل لا يحتوي على {0}"
 
 #: port/app/update_files.cpp:118
 msgid "{0} could not be written (is /data full?)"
@@ -4326,7 +4326,7 @@ msgstr "يفتح EmulationStation في المرة القادمة التي يبد
 
 #: port/frontend/shell/orbit.cpp:542 port/frontend/shell/settings.cpp:2235
 msgid "Downloading EmulationStation. It opens next time Playtendoh starts."
-msgstr ""
+msgstr "تحميل EmulationStation. يتم فتحه في المرة القادمة التي يبدأ فيها Playtendoh."
 
 #: port/frontend/shell/orbit.cpp:695 port/frontend/shell/reports.cpp:73 port/frontend/shell/settings.cpp:1532 port/frontend/shell/welcome.cpp:222
 msgid "Make it yours"
@@ -4391,12 +4391,12 @@ msgstr "استخدام {0}"
 #. the first start's layout question: Triangle turns the covers flat or into 3D boxes
 #: port/frontend/shell/orbit.cpp:763
 msgid "Box art: 3D"
-msgstr ""
+msgstr "صورة الصندوق: 3D"
 
 #. the first start's layout question: Triangle turns the covers flat or into 3D boxes
 #: port/frontend/shell/orbit.cpp:763
 msgid "Box art: flat"
-msgstr ""
+msgstr "فن الصندوق: مسطح"
 
 #: port/frontend/shell/orbit.cpp:774
 msgid "Hold L1 while Playtendoh starts to use its own launcher. Switch back any time in Settings > Launcher > Layout."
@@ -4598,15 +4598,15 @@ msgstr "لا يوجد DualSense"
 
 #: port/frontend/shell/pages.cpp:793 port/frontend/shell/pages.cpp:813
 msgid "Built-in layouts can't be changed. Choose one of your own at the top."
-msgstr ""
+msgstr "لا يمكن تغيير التخطيطات المضمنة. اختر واحدًا خاصًا بك في الأعلى."
 
 #: port/frontend/shell/pages.cpp:797 port/frontend/shell/pages.cpp:797 port/frontend/shell/porpoise_rows.cpp:734
 msgid "Clear all"
-msgstr ""
+msgstr "مسح الكل"
 
 #: port/frontend/shell/pages.cpp:797 port/frontend/shell/porpoise_rows.cpp:1568
 msgid "Keep them"
-msgstr ""
+msgstr "احتفظ بها"
 
 #: port/frontend/shell/pages.cpp:847
 msgid "Cleared. No DualSense button is set for it."
@@ -4630,18 +4630,20 @@ msgstr "هذا الزر"
 
 #: port/frontend/shell/pages.cpp:973
 msgid "Press the DualSense button or trigger for {0} now."
-msgstr ""
+msgstr "اضغط على زر DualSense أو قم بتشغيل {0} الآن."
 
 #. a GameCube or GBA button's mapping: a DualSense button, never a stick's direction or the touchpad
 #: port/frontend/shell/pages.cpp:983
 msgid "Left and Right, or Cross, choose the layout. Built-in layouts can't be changed; choose one of your own to set buttons."
-msgstr ""
+msgstr "اليسار واليمين، أو أكس، اختر التخطيط. لا يمكن تغيير التخطيطات المضمنة؛ اختر واحدًا خاصًا بك لتعيين الأزرار."
 
 #: port/frontend/shell/pages.cpp:984 port/frontend/shell/pages.cpp:985
 msgid ""
 "Cross chooses what this DualSense button does. If another button already did that, the two swap.\n"
 "Square makes it do nothing."
 msgstr ""
+"يختار Cross ما يفعله زر DualSense هذا. إذا قام زر آخر بذلك بالفعل، فسيتم تبديل الاثنين.\n"
+"المربع يجعله لا يفعل شيئًا."
 
 #. a Switch button's mapping: each is on a DualSense button (the touchpad's click too), never on none
 #: port/frontend/shell/pages.cpp:988
@@ -4952,87 +4954,87 @@ msgstr "كما سبق، من New 3DS أو New 2DS يشغل تطبيق Artic Setu
 
 #: port/frontend/shell/porpoise_rows.cpp:71
 msgid "Enhancements"
-msgstr ""
+msgstr "التحسينات"
 
 #: port/frontend/shell/porpoise_rows.cpp:71
 msgid "Bloom, colour, texture filtering, resampling, lighting and fog."
-msgstr ""
+msgstr "الإزهار واللون وتصفية الملمس وإعادة التشكيل والإضاءة والضباب."
 
 #: port/frontend/shell/porpoise_rows.cpp:72
 msgid "Rendering"
-msgstr ""
+msgstr "التقديم"
 
 #: port/frontend/shell/porpoise_rows.cpp:72
 msgid "Shaders, the texture cache and texture packs."
-msgstr ""
+msgstr "تظليل، ذاكرة التخزين المؤقت للنسيج وحزم النسيج."
 
 #: port/frontend/shell/porpoise_rows.cpp:73
 msgid "Button layout, vibration, sticks, turbo and the triggers."
-msgstr ""
+msgstr "تخطيط الزر، والاهتزاز، والعصي، والتوربو والمشغلات."
 
 #: port/frontend/shell/porpoise_rows.cpp:74 port/frontend/shell/porpoise_rows.cpp:75 port/frontend/shell/porpoise_rows.cpp:76
 msgid "This player's light bar. Buttons are the same as player 1's."
-msgstr ""
+msgstr "شريط الضوء لهذا اللاعب. الأزرار هي نفس أزرار اللاعب 1."
 
 #: port/frontend/shell/porpoise_rows.cpp:75 port/frontend/shell/porpoise_rows.cpp:195 port/frontend/shell/porpoise_rows.cpp:197 port/frontend/shell/porpoise_rows.cpp:207 port/frontend/shell/porpoise_rows.cpp:209 port/frontend/shell/porpoise_rows.cpp:219 port/frontend/shell/porpoise_rows.cpp:221 port/frontend/shell/porpoise_rows.cpp:231 port/frontend/shell/porpoise_rows.cpp:233
 msgid "Player 3"
-msgstr ""
+msgstr "لاعب 3"
 
 #: port/frontend/shell/porpoise_rows.cpp:76 port/frontend/shell/porpoise_rows.cpp:195 port/frontend/shell/porpoise_rows.cpp:197 port/frontend/shell/porpoise_rows.cpp:207 port/frontend/shell/porpoise_rows.cpp:209 port/frontend/shell/porpoise_rows.cpp:219 port/frontend/shell/porpoise_rows.cpp:221 port/frontend/shell/porpoise_rows.cpp:231 port/frontend/shell/porpoise_rows.cpp:233
 msgid "Player 4"
-msgstr ""
+msgstr "اللاعب 4"
 
 #: port/frontend/shell/porpoise_rows.cpp:77 port/frontend/shell/porpoise_rows.cpp:83 port/frontend/shell/porpoise_rows.cpp:87 port/frontend/shell/porpoise_rows.cpp:257
 msgid "Port 1"
-msgstr ""
+msgstr "المنفذ 1"
 
 #: port/frontend/shell/porpoise_rows.cpp:77 port/frontend/shell/porpoise_rows.cpp:78 port/frontend/shell/porpoise_rows.cpp:79 port/frontend/shell/porpoise_rows.cpp:80
 msgid "What's plugged into this port, and who plays it."
-msgstr ""
+msgstr "ما الذي تم توصيله بهذا المنفذ ومن يقوم بتشغيله."
 
 #: port/frontend/shell/porpoise_rows.cpp:78 port/frontend/shell/porpoise_rows.cpp:84 port/frontend/shell/porpoise_rows.cpp:88 port/frontend/shell/porpoise_rows.cpp:257
 msgid "Port 2"
-msgstr ""
+msgstr "المنفذ 2"
 
 #: port/frontend/shell/porpoise_rows.cpp:79 port/frontend/shell/porpoise_rows.cpp:85 port/frontend/shell/porpoise_rows.cpp:89 port/frontend/shell/porpoise_rows.cpp:257
 msgid "Port 3"
-msgstr ""
+msgstr "المنفذ 3"
 
 #: port/frontend/shell/porpoise_rows.cpp:80 port/frontend/shell/porpoise_rows.cpp:86 port/frontend/shell/porpoise_rows.cpp:90 port/frontend/shell/porpoise_rows.cpp:257
 msgid "Port 4"
-msgstr ""
+msgstr "المنفذ 4"
 
 #: port/frontend/shell/porpoise_rows.cpp:81 port/frontend/shell/porpoise_rows.cpp:1114
 msgid "GBA video"
-msgstr ""
+msgstr "فيديو جي بي ايه"
 
 #: port/frontend/shell/porpoise_rows.cpp:81 port/frontend/shell/porpoise_rows.cpp:1115
 msgid "Each GBA's screen on the TV."
-msgstr ""
+msgstr "شاشة كل GBA على شاشة التلفزيون."
 
 #: port/frontend/shell/porpoise_rows.cpp:82 port/frontend/shell/porpoise_rows.cpp:1114
 msgid "GBA sound"
-msgstr ""
+msgstr "صوت جي بي ايه"
 
 #: port/frontend/shell/porpoise_rows.cpp:82 port/frontend/shell/porpoise_rows.cpp:1115
 msgid "Each GBA's sound."
-msgstr ""
+msgstr "صوت كل GBA."
 
 #: port/frontend/shell/porpoise_rows.cpp:83 port/frontend/shell/porpoise_rows.cpp:84 port/frontend/shell/porpoise_rows.cpp:85 port/frontend/shell/porpoise_rows.cpp:86
 msgid "This port's GBA screen."
-msgstr ""
+msgstr "شاشة GBA لهذا المنفذ."
 
 #: port/frontend/shell/porpoise_rows.cpp:87 port/frontend/shell/porpoise_rows.cpp:88 port/frontend/shell/porpoise_rows.cpp:89 port/frontend/shell/porpoise_rows.cpp:90
 msgid "This port's GBA sound."
-msgstr ""
+msgstr "صوت GBA لهذا المنفذ."
 
 #: port/frontend/shell/porpoise_rows.cpp:91
 msgid "The pointer's reach, your grip, motion and real Wii Remotes."
-msgstr ""
+msgstr "مدى وصول المؤشر، وقبضتك، وحركتك، وأجهزة تحكم Wii الحقيقية."
 
 #: port/frontend/shell/porpoise_rows.cpp:92
 msgid "Settings that may not work on PS5 or need extra setup."
-msgstr ""
+msgstr "الإعدادات التي قد لا تعمل على PS5 أو تحتاج إلى إعداد إضافي."
 
 #: port/frontend/shell/porpoise_rows.cpp:99
 msgid "Higher is sharper but can slow games down."
@@ -5140,35 +5142,35 @@ msgstr "عند تشغيل توليد الإطارات تُعرض إطارات ا
 
 #: port/frontend/shell/porpoise_rows.cpp:125
 msgid "Color filter"
-msgstr ""
+msgstr "مرشح اللون"
 
 #: port/frontend/shell/porpoise_rows.cpp:125
 msgid "For color blindness: moves the colors you may not tell apart to ones you can."
-msgstr ""
+msgstr "لعمى الألوان: انقل الألوان التي قد لا تستطيع تمييزها عن الألوان التي يمكنك تمييزها."
 
 #: port/frontend/shell/porpoise_rows.cpp:126
 msgid "Red-weak"
-msgstr ""
+msgstr "أحمر ضعيف"
 
 #: port/frontend/shell/porpoise_rows.cpp:126
 msgid "Green-weak"
-msgstr ""
+msgstr "الأخضر ضعيف"
 
 #: port/frontend/shell/porpoise_rows.cpp:126
 msgid "Blue-weak"
-msgstr ""
+msgstr "أزرق ضعيف"
 
 #: port/frontend/shell/porpoise_rows.cpp:126
 msgid "Grayscale"
-msgstr ""
+msgstr "تدرج الرمادي"
 
 #: port/frontend/shell/porpoise_rows.cpp:127
 msgid "Color filter in games"
-msgstr ""
+msgstr "مرشح الألوان في الألعاب"
 
 #: port/frontend/shell/porpoise_rows.cpp:127
 msgid "Applies the color filter to games too."
-msgstr ""
+msgstr "يطبق مرشح الألوان على الألعاب أيضًا."
 
 #: port/frontend/shell/porpoise_rows.cpp:128
 msgid "Frame rate counter"
@@ -5196,235 +5198,235 @@ msgstr "مثل PS5"
 
 #: port/frontend/shell/porpoise_rows.cpp:134
 msgid "Aspect ratio"
-msgstr ""
+msgstr "نسبة الارتفاع"
 
 #: port/frontend/shell/porpoise_rows.cpp:134
 msgid "The picture's shape. Automatic follows the game."
-msgstr ""
+msgstr "شكل الصورة . التلقائي يتبع اللعبة."
 
 #: port/frontend/shell/porpoise_rows.cpp:135
 msgid "Force 16:9"
-msgstr ""
+msgstr "قوة 16: 9"
 
 #: port/frontend/shell/porpoise_rows.cpp:135
 msgid "Force 4:3"
-msgstr ""
+msgstr "القوة 4:3"
 
 #: port/frontend/shell/porpoise_rows.cpp:135
 msgid "Stretch to fill"
-msgstr ""
+msgstr "تمتد لملء"
 
 #: port/frontend/shell/porpoise_rows.cpp:136
 msgid "Fills the bars beside a 4:3 picture. Your own 1920x1080 PNGs go in /data/porpoise/borders."
-msgstr ""
+msgstr "يملأ الأشرطة بجانب صورة 4:3. تدخل ملفات PNG الخاصة بك مقاس 1920 × 1080 في /data/porpoise/borders."
 
 #: port/frontend/shell/porpoise_rows.cpp:137
 msgid "V-Sync"
-msgstr ""
+msgstr "V-مزامنة"
 
 #: port/frontend/shell/porpoise_rows.cpp:137
 msgid "Syncs frames to the TV's refresh for the smoothest motion."
-msgstr ""
+msgstr "يقوم بمزامنة الإطارات مع تحديث TV للحصول على الحركة الأكثر سلاسة."
 
 #: port/frontend/shell/porpoise_rows.cpp:138
 msgid "Syncs frames to the TV's refresh for the smoothest motion. Off uses the emulator's own timing."
-msgstr ""
+msgstr "يقوم بمزامنة الإطارات مع تحديث TV للحصول على الحركة الأكثر سلاسة. يستخدم Off توقيت المحاكي الخاص."
 
 #: port/frontend/shell/porpoise_rows.cpp:140
 msgid "Shader compilation"
-msgstr ""
+msgstr "تجميع شادر"
 
 #: port/frontend/shell/porpoise_rows.cpp:140
 msgid "Ubershaders prevent stutter when something new is drawn, but use more GPU."
-msgstr ""
+msgstr "يمنع Ubershaders التأتأة عند رسم شيء جديد، ولكن استخدم المزيد من GPU."
 
 #: port/frontend/shell/porpoise_rows.cpp:141
 msgid "Synchronous"
-msgstr ""
+msgstr "متزامن"
 
 #: port/frontend/shell/porpoise_rows.cpp:141
 msgid "Ubershaders"
-msgstr ""
+msgstr "أوبرشادر"
 
 #: port/frontend/shell/porpoise_rows.cpp:141
 msgid "Async ubershaders"
-msgstr ""
+msgstr "تظليل غير متزامن"
 
 #: port/frontend/shell/porpoise_rows.cpp:141
 msgid "Async, skip drawing"
-msgstr ""
+msgstr "غير متزامن، تخطي الرسم"
 
 #: port/frontend/shell/porpoise_rows.cpp:142
 msgid "Build shaders before starting"
-msgstr ""
+msgstr "قم ببناء التظليل قبل البدء"
 
 #: port/frontend/shell/porpoise_rows.cpp:142
 msgid "Shaders the game used last time are built while it loads. It starts a moment later."
-msgstr ""
+msgstr "يتم إنشاء تظليلات اللعبة المستخدمة في المرة الأخيرة أثناء تحميلها. يبدأ بعد لحظة."
 
 #: port/frontend/shell/porpoise_rows.cpp:143
 msgid "Builds the shaders the game used last time while it loads, so effects don't stutter. The game takes a moment longer to start."
-msgstr ""
+msgstr "ينشئ التظليل الذي استخدمته اللعبة في المرة الأخيرة أثناء تحميلها، حتى لا تتعثر التأثيرات. تستغرق اللعبة لحظة أطول للبدء."
 
 #: port/frontend/shell/porpoise_rows.cpp:145
 msgid "Threaded GPU recording"
-msgstr ""
+msgstr "تسجيل GPU مترابطة"
 
 #: port/frontend/shell/porpoise_rows.cpp:145
 msgid "The driver records drawing on its own thread. Turn it off if a game crashes."
-msgstr ""
+msgstr "يسجل برنامج التشغيل الرسم على الخيط الخاص به. قم بإيقاف تشغيله في حالة تعطل اللعبة."
 
 #: port/frontend/shell/porpoise_rows.cpp:146
 msgid "Records drawing on a separate thread. Can speed up demanding games. Turn it off if a game crashes or looks wrong. Applies next time a game starts."
-msgstr ""
+msgstr "سجلات الرسم على موضوع منفصل. يمكن تسريع الألعاب الصعبة. قم بإيقاف تشغيله في حالة تعطل اللعبة أو ظهورها بشكل خاطئ. ينطبق في المرة القادمة التي تبدأ فيها اللعبة."
 
 #: port/frontend/shell/porpoise_rows.cpp:148
 msgid "Texture cache accuracy"
-msgstr ""
+msgstr "دقة ذاكرة التخزين المؤقت للنسيج"
 
 #: port/frontend/shell/porpoise_rows.cpp:148
 msgid "Safe fixes some games' text and effects; Fast is quickest."
-msgstr ""
+msgstr "إصلاحات آمنة لنصوص وتأثيرات بعض الألعاب؛ السريع هو الأسرع."
 
 #: port/frontend/shell/porpoise_rows.cpp:149
 msgid "Fast"
-msgstr ""
+msgstr "سريع"
 
 #: port/frontend/shell/porpoise_rows.cpp:149
 msgid "Middle"
-msgstr ""
+msgstr "الأوسط"
 
 #: port/frontend/shell/porpoise_rows.cpp:149 port/frontend/shell/porpoise_rows.cpp:313
 msgid "Safe"
-msgstr ""
+msgstr "آمنة"
 
 #: port/frontend/shell/porpoise_rows.cpp:150
 msgid "Crop overscan"
-msgstr ""
+msgstr "اقتصاص الشاشة الزائدة"
 
 #: port/frontend/shell/porpoise_rows.cpp:150
 msgid "Hides the black borders some games draw at the edges."
-msgstr ""
+msgstr "إخفاء الحدود السوداء التي ترسمها بعض الألعاب عند الحواف."
 
 #: port/frontend/shell/porpoise_rows.cpp:152
 msgid "Crop left"
-msgstr ""
+msgstr "اقتصاص لليسار"
 
 #: port/frontend/shell/porpoise_rows.cpp:152
 msgid "Trims the left edge of the picture."
-msgstr ""
+msgstr "يقوم بقص الحافة اليسرى من الصورة."
 
 #: port/frontend/shell/porpoise_rows.cpp:154
 msgid "Crop right"
-msgstr ""
+msgstr "اقتصاص الحق"
 
 #: port/frontend/shell/porpoise_rows.cpp:154
 msgid "Trims the right edge of the picture."
-msgstr ""
+msgstr "يقوم بقص الحافة اليمنى من الصورة."
 
 #: port/frontend/shell/porpoise_rows.cpp:156
 msgid "Crop top"
-msgstr ""
+msgstr "أعلى المحاصيل"
 
 #: port/frontend/shell/porpoise_rows.cpp:156
 msgid "Trims the top edge of the picture."
-msgstr ""
+msgstr "يقوم بقص الحافة العلوية من الصورة."
 
 #: port/frontend/shell/porpoise_rows.cpp:158
 msgid "Crop bottom"
-msgstr ""
+msgstr "أسفل المحاصيل"
 
 #: port/frontend/shell/porpoise_rows.cpp:158
 msgid "Trims the bottom edge of the picture."
-msgstr ""
+msgstr "يقوم بقص الحافة السفلية للصورة."
 
 #: port/frontend/shell/porpoise_rows.cpp:160
 msgid "Skip duplicate frames"
-msgstr ""
+msgstr "تخطي الإطارات المكررة"
 
 #: port/frontend/shell/porpoise_rows.cpp:160
 msgid "Saves work when a game shows the same frame twice."
-msgstr ""
+msgstr "يحفظ العمل عندما تعرض اللعبة نفس الإطار مرتين."
 
 #: port/frontend/shell/porpoise_rows.cpp:162
 msgid "Anisotropic filtering"
-msgstr ""
+msgstr "تصفية متباين الخواص"
 
 #: port/frontend/shell/porpoise_rows.cpp:162
 msgid "Sharper textures on floors and walls seen at an angle."
-msgstr ""
+msgstr "أنسجة أكثر وضوحًا على الأرضيات والجدران يمكن رؤيتها بزاوية."
 
 #: port/frontend/shell/porpoise_rows.cpp:164
 msgid "Extra bloom"
-msgstr ""
+msgstr "إزهار إضافي"
 
 #: port/frontend/shell/porpoise_rows.cpp:164
 msgid "Adds a soft glow around bright areas."
-msgstr ""
+msgstr "يضيف توهجًا ناعمًا حول المناطق المضيئة."
 
 #: port/frontend/shell/porpoise_rows.cpp:165 port/frontend/shell/porpoise_rows.cpp:263 port/frontend/shell/porpoise_rows.cpp:313
 msgid "Low"
-msgstr ""
+msgstr "منخفض"
 
 #: port/frontend/shell/porpoise_rows.cpp:165 port/frontend/shell/porpoise_rows.cpp:265
 msgid "Medium"
-msgstr ""
+msgstr "متوسط"
 
 #: port/frontend/shell/porpoise_rows.cpp:165
 msgid "High"
-msgstr ""
+msgstr "عالية"
 
 #: port/frontend/shell/porpoise_rows.cpp:166
 msgid "Saturation"
-msgstr ""
+msgstr "التشبع"
 
 #: port/frontend/shell/porpoise_rows.cpp:166
 msgid "How rich the colours are. 0 is as the game has them."
-msgstr ""
+msgstr "كم هي غنية الألوان. 0 كما تحتوي اللعبة عليهم."
 
 #: port/frontend/shell/porpoise_rows.cpp:168
 msgid "Contrast"
-msgstr ""
+msgstr "التباين"
 
 #: port/frontend/shell/porpoise_rows.cpp:168
 msgid "How far apart the darks and the lights are. 0 is as the game has them."
-msgstr ""
+msgstr "كم تتباعد الظلمات والأضواء. 0 كما تحتوي اللعبة عليهم."
 
 #: port/frontend/shell/porpoise_rows.cpp:170
 msgid "Warmth"
-msgstr ""
+msgstr "الدفء"
 
 #: port/frontend/shell/porpoise_rows.cpp:170
 msgid "Warmer (more red) or cooler (more blue). 0 is as the game has it."
-msgstr ""
+msgstr "أكثر دفئًا (أكثر حمراء) أو أكثر برودة (أكثر زرقاء). 0 كما هو الحال في اللعبة."
 
 #: port/frontend/shell/porpoise_rows.cpp:172
 msgid "Texture filtering"
-msgstr ""
+msgstr "تصفية الملمس"
 
 #: port/frontend/shell/porpoise_rows.cpp:172
 msgid "Force sharp or smooth textures, or leave it to the game."
-msgstr ""
+msgstr "فرض القوام الحاد أو الناعم، أو ترك الأمر للعبة."
 
 #: port/frontend/shell/porpoise_rows.cpp:173 port/frontend/shell/porpoise_rows.cpp:182 port/frontend/shell/porpoise_rows.cpp:184
 msgid "The game's own"
-msgstr ""
+msgstr "اللعبة خاصة بها"
 
 #: port/frontend/shell/porpoise_rows.cpp:173
 msgid "Nearest (sharp)"
-msgstr ""
+msgstr "الأقرب (حاد)"
 
 #: port/frontend/shell/porpoise_rows.cpp:173
 msgid "Linear (smooth)"
-msgstr ""
+msgstr "خطي (ناعم)"
 
 #: port/frontend/shell/porpoise_rows.cpp:174
 msgid "Output resampling"
-msgstr ""
+msgstr "إعادة أخذ عينات الإخراج"
 
 #: port/frontend/shell/porpoise_rows.cpp:174
 msgid "How the picture is scaled. Sharp bilinear keeps pixels crisp."
-msgstr ""
+msgstr "كيف يتم تحجيم الصورة. خط ثنائي حاد يحافظ على وضوح البكسلات."
 
 #. Settings > Screens: a row that opens the touch screen's settings (where the touchpad's cursor lands, the right stick as the stylus)
 #. Settings > Performance: a row that opens Eden's accuracy shortcuts (Fast GPU, Unsafe CPU, ...); its value: how many are changed
@@ -5435,67 +5437,67 @@ msgstr "افتراضي"
 
 #: port/frontend/shell/porpoise_rows.cpp:175
 msgid "Sharp bilinear"
-msgstr ""
+msgstr "ثنائي حاد"
 
 #: port/frontend/shell/porpoise_rows.cpp:175
 msgid "Area sampling"
-msgstr ""
+msgstr "أخذ عينات من المنطقة"
 
 #: port/frontend/shell/porpoise_rows.cpp:177
 msgid "Per-pixel lighting"
-msgstr ""
+msgstr "الإضاءة لكل بكسل"
 
 #: port/frontend/shell/porpoise_rows.cpp:177
 msgid "Smoother lighting on surfaces. A little heavier."
-msgstr ""
+msgstr "إضاءة أكثر سلاسة على الأسطح. أثقل قليلا."
 
 #: port/frontend/shell/porpoise_rows.cpp:179
 msgid "Disable fog"
-msgstr ""
+msgstr "تعطيل الضباب"
 
 #: port/frontend/shell/porpoise_rows.cpp:179
 msgid "Removes distance fog. Some games use fog for their look."
-msgstr ""
+msgstr "يزيل ضباب المسافة. تستخدم بعض الألعاب الضباب لمظهرها."
 
 #: port/frontend/shell/porpoise_rows.cpp:181
 msgid "Bloom"
-msgstr ""
+msgstr "بلوم"
 
 #: port/frontend/shell/porpoise_rows.cpp:181
 msgid "A graphics mod for this game's glow. Applies next time it starts."
-msgstr ""
+msgstr "تعديل رسومي لتوهج هذه اللعبة. ينطبق في المرة القادمة عندما يبدأ."
 
 #: port/frontend/shell/porpoise_rows.cpp:182 port/frontend/shell/porpoise_rows.cpp:184
 msgid "Blurred"
-msgstr ""
+msgstr "غير واضح"
 
 #: port/frontend/shell/porpoise_rows.cpp:182 port/frontend/shell/porpoise_rows.cpp:184
 msgid "Native resolution"
-msgstr ""
+msgstr "القرار الأصلي"
 
 #: port/frontend/shell/porpoise_rows.cpp:183
 msgid "Depth of field"
-msgstr ""
+msgstr "عمق الميدان"
 
 #: port/frontend/shell/porpoise_rows.cpp:183
 msgid "A graphics mod for the blur on faraway things. Applies next time it starts."
-msgstr ""
+msgstr "تعديل رسومي للتعتيم على الأشياء البعيدة. ينطبق في المرة القادمة عندما يبدأ."
 
 #: port/frontend/shell/porpoise_rows.cpp:185
 msgid "Hide the HUD"
-msgstr ""
+msgstr "إخفاء هود"
 
 #: port/frontend/shell/porpoise_rows.cpp:185
 msgid "Hides the game's HUD, for clean screenshots. Applies the next time it starts."
-msgstr ""
+msgstr "يخفي شاشة HUD الخاصة باللعبة للحصول على لقطات شاشة نظيفة. ينطبق في المرة القادمة التي يبدأ فيها."
 
 #: port/frontend/shell/porpoise_rows.cpp:186
 msgid "Native resolution goop"
-msgstr ""
+msgstr "المادة اللزجة القرار الأصلي"
 
 #: port/frontend/shell/porpoise_rows.cpp:186
 msgid "Super Mario Sunshine's goop at the game's own resolution. Applies the next time it starts."
-msgstr ""
+msgstr "مادة لزجة Super Mario Sunshine بدقة اللعبة نفسها. ينطبق في المرة القادمة التي يبدأ فيها."
 
 #: port/frontend/shell/porpoise_rows.cpp:187 port/frontend/shell/settings.cpp:678 port/frontend/shell/settings.cpp:685
 msgid "Custom textures"
@@ -5503,107 +5505,107 @@ msgstr "خامات مخصصة"
 
 #: port/frontend/shell/porpoise_rows.cpp:187
 msgid "Loads HD texture packs."
-msgstr ""
+msgstr "تحميل حزم الملمس HD."
 
 #: port/frontend/shell/porpoise_rows.cpp:188
 msgid "Loads HD texture packs. Put each pack's folder, named with the game's ID (like GALE01), in /data/porpoise/saves/User/Load/Textures."
-msgstr ""
+msgstr "تحميل حزم الملمس HD. ضع مجلد كل حزمة، المسمى بمعرف اللعبة (مثل GALE01)، في /data/porpoise/saves/User/Load/Textures."
 
 #: port/frontend/shell/porpoise_rows.cpp:190 port/frontend/shell/porpoise_rows.cpp:202 port/frontend/shell/porpoise_rows.cpp:214 port/frontend/shell/porpoise_rows.cpp:226
 msgid "Device"
-msgstr ""
+msgstr "الجهاز"
 
 #: port/frontend/shell/porpoise_rows.cpp:190 port/frontend/shell/porpoise_rows.cpp:202 port/frontend/shell/porpoise_rows.cpp:214 port/frontend/shell/porpoise_rows.cpp:226
 msgid "What's plugged into this controller port."
-msgstr ""
+msgstr "ما الذي تم توصيله بمنفذ وحدة التحكم هذا."
 
 #: port/frontend/shell/porpoise_rows.cpp:191 port/frontend/shell/porpoise_rows.cpp:203 port/frontend/shell/porpoise_rows.cpp:215 port/frontend/shell/porpoise_rows.cpp:227
 msgid "What's plugged into this controller port. GBA (Integrated) is a Game Boy Advance on the link cable, for games like Four Swords Adventures. It needs the GBA BIOS at /data/porpoise/saves/User/GBA/gba_bios.bin. Best set per game."
-msgstr ""
+msgstr "ما الذي تم توصيله بمنفذ وحدة التحكم هذا. GBA (المتكامل) هو Game Boy Advance الموجود على كابل الارتباط، لألعاب مثل Four Swords Adventures. إنه يحتاج إلى GBA BIOS في /data/porpoise/saves/User/GBA/gba_bios.bin. أفضل مجموعة لكل لعبة."
 
 #: port/frontend/shell/porpoise_rows.cpp:192 port/frontend/shell/porpoise_rows.cpp:204 port/frontend/shell/porpoise_rows.cpp:216 port/frontend/shell/porpoise_rows.cpp:228 port/frontend/shell/porpoise_rows.cpp:1162
 msgid "GameCube Controller"
-msgstr ""
+msgstr "وحدة تحكم جيم كيوب"
 
 #: port/frontend/shell/porpoise_rows.cpp:192 port/frontend/shell/porpoise_rows.cpp:204 port/frontend/shell/porpoise_rows.cpp:216 port/frontend/shell/porpoise_rows.cpp:228 port/frontend/shell/porpoise_rows.cpp:1162
 msgid "GBA (Integrated)"
-msgstr ""
+msgstr "GBA (متكامل)"
 
 #: port/frontend/shell/porpoise_rows.cpp:193 port/frontend/shell/porpoise_rows.cpp:196 port/frontend/shell/porpoise_rows.cpp:205 port/frontend/shell/porpoise_rows.cpp:208 port/frontend/shell/porpoise_rows.cpp:217 port/frontend/shell/porpoise_rows.cpp:220 port/frontend/shell/porpoise_rows.cpp:229 port/frontend/shell/porpoise_rows.cpp:232
 msgid "Controlled by"
-msgstr ""
+msgstr "تسيطر عليها"
 
 #: port/frontend/shell/porpoise_rows.cpp:193 port/frontend/shell/porpoise_rows.cpp:205 port/frontend/shell/porpoise_rows.cpp:217 port/frontend/shell/porpoise_rows.cpp:229
 msgid "Who plays this GBA by holding their GBA button."
-msgstr ""
+msgstr "من يلعب GBA بالضغط على زر GBA."
 
 #: port/frontend/shell/porpoise_rows.cpp:194 port/frontend/shell/porpoise_rows.cpp:206 port/frontend/shell/porpoise_rows.cpp:218 port/frontend/shell/porpoise_rows.cpp:230
 msgid "A player: they play it while holding their GBA button, with its sound on their controller. Its own controller: the controller in this port is the GBA, no button needed. Nobody: only from the web page."
-msgstr ""
+msgstr "اللاعب: يلعبونه أثناء الضغط على زر GBA، مع وجود صوته على وحدة التحكم الخاصة بهم. وحدة التحكم الخاصة بها: وحدة التحكم في هذا المنفذ هي GBA، ولا حاجة إلى زر. لا أحد: فقط من صفحة الويب."
 
 #: port/frontend/shell/porpoise_rows.cpp:195 port/frontend/shell/porpoise_rows.cpp:207 port/frontend/shell/porpoise_rows.cpp:219 port/frontend/shell/porpoise_rows.cpp:231 port/frontend/shell/porpoise_rows.cpp:1153
 msgid "Its own controller"
-msgstr ""
+msgstr "وحدة التحكم الخاصة بها"
 
 #: port/frontend/shell/porpoise_rows.cpp:196 port/frontend/shell/porpoise_rows.cpp:208 port/frontend/shell/porpoise_rows.cpp:220 port/frontend/shell/porpoise_rows.cpp:232
 msgid "Whose controller is in this port."
-msgstr ""
+msgstr "الذي تحكم في هذا المنفذ."
 
 #: port/frontend/shell/porpoise_rows.cpp:198 port/frontend/shell/porpoise_rows.cpp:210 port/frontend/shell/porpoise_rows.cpp:222 port/frontend/shell/porpoise_rows.cpp:234 port/frontend/shell/porpoise_rows.cpp:621
 msgid "GBA button"
-msgstr ""
+msgstr "زر جي بي ايه"
 
 #: port/frontend/shell/porpoise_rows.cpp:198 port/frontend/shell/porpoise_rows.cpp:210 port/frontend/shell/porpoise_rows.cpp:222 port/frontend/shell/porpoise_rows.cpp:234
 msgid "Hold the GBA button, press it to toggle, or keep it always on or off."
-msgstr ""
+msgstr "اضغط مع الاستمرار على الزر GBA، أو اضغط عليه للتبديل، أو أبقِه قيد التشغيل أو الإيقاف دائمًا."
 
 #: port/frontend/shell/porpoise_rows.cpp:199 port/frontend/shell/porpoise_rows.cpp:211 port/frontend/shell/porpoise_rows.cpp:223 port/frontend/shell/porpoise_rows.cpp:235 port/frontend/shell/porpoise_rows.cpp:369 port/frontend/shell/porpoise_rows.cpp:381 port/frontend/shell/porpoise_rows.cpp:393 port/frontend/shell/porpoise_rows.cpp:405
 msgid "Toggle"
-msgstr ""
+msgstr "تبديل"
 
 #: port/frontend/shell/porpoise_rows.cpp:199 port/frontend/shell/porpoise_rows.cpp:211 port/frontend/shell/porpoise_rows.cpp:223 port/frontend/shell/porpoise_rows.cpp:235 port/frontend/shell/porpoise_rows.cpp:369 port/frontend/shell/porpoise_rows.cpp:381 port/frontend/shell/porpoise_rows.cpp:393 port/frontend/shell/porpoise_rows.cpp:405
 msgid "Always on"
-msgstr ""
+msgstr "دائما على"
 
 #: port/frontend/shell/porpoise_rows.cpp:199 port/frontend/shell/porpoise_rows.cpp:211 port/frontend/shell/porpoise_rows.cpp:223 port/frontend/shell/porpoise_rows.cpp:235 port/frontend/shell/porpoise_rows.cpp:369 port/frontend/shell/porpoise_rows.cpp:381 port/frontend/shell/porpoise_rows.cpp:393 port/frontend/shell/porpoise_rows.cpp:405
 msgid "Always off"
-msgstr ""
+msgstr "دائما خارج"
 
 #: port/frontend/shell/porpoise_rows.cpp:200 port/frontend/shell/porpoise_rows.cpp:212 port/frontend/shell/porpoise_rows.cpp:224 port/frontend/shell/porpoise_rows.cpp:236
 msgid "GBA game"
-msgstr ""
+msgstr "لعبة جي بي ايه"
 
 #: port/frontend/shell/porpoise_rows.cpp:200
 msgid "The GBA game loaded at start, from games/gba/port1. None: BIOS only."
-msgstr ""
+msgstr "تم تحميل لعبة GBA في البداية، من games/gba/port1. لا شيء: BIOS فقط."
 
 #: port/frontend/shell/porpoise_rows.cpp:201 port/frontend/shell/porpoise_rows.cpp:213 port/frontend/shell/porpoise_rows.cpp:225 port/frontend/shell/porpoise_rows.cpp:237
 msgid "Save beside the game"
-msgstr ""
+msgstr "حفظ بجانب اللعبة"
 
 #: port/frontend/shell/porpoise_rows.cpp:201 port/frontend/shell/porpoise_rows.cpp:213 port/frontend/shell/porpoise_rows.cpp:225 port/frontend/shell/porpoise_rows.cpp:237
 msgid "Keeps this GBA's save next to its game instead of with the other saves."
-msgstr ""
+msgstr "يحتفظ بحفظ GBA بجوار لعبته بدلاً من حفظه مع عمليات الحفظ الأخرى."
 
 #: port/frontend/shell/porpoise_rows.cpp:212
 msgid "The GBA game loaded at start, from games/gba/port2. None: BIOS only."
-msgstr ""
+msgstr "تم تحميل لعبة GBA في البداية، من games/gba/port2. لا شيء: BIOS فقط."
 
 #: port/frontend/shell/porpoise_rows.cpp:224
 msgid "The GBA game loaded at start, from games/gba/port3. None: BIOS only."
-msgstr ""
+msgstr "تم تحميل لعبة GBA في البداية، من games/gba/port3. لا شيء: BIOS فقط."
 
 #: port/frontend/shell/porpoise_rows.cpp:236
 msgid "The GBA game loaded at start, from games/gba/port4. None: BIOS only."
-msgstr ""
+msgstr "تم تحميل لعبة GBA في البداية، من games/gba/port4. لا شيء: BIOS فقط."
 
 #: port/frontend/shell/porpoise_rows.cpp:238
 msgid "Console"
-msgstr ""
+msgstr "وحدة التحكم"
 
 #: port/frontend/shell/porpoise_rows.cpp:238
 msgid "Which console's controls to use, if a game is detected wrongly."
-msgstr ""
+msgstr "ما هي عناصر التحكم التي يجب استخدامها في وحدة التحكم، إذا تم اكتشاف اللعبة بشكل خاطئ."
 
 #: port/frontend/shell/porpoise_rows.cpp:240
 msgid "Button layout"
@@ -5615,7 +5617,7 @@ msgstr "PlayStation: زر أكس هو A وزر دائرة هو B. GameCube: زر
 
 #: port/frontend/shell/porpoise_rows.cpp:242
 msgid "PlayStation: Cross is A and Circle is B. GameCube: Circle is A and Cross is B. My layouts are the ones you make on the Buttons page. For GameCube games and Wii games played with a GameCube controller."
-msgstr ""
+msgstr "PlayStation: أكس هو A ودائرة هو B. GameCube: دائرة هو A وأكس هو B. تخطيطاتي هي تلك التي تقوم بإنشائها على صفحة الأزرار. بالنسبة لألعاب GameCube وألعاب Wii التي يتم لعبها باستخدام وحدة تحكم GameCube."
 
 #: port/frontend/shell/porpoise_rows.cpp:244
 msgid "Controller rumble."
@@ -5679,95 +5681,95 @@ msgstr "العصا اليمنى"
 
 #: port/frontend/shell/porpoise_rows.cpp:255
 msgid "Player 1's port"
-msgstr ""
+msgstr "منفذ اللاعب 1"
 
 #: port/frontend/shell/porpoise_rows.cpp:255
 msgid "The GameCube port your controller is in, for the few games that want another."
-msgstr ""
+msgstr "منفذ GameCube الذي توجد به وحدة التحكم الخاصة بك، لعدد قليل من الألعاب التي تحتاج إلى منفذ آخر."
 
 #: port/frontend/shell/porpoise_rows.cpp:256
 msgid "The GameCube port your controller is in. A few games briefly need it in another port."
-msgstr ""
+msgstr "منفذ GameCube الموجود به جهاز التحكم الخاص بك. بعض الألعاب تحتاج إليه لفترة وجيزة في منفذ آخر."
 
 #: port/frontend/shell/porpoise_rows.cpp:258
 msgid "Invert the control stick"
-msgstr ""
+msgstr "اقلب عصا التحكم"
 
 #: port/frontend/shell/porpoise_rows.cpp:258
 msgid "For a game whose controls feel reversed. Best set per game."
-msgstr ""
+msgstr "للعبة التي تبدو ضوابطها معكوسة. أفضل مجموعة لكل لعبة."
 
 #: port/frontend/shell/porpoise_rows.cpp:259 port/frontend/shell/porpoise_rows.cpp:261
 msgid "Up and down"
-msgstr ""
+msgstr "صعودا وهبوطا"
 
 #: port/frontend/shell/porpoise_rows.cpp:259 port/frontend/shell/porpoise_rows.cpp:261
 msgid "Left and right"
-msgstr ""
+msgstr "اليسار واليمين"
 
 #: port/frontend/shell/porpoise_rows.cpp:259 port/frontend/shell/porpoise_rows.cpp:261
 msgid "Both"
-msgstr ""
+msgstr "كلاهما"
 
 #: port/frontend/shell/porpoise_rows.cpp:260
 msgid "Invert the C-stick"
-msgstr ""
+msgstr "اقلب عصا C"
 
 #: port/frontend/shell/porpoise_rows.cpp:260
 msgid "For a game whose camera feels reversed. Best set per game."
-msgstr ""
+msgstr "للعبة التي تبدو كاميرتها معكوسة. أفضل مجموعة لكل لعبة."
 
 #: port/frontend/shell/porpoise_rows.cpp:262
 msgid "Stick sensitivity"
-msgstr ""
+msgstr "حساسية العصا"
 
 #: port/frontend/shell/porpoise_rows.cpp:262
 msgid "Lower makes small pushes gentler. A full push still turns fully."
-msgstr ""
+msgstr "الجزء السفلي يجعل الدفعات الصغيرة ألطف. لا تزال الدفعة الكاملة تدور بشكل كامل."
 
 #: port/frontend/shell/porpoise_rows.cpp:263 port/frontend/shell/porpoise_rows.cpp:313
 msgid "Normal"
-msgstr ""
+msgstr "عادي"
 
 #: port/frontend/shell/porpoise_rows.cpp:263
 msgid "Lower"
-msgstr ""
+msgstr "أقل"
 
 #: port/frontend/shell/porpoise_rows.cpp:263
 msgid "Lowest"
-msgstr ""
+msgstr "أدنى"
 
 #: port/frontend/shell/porpoise_rows.cpp:264
 msgid "Stick dead zone"
-msgstr ""
+msgstr "عصا المنطقة الميتة"
 
 #: port/frontend/shell/porpoise_rows.cpp:264
 msgid "How far the stick moves before the game sees it, for a stick that drifts."
-msgstr ""
+msgstr "إلى أي مدى تتحرك العصا قبل أن تراها اللعبة، بالنسبة للعصا التي تنجرف."
 
 #: port/frontend/shell/porpoise_rows.cpp:265
 msgid "Small"
-msgstr ""
+msgstr "صغير"
 
 #: port/frontend/shell/porpoise_rows.cpp:265
 msgid "Large"
-msgstr ""
+msgstr "كبير"
 
 #: port/frontend/shell/porpoise_rows.cpp:266
 msgid "Fast forward buttons"
-msgstr ""
+msgstr "أزرار التقديم السريع"
 
 #: port/frontend/shell/porpoise_rows.cpp:266
 msgid "Touchpad + R1 steps fast forward; touchpad + R2 fast-forwards while held."
-msgstr ""
+msgstr "لوحة اللمس + R1 تتقدم بسرعة؛ لوحة اللمس + R2 للتقديم السريع أثناء الضغط."
 
 #: port/frontend/shell/porpoise_rows.cpp:268
 msgid "Quick save buttons"
-msgstr ""
+msgstr "أزرار الحفظ السريع"
 
 #: port/frontend/shell/porpoise_rows.cpp:268
 msgid "Touchpad + L1 saves to this slot and touchpad + L2 loads it."
-msgstr ""
+msgstr "تقوم لوحة اللمس + L1 بالحفظ في هذه الفتحة وتقوم لوحة اللمس + L2 بتحميلها."
 
 #: port/frontend/shell/porpoise_rows.cpp:270 port/frontend/shell/settings.cpp:868
 msgid "Turbo button"
@@ -5775,39 +5777,39 @@ msgstr "زر التكرار السريع"
 
 #: port/frontend/shell/porpoise_rows.cpp:270
 msgid "Holding this button presses it repeatedly."
-msgstr ""
+msgstr "يؤدي الضغط على هذا الزر إلى الضغط عليه بشكل متكرر."
 
 #: port/frontend/shell/porpoise_rows.cpp:271
 msgid "Cross"
-msgstr ""
+msgstr "عبور"
 
 #: port/frontend/shell/porpoise_rows.cpp:271
 msgid "Circle"
-msgstr ""
+msgstr "دائرة"
 
 #: port/frontend/shell/porpoise_rows.cpp:271
 msgid "Square"
-msgstr ""
+msgstr "مربع"
 
 #: port/frontend/shell/porpoise_rows.cpp:271
 msgid "Triangle"
-msgstr ""
+msgstr "مثلث"
 
 #: port/frontend/shell/porpoise_rows.cpp:272
 msgid "Screenshot buttons"
-msgstr ""
+msgstr "أزرار لقطة الشاشة"
 
 #: port/frontend/shell/porpoise_rows.cpp:272
 msgid "In a game, touchpad + Square takes a screenshot."
-msgstr ""
+msgstr "في إحدى الألعاب، تقوم لوحة اللمس + مربع بالتقاط لقطة شاشة."
 
 #: port/frontend/shell/porpoise_rows.cpp:274
 msgid "Trigger click"
-msgstr ""
+msgstr "انقر فوق الزناد"
 
 #: port/frontend/shell/porpoise_rows.cpp:274
 msgid "L2 and R2 click near the bottom, like the GameCube's triggers."
-msgstr ""
+msgstr "انقر فوق L2 وR2 بالقرب من الجزء السفلي، مثل مشغلات GameCube."
 
 #: port/frontend/shell/porpoise_rows.cpp:275 port/frontend/shell/settings.cpp:168
 msgid "Light"
@@ -5815,175 +5817,175 @@ msgstr "فاتح"
 
 #: port/frontend/shell/porpoise_rows.cpp:275
 msgid "Firm"
-msgstr ""
+msgstr "شركة"
 
 #: port/frontend/shell/porpoise_rows.cpp:275
 msgid "Extra firm"
-msgstr ""
+msgstr "شركة اضافية"
 
 #: port/frontend/shell/porpoise_rows.cpp:276 port/frontend/shell/porpoise_rows.cpp:278 port/frontend/shell/porpoise_rows.cpp:280 port/frontend/shell/porpoise_rows.cpp:282
 msgid "Light bar"
-msgstr ""
+msgstr "شريط الضوء"
 
 #: port/frontend/shell/porpoise_rows.cpp:276 port/frontend/shell/porpoise_rows.cpp:278 port/frontend/shell/porpoise_rows.cpp:280 port/frontend/shell/porpoise_rows.cpp:282
 msgid "The colour of this player's light bar."
-msgstr ""
+msgstr "لون شريط الضوء الخاص بهذا اللاعب."
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Blue"
-msgstr ""
+msgstr "أزرق"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Red"
-msgstr ""
+msgstr "أحمر"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Green"
-msgstr ""
+msgstr "أخضر"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Pink"
-msgstr ""
+msgstr "وردي"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Purple"
-msgstr ""
+msgstr "أرجواني"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Orange"
-msgstr ""
+msgstr "برتقالي"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Yellow"
-msgstr ""
+msgstr "أصفر"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Cyan"
-msgstr ""
+msgstr "سماوي"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "White"
-msgstr ""
+msgstr "أبيض"
 
 #: port/frontend/shell/porpoise_rows.cpp:284
 msgid "Wii Remotes"
-msgstr ""
+msgstr "أجهزة التحكم عن بعد وي"
 
 #: port/frontend/shell/porpoise_rows.cpp:284
 msgid "Use your DualSense, or real Remotes through a Mayflash DolphinBar."
-msgstr ""
+msgstr "استخدم DualSense، أو أجهزة التحكم عن بعد الحقيقية من خلال Mayflash DolphinBar."
 
 #: port/frontend/shell/porpoise_rows.cpp:285
 msgid "DualSense: your controller is the Wii Remote. Real Wii Remotes: up to four through a Mayflash DolphinBar (mode 4) in a USB port, with their own attachments, pointer and motion. Applies when the game starts."
-msgstr ""
+msgstr "DualSense: وحدة التحكم الخاصة بك هي Wii Remote. أجهزة التحكم عن بعد Wii الحقيقية: ما يصل إلى أربعة من خلال Mayflash DolphinBar (الوضع 4) في منفذ USB، مع ملحقاتها ومؤشرها وحركتها. ينطبق عندما تبدأ اللعبة."
 
 #: port/frontend/shell/porpoise_rows.cpp:286
 msgid "Real Wii Remotes (DolphinBar)"
-msgstr ""
+msgstr "أجهزة التحكم عن بعد لـ Wii الحقيقية (DolphinBar)"
 
 #: port/frontend/shell/porpoise_rows.cpp:287
 msgid "Wii buttons"
-msgstr ""
+msgstr "أزرار وي"
 
 #: port/frontend/shell/porpoise_rows.cpp:287
 msgid "Which buttons the Wii controllers use."
-msgstr ""
+msgstr "ما هي الأزرار التي تستخدمها وحدات تحكم Wii؟"
 
 #: port/frontend/shell/porpoise_rows.cpp:288 port/frontend/shell/porpoise_rows.cpp:363 port/frontend/shell/porpoise_rows.cpp:674
 msgid "Default set"
-msgstr ""
+msgstr "المجموعة الافتراضية"
 
 #: port/frontend/shell/porpoise_rows.cpp:288 port/frontend/shell/porpoise_rows.cpp:363 port/frontend/shell/porpoise_rows.cpp:674
 msgid "Mine 1"
-msgstr ""
+msgstr "منجم 1"
 
 #: port/frontend/shell/porpoise_rows.cpp:288 port/frontend/shell/porpoise_rows.cpp:363 port/frontend/shell/porpoise_rows.cpp:674
 msgid "Mine 2"
-msgstr ""
+msgstr "الألغام 2"
 
 #: port/frontend/shell/porpoise_rows.cpp:289
 msgid "Pointer speed"
-msgstr ""
+msgstr "سرعة المؤشر"
 
 #: port/frontend/shell/porpoise_rows.cpp:289
 msgid "How far you turn the controller to reach the screen's edge."
-msgstr ""
+msgstr "إلى أي مدى تدير وحدة التحكم للوصول إلى حافة الشاشة."
 
 #: port/frontend/shell/porpoise_rows.cpp:290
 msgid "Your screen"
-msgstr ""
+msgstr "شاشتك"
 
 #: port/frontend/shell/porpoise_rows.cpp:291
 msgid "Pointer range"
-msgstr ""
+msgstr "نطاق المؤشر"
 
 #: port/frontend/shell/porpoise_rows.cpp:291
 msgid "Widen it if the pointer can't reach the screen's edge."
-msgstr ""
+msgstr "قم بتوسيعها إذا لم يتمكن المؤشر من الوصول إلى حافة الشاشة."
 
 #: port/frontend/shell/porpoise_rows.cpp:292
 msgid "Standard"
-msgstr ""
+msgstr "قياسي"
 
 #: port/frontend/shell/porpoise_rows.cpp:292
 msgid "Wide"
-msgstr ""
+msgstr "واسعة"
 
 #: port/frontend/shell/porpoise_rows.cpp:292
 msgid "Extra wide"
-msgstr ""
+msgstr "واسعة للغاية"
 
 #: port/frontend/shell/porpoise_rows.cpp:293
 msgid "Grip"
-msgstr ""
+msgstr "قبضة"
 
 #: port/frontend/shell/porpoise_rows.cpp:293
 msgid "How you hold the DualSense. Automatic detects it."
-msgstr ""
+msgstr "كيف تحمل DualSense. يكتشفها تلقائياً."
 
 #: port/frontend/shell/porpoise_rows.cpp:294
 msgid "Both hands"
-msgstr ""
+msgstr "كلتا اليدين"
 
 #: port/frontend/shell/porpoise_rows.cpp:294
 msgid "Upright, trigger to the TV"
-msgstr ""
+msgstr "تستقيم، الزناد إلى التلفزيون"
 
 #: port/frontend/shell/porpoise_rows.cpp:294
 msgid "Upright, facing you"
-msgstr ""
+msgstr "منتصبًا، في مواجهتك"
 
 #: port/frontend/shell/porpoise_rows.cpp:295
 msgid "Motion"
-msgstr ""
+msgstr "الحركة"
 
 #: port/frontend/shell/porpoise_rows.cpp:295
 msgid "Tilt, swing and point with the DualSense."
-msgstr ""
+msgstr "قم بالإمالة والتأرجح والإشارة باستخدام DualSense."
 
 #: port/frontend/shell/porpoise_rows.cpp:297
 msgid "Flick to shake"
-msgstr ""
+msgstr "نفض الغبار ليهز"
 
 #: port/frontend/shell/porpoise_rows.cpp:297
 msgid "A quick flick of the controller shakes the Remote."
-msgstr ""
+msgstr "نقرة سريعة على وحدة التحكم تهز جهاز التحكم عن بعد."
 
 #: port/frontend/shell/porpoise_rows.cpp:299
 msgid "Wii MotionPlus"
-msgstr ""
+msgstr "وي موشن بلس"
 
 #: port/frontend/shell/porpoise_rows.cpp:299
 msgid "Adds MotionPlus using the gyroscope. Automatic: for games that need it."
-msgstr ""
+msgstr "يضيف MotionPlus باستخدام الجيروسكوب. تلقائي: للألعاب التي تحتاج إليها."
 
 #: port/frontend/shell/porpoise_rows.cpp:301
 msgid "Setup before each game"
-msgstr ""
+msgstr "الإعداد قبل كل مباراة"
 
 #: port/frontend/shell/porpoise_rows.cpp:301
 msgid "Shows the Wii Remote's setup when a game starts."
-msgstr ""
+msgstr "يعرض إعداد جهاز Wii Remote عند بدء اللعبة."
 
 #: port/frontend/shell/porpoise_rows.cpp:303
 msgid "The game's sound."
@@ -5991,75 +5993,75 @@ msgstr "صوت اللعبة."
 
 #: port/frontend/shell/porpoise_rows.cpp:304
 msgid "Mute the game"
-msgstr ""
+msgstr "كتم صوت اللعبة"
 
 #: port/frontend/shell/porpoise_rows.cpp:304
 msgid "Silences the game."
-msgstr ""
+msgstr "إسكات اللعبة."
 
 #: port/frontend/shell/porpoise_rows.cpp:305
 msgid "Accurate sound"
-msgstr ""
+msgstr "صوت دقيق"
 
 #: port/frontend/shell/porpoise_rows.cpp:305
 msgid "Exact sound emulation. Fixes a few games but is much slower."
-msgstr ""
+msgstr "مضاهاة الصوت الدقيق. يعمل على إصلاح بعض الألعاب ولكنه أبطأ بكثير."
 
 #: port/frontend/shell/porpoise_rows.cpp:307
 msgid "Wii Remote speaker"
-msgstr ""
+msgstr "مكبر صوت وي عن بعد"
 
 #: port/frontend/shell/porpoise_rows.cpp:307
 msgid "The Remote's sounds: from the TV, or from each player's controller."
-msgstr ""
+msgstr "أصوات جهاز التحكم عن بعد: من TV، أو من وحدة تحكم كل لاعب."
 
 #: port/frontend/shell/porpoise_rows.cpp:308
 msgid "Controller"
-msgstr ""
+msgstr "المراقب المالي"
 
 #: port/frontend/shell/porpoise_rows.cpp:309
 msgid "Sound preset"
-msgstr ""
+msgstr "الصوت مسبقا"
 
 #: port/frontend/shell/porpoise_rows.cpp:309
 msgid "How sound handles a game running slow."
-msgstr ""
+msgstr "كيف يتعامل الصوت مع لعبة تسير ببطء."
 
 #: port/frontend/shell/porpoise_rows.cpp:310
 msgid "Smooth fills gaps when a game runs slow instead of crackling. Responsive has a little less delay. Extra smooth suits games that slow down often. Classic is the older sound; changing to or from it applies next time a game starts."
-msgstr ""
+msgstr "يملأ الفجوات بشكل سلس عندما تكون اللعبة بطيئة بدلاً من الطقطقة. الاستجابة لديها تأخير أقل قليلا. السلاسة الإضافية تناسب الألعاب التي تتباطأ كثيرًا. الكلاسيكي هو الصوت الأقدم. ينطبق التغيير إليه أو منه في المرة القادمة التي تبدأ فيها اللعبة."
 
 #: port/frontend/shell/porpoise_rows.cpp:311
 msgid "Responsive"
-msgstr ""
+msgstr "مستجيب"
 
 #: port/frontend/shell/porpoise_rows.cpp:311
 msgid "Extra smooth"
-msgstr ""
+msgstr "سلس للغاية"
 
 #: port/frontend/shell/porpoise_rows.cpp:312
 msgid "Audio buffer"
-msgstr ""
+msgstr "المخزن المؤقت للصوت"
 
 #: port/frontend/shell/porpoise_rows.cpp:312
 msgid "More prevents crackling but adds a little delay."
-msgstr ""
+msgstr "المزيد يمنع الطقطقة ولكنه يضيف القليل من التأخير."
 
 #: port/frontend/shell/porpoise_rows.cpp:314
 msgid "Fill audio gaps"
-msgstr ""
+msgstr "ملء الفجوات الصوتية"
 
 #: port/frontend/shell/porpoise_rows.cpp:314
 msgid "Fills gaps with a faded repeat when a game runs slow."
-msgstr ""
+msgstr "يملأ الفجوات بتكرار باهت عندما تسير اللعبة ببطء."
 
 #: port/frontend/shell/porpoise_rows.cpp:315
 msgid "Audio stretching"
-msgstr ""
+msgstr "تمدد الصوت"
 
 #: port/frontend/shell/porpoise_rows.cpp:315
 msgid "When a game slows down, its sound slows with it, instead of crackling."
-msgstr ""
+msgstr "عندما تتباطأ اللعبة، يتباطأ صوتها معها، بدلاً من الطقطقة."
 
 #: port/frontend/shell/porpoise_rows.cpp:316 port/frontend/shell/settings.cpp:1051
 msgid "Microphone"
@@ -6067,7 +6069,7 @@ msgstr "الميكروفون"
 
 #: port/frontend/shell/porpoise_rows.cpp:316
 msgid "Use the DualSense mic as the GameCube Microphone and Wii Speak."
-msgstr ""
+msgstr "استخدم ميكروفون DualSense كميكروفون GameCube وWii Speak."
 
 #: port/frontend/shell/porpoise_rows.cpp:318 port/frontend/shell/shell.cpp:2043
 msgid "Resume where you left off"
@@ -6135,319 +6137,319 @@ msgstr "الكورية"
 
 #: port/frontend/shell/porpoise_rows.cpp:327
 msgid "Fast save states"
-msgstr ""
+msgstr "حفظ سريع للدول"
 
 #: port/frontend/shell/porpoise_rows.cpp:327
 msgid "Quicker and smaller states. Turn it off if a game looks wrong after loading one."
-msgstr ""
+msgstr "دول أسرع وأصغر. قم بإيقاف تشغيله إذا كانت اللعبة تبدو خاطئة بعد تحميلها."
 
 #: port/frontend/shell/porpoise_rows.cpp:329
 msgid "Progressive scan"
-msgstr ""
+msgstr "المسح التدريجي"
 
 #: port/frontend/shell/porpoise_rows.cpp:329
 msgid "480p output, as on a component cable."
-msgstr ""
+msgstr "إخراج 480 بكسل، كما هو الحال في كابل مكون."
 
 #: port/frontend/shell/porpoise_rows.cpp:331
 msgid "Wii widescreen"
-msgstr ""
+msgstr "وي شاشة عريضة"
 
 #: port/frontend/shell/porpoise_rows.cpp:331
 msgid "The Wii's 16:9 setting, used by Wii games."
-msgstr ""
+msgstr "إعداد Wii الخاص بـ 16:9، والذي تستخدمه ألعاب Wii."
 
 #: port/frontend/shell/porpoise_rows.cpp:333
 msgid "PAL games at 60 Hz"
-msgstr ""
+msgstr "ألعاب PAL بتردد 60 هرتز"
 
 #: port/frontend/shell/porpoise_rows.cpp:333
 msgid "European Wii games at 60 Hz, as a Wii set to EURGB60. Off: 50 Hz."
-msgstr ""
+msgstr "ألعاب Wii الأوروبية بتردد 60 هرتز، حيث تم ضبط Wii على EURGB60. إيقاف: 50 هرتز."
 
 #: port/frontend/shell/porpoise_rows.cpp:335
 msgid "Sensor bar"
-msgstr ""
+msgstr "شريط الاستشعار"
 
 #: port/frontend/shell/porpoise_rows.cpp:335
 msgid "Where the sensor bar is."
-msgstr ""
+msgstr "حيث يوجد شريط الاستشعار."
 
 #: port/frontend/shell/porpoise_rows.cpp:336
 msgid "Below the TV"
-msgstr ""
+msgstr "أسفل التلفاز"
 
 #: port/frontend/shell/porpoise_rows.cpp:336
 msgid "Above the TV"
-msgstr ""
+msgstr "فوق التلفاز"
 
 #: port/frontend/shell/porpoise_rows.cpp:337
 msgid "GameCube boot animation"
-msgstr ""
+msgstr "الرسوم المتحركة لتمهيد GameCube"
 
 #: port/frontend/shell/porpoise_rows.cpp:337
 msgid "Shows the GameCube start-up before games. Needs your own IPL.bin."
-msgstr ""
+msgstr "يُظهر بدء تشغيل GameCube قبل الألعاب. يحتاج إلى IPL.bin الخاص بك."
 
 #: port/frontend/shell/porpoise_rows.cpp:339
 msgid "WiiConnect24 channels"
-msgstr ""
+msgstr "قنوات وي كونيكت 24"
 
 #: port/frontend/shell/porpoise_rows.cpp:339
 msgid "Forecast, News, Check Mii Out and more through WiiLink. Needs the PS5 online."
-msgstr ""
+msgstr "التوقعات والأخبار والتحقق من Mii والمزيد من خلال WiiLink. يحتاج إلى PS5 عبر الإنترنت."
 
 #: port/frontend/shell/porpoise_rows.cpp:341
 msgid "Overclocking can smooth a game that slows down. 100% is the real console."
-msgstr ""
+msgstr "يمكن أن يؤدي رفع تردد التشغيل إلى تسهيل اللعبة التي تتباطأ. 100% هي وحدة التحكم الحقيقية."
 
 #: port/frontend/shell/porpoise_rows.cpp:343 port/frontend/shell/porpoise_rows.cpp:1774 port/frontend/shell/settings.cpp:285
 msgid "Auto Boost"
-msgstr ""
+msgstr "التعزيز التلقائي"
 
 #: port/frontend/shell/porpoise_rows.cpp:343
 msgid "New games start with the settings that run them best on PS5. Turn it off for a game in its own settings."
-msgstr ""
+msgstr "تبدأ الألعاب الجديدة بالإعدادات التي تعمل عليها بشكل أفضل على PS5. قم بإيقاف تشغيله للعبة في إعداداتها الخاصة."
 
 #: port/frontend/shell/porpoise_rows.cpp:346 port/frontend/shell/porpoise_rows.cpp:1784
 msgid "Riptide Boost"
-msgstr ""
+msgstr "تعزيز ضد التيار"
 
 #: port/frontend/shell/porpoise_rows.cpp:346 port/frontend/shell/porpoise_rows.cpp:1784
 msgid "Speeds up the emulated processor's 3D math. Turn it off if a game misbehaves."
-msgstr ""
+msgstr "يسرع العمليات الحسابية ثلاثية الأبعاد للمعالج الذي تمت محاكاته. قم بإيقاف تشغيله في حالة سوء تصرف اللعبة."
 
 #: port/frontend/shell/porpoise_rows.cpp:348
 msgid "Performance profiler"
-msgstr ""
+msgstr "ملف تعريف الأداء"
 
 #: port/frontend/shell/porpoise_rows.cpp:348
 msgid "For reporting a slow game: logs where the CPU spends its time. Costs a little speed; turn it off after."
-msgstr ""
+msgstr "للإبلاغ عن لعبة بطيئة: سجل المكان الذي يقضي فيه CPU وقته. يكلف القليل من السرعة؛ أطفئه بعد ذلك."
 
 #: port/frontend/shell/porpoise_rows.cpp:350
 msgid "Debug logs"
-msgstr ""
+msgstr "سجلات التصحيح"
 
 #: port/frontend/shell/porpoise_rows.cpp:350
 msgid "Keeps detailed logs for reporting a problem. Can slow games a little."
-msgstr ""
+msgstr "يحتفظ بسجلات مفصلة للإبلاغ عن مشكلة. يمكن أن تبطئ الألعاب قليلا."
 
 #: port/frontend/shell/porpoise_rows.cpp:352
 msgid "Dual core"
-msgstr ""
+msgstr "ثنائي النواة"
 
 #: port/frontend/shell/porpoise_rows.cpp:352
 msgid "Faster. Turn it off for a game that freezes or glitches."
-msgstr ""
+msgstr "أسرع. قم بإيقاف تشغيله للعبة التي تتجمد أو بها خلل."
 
 #: port/frontend/shell/porpoise_rows.cpp:354
 msgid "Emulator on its own cores"
-msgstr ""
+msgstr "محاكي على النوى الخاصة به"
 
 #: port/frontend/shell/porpoise_rows.cpp:354
 msgid "A PS5 core each for the emulated processor and graphics. Usually faster."
-msgstr ""
+msgstr "نواة PS5 لكل من المعالج والرسومات التي تمت محاكاتها. عادة أسرع."
 
 #: port/frontend/shell/porpoise_rows.cpp:356
 msgid "Exact multiply-add"
-msgstr ""
+msgstr "الضرب والإضافة الدقيق"
 
 #: port/frontend/shell/porpoise_rows.cpp:356
 msgid "Exact floating-point rounding. Much slower, and very few games need it."
-msgstr ""
+msgstr "التقريب الدقيق للفاصلة العائمة. أبطأ بكثير، وعدد قليل جدًا من الألعاب تحتاج إليه."
 
 #: port/frontend/shell/porpoise_rows.cpp:358
 msgid "Fast disc loading"
-msgstr ""
+msgstr "تحميل سريع للأقراص"
 
 #: port/frontend/shell/porpoise_rows.cpp:358
 msgid "Shorter loading screens. A few games need real disc speed."
-msgstr ""
+msgstr "شاشات تحميل أقصر. تحتاج بعض الألعاب إلى سرعة قرص حقيقية."
 
 #: port/frontend/shell/porpoise_rows.cpp:360
 msgid "Cheat codes, for games that have them."
-msgstr ""
+msgstr "رموز الغش للألعاب التي تحتوي عليها."
 
 #: port/frontend/shell/porpoise_rows.cpp:362
 msgid "GBA buttons in use"
-msgstr ""
+msgstr "أزرار GBA قيد الاستخدام"
 
 #: port/frontend/shell/porpoise_rows.cpp:362
 msgid "The default set, or one of your own."
-msgstr ""
+msgstr "المجموعة الافتراضية، أو واحدة خاصة بك."
 
 #: port/frontend/shell/porpoise_rows.cpp:364
 msgid "GBA web page"
-msgstr ""
+msgstr "صفحة ويب GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:364
 msgid "Play the GBA in a browser on the same network, on port 6771."
-msgstr ""
+msgstr "قم بتشغيل GBA في متصفح على نفس الشبكة، على المنفذ 6771."
 
 #: port/frontend/shell/porpoise_rows.cpp:366 port/frontend/shell/porpoise_rows.cpp:378 port/frontend/shell/porpoise_rows.cpp:390 port/frontend/shell/porpoise_rows.cpp:402
 msgid "Position"
-msgstr ""
+msgstr "الموقف"
 
 #: port/frontend/shell/porpoise_rows.cpp:366 port/frontend/shell/porpoise_rows.cpp:378 port/frontend/shell/porpoise_rows.cpp:390 port/frontend/shell/porpoise_rows.cpp:402
 msgid "Where its screen sits on the TV. Moving it in a game makes it Manual."
-msgstr ""
+msgstr "حيث تقع شاشته على شاشة التلفزيون. نقلها في لعبة يجعلها يدوية."
 
 #: port/frontend/shell/porpoise_rows.cpp:367 port/frontend/shell/porpoise_rows.cpp:379 port/frontend/shell/porpoise_rows.cpp:391 port/frontend/shell/porpoise_rows.cpp:403
 msgid "Top left"
-msgstr ""
+msgstr "أعلى اليسار"
 
 #: port/frontend/shell/porpoise_rows.cpp:367 port/frontend/shell/porpoise_rows.cpp:379 port/frontend/shell/porpoise_rows.cpp:391 port/frontend/shell/porpoise_rows.cpp:403
 msgid "Top right"
-msgstr ""
+msgstr "أعلى اليمين"
 
 #: port/frontend/shell/porpoise_rows.cpp:367 port/frontend/shell/porpoise_rows.cpp:379 port/frontend/shell/porpoise_rows.cpp:391 port/frontend/shell/porpoise_rows.cpp:403
 msgid "Bottom left"
-msgstr ""
+msgstr "أسفل اليسار"
 
 #: port/frontend/shell/porpoise_rows.cpp:367 port/frontend/shell/porpoise_rows.cpp:379 port/frontend/shell/porpoise_rows.cpp:391 port/frontend/shell/porpoise_rows.cpp:403
 msgid "Bottom right"
-msgstr ""
+msgstr "أسفل اليمين"
 
 #: port/frontend/shell/porpoise_rows.cpp:367 port/frontend/shell/porpoise_rows.cpp:379 port/frontend/shell/porpoise_rows.cpp:391 port/frontend/shell/porpoise_rows.cpp:403
 msgid "Manual"
-msgstr ""
+msgstr "دليل"
 
 #: port/frontend/shell/porpoise_rows.cpp:368 port/frontend/shell/porpoise_rows.cpp:380 port/frontend/shell/porpoise_rows.cpp:392 port/frontend/shell/porpoise_rows.cpp:404 port/frontend/shell/porpoise_rows.cpp:617
 msgid "Show the GBA's screen"
-msgstr ""
+msgstr "إظهار شاشة GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:368 port/frontend/shell/porpoise_rows.cpp:380 port/frontend/shell/porpoise_rows.cpp:392 port/frontend/shell/porpoise_rows.cpp:404
 msgid "Shows it over the game while held, toggled with each press, or always on or off."
-msgstr ""
+msgstr "لإظهاره فوق اللعبة أثناء الضغط عليه، أو تبديله مع كل ضغطة، أو تشغيله أو إيقافه دائمًا."
 
 #: port/frontend/shell/porpoise_rows.cpp:369 port/frontend/shell/porpoise_rows.cpp:381 port/frontend/shell/porpoise_rows.cpp:393 port/frontend/shell/porpoise_rows.cpp:405
 msgid "While held"
-msgstr ""
+msgstr "في حين عقد"
 
 #: port/frontend/shell/porpoise_rows.cpp:370 port/frontend/shell/porpoise_rows.cpp:382 port/frontend/shell/porpoise_rows.cpp:394 port/frontend/shell/porpoise_rows.cpp:406
 msgid "Position across"
-msgstr ""
+msgstr "الموقف عبر"
 
 #: port/frontend/shell/porpoise_rows.cpp:370 port/frontend/shell/porpoise_rows.cpp:372 port/frontend/shell/porpoise_rows.cpp:382 port/frontend/shell/porpoise_rows.cpp:384 port/frontend/shell/porpoise_rows.cpp:394 port/frontend/shell/porpoise_rows.cpp:396 port/frontend/shell/porpoise_rows.cpp:406 port/frontend/shell/porpoise_rows.cpp:408
 msgid "Where its screen sits on the TV. Automatic picks a corner."
-msgstr ""
+msgstr "حيث تقع شاشته على TV. التلقائي يختار الزاوية."
 
 #: port/frontend/shell/porpoise_rows.cpp:372 port/frontend/shell/porpoise_rows.cpp:384 port/frontend/shell/porpoise_rows.cpp:396 port/frontend/shell/porpoise_rows.cpp:408
 msgid "Position down"
-msgstr ""
+msgstr "الموقف إلى أسفل"
 
 #: port/frontend/shell/porpoise_rows.cpp:374 port/frontend/shell/porpoise_rows.cpp:386 port/frontend/shell/porpoise_rows.cpp:398 port/frontend/shell/porpoise_rows.cpp:410
 msgid "Screen size"
-msgstr ""
+msgstr "حجم الشاشة"
 
 #: port/frontend/shell/porpoise_rows.cpp:374 port/frontend/shell/porpoise_rows.cpp:386 port/frontend/shell/porpoise_rows.cpp:398 port/frontend/shell/porpoise_rows.cpp:410
 msgid "How big its screen is: 1 to 4 times the GBA's size."
-msgstr ""
+msgstr "حجم شاشتها: من 1 إلى 4 أضعاف حجم GBA."
 
 #: port/frontend/shell/porpoise_rows.cpp:375 port/frontend/shell/porpoise_rows.cpp:387 port/frontend/shell/porpoise_rows.cpp:399 port/frontend/shell/porpoise_rows.cpp:411
 msgid "Opacity"
-msgstr ""
+msgstr "العتامة"
 
 #: port/frontend/shell/porpoise_rows.cpp:375 port/frontend/shell/porpoise_rows.cpp:387 port/frontend/shell/porpoise_rows.cpp:399 port/frontend/shell/porpoise_rows.cpp:411
 msgid "How much of the game shows through its screen on the TV."
-msgstr ""
+msgstr "كم من اللعبة تظهر من خلال شاشتها على التلفزيون."
 
 #: port/frontend/shell/porpoise_rows.cpp:376 port/frontend/shell/porpoise_rows.cpp:388 port/frontend/shell/porpoise_rows.cpp:400 port/frontend/shell/porpoise_rows.cpp:412
 msgid "Sharp or soft pixels. The web page has its own setting."
-msgstr ""
+msgstr "بكسلات حادة أو ناعمة. صفحة الويب لها إعدادها الخاص."
 
 #: port/frontend/shell/porpoise_rows.cpp:376 port/frontend/shell/porpoise_rows.cpp:388 port/frontend/shell/porpoise_rows.cpp:400 port/frontend/shell/porpoise_rows.cpp:412
 msgid "Soft pixels"
-msgstr ""
+msgstr "بكسلات ناعمة"
 
 #: port/frontend/shell/porpoise_rows.cpp:377 port/frontend/shell/porpoise_rows.cpp:389 port/frontend/shell/porpoise_rows.cpp:401 port/frontend/shell/porpoise_rows.cpp:413
 msgid "Interframe blending"
-msgstr ""
+msgstr "مزج بين الإطارات"
 
 #: port/frontend/shell/porpoise_rows.cpp:377 port/frontend/shell/porpoise_rows.cpp:389 port/frontend/shell/porpoise_rows.cpp:401 port/frontend/shell/porpoise_rows.cpp:413
 msgid "Blends each frame with the last, for games that flicker sprites. TV only."
-msgstr ""
+msgstr "يمزج كل إطار مع الإطار الأخير، للألعاب التي تومض بالصور المتحركة. TV فقط."
 
 #: port/frontend/shell/porpoise_rows.cpp:414 port/frontend/shell/porpoise_rows.cpp:418 port/frontend/shell/porpoise_rows.cpp:422 port/frontend/shell/porpoise_rows.cpp:426
 msgid "Its sound, on the TV or its player's controller."
-msgstr ""
+msgstr "صوته، على التلفزيون أو وحدة تحكم المشغل."
 
 #: port/frontend/shell/porpoise_rows.cpp:415 port/frontend/shell/porpoise_rows.cpp:419 port/frontend/shell/porpoise_rows.cpp:423 port/frontend/shell/porpoise_rows.cpp:427
 msgid "Mute"
-msgstr ""
+msgstr "كتم الصوت"
 
 #: port/frontend/shell/porpoise_rows.cpp:415 port/frontend/shell/porpoise_rows.cpp:419 port/frontend/shell/porpoise_rows.cpp:423 port/frontend/shell/porpoise_rows.cpp:427
 msgid "Turns its sound off."
-msgstr ""
+msgstr "ينطفئ صوته."
 
 #: port/frontend/shell/porpoise_rows.cpp:416 port/frontend/shell/porpoise_rows.cpp:420 port/frontend/shell/porpoise_rows.cpp:424 port/frontend/shell/porpoise_rows.cpp:428
 msgid "Sound on the controller"
-msgstr ""
+msgstr "الصوت على وحدة التحكم"
 
 #: port/frontend/shell/porpoise_rows.cpp:416 port/frontend/shell/porpoise_rows.cpp:420 port/frontend/shell/porpoise_rows.cpp:424 port/frontend/shell/porpoise_rows.cpp:428
 msgid "From its player's controller speaker instead of the TV."
-msgstr ""
+msgstr "من مكبر صوت وحدة التحكم الخاصة بالمشغل بدلاً من التلفزيون."
 
 #: port/frontend/shell/porpoise_rows.cpp:417 port/frontend/shell/porpoise_rows.cpp:421 port/frontend/shell/porpoise_rows.cpp:425 port/frontend/shell/porpoise_rows.cpp:429
 msgid "Speaker resampling"
-msgstr ""
+msgstr "إعادة تشكيل المتحدث"
 
 #: port/frontend/shell/porpoise_rows.cpp:417 port/frontend/shell/porpoise_rows.cpp:421 port/frontend/shell/porpoise_rows.cpp:425 port/frontend/shell/porpoise_rows.cpp:429
 msgid "Simple is sharper; Smooth is a little softer."
-msgstr ""
+msgstr "البسيط أكثر وضوحا. السلس هو ليونة قليلا."
 
 #: port/frontend/shell/porpoise_rows.cpp:417 port/frontend/shell/porpoise_rows.cpp:421 port/frontend/shell/porpoise_rows.cpp:425 port/frontend/shell/porpoise_rows.cpp:429
 msgid "Simple"
-msgstr ""
+msgstr "بسيط"
 
 #: port/frontend/shell/porpoise_rows.cpp:452
 msgid "Arcade Cabinet"
-msgstr ""
+msgstr "خزانة الممرات"
 
 #: port/frontend/shell/porpoise_rows.cpp:452
 msgid "Retro Cabinet"
-msgstr ""
+msgstr "خزانة ريترو"
 
 #: port/frontend/shell/porpoise_rows.cpp:452
 msgid "Synthwave Cabinet"
-msgstr ""
+msgstr "خزانة سينثويف"
 
 #: port/frontend/shell/porpoise_rows.cpp:452
 msgid "80s TV"
-msgstr ""
+msgstr "تلفزيون الثمانينات"
 
 #: port/frontend/shell/porpoise_rows.cpp:453
 msgid "Wood-Grain TV"
-msgstr ""
+msgstr "تلفزيون الخشب الحبوب"
 
 #: port/frontend/shell/porpoise_rows.cpp:453
 msgid "90s TV"
-msgstr ""
+msgstr "تلفزيون التسعينات"
 
 #: port/frontend/shell/porpoise_rows.cpp:453
 msgid "Black TV"
-msgstr ""
+msgstr "تلفزيون اسود"
 
 #: port/frontend/shell/porpoise_rows.cpp:453
 msgid "Beige Monitor"
-msgstr ""
+msgstr "مراقب بيج"
 
 #: port/frontend/shell/porpoise_rows.cpp:613 port/frontend/shell/porpoise_rows.cpp:616
 msgid "D-pad up"
-msgstr ""
+msgstr "لوحة D لأعلى"
 
 #: port/frontend/shell/porpoise_rows.cpp:613 port/frontend/shell/porpoise_rows.cpp:616
 msgid "D-pad down"
-msgstr ""
+msgstr "وسادة D لأسفل"
 
 #: port/frontend/shell/porpoise_rows.cpp:613 port/frontend/shell/porpoise_rows.cpp:616
 msgid "D-pad left"
-msgstr ""
+msgstr "لوحة D اليسار"
 
 #: port/frontend/shell/porpoise_rows.cpp:613 port/frontend/shell/porpoise_rows.cpp:616
 msgid "D-pad right"
-msgstr ""
+msgstr "لوحة D على اليمين"
 
 #: port/frontend/shell/porpoise_rows.cpp:616 port/frontend/shell/shell.cpp:2852 port/frontend/shell/shell.cpp:2890
 msgid "Select"
@@ -6455,35 +6457,35 @@ msgstr "اختيار"
 
 #: port/frontend/shell/porpoise_rows.cpp:617
 msgid "Move the GBA's screen"
-msgstr ""
+msgstr "حرك شاشة GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:617
 msgid "Adjust the GBA's opacity"
-msgstr ""
+msgstr "اضبط عتامة GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:617
 msgid "Reset the GBA"
-msgstr ""
+msgstr "إعادة تعيين GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:617
 msgid "Mute the GBA"
-msgstr ""
+msgstr "كتم صوت GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:618
 msgid "GBA volume"
-msgstr ""
+msgstr "حجم GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:618
 msgid "GBA link cable"
-msgstr ""
+msgstr "كابل ربط GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:618
 msgid "Quick save the GBA"
-msgstr ""
+msgstr "حفظ سريع لGBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:618
 msgid "Quick load the GBA"
-msgstr ""
+msgstr "تحميل سريع لGBA"
 
 #. a button layout of the player's own, made in Porpoise's Customize Buttons: {0} is its number
 #: port/frontend/shell/porpoise_rows.cpp:677 port/frontend/shell/porpoise_rows.cpp:1267
@@ -6492,11 +6494,11 @@ msgstr "تخطيطي {0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:713
 msgid "Left stick as the D-pad"
-msgstr ""
+msgstr "العصا اليسرى مثل لوحة D"
 
 #: port/frontend/shell/porpoise_rows.cpp:733
 msgid "GBA Buttons"
-msgstr ""
+msgstr "أزرار جي بي ايه"
 
 #. {0} is why, in the system's words
 #: port/frontend/shell/porpoise_rows.cpp:778 port/frontend/shell/porpoise_rows.cpp:841 port/frontend/shell/porpoise_rows.cpp:1404 port/frontend/shell/porpoise_rows.cpp:1475 port/frontend/shell/porpoise_rows.cpp:1498 port/frontend/shell/porpoise_rows.cpp:1837
@@ -6505,31 +6507,31 @@ msgstr "تعذّر حفظ إعدادات Porpoise: {0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:810
 msgid "Nothing"
-msgstr ""
+msgstr "لا شيء"
 
 #: port/frontend/shell/porpoise_rows.cpp:950
 msgid "This DualSense's input, live. Hold Circle to leave."
-msgstr ""
+msgstr "إدخال DualSense هذا مباشر. اضغط باستمرار على دائرة للمغادرة."
 
 #: port/frontend/shell/porpoise_rows.cpp:950
 msgid "No DualSense for this player: turn it on and sign in. Hold Circle on yours to leave."
-msgstr ""
+msgstr "لا يوجد DualSense لهذا اللاعب: قم بتشغيله وتسجيل الدخول. اضغط باستمرار على الدائرة الخاصة بك للمغادرة."
 
 #: port/frontend/shell/porpoise_rows.cpp:978
 msgid "Left stick"
-msgstr ""
+msgstr "العصا اليسرى"
 
 #: port/frontend/shell/porpoise_rows.cpp:990
 msgid "Motion (g):"
-msgstr ""
+msgstr "الحركة (ز):"
 
 #: port/frontend/shell/porpoise_rows.cpp:991
 msgid "Fingers on the touchpad: {0}"
-msgstr ""
+msgstr "الأصابع على لوحة اللمس: {0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:1005
 msgid "This player's DualSense."
-msgstr ""
+msgstr "DualSense لهذا اللاعب."
 
 #: port/frontend/shell/porpoise_rows.cpp:1005 port/frontend/shell/settings.cpp:893
 msgid "No DualSense for this player yet."
@@ -6537,86 +6539,86 @@ msgstr "لا يوجد DualSense لهذا اللاعب بعد."
 
 #: port/frontend/shell/porpoise_rows.cpp:1028
 msgid "P{0}"
-msgstr ""
+msgstr "ف{0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:1132
 msgid "Ports"
-msgstr ""
+msgstr "الموانئ"
 
 #: port/frontend/shell/porpoise_rows.cpp:1133
 msgid "What's plugged into each controller port, and who plays it."
-msgstr ""
+msgstr "ما الذي يتم توصيله بكل منفذ وحدة تحكم، ومن يقوم بتشغيله."
 
 #: port/frontend/shell/porpoise_rows.cpp:1229
 msgid "None (BIOS)"
-msgstr ""
+msgstr "لا شيء (البيوس)"
 
 #. {0} is a file kept in the settings, not in its folder now
 #: port/frontend/shell/porpoise_rows.cpp:1240
 msgid "{0} (missing)"
-msgstr ""
+msgstr "{0} (مفقود)"
 
 #: port/frontend/shell/porpoise_rows.cpp:1264
 msgid "Custom"
-msgstr ""
+msgstr "مخصص"
 
 #: port/frontend/shell/porpoise_rows.cpp:1286
 msgid "Pack folder"
-msgstr ""
+msgstr "مجلد الحزمة"
 
 #: port/frontend/shell/porpoise_rows.cpp:1288
 msgid "Each pack goes in /data/porpoise/saves/User/Load/Textures, in a folder named with the game's ID, like GALE01."
-msgstr ""
+msgstr "يتم إدخال كل حزمة في /data/porpoise/saves/User/Load/Textures، في مجلد يحمل اسم معرف اللعبة، مثل GALE01."
 
 #: port/frontend/shell/porpoise_rows.cpp:1309
 msgid "A texture pack. Custom textures turns packs on or off."
-msgstr ""
+msgstr "حزمة الملمس. تعمل القوام المخصص على تشغيل الحزم أو إيقاف تشغيلها."
 
 #: port/frontend/shell/porpoise_rows.cpp:1320
 msgid "No packs found"
-msgstr ""
+msgstr "لم يتم العثور على حزم"
 
 #: port/frontend/shell/porpoise_rows.cpp:1334
 msgid "Which layout, and what each DualSense button does."
-msgstr ""
+msgstr "ما هو التخطيط وما يفعله كل زر DualSense."
 
 #: port/frontend/shell/porpoise_rows.cpp:1531
 msgid "No saves on a USB drive."
-msgstr ""
+msgstr "لا يوجد حفظ على محرك أقراص USB."
 
 #: port/frontend/shell/porpoise_rows.cpp:1537 port/frontend/shell/porpoise_rows.cpp:2027 port/frontend/shell/porpoise_rows.cpp:2046
 msgid "Copy a save from USB"
-msgstr ""
+msgstr "انسخ الحفظ من USB"
 
 #. {0} is why, in the system's words
 #: port/frontend/shell/porpoise_rows.cpp:1542 port/frontend/shell/porpoise_rows.cpp:1589 port/frontend/shell/porpoise_rows.cpp:2079
 msgid "The save could not be copied: {0}"
-msgstr ""
+msgstr "لا يمكن نسخ الحفظ: {0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:1551
 msgid "No cards on a USB drive."
-msgstr ""
+msgstr "لا توجد بطاقات على محرك أقراص USB."
 
 #: port/frontend/shell/porpoise_rows.cpp:1557 port/frontend/shell/porpoise_rows.cpp:2028
 msgid "Copy a card from USB"
-msgstr ""
+msgstr "انسخ البطاقة من USB"
 
 #. {0} is how many saves came in, {1} how many were already here
 #: port/frontend/shell/porpoise_rows.cpp:1561 port/frontend/shell/porpoise_rows.cpp:2107
 msgid "{0} saves copied, {1} already here"
-msgstr ""
+msgstr "تم حفظ {0} منسوخًا، {1} هنا بالفعل"
 
 #: port/frontend/shell/porpoise_rows.cpp:1563 port/frontend/shell/porpoise_rows.cpp:2103
 msgid "The saves could not be copied: {0}"
-msgstr ""
+msgstr "لا يمكن نسخ الحفظ: {0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:1568 port/frontend/shell/porpoise_rows.cpp:2029
 msgid "Delete every save on this card"
-msgstr ""
+msgstr "احذف كل عملية حفظ على هذه البطاقة"
 
 #: port/frontend/shell/porpoise_rows.cpp:1587 port/frontend/shell/porpoise_rows.cpp:2076
 msgid "Copied to {0}"
-msgstr ""
+msgstr "تم النسخ إلى {0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:1612 port/frontend/shell/settings.cpp:1312
 msgid "Downloading: {0} left"
@@ -6653,7 +6655,7 @@ msgstr "RetroAchievements"
 
 #: port/frontend/shell/porpoise_rows.cpp:1621
 msgid "{1}: {0} points"
-msgstr ""
+msgstr "{1}: {0} نقطة"
 
 #: port/frontend/shell/porpoise_rows.cpp:1621 port/frontend/shell/settings.cpp:1409
 msgid "Signing in…"
@@ -6661,11 +6663,11 @@ msgstr "جار تسجيل الدخول…"
 
 #: port/frontend/shell/porpoise_rows.cpp:1621
 msgid "Sign in"
-msgstr ""
+msgstr "تسجيل الدخول"
 
 #: port/frontend/shell/porpoise_rows.cpp:1622
 msgid "Earn achievements in supported games. See them in the in-game menu."
-msgstr ""
+msgstr "كسب الإنجازات في الألعاب المدعومة. شاهدهم في القائمة داخل اللعبة."
 
 #: port/frontend/shell/porpoise_rows.cpp:1628 port/frontend/shell/settings.cpp:1321
 msgid "Box art from GameTDB"
@@ -6677,19 +6679,19 @@ msgstr "أغلفة للمكتبة، تنزل مرة واحدة."
 
 #: port/frontend/shell/porpoise_rows.cpp:1637
 msgid "SteamGridDB key"
-msgstr ""
+msgstr "مفتاح SteamGridDB"
 
 #: port/frontend/shell/porpoise_rows.cpp:1638
 msgid "Yours"
-msgstr ""
+msgstr "لك"
 
 #: port/frontend/shell/porpoise_rows.cpp:1638
 msgid "Built in"
-msgstr ""
+msgstr "بنيت في"
 
 #: port/frontend/shell/porpoise_rows.cpp:1639
 msgid "Wide art shown as a game starts. Your own key from steamgriddb.com is used first; leave it empty to remove it."
-msgstr ""
+msgstr "يظهر الفن الواسع مع بداية اللعبة. يتم استخدام المفتاح الخاص بك من steamgriddb.com أولاً؛ اتركه فارغًا لإزالته."
 
 #: port/frontend/shell/porpoise_rows.cpp:1645 port/frontend/shell/settings.cpp:1327
 msgid "Download missing box art"
@@ -6710,202 +6712,202 @@ msgstr "يستبدل كل غلاف في هذا الجانب بتنزيل جدي�
 #. a saved set of Graphics settings: {0} is its number
 #: port/frontend/shell/porpoise_rows.cpp:1703
 msgid "Use setup {0}"
-msgstr ""
+msgstr "استخدام الإعداد {0}"
 
 #. a saved set of Graphics settings: {0} is its number
 #: port/frontend/shell/porpoise_rows.cpp:1703
 msgid "Applies this setup's Graphics settings to this game."
-msgstr ""
+msgstr "تطبيق إعدادات الرسومات الخاصة بهذا الإعداد على هذه اللعبة."
 
 #: port/frontend/shell/porpoise_rows.cpp:1707 port/frontend/shell/porpoise_rows.cpp:1915
 msgid "Save as a setup"
-msgstr ""
+msgstr "حفظ كإعداد"
 
 #: port/frontend/shell/porpoise_rows.cpp:1707
 msgid "Saves this game's Graphics settings to use on other games."
-msgstr ""
+msgstr "يحفظ إعدادات الرسومات الخاصة بهذه اللعبة لاستخدامها في ألعاب أخرى."
 
 #: port/frontend/shell/porpoise_rows.cpp:1720
 msgid "Wii games are 16:9 when Wii widescreen is on in Settings."
-msgstr ""
+msgstr "ألعاب Wii هي 16:9 عند تشغيل الشاشة العريضة Wii في الإعدادات."
 
 #: port/frontend/shell/porpoise_rows.cpp:1721
 msgid "This game has a widescreen code: Automatic and On show it in 16:9."
-msgstr ""
+msgstr "تحتوي هذه اللعبة على رمز شاشة عريضة: تلقائي ويتم عرضه في 16:9."
 
 #: port/frontend/shell/porpoise_rows.cpp:1722
 msgid "This game has its own 16:9 option. Turn it on in the game's options."
-msgstr ""
+msgstr "تحتوي هذه اللعبة على خيار 16:9 الخاص بها. قم بتفعيله في خيارات اللعبة."
 
 #: port/frontend/shell/porpoise_rows.cpp:1723
 msgid "This game has no widescreen code. On uses a widescreen hack, which can glitch at the edges."
-msgstr ""
+msgstr "هذه اللعبة لا تحتوي على كود للشاشة العريضة. يستخدم On اختراقًا للشاشة العريضة، والذي يمكن أن يحدث خللًا عند الحواف."
 
 #: port/frontend/shell/porpoise_rows.cpp:1724
 msgid "The Wii's setting"
-msgstr ""
+msgstr "إعداد جهاز Wii"
 
 #: port/frontend/shell/porpoise_rows.cpp:1724
 msgid "16:9 code"
-msgstr ""
+msgstr "كود 16:9"
 
 #: port/frontend/shell/porpoise_rows.cpp:1724
 msgid "In the game's options"
-msgstr ""
+msgstr "في خيارات اللعبة"
 
 #: port/frontend/shell/porpoise_rows.cpp:1724
 msgid "4:3 only"
-msgstr ""
+msgstr "4:3 فقط"
 
 #: port/frontend/shell/porpoise_rows.cpp:1729
 msgid "Your own code"
-msgstr ""
+msgstr "الكود الخاص بك"
 
 #: port/frontend/shell/porpoise_rows.cpp:1729
 msgid "Type a Gecko code and a name. It's saved in /data/porpoise/cheats and turned on."
-msgstr ""
+msgstr "اكتب رمز أبو بريص واسمًا. تم حفظه في /data/porpoise/cheats وتشغيله."
 
 #: port/frontend/shell/porpoise_rows.cpp:1730
 msgid "Add a code"
-msgstr ""
+msgstr "أضف رمزًا"
 
 #: port/frontend/shell/porpoise_rows.cpp:1740
 msgid "Your code, from /data/porpoise/cheats."
-msgstr ""
+msgstr "الرمز الخاص بك، من /data/porpoise/cheats."
 
 #: port/frontend/shell/porpoise_rows.cpp:1741
 msgid "From the widescreen collection for this game."
-msgstr ""
+msgstr "من مجموعة الشاشات العريضة لهذه اللعبة."
 
 #: port/frontend/shell/porpoise_rows.cpp:1742
 msgid "A patch for this game."
-msgstr ""
+msgstr "التصحيح لهذه اللعبة."
 
 #: port/frontend/shell/porpoise_rows.cpp:1742
 msgid "A cheat for this game."
-msgstr ""
+msgstr "الغش لهذه اللعبة."
 
 #: port/frontend/shell/porpoise_rows.cpp:1749
 msgid "No codes for this game"
-msgstr ""
+msgstr "لا توجد رموز لهذه اللعبة"
 
 #: port/frontend/shell/porpoise_rows.cpp:1749
 msgid "Put your own in /data/porpoise/cheats, named with the game's ID."
-msgstr ""
+msgstr "ضع لعبتك الخاصة في /data/porpoise/cheats، والتي تحمل اسم ID الخاص باللعبة."
 
 #: port/frontend/shell/porpoise_rows.cpp:1766
 msgid "Your own settings file"
-msgstr ""
+msgstr "ملف الإعدادات الخاص بك"
 
 #: port/frontend/shell/porpoise_rows.cpp:1766
 msgid "This game uses your own settings file, so the options below have no effect. Remove it to use them."
-msgstr ""
+msgstr "تستخدم هذه اللعبة ملف الإعدادات الخاص بك، وبالتالي فإن الخيارات أدناه ليس لها أي تأثير. قم بإزالتها لاستخدامها."
 
 #: port/frontend/shell/porpoise_rows.cpp:1774
 msgid "Settings that run this game best on PS5."
-msgstr ""
+msgstr "الإعدادات التي تعمل على تشغيل هذه اللعبة بشكل أفضل على PS5."
 
 #: port/frontend/shell/porpoise_rows.cpp:1798
 msgid "Recommended for this game."
-msgstr ""
+msgstr "الموصى بها لهذه اللعبة."
 
 #: port/frontend/shell/porpoise_rows.cpp:1807
 msgid "A known fix for this game."
-msgstr ""
+msgstr "إصلاح معروف لهذه اللعبة."
 
 #: port/frontend/shell/porpoise_rows.cpp:1811
 msgid "Applied"
-msgstr ""
+msgstr "مطبق"
 
 #: port/frontend/shell/porpoise_rows.cpp:1823
 msgid "No changes needed"
-msgstr ""
+msgstr "لا حاجة للتغييرات"
 
 #: port/frontend/shell/porpoise_rows.cpp:1823
 msgid "This game runs well with the default settings."
-msgstr ""
+msgstr "تعمل هذه اللعبة بشكل جيد مع الإعدادات الافتراضية."
 
 #: port/frontend/shell/porpoise_rows.cpp:1883
 msgid "A name for your code"
-msgstr ""
+msgstr "اسم للكود الخاص بك"
 
 #: port/frontend/shell/porpoise_rows.cpp:1886
 msgid "{0}: the code's digits"
-msgstr ""
+msgstr "{0}: أرقام الكود"
 
 #: port/frontend/shell/porpoise_rows.cpp:1899
 msgid "The code could not be saved."
-msgstr ""
+msgstr "لا يمكن حفظ الرمز."
 
 #: port/frontend/shell/porpoise_rows.cpp:1899
 msgid "A Gecko code is digits 0-9 and A-F, sixteen to a line."
-msgstr ""
+msgstr "يتكون رمز أبو بريص من الأرقام من 0 إلى 9 ومن A إلى F، ومن ستة عشر إلى سطر واحد."
 
 #: port/frontend/shell/porpoise_rows.cpp:1914
 msgid "Setup {0}"
-msgstr ""
+msgstr "الإعداد {0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:1920
 msgid "The setup could not be saved."
-msgstr ""
+msgstr "لا يمكن حفظ الإعداد."
 
 #. a GameCube memory card: {0} its slot, A or B, {1} its region, USA, EUR or JAP
 #: port/frontend/shell/porpoise_rows.cpp:1945
 msgid "Memory card {0} ({1})"
-msgstr ""
+msgstr "بطاقة الذاكرة {0} ({1})"
 
 #. {0} and {1} are counts of a memory card's blocks
 #: port/frontend/shell/porpoise_rows.cpp:1955 port/frontend/shell/porpoise_rows.cpp:1969
 msgid "{0} of {1} blocks free"
-msgstr ""
+msgstr "{0} من {1} كتل مجانية"
 
 #: port/frontend/shell/porpoise_rows.cpp:1967
 msgid "{0} save"
 msgid_plural "{0} saves"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "{0} ملفات حفظ"
+msgstr[1] "{0} ملف حفظ"
+msgstr[2] "{0} ملفا حفظ"
+msgstr[3] "{0} ملفات حفظ"
+msgstr[4] "{0} ملف حفظ"
+msgstr[5] "{0} ملف حفظ"
 
 #: port/frontend/shell/porpoise_rows.cpp:1997
 msgid "{0} block"
 msgid_plural "{0} blocks"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "{0} كتل"
+msgstr[1] "{0} كتلة"
+msgstr[2] "{0} كتلتان"
+msgstr[3] "{0} كتل"
+msgstr[4] "{0} كتلة"
+msgstr[5] "{0} كتلة"
 
 #: port/frontend/shell/porpoise_rows.cpp:1997
 msgid "{0} KB"
-msgstr ""
+msgstr "{0} كيلو بايت"
 
 #: port/frontend/shell/porpoise_rows.cpp:2002
 msgid "This card is a single image file, so saves can't be copied one by one. Use Copy the whole card to USB instead."
-msgstr ""
+msgstr "هذه البطاقة عبارة عن ملف صورة واحد، لذا لا يمكن نسخ المحفوظات واحدة تلو الأخرى. استخدم نسخ البطاقة بأكملها إلى USB بدلاً من ذلك."
 
 #: port/frontend/shell/porpoise_rows.cpp:2013
 msgid "Copy the whole card to USB"
-msgstr ""
+msgstr "انسخ البطاقة بأكملها إلى USB"
 
 #: port/frontend/shell/porpoise_rows.cpp:2014
 msgid "Backs up every save on this card at once."
-msgstr ""
+msgstr "قم بعمل نسخة احتياطية لكل عملية حفظ على هذه البطاقة مرة واحدة."
 
 #: port/frontend/shell/porpoise_rows.cpp:2027
 msgid "Copy one save from the drive to this card."
-msgstr ""
+msgstr "انسخ ملف حفظ واحد من محرك الأقراص إلى هذه البطاقة."
 
 #: port/frontend/shell/porpoise_rows.cpp:2028
 msgid "Copy every save from a card on the drive to this card. Saves already here are kept."
-msgstr ""
+msgstr "انسخ كل عملية حفظ من البطاقة الموجودة على محرك الأقراص إلى هذه البطاقة. يتم حفظ الحفظ الموجود هنا بالفعل."
 
 #: port/frontend/shell/porpoise_rows.cpp:2029
 msgid "A copy is kept in saves/before."
-msgstr ""
+msgstr "يتم الاحتفاظ بنسخة في saves/before."
 
 #: port/frontend/shell/porpoise_rows.cpp:2038 port/frontend/shell/settings.cpp:1948
 msgid "No saves yet"
@@ -6913,84 +6915,84 @@ msgstr "لا ملفات حفظ بعد"
 
 #: port/frontend/shell/porpoise_rows.cpp:2047
 msgid "Copy one save from the drive."
-msgstr ""
+msgstr "انسخ ملف حفظ واحد من محرك الأقراص."
 
 #: port/frontend/shell/porpoise_rows.cpp:2054
 msgid "Copy every save from USB"
-msgstr ""
+msgstr "انسخ كل عملية حفظ من USB"
 
 #: port/frontend/shell/porpoise_rows.cpp:2055
 msgid "From a USB drive's backups and Porpoise Saves folder. Saves already here are kept."
-msgstr ""
+msgstr "من النسخ الاحتياطية لمحرك الأقراص USB ومجلد الحفظ Porpoise. يتم حفظ الحفظ الموجود هنا بالفعل."
 
 #: port/frontend/shell/porpoise_rows.cpp:2070
 msgid "Copy to USB"
-msgstr ""
+msgstr "نسخ إلى USB"
 
 #: port/frontend/shell/porpoise_rows.cpp:2084
 msgid "The save could not be moved: {0}"
-msgstr ""
+msgstr "لا يمكن نقل الحفظ: {0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:2086
 msgid "Moved to {0}"
-msgstr ""
+msgstr "تم النقل إلى {0}"
 
 #. the first start's question: whether the app may send reports of how games run to the project
 #: port/frontend/shell/reports.cpp:75
 msgid "Help Playtendoh get better?"
-msgstr ""
+msgstr "هل تريد المساعدة في تحسين Playtendoh؟"
 
 #: port/frontend/shell/reports.cpp:77
 msgid "When a game ends, Playtendoh can send a short report on how it ran, to help fix problems and grow the list of working games. It has nothing about you, and nothing is sent while you play."
-msgstr ""
+msgstr "عندما تنتهي اللعبة، يمكن لـ Playtendoh إرسال تقرير قصير حول كيفية تشغيلها، للمساعدة في حل المشكلات وتنمية قائمة الألعاب العاملة. لا تحتوي على أي شيء عنك، ولا يتم إرسال أي شيء أثناء اللعب."
 
 #: port/frontend/shell/reports.cpp:88
 msgid "What a report has"
-msgstr ""
+msgstr "ما لديه تقرير"
 
 #: port/frontend/shell/reports.cpp:89
 msgid "The game and its console, how it ended, and for how long"
-msgstr ""
+msgstr "اللعبة ووحدة التحكم الخاصة بها، كيف انتهت، وإلى متى"
 
 #: port/frontend/shell/reports.cpp:89
 msgid "The settings it ran with, and the PS5's firmware and model"
-msgstr ""
+msgstr "الإعدادات التي تم تشغيلها بها والبرامج الثابتة لجهاز PS5 وطرازه"
 
 #: port/frontend/shell/reports.cpp:90
 msgid "The last lines of Playtendoh's log, with addresses and folder names removed"
-msgstr ""
+msgstr "الأسطر الأخيرة من سجل Playtendoh، مع إزالة العناوين وأسماء المجلدات"
 
 #: port/frontend/shell/reports.cpp:91
 msgid "What it never has"
-msgstr ""
+msgstr "ما لم يكن أبدا"
 
 #: port/frontend/shell/reports.cpp:92
 msgid "Your PSN name or ID, your console's serial, its IP or MAC address"
-msgstr ""
+msgstr "اسم أو معرف PSN الخاص بك، والرقم التسلسلي لوحدة التحكم الخاصة بك، وعنوان IP أو MAC الخاص بها"
 
 #: port/frontend/shell/reports.cpp:93
 msgid "Your RetroAchievements and SteamGridDB accounts, room names, nicknames and Wi-Fi names"
-msgstr ""
+msgstr "حسابات RetroAchievements وSteamGridDB وأسماء الغرف والألقاب وأسماء Wi-Fi الخاصة بك"
 
 #: port/frontend/shell/reports.cpp:93
 msgid "Your folders, your saves and your game list"
-msgstr ""
+msgstr "مجلداتك وحفظاتك وقائمة ألعابك"
 
 #: port/frontend/shell/reports.cpp:123
 msgid "Every field a report has"
-msgstr ""
+msgstr "كل مجال له تقرير"
 
 #: port/frontend/shell/reports.cpp:130
 msgid "You can change this any time in Settings > Online. Turning it off deletes the reports waiting to be sent."
-msgstr ""
+msgstr "يمكنك تغيير هذا في أي وقت من خلال الإعدادات > عبر الإنترنت. يؤدي إيقاف تشغيله إلى حذف التقارير التي تنتظر إرسالها."
 
 #: port/frontend/shell/reports.cpp:131
 msgid "Not now"
-msgstr ""
+msgstr "ليس الآن"
 
 #: port/frontend/shell/reports.cpp:131
 msgid "Yes, send reports"
-msgstr ""
+msgstr "نعم، أرسل التقارير"
 
 #: port/frontend/shell/settings.cpp:54
 msgid "Japan"
@@ -7255,59 +7257,59 @@ msgstr "DualSense بوصفه وحدة تحكم GameCube."
 
 #: port/frontend/shell/settings.cpp:277
 msgid "Sound"
-msgstr ""
+msgstr "الصوت"
 
 #: port/frontend/shell/settings.cpp:277
 msgid "Game sound, and how it handles slowdowns."
-msgstr ""
+msgstr "صوت اللعبة وكيفية تعاملها مع التباطؤ."
 
 #: port/frontend/shell/settings.cpp:279 port/frontend/shell/settings.cpp:300
 msgid "GBA"
-msgstr ""
+msgstr "GBA"
 
 #: port/frontend/shell/settings.cpp:280
 msgid "The emulated console, and how it runs."
-msgstr ""
+msgstr "وحدة التحكم التي تمت محاكاتها وكيفية تشغيلها."
 
 #: port/frontend/shell/settings.cpp:283
 msgid "Setups"
-msgstr ""
+msgstr "الاجهزة"
 
 #: port/frontend/shell/settings.cpp:284
 msgid "Cheats and patches"
-msgstr ""
+msgstr "غش وبقع"
 
 #: port/frontend/shell/settings.cpp:289
 msgid "Box art for the library."
-msgstr ""
+msgstr "فن الصندوق للمكتبة."
 
 #: port/frontend/shell/settings.cpp:290
 msgid "Memory cards and saves"
-msgstr ""
+msgstr "بطاقات الذاكرة والحفظ"
 
 #: port/frontend/shell/settings.cpp:291
 msgid "Copy each game's save to a USB drive, or move it aside."
-msgstr ""
+msgstr "انسخ حفظ كل لعبة إلى محرك أقراص USB، أو انقله جانبًا."
 
 #: port/frontend/shell/settings.cpp:291
 msgid "Copy saves on your cards to a USB drive, or move them aside."
-msgstr ""
+msgstr "انسخ ما تم حفظه على بطاقاتك إلى محرك أقراص USB، أو انقلها جانبًا."
 
 #: port/frontend/shell/settings.cpp:296
 msgid "All of {0}'s options, for every game on this system."
-msgstr ""
+msgstr "جميع خيارات {0} لكل لعبة على هذا النظام."
 
 #: port/frontend/shell/settings.cpp:297
 msgid "Which emulator plays this system's games."
-msgstr ""
+msgstr "أي محاكي يلعب ألعاب هذا النظام."
 
 #: port/frontend/shell/settings.cpp:300
 msgid "A Game Boy Advance on a GameCube port: set one in Controls, under Ports."
-msgstr ""
+msgstr "لعبة Game Boy Advance على منفذ GameCube: قم بتعيين واحد في عناصر التحكم، ضمن المنافذ."
 
 #: port/frontend/shell/settings.cpp:305
 msgid "RetroAchievements and Playtendoh's updates."
-msgstr ""
+msgstr "تحديثات RetroAchievements وPlaytendoh."
 
 #: port/frontend/shell/settings.cpp:318
 msgid "{0}'s saves only. Settings has every system's."
@@ -7457,11 +7459,11 @@ msgstr[5] "التعديلات المضافة: {0}. فعّلها في حزم ال
 
 #: port/frontend/shell/settings.cpp:484
 msgid "Reset all settings"
-msgstr ""
+msgstr "إعادة ضبط جميع الإعدادات"
 
 #: port/frontend/shell/settings.cpp:486
 msgid "Puts every setting back to default. Games, folders and saves are kept."
-msgstr ""
+msgstr "يعيد كل الإعداد إلى الوضع الافتراضي. يتم الاحتفاظ بالألعاب والمجلدات والمحفوظات."
 
 #: port/frontend/shell/settings.cpp:516 port/frontend/shell/settings.cpp:1725
 msgid "Which emulator plays this system's games, from the next game. Each keeps its own settings and saves."
@@ -7489,7 +7491,7 @@ msgstr "لمحاكي هذا الجانب إعداداته وتحكمه وملف�
 
 #: port/frontend/shell/settings.cpp:530
 msgid "Porpoise's other settings, your button layouts and Wii Remote setup. Circle at the top comes back here."
-msgstr ""
+msgstr "إعدادات Porpoise الأخرى وتخطيطات الأزرار وإعدادات Wii Remote. دائرة في الأعلى يعود هنا."
 
 #: port/frontend/shell/settings.cpp:533 port/frontend/shell/settings.cpp:1283 port/frontend/shell/settings.cpp:1956
 msgid "Back up to USB"
@@ -7988,7 +7990,7 @@ msgstr "زر أكس: وحدة تحكم هذا اللاعب وحركته وأزر
 
 #: port/frontend/shell/settings.cpp:893
 msgid "Set to a real Wii Remote, but none found. Cross to change it."
-msgstr ""
+msgstr "تم التعيين على Wii Remote الحقيقي، ولكن لم يتم العثور على أي شيء. أكس لتغييره."
 
 #: port/frontend/shell/settings.cpp:894
 msgid "This player's controller, motion, vibration, deadzones and buttons. Player 1 is the user who started Playtendoh; other signed-in users are players 2 to 4."
@@ -8448,36 +8450,36 @@ msgstr "مجلد لكل نظام"
 #. Settings > Game files: a row opening the list of every system's folder; {0} how many have a folder of their own, {1} how many systems
 #: port/frontend/shell/settings.cpp:1163
 msgid "{0} of {1} on their own"
-msgstr ""
+msgstr "{0} من {1} بمفردهم"
 
 #: port/frontend/shell/settings.cpp:1164
 msgid "Keep a system's files together with the rest, or in a folder of its own."
-msgstr ""
+msgstr "احتفظ بملفات النظام مع بقية الملفات، أو في مجلد خاص بها."
 
 #: port/frontend/shell/settings.cpp:1165
 msgid "Saves, BIOS files and settings for every system are kept together in {0}, unless you give a system its own folder. Moving is quick and nothing is deleted. Playtendoh restarts to do it. Some emulators always use their own folder."
-msgstr ""
+msgstr "يتم حفظ ملفات BIOS وإعداداتها لكل نظام معًا في {0}، إلا إذا قمت بمنح النظام مجلدًا خاصًا به. التحرك سريع ولا يتم حذف أي شيء. تتم إعادة تشغيل Playtendoh للقيام بذلك. تستخدم بعض المحاكيات دائمًا المجلد الخاص بها."
 
 #. Settings > Game files: a system whose emulator always keeps a folder of its own
 #: port/frontend/shell/settings.cpp:1172
 msgid "Its emulator always keeps its own folder."
-msgstr ""
+msgstr "يحتفظ محاكيه دائمًا بمجلده الخاص."
 
 #: port/frontend/shell/settings.cpp:1179
 msgid "Moves the next time Playtendoh starts."
-msgstr ""
+msgstr "يتحرك في المرة التالية التي يبدأ فيها Playtendoh."
 
 #: port/frontend/shell/settings.cpp:1180
 msgid "On: this system's files get their own folder. Off: kept with the rest."
-msgstr ""
+msgstr "تشغيل: تحصل ملفات هذا النظام على مجلد خاص بها. انطفأ: أبقى مع الباقي."
 
 #: port/frontend/shell/settings.cpp:1181
 msgid "Own folder"
-msgstr ""
+msgstr "المجلد الخاص"
 
 #: port/frontend/shell/settings.cpp:1181
 msgid "Together"
-msgstr ""
+msgstr "معًا"
 
 #. {0} is a file or folder already where one would be moved to
 #: port/frontend/shell/settings.cpp:1186
@@ -8639,7 +8641,7 @@ msgstr "صور الأغلفة"
 
 #: port/frontend/shell/settings.cpp:1318
 msgid "Covers for the library, from libretro's thumbnails."
-msgstr ""
+msgstr "أغلفة المكتبة، من الصور المصغرة للمكتبة."
 
 #: port/frontend/shell/settings.cpp:1318
 msgid "Covers for the library, from GameTDB."
@@ -8679,16 +8681,16 @@ msgstr "ينزل غلاف كل لعبة في هذا الجانب مرة أخرى
 
 #: port/frontend/shell/settings.cpp:1335
 msgid "Send reports"
-msgstr ""
+msgstr "إرسال التقارير"
 
 #: port/frontend/shell/settings.cpp:1335
 msgid "How games run, with nothing about you."
-msgstr ""
+msgstr "كيفية تشغيل الألعاب، دون أي شيء عنك."
 
 #. {0} is the address of the page that lists every field a report has
 #: port/frontend/shell/settings.cpp:1337
 msgid "When a game ends, a short report is sent: the game, how it ended, its settings, the PS5's firmware and model, and the end of the log with addresses and folder names removed. Never your PSN name, serial, addresses, accounts or saves. Nothing is sent while you play. Off deletes reports waiting to be sent. Every field: {0}"
-msgstr ""
+msgstr "عندما تنتهي اللعبة، يتم إرسال تقرير قصير: اللعبة، وكيف انتهت، وإعداداتها، والبرامج الثابتة لجهاز PS5 وطرازه، ونهاية السجل مع إزالة العناوين وأسماء المجلدات. لا تقم مطلقًا باستخدام اسم PSN أو الرقم التسلسلي أو العناوين أو الحسابات أو الحفظ. لا يتم إرسال أي شيء أثناء اللعب. إيقاف يحذف التقارير التي تنتظر إرسالها. كل حقل: {0}"
 
 #: port/frontend/shell/settings.cpp:1341
 msgid "Play from your 3DS, or copy its system files."
@@ -8813,7 +8815,7 @@ msgstr "حزم الرسومات من مجتمع Cemu، من أحدث إصدار 
 
 #: port/frontend/shell/settings.cpp:1400
 msgid "Earn achievements in DS, GameCube, Wii, N64, SNES, NES, Game Boy, Virtual Boy and Pokémon mini games. Only a sign-in token is kept on the PS5, never your password. Save states, cheats and speed still work."
-msgstr ""
+msgstr "احصل على الإنجازات في ألعاب DS, GameCube, Wii, N64, SNES, NES, Game Boy, Virtual Boy, Pokémon mini. يتم الاحتفاظ برمز تسجيل الدخول فقط على PS5، وليس كلمة المرور الخاصة بك أبدًا. حفظ الحالات والغش والسرعة لا يزال يعمل."
 
 #: port/frontend/shell/settings.cpp:1405
 msgid "{1} · {0} point"
@@ -8831,7 +8833,7 @@ msgstr "استمر في الضغط على زر أكس لتسجيل الخروج"
 
 #: port/frontend/shell/settings.cpp:1406
 msgid "Signed in on every console that has achievements."
-msgstr ""
+msgstr "تم تسجيل الدخول على كل وحدة تحكم بها إنجازات."
 
 #: port/frontend/shell/settings.cpp:1409
 msgid "Cross to sign in"
@@ -8839,7 +8841,7 @@ msgstr "زر أكس لتسجيل الدخول"
 
 #: port/frontend/shell/settings.cpp:1410
 msgid "Sign in once for every console that has achievements."
-msgstr ""
+msgstr "قم بتسجيل الدخول مرة واحدة لكل وحدة تحكم بها إنجازات."
 
 #: port/frontend/shell/settings.cpp:1411
 msgid "Unlock notices"
@@ -8896,31 +8898,31 @@ msgstr "كيفية ترتيب المكتبة."
 
 #: port/frontend/shell/settings.cpp:1456
 msgid "Classic shows one console at a time, with Recently played on top. Orbit is a dial for picking a console, with recent games in the centre. EmulationStation (ES-DE) is a separate launcher, downloaded the first time you choose it. Your games, settings and saves stay the same."
-msgstr ""
+msgstr "يعرض الإصدار الكلاسيكي وحدة تحكم واحدة في كل مرة، مع تشغيلها مؤخرًا في الأعلى. Orbit عبارة عن قرص لاختيار وحدة التحكم، مع وجود أحدث الألعاب في المركز. EmulationStation (ES-DE) هو مشغل منفصل، يتم تنزيله في المرة الأولى التي تختاره فيها. تظل ألعابك وإعداداتك وحفظاتك كما هي."
 
 #: port/frontend/shell/settings.cpp:1461
 msgid "EmulationStation (ES-DE) shows the same games with its own themes. It's a separate download of about 850 MB and stays through updates. Games still play here with the same settings, saves and in-game menu. Hold L1 while Playtendoh starts to use this launcher instead."
-msgstr ""
+msgstr "يعرض EmulationStation (ES-DE) نفس الألعاب بموضوعاتها الخاصة. إنه تنزيل منفصل لحوالي 850 MB ويبقى خلال التحديثات. لا تزال الألعاب تُلعب هنا بنفس الإعدادات وعمليات الحفظ والقائمة داخل اللعبة. اضغط باستمرار على L1 بينما يبدأ Playtendoh في استخدام هذا المشغل بدلاً من ذلك."
 
 #: port/frontend/shell/settings.cpp:1465
 msgid "Asking GitHub…"
-msgstr ""
+msgstr "السؤال GitHub..."
 
 #: port/frontend/shell/settings.cpp:1472
 msgid "Hold Cross to remove"
-msgstr ""
+msgstr "اضغط باستمرار على أكس للإزالة"
 
 #: port/frontend/shell/settings.cpp:1472
 msgid "Cross to download · {0} MB"
-msgstr ""
+msgstr "أكس للتحميل · {0} MB"
 
 #: port/frontend/shell/settings.cpp:1475
 msgid "Installed. Choose it as the Layout above."
-msgstr ""
+msgstr "تم التثبيت. اختره كتخطيط أعلاه."
 
 #: port/frontend/shell/settings.cpp:1475
 msgid "A separate launcher, as a download."
-msgstr ""
+msgstr "قاذفة منفصلة، كتنزيل."
 
 #. Settings > Launcher: a row that opens which sides the bar shows (Wii U, Switch, DS, 3DS)
 #: port/frontend/shell/settings.cpp:1483
@@ -8994,15 +8996,15 @@ msgstr "هل يعرض الشريط جانب 3DS ‏(Azahar). عند إخفائه
 
 #: port/frontend/shell/settings.cpp:1500
 msgid "3D box art"
-msgstr ""
+msgstr "فن الصندوق 3D"
 
 #: port/frontend/shell/settings.cpp:1500
 msgid "Covers as boxes, with a spine."
-msgstr ""
+msgstr "يغطي كصناديق، مع العمود الفقري."
 
 #: port/frontend/shell/settings.cpp:1501
 msgid "Each cover drawn as its box, turned a little, with its spine. Off: flat covers."
-msgstr ""
+msgstr "كل غطاء مرسوم على شكل صندوق، مقلوب قليلاً بعموده الفقري. إيقاف: أغطية مسطحة."
 
 #: port/frontend/shell/settings.cpp:1502
 msgid "Game pictures behind menus"
@@ -9293,15 +9295,15 @@ msgstr "يمسح إعدادات هذه اللعبة الخاصة، فتعود إ
 
 #: port/frontend/shell/settings.cpp:1792
 msgid "Back to the emulator's own values"
-msgstr ""
+msgstr "العودة إلى قيم المحاكي الخاصة"
 
 #: port/frontend/shell/settings.cpp:1793
 msgid "Nothing changed"
-msgstr ""
+msgstr "لم يتغير شيء"
 
 #: port/frontend/shell/settings.cpp:1795
 msgid "Resets every option above to {0}'s default, for every game on this system."
-msgstr ""
+msgstr "يعيد تعيين كل خيار أعلاه إلى الإعداد الافتراضي {0}، لكل لعبة على هذا النظام."
 
 #. a Wii U account by its number, when its name cannot be read
 #: port/frontend/shell/settings.cpp:1870
@@ -9502,11 +9504,11 @@ msgstr "اللغة: {0}"
 
 #: port/frontend/shell/settings.cpp:2296
 msgid "Playtendoh cannot write to {0}"
-msgstr ""
+msgstr "لا يمكن لـ Playtendoh الكتابة إلى {0}"
 
 #: port/frontend/shell/settings.cpp:2300
 msgid "Playtendoh restarts to move the files"
-msgstr ""
+msgstr "تتم إعادة تشغيل Playtendoh لنقل الملفات"
 
 #: port/frontend/shell/settings.cpp:2311
 msgid "At least one system must stay on"
@@ -9551,7 +9553,7 @@ msgstr "جار النسخ الاحتياطي لملفات حفظ كل الجوا
 
 #: port/frontend/shell/settings.cpp:2839
 msgid "EmulationStation's download stopped"
-msgstr ""
+msgstr "توقف تنزيل EmulationStation"
 
 #. the loading screen's name for a retro side's own emulator menus: {0} is the side (Nintendo 64)
 #: port/frontend/shell/settings.cpp:2851
@@ -9564,17 +9566,17 @@ msgstr "جار فتح إعدادات المحاكي"
 
 #: port/frontend/shell/settings.cpp:2878
 msgid "Every game has its cover"
-msgstr ""
+msgstr "كل لعبة لها غلافها"
 
 #: port/frontend/shell/settings.cpp:2878
 msgid "Looking for {0} cover"
 msgid_plural "Looking for {0} covers"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "جارٍ البحث عن أغلفة ({0})"
+msgstr[1] "جارٍ البحث عن غلاف واحد ({0})"
+msgstr[2] "جارٍ البحث عن غلافين ({0})"
+msgstr[3] "جارٍ البحث عن {0} أغلفة"
+msgstr[4] "جارٍ البحث عن {0} غلافًا"
+msgstr[5] "جارٍ البحث عن {0} غلاف"
 
 #: port/frontend/shell/settings.cpp:2943
 msgid "Switch games play offline"
@@ -9645,23 +9647,23 @@ msgstr "جار تسجيل الدخول إلى RetroAchievements…"
 
 #: port/frontend/shell/settings.cpp:3049
 msgid "Your SteamGridDB key"
-msgstr ""
+msgstr "مفتاح SteamGridDB الخاص بك"
 
 #: port/frontend/shell/settings.cpp:3052
 msgid "Your SteamGridDB key is removed"
-msgstr ""
+msgstr "تمت إزالة مفتاح SteamGridDB الخاص بك"
 
 #: port/frontend/shell/settings.cpp:3052
 msgid "Used next time Playtendoh starts"
-msgstr ""
+msgstr "يستخدم في المرة القادمة التي يبدأ فيها Playtendoh"
 
 #: port/frontend/shell/settings.cpp:3072
 msgid "EmulationStation removed. Its scraped data is kept."
-msgstr ""
+msgstr "تمت إزالة EmulationStation. يتم الاحتفاظ بالبيانات التعريفية للعبة التي تم تنزيلها."
 
 #: port/frontend/shell/settings.cpp:3082
 msgid "{0} reset to defaults"
-msgstr ""
+msgstr "إعادة تعيين {0} إلى الإعدادات الافتراضية"
 
 #: port/frontend/shell/settings.cpp:3093
 msgid "Player removed: their saves and settings are kept"
@@ -10028,30 +10030,30 @@ msgstr "تشغيل: تأتي الأغلفة مع ظهور ألعابك"
 
 #: port/frontend/shell/setup.cpp:375
 msgid "System folders"
-msgstr ""
+msgstr "مجلدات النظام"
 
 #: port/frontend/shell/setup.cpp:378
 msgid "Together in {0}"
-msgstr ""
+msgstr "معًا في {0}"
 
 #. the Setup check: how many of the systems that can move have a folder of their own
 #: port/frontend/shell/setup.cpp:380
 msgid "{0} system in its own folder"
 msgid_plural "{0} systems in their own folders"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "أنظمة في مجلدات خاصة بها ({0})"
+msgstr[1] "نظام واحد في مجلد خاص به ({0})"
+msgstr[2] "نظامان في مجلدين خاصين بهما ({0})"
+msgstr[3] "{0} أنظمة في مجلدات خاصة بها"
+msgstr[4] "{0} نظامًا في مجلدات خاصة بها"
+msgstr[5] "{0} نظام في مجلدات خاصة بها"
 
 #: port/frontend/shell/setup.cpp:382
 msgid "Where each system's files go"
-msgstr ""
+msgstr "أين تذهب ملفات كل نظام"
 
 #: port/frontend/shell/setup.cpp:383
 msgid "Saves, BIOS files and settings for every system are kept together in {0}. You can give the Wii U, 3DS, DS or Switch a folder of its own instead. Cross shows them, each with its own switch."
-msgstr ""
+msgstr "يتم حفظ ملفات BIOS والإعدادات الخاصة بكل نظام معًا في {0}. يمكنك منح Wii U أو 3DS أو DS أو Switch مجلدًا خاصًا به بدلاً من ذلك. يعرضها أكس، كل منها بمفتاح خاص بها."
 
 #: port/frontend/shell/setup.cpp:480
 msgid "Checked again"
@@ -10073,22 +10075,22 @@ msgstr "لنتحقق من إعدادك"
 #: port/frontend/shell/setup.cpp:516
 msgid "{0} thing needs you"
 msgid_plural "{0} things need you"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "لا عناصر تحتاج إلى تدخلك ({0})"
+msgstr[1] "عنصر واحد يحتاج إلى تدخلك ({0})"
+msgstr[2] "عنصران يحتاجان إلى تدخلك ({0})"
+msgstr[3] "{0} عناصر تحتاج إلى تدخلك"
+msgstr[4] "{0} عنصرًا يحتاج إلى تدخلك"
+msgstr[5] "{0} عنصر يحتاج إلى تدخلك"
 
 #. the Setup check's summary: how many checks need the player, or that every one is ready
 #: port/frontend/shell/setup.cpp:516
 msgid "Everything is ready"
-msgstr ""
+msgstr "كل شيء جاهز"
 
 #. the Setup check's summary: {0} checks ready of {1}
 #: port/frontend/shell/setup.cpp:519
 msgid "{0} of {1} ready"
-msgstr ""
+msgstr "{0} من {1} جاهز"
 
 #: port/frontend/shell/setup.cpp:533
 msgid "{0} · same as the PS5"
@@ -10097,17 +10099,17 @@ msgstr "{0} · مثل PS5"
 #. the Setup check's groups: what needs the player, what is optional, what is ready; {0} how many
 #: port/frontend/shell/setup.cpp:588
 msgid "Needs you · {0}"
-msgstr ""
+msgstr "يحتاج إليك · {0}"
 
 #. the Setup check's groups: what needs the player, what is optional, what is ready; {0} how many
 #: port/frontend/shell/setup.cpp:588
 msgid "Optional · {0}"
-msgstr ""
+msgstr "اختياري · {0}"
 
 #. the Setup check's groups: what needs the player, what is optional, what is ready; {0} how many
 #: port/frontend/shell/setup.cpp:588
 msgid "Ready · {0}"
-msgstr ""
+msgstr "جاهز · {0}"
 
 #: port/frontend/shell/setup.cpp:641
 msgid "The menus' language"
@@ -10513,11 +10515,11 @@ msgstr "الإعدادات"
 
 #: port/frontend/shell/shell.cpp:1662
 msgid "Hide"
-msgstr ""
+msgstr "إخفاء"
 
 #: port/frontend/shell/shell.cpp:1662
 msgid "Show"
-msgstr ""
+msgstr "عرض"
 
 #: port/frontend/shell/shell.cpp:1662 port/frontend/shell/shell.cpp:1664 port/frontend/shell/shell.cpp:1717 port/frontend/shell/shell.cpp:2765
 msgid "Done"
@@ -10971,82 +10973,82 @@ msgstr "هذا الصف"
 #. What's new in 6.0: the Library's two new ways to browse
 #: port/frontend/shell/whatsnew.cpp:28
 msgid "Orbit and the Timeline"
-msgstr ""
+msgstr "المدار والجدول الزمني"
 
 #. What's new in 6.0: the Library's two new ways to browse
 #: port/frontend/shell/whatsnew.cpp:28
 msgid "Turn a dial to pick a console, or see every console's games on one shelf."
-msgstr ""
+msgstr "قم بتدوير القرص لاختيار وحدة التحكم، أو شاهد ألعاب كل وحدة تحكم على رف واحد."
 
 #. What's new in 6.0: how many consoles the app plays now
 #: port/frontend/shell/whatsnew.cpp:30
 msgid "21 consoles"
-msgstr ""
+msgstr "21 وحدة تحكم"
 
 #. What's new in 6.0: how many consoles the app plays now
 #: port/frontend/shell/whatsnew.cpp:30
 msgid "From the Game & Watch to the Switch 2, each with its own settings and saves."
-msgstr ""
+msgstr "من Game & Watch إلى Switch 2، ولكل منها إعداداته الخاصة وحفظه."
 
 #. What's new in 6.0: Switch 2 games; Lichii is the emulator's name, left as it is
 #: port/frontend/shell/whatsnew.cpp:32
 msgid "Switch 2"
-msgstr ""
+msgstr "Switch 2"
 
 #. What's new in 6.0: Switch 2 games; Lichii is the emulator's name, left as it is
 #: port/frontend/shell/whatsnew.cpp:32
 msgid "Switch 2 games on Lichii, with your own keys and firmware."
-msgstr ""
+msgstr "ألعاب Switch 2 على Lichii، مع المفاتيح والبرامج الثابتة الخاصة بك."
 
 #. What's new in 6.0: GameCube and Wii games; Porpoise X is the emulator's name, left as it is
 #: port/frontend/shell/whatsnew.cpp:34
 msgid "GameCube and Wii"
-msgstr ""
+msgstr "GameCube وWii"
 
 #. What's new in 6.0: GameCube and Wii games; Porpoise X is the emulator's name, left as it is
 #: port/frontend/shell/whatsnew.cpp:34
 msgid "Played by Porpoise X, with menus in Playtendoh's style."
-msgstr ""
+msgstr "يتم تشغيلها بواسطة Porpoise X، مع قوائم بأسلوب Playtendoh."
 
 #. What's new in 6.0: Settings > Emulator lists every option of a console's emulator
 #: port/frontend/shell/whatsnew.cpp:36
 msgid "Every emulator option"
-msgstr ""
+msgstr "كل خيار المحاكي"
 
 #. What's new in 6.0: Settings > Emulator lists every option of a console's emulator
 #: port/frontend/shell/whatsnew.cpp:36
 msgid "Settings > Emulator has every option for each console's emulator."
-msgstr ""
+msgstr "الإعدادات > المحاكي لديه كل الخيارات لمحاكي كل وحدة تحكم."
 
 #. What's new in 6.0: EmulationStation (ES-DE) as a launcher, downloaded when chosen
 #: port/frontend/shell/whatsnew.cpp:38
 msgid "Choose ES-DE as your launcher: it downloads when you pick it."
-msgstr ""
+msgstr "اختر ES-DE كمشغل خاص بك: يتم تنزيله عند اختياره."
 
 #. What's new in 6.0: collections, groups of games the player makes
 #: port/frontend/shell/whatsnew.cpp:40
 msgid "Group your games your way, and find them from the Library's filters."
-msgstr ""
+msgstr "قم بتجميع ألعابك على طريقتك، واعثر عليها من مرشحات المكتبة."
 
 #. What's new in 6.0: the menu over a game, redesigned, with button mapping in every emulator
 #: port/frontend/shell/whatsnew.cpp:42
 msgid "A new in-game menu"
-msgstr ""
+msgstr "قائمة جديدة داخل اللعبة"
 
 #. What's new in 6.0: the menu over a game, redesigned, with button mapping in every emulator
 #: port/frontend/shell/whatsnew.cpp:42
 msgid "One menu for every game, with your own button layout in each emulator."
-msgstr ""
+msgstr "قائمة واحدة لكل لعبة، مع تخطيط الزر الخاص بك في كل محاكي."
 
 #. What's new in 6.0: the launcher's music and sounds, quieter
 #: port/frontend/shell/whatsnew.cpp:44
 msgid "Calmer sound"
-msgstr ""
+msgstr "صوت أكثر هدوءًا"
 
 #. What's new in 6.0: the launcher's music and sounds, quieter
 #: port/frontend/shell/whatsnew.cpp:44
 msgid "New, quieter music and soft menu sounds."
-msgstr ""
+msgstr "موسيقى جديدة أكثر هدوءًا وأصوات قائمة ناعمة."
 
 #. the heading of the screen a new version opens on, once: what it brings
 #: port/frontend/shell/whatsnew.cpp:85
