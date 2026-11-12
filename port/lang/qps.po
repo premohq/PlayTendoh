@@ -478,7 +478,7 @@ msgstr "⟦Ñöt plàÿàblé~~~~⟧"
 msgid "the PS5 Vulkan driver did not start"
 msgstr "⟦thé PS5 Vûlkàñ drîvér dîd ñöt stàrt~~~~~~~~~~~~~~⟧"
 
-#: port/app/emulator.cpp:532 port/frontend/shell/settings.cpp:3312 port/frontend/shell/shell.cpp:2410
+#: port/app/emulator.cpp:532 port/frontend/shell/settings.cpp:3312 port/frontend/shell/shell.cpp:2413
 msgid "Playtendoh cannot write to {0}. Is the HEN loaded?"
 msgstr "⟦Plàÿtéñdöh çàññöt wrîté tö ~~~~~~~~~~{0}. Îs thé HÉÑ löàdéd?~~~~~~~~⟧"
 
@@ -1399,7 +1399,7 @@ msgstr "⟦Réàdîñg thé pàçks…~~~~~~~⟧"
 msgid "There are no graphic packs for this game."
 msgstr "⟦Théré àré ñö gràphîç pàçks för thîs gàmé.~~~~~~~~~~~~~~~~⟧"
 
-#: port/app/ingame.cpp:275 port/app/ingame.cpp:397 port/frontend/shell/hub.cpp:243 port/frontend/shell/pages.cpp:306 port/frontend/shell/shell.cpp:2259
+#: port/app/ingame.cpp:275 port/app/ingame.cpp:397 port/frontend/shell/hub.cpp:243 port/frontend/shell/pages.cpp:306 port/frontend/shell/shell.cpp:2262
 #, menu
 msgid "Graphic packs"
 msgstr "⟦Gràphîç pàçks~~~~~⟧"
@@ -1743,12 +1743,12 @@ msgid "Running"
 msgstr "⟦Rûññîñg~~⟧"
 
 #. the first start's setup: Cross on its last step
-#: port/app/ingame.cpp:710 port/app/ingame3ds.cpp:1147 port/eden/ingame.cpp:831 port/frontend/shell/firststart.cpp:264 port/frontend/shell/orbit.cpp:461 port/frontend/shell/orbit.cpp:821 port/frontend/shell/reports.cpp:155 port/frontend/shell/setup.cpp:432 port/frontend/shell/shares.cpp:524 port/frontend/shell/shell.cpp:1865 port/frontend/shell/shell.cpp:1869 port/frontend/shell/shell.cpp:1904 port/frontend/shell/shell.cpp:1913 port/frontend/shell/shell.cpp:1921 port/frontend/shell/shell.cpp:1929 port/frontend/shell/shell.cpp:1932 port/frontend/shell/shell.cpp:3054 port/frontend/shell/shell.cpp:3092
+#: port/app/ingame.cpp:710 port/app/ingame3ds.cpp:1147 port/eden/ingame.cpp:831 port/frontend/shell/firststart.cpp:264 port/frontend/shell/orbit.cpp:461 port/frontend/shell/orbit.cpp:821 port/frontend/shell/reports.cpp:155 port/frontend/shell/setup.cpp:432 port/frontend/shell/shares.cpp:524 port/frontend/shell/shell.cpp:1868 port/frontend/shell/shell.cpp:1872 port/frontend/shell/shell.cpp:1907 port/frontend/shell/shell.cpp:1916 port/frontend/shell/shell.cpp:1924 port/frontend/shell/shell.cpp:1932 port/frontend/shell/shell.cpp:1935 port/frontend/shell/shell.cpp:3057 port/frontend/shell/shell.cpp:3095
 #, menu
 msgid "Choose"
 msgstr "⟦Çhöösé~~⟧"
 
-#: port/app/ingame.cpp:710 port/app/ingame3ds.cpp:1147 port/eden/ingame.cpp:831 port/frontend/shell/shares.cpp:520 port/frontend/shell/shares.cpp:523 port/frontend/shell/shell.cpp:1878 port/frontend/shell/shell.cpp:1922 port/frontend/shell/shell.cpp:1926 port/frontend/shell/shell.cpp:1929 port/frontend/shell/shell.cpp:1932 port/frontend/shell/shell.cpp:1943
+#: port/app/ingame.cpp:710 port/app/ingame3ds.cpp:1147 port/eden/ingame.cpp:831 port/frontend/shell/shares.cpp:520 port/frontend/shell/shares.cpp:523 port/frontend/shell/shell.cpp:1881 port/frontend/shell/shell.cpp:1925 port/frontend/shell/shell.cpp:1929 port/frontend/shell/shell.cpp:1932 port/frontend/shell/shell.cpp:1935 port/frontend/shell/shell.cpp:1946
 #, menu
 msgid "Change"
 msgstr "⟦Çhàñgé~~⟧"
@@ -1758,7 +1758,7 @@ msgstr "⟦Çhàñgé~~⟧"
 msgid "Back to the game"
 msgstr "⟦Bàçk tö thé gàmé~~~~~~⟧"
 
-#: port/app/ingame.cpp:710 port/app/ingame3ds.cpp:1147 port/eden/ingame.cpp:831 port/frontend/shell/firststart.cpp:266 port/frontend/shell/installs.cpp:330 port/frontend/shell/orbit.cpp:457 port/frontend/shell/shares.cpp:520 port/frontend/shell/shares.cpp:526 port/frontend/shell/shell.cpp:1888 port/frontend/shell/shell.cpp:1914 port/frontend/shell/shell.cpp:1921 port/frontend/shell/shell.cpp:1922 port/frontend/shell/shell.cpp:1926 port/frontend/shell/shell.cpp:1930 port/frontend/shell/shell.cpp:1932 port/frontend/shell/shell.cpp:1936 port/frontend/shell/shell.cpp:1940 port/frontend/shell/shell.cpp:1944 port/frontend/shell/timeline.cpp:1335
+#: port/app/ingame.cpp:710 port/app/ingame3ds.cpp:1147 port/eden/ingame.cpp:831 port/frontend/shell/firststart.cpp:266 port/frontend/shell/installs.cpp:330 port/frontend/shell/orbit.cpp:457 port/frontend/shell/shares.cpp:520 port/frontend/shell/shares.cpp:526 port/frontend/shell/shell.cpp:1891 port/frontend/shell/shell.cpp:1917 port/frontend/shell/shell.cpp:1924 port/frontend/shell/shell.cpp:1925 port/frontend/shell/shell.cpp:1929 port/frontend/shell/shell.cpp:1933 port/frontend/shell/shell.cpp:1935 port/frontend/shell/shell.cpp:1939 port/frontend/shell/shell.cpp:1943 port/frontend/shell/shell.cpp:1947 port/frontend/shell/timeline.cpp:1335
 #, menu
 msgid "Back"
 msgstr "⟦Bàçk~⟧"
@@ -1827,7 +1827,7 @@ msgstr "⟦Tûrbö~~⟧"
 msgid "Pause"
 msgstr "⟦Pàûsé~~⟧"
 
-#: port/app/ingame3ds.cpp:208 port/frontend/shell/firststart.cpp:260 port/frontend/shell/firststart.cpp:262 port/frontend/shell/shell.cpp:1871 port/frontend/shell/shell.cpp:1910
+#: port/app/ingame3ds.cpp:208 port/frontend/shell/firststart.cpp:260 port/frontend/shell/firststart.cpp:262 port/frontend/shell/shell.cpp:1874 port/frontend/shell/shell.cpp:1913
 #, menu
 msgid "Move"
 msgstr "⟦Mövé~⟧"
@@ -2253,7 +2253,7 @@ msgstr "⟦{0} öf ~{1} öñ~⟧"
 msgid "Achievements"
 msgstr "⟦Åçhîévéméñts~~~~⟧"
 
-#: port/app/ingame3ds.cpp:749 port/frontend/shell/installs.cpp:376 port/frontend/shell/pages.cpp:326 port/frontend/shell/pages.cpp:943 port/frontend/shell/pages.cpp:1343 port/frontend/shell/shell.cpp:3121
+#: port/app/ingame3ds.cpp:749 port/frontend/shell/installs.cpp:376 port/frontend/shell/pages.cpp:326 port/frontend/shell/pages.cpp:943 port/frontend/shell/pages.cpp:1343 port/frontend/shell/shell.cpp:3124
 #, menu
 msgid "{0} of {1}"
 msgstr "⟦{0} öf ~{1}⟧"
@@ -2361,7 +2361,7 @@ msgstr "⟦Lîd~⟧"
 msgid "Closed"
 msgstr "⟦Çlöséd~~⟧"
 
-#: port/app/ingame3ds.cpp:800 port/frontend/shell/orbit.cpp:459 port/frontend/shell/shell.cpp:1871 port/frontend/shell/shell.cpp:1900 port/frontend/shell/shell.cpp:1908 port/frontend/shell/shell.cpp:1919 port/frontend/shell/shell.cpp:1925 port/frontend/shell/shell.cpp:1940 port/frontend/shell/timeline.cpp:484 port/frontend/shell/timeline.cpp:1331
+#: port/app/ingame3ds.cpp:800 port/frontend/shell/orbit.cpp:459 port/frontend/shell/shell.cpp:1874 port/frontend/shell/shell.cpp:1903 port/frontend/shell/shell.cpp:1911 port/frontend/shell/shell.cpp:1922 port/frontend/shell/shell.cpp:1928 port/frontend/shell/shell.cpp:1943 port/frontend/shell/timeline.cpp:484 port/frontend/shell/timeline.cpp:1331
 #, menu
 msgid "Open"
 msgstr "⟦Öpéñ~⟧"
@@ -2515,7 +2515,7 @@ msgstr "⟦Slöt ~~{0} îs émptÿ~~~⟧"
 msgid "Saving…"
 msgstr "⟦Sàvîñg…~~⟧"
 
-#: port/app/ingame3ds.cpp:1059 port/app/ingame3ds.cpp:1065 port/app/ingame3ds.cpp:1431 port/app/loading_screen.h:71
+#: port/app/ingame3ds.cpp:1059 port/app/ingame3ds.cpp:1065 port/app/ingame3ds.cpp:1431 port/app/loading_screen.h:75
 #, menu
 msgid "Loading…"
 msgstr "⟦Löàdîñg…~~~⟧"
@@ -2653,7 +2653,7 @@ msgstr "⟦Ît îs àlréàdÿ îñstàlléd héré.~~~~~~~~~~~⟧"
 msgid "An install is already running."
 msgstr "⟦Åñ îñstàll îs àlréàdÿ rûññîñg.~~~~~~~~~~~~⟧"
 
-#: port/app/keyboard_menu.h:61 port/frontend/shell/shell.cpp:3026 port/frontend/shell/shell.cpp:3055 port/frontend/shell/shell.cpp:3075 port/frontend/shell/shell.cpp:3094
+#: port/app/keyboard_menu.h:61 port/frontend/shell/shell.cpp:3029 port/frontend/shell/shell.cpp:3058 port/frontend/shell/shell.cpp:3078 port/frontend/shell/shell.cpp:3097
 #, menu
 msgid "OK"
 msgstr "⟦ÖK⟧"
@@ -2669,37 +2669,37 @@ msgstr "⟦Thé gàmé àsks för~~~~~~⟧"
 msgid "Some text"
 msgstr "⟦Sömé téxt~~~⟧"
 
-#: port/app/keyboard_menu.h:96 port/frontend/shell/shell.cpp:2944
+#: port/app/keyboard_menu.h:96 port/frontend/shell/shell.cpp:2947
 #, menu
 msgid "L1 R1: {0}"
 msgstr "⟦L1 R1: ~~{0}⟧"
 
 #. the in-game keyboard's keys
-#: port/app/keyboard_menu.h:153 port/frontend/shell/shell.cpp:2967
+#: port/app/keyboard_menu.h:153 port/frontend/shell/shell.cpp:2970
 #, menu
 msgid "Shift: on"
 msgstr "⟦Shîft: öñ~~~⟧"
 
 #. the in-game keyboard's keys
 #. the in-game keyboard's hints: Cross types the focused key
-#: port/app/keyboard_menu.h:153 port/app/keyboard_menu.h:173 port/frontend/shell/shell.cpp:1860 port/frontend/shell/shell.cpp:1863 port/frontend/shell/shell.cpp:2967
+#: port/app/keyboard_menu.h:153 port/app/keyboard_menu.h:173 port/frontend/shell/shell.cpp:1863 port/frontend/shell/shell.cpp:1866 port/frontend/shell/shell.cpp:2970
 #, menu
 msgid "Shift"
 msgstr "⟦Shîft~~⟧"
 
-#: port/app/keyboard_menu.h:155 port/frontend/shell/shell.cpp:2967
+#: port/app/keyboard_menu.h:155 port/frontend/shell/shell.cpp:2970
 #, menu
 msgid "Space"
 msgstr "⟦Spàçé~~⟧"
 
 #. the in-game keyboard's hints: Cross types the focused key
-#: port/app/keyboard_menu.h:157 port/app/keyboard_menu.h:173 port/frontend/shell/porpoise_rows.cpp:1568 port/frontend/shell/porpoise_rows.cpp:2057 port/frontend/shell/shell.cpp:1860 port/frontend/shell/shell.cpp:1863 port/frontend/shell/shell.cpp:2967
+#: port/app/keyboard_menu.h:157 port/app/keyboard_menu.h:173 port/frontend/shell/porpoise_rows.cpp:1568 port/frontend/shell/porpoise_rows.cpp:2057 port/frontend/shell/shell.cpp:1863 port/frontend/shell/shell.cpp:1866 port/frontend/shell/shell.cpp:2970
 #, menu
 msgid "Delete"
 msgstr "⟦Délété~~⟧"
 
 #. the in-game keyboard's hints: Cross types the focused key
-#: port/app/keyboard_menu.h:173 port/frontend/shell/shares.cpp:300 port/frontend/shell/shell.cpp:1860 port/frontend/shell/shell.cpp:1863
+#: port/app/keyboard_menu.h:173 port/frontend/shell/shares.cpp:300 port/frontend/shell/shell.cpp:1863 port/frontend/shell/shell.cpp:1866
 #, menu
 msgid "Type"
 msgstr "⟦Tÿpé~⟧"
@@ -2977,18 +2977,18 @@ msgid "{0} {1}, {2}"
 msgstr "⟦{0} {1}, {2}⟧"
 
 #. a game's loading screen: the game's shaders read from the cache and made ready, {0} of {1}
-#: port/app/loading_screen.h:62
+#: port/app/loading_screen.h:66
 #, menu
 msgid "Shaders: {0} of {1}"
 msgstr "⟦Shàdérs: ~~~{0} öf ~{1}⟧"
 
 #. a game's loading screen: the graphics pipelines (shaders put together for the GPU) made ready from the cache, {0} of {1}
-#: port/app/loading_screen.h:67
+#: port/app/loading_screen.h:71
 #, menu
 msgid "Pipelines: {0} of {1}"
 msgstr "⟦Pîpélîñés: ~~~~{0} öf ~{1}⟧"
 
-#: port/app/loading_screen.h:75
+#: port/app/loading_screen.h:79
 #, menu
 msgid "Starting"
 msgstr "⟦Stàrtîñg~~~⟧"
@@ -3041,6 +3041,63 @@ msgstr "⟦Ît çöûld ñöt bé îñstàlléd: ~~~~~~~~~~{0}⟧"
 #: port/app/pack_updates.cpp:294
 msgid "The new packs could not replace the old ones"
 msgstr "⟦Thé ñéw pàçks çöûld ñöt réplàçé thé öld öñés~~~~~~~~~~~~~~~~~⟧"
+
+#: port/app/quotes.h:31
+#, menu
+msgid "On my business card, I am a corporate president. In my mind, I am a game developer. But in my heart, I am a gamer."
+msgstr "⟦Öñ mÿ bûsîñéss çàrd, Î àm à çörpöràté présîdéñt. Îñ mÿ mîñd, Î àm à gàmé dévélöpér. Bût îñ mÿ héàrt, Î àm à gàmér.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~⟧"
+
+#: port/app/quotes.h:33
+#, menu
+msgid "Above all, video games are meant to be just one thing: fun."
+msgstr "⟦Åbövé àll, vîdéö gàmés àré méàñt tö bé jûst öñé thîñg: fûñ.~~~~~~~~~~~~~~~~~~~~~~~⟧"
+
+#: port/app/quotes.h:35
+#, menu
+msgid "A good idea is something that does not solve just one single problem, but rather can solve multiple problems at once."
+msgstr "⟦Å gööd îdéà îs söméthîñg thàt döés ñöt sölvé jûst öñé sîñglé pröblém, bût ràthér çàñ sölvé mûltîplé pröbléms àt öñçé.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~⟧"
+
+#: port/app/quotes.h:37
+#, menu
+msgid "A delayed game is eventually good, but a rushed game is forever bad."
+msgstr "⟦Å délàÿéd gàmé îs évéñtûàllÿ gööd, bût à rûshéd gàmé îs förévér bàd.~~~~~~~~~~~~~~~~~~~~~~~~~~~⟧"
+
+#: port/app/quotes.h:38
+#, menu
+msgid "If it's really nice outside, you should go play outside."
+msgstr "⟦Îf ît's réàllÿ ñîçé öûtsîdé, ÿöû shöûld gö plàÿ öûtsîdé.~~~~~~~~~~~~~~~~~~~~~~⟧"
+
+#: port/app/quotes.h:39
+#, menu
+msgid "My name is Reggie. I'm about kicking ass, I'm about taking names, and we're about making games."
+msgstr "⟦Mÿ ñàmé îs Réggîé. Î'm àböût kîçkîñg àss, Î'm àböût tàkîñg ñàmés, àñd wé'ré àböût màkîñg gàmés.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~⟧"
+
+#: port/app/quotes.h:41
+#, menu
+msgid "My body is ready."
+msgstr "⟦Mÿ bödÿ îs réàdÿ.~~~~~~⟧"
+
+#: port/app/quotes.h:43
+#, menu
+msgid "Creating what you love is the easiest way to grasp how to make something entertaining."
+msgstr "⟦Çréàtîñg whàt ÿöû lövé îs thé éàsîést wàÿ tö gràsp höw tö màké söméthîñg éñtértàîñîñg.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~⟧"
+
+#: port/app/quotes.h:45
+#, menu
+msgid "Lateral thinking with withered technology."
+msgstr "⟦Làtéràl thîñkîñg wîth wîthéréd téçhñölögÿ.~~~~~~~~~~~~~~~~⟧"
+
+#. a quote's words in quotation marks, on a game's loading screen: use your language's marks
+#: port/app/quotes.h:53
+#, menu
+msgid "“{0}”"
+msgstr "⟦“{0}”⟧"
+
+#. under a quote on a game's loading screen, for a line long said to be theirs whose source is not known: {0} is the name
+#: port/app/quotes.h:60
+#, menu
+msgid "Often credited to {0}"
+msgstr "⟦Öftéñ çrédîtéd tö ~~~~~~~{0}⟧"
 
 #. a row that opens the remote touch screen's page: the game's second screen in a phone's browser, and its code to scan
 #: port/app/remote_menu.h:29 port/frontend/shell/settings.cpp:1713 port/frontend/shell/settings.cpp:1715 port/frontend/shell/settings.cpp:3622
@@ -3447,7 +3504,7 @@ msgstr "⟦Thîs îs ñöt à 3DS gàmé Plàÿtéñdöh çàñ stàrt.~~~~~~~~~
 msgid "The game could not be loaded."
 msgstr "⟦Thé gàmé çöûld ñöt bé löàdéd.~~~~~~~~~~~⟧"
 
-#: port/azahar/core.cpp:626 port/frontend/shell/shell.cpp:1216
+#: port/azahar/core.cpp:626 port/frontend/shell/shell.cpp:1219
 #, menu
 msgid "This game is encrypted. Decrypt it on your 3DS with GodMode9 first."
 msgstr "⟦Thîs gàmé îs éñçrÿptéd. Déçrÿpt ît öñ ÿöûr 3DS wîth GödMödé9 fîrst.~~~~~~~~~~~~~~~~~~~~~~~~~~⟧"
@@ -3890,7 +3947,7 @@ msgid "Update"
 msgstr "⟦Üpdàté~~⟧"
 
 #. an update found to install ({0}: its version, as 208)
-#: port/frontend/actions.cpp:417 port/frontend/actions.cpp:496 port/frontend/shell/hub.cpp:210 port/frontend/shell/installs.cpp:42 port/frontend/shell/shell.cpp:1087 port/main_ps5.cpp:590
+#: port/frontend/actions.cpp:417 port/frontend/actions.cpp:496 port/frontend/shell/hub.cpp:210 port/frontend/shell/installs.cpp:42 port/frontend/shell/shell.cpp:1090 port/main_ps5.cpp:590
 msgid "DLC"
 msgstr "⟦DLÇ~⟧"
 
@@ -4240,7 +4297,7 @@ msgid "Copy your games to the PS5 or a USB drive, each console's in its own fold
 msgstr "⟦Çöpÿ ÿöûr gàmés tö thé PS5 ör à ÜSB drîvé, éàçh çöñsölé's îñ îts öwñ földér. Théÿ shöw ûp thé ñéxt tîmé ÿöû öpéñ îts lîbràrÿ. Séttîñgs > Gàmé fîlés sàÿs whéré éàçh öñé göés.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~⟧"
 
 #. how many games the Library has
-#: port/frontend/shell/firststart.cpp:629 port/frontend/shell/library.cpp:766 port/frontend/shell/orbit.cpp:330 port/frontend/shell/pages.cpp:1403 port/frontend/shell/shell.cpp:1812 port/frontend/shell/timeline.cpp:478 port/frontend/shell/timeline.cpp:967 port/frontend/shell/timeline.cpp:1124 port/frontend/shell/timeline.cpp:1369
+#: port/frontend/shell/firststart.cpp:629 port/frontend/shell/library.cpp:766 port/frontend/shell/orbit.cpp:330 port/frontend/shell/pages.cpp:1403 port/frontend/shell/shell.cpp:1815 port/frontend/shell/timeline.cpp:478 port/frontend/shell/timeline.cpp:967 port/frontend/shell/timeline.cpp:1124 port/frontend/shell/timeline.cpp:1369
 msgid "{0} game"
 msgid_plural "{0} games"
 msgstr[0] "⟦{0} gàmé~~⟧"
@@ -4293,11 +4350,11 @@ msgstr[1] "⟦{0} DLÇ~⟧"
 msgid "Experimental"
 msgstr "⟦Éxpérîméñtàl~~~~⟧"
 
-#: port/frontend/shell/hub.cpp:230 port/frontend/shell/shell.cpp:2270
+#: port/frontend/shell/hub.cpp:230 port/frontend/shell/shell.cpp:2273
 msgid "Favourite"
 msgstr "⟦Fàvöûrîté~~~⟧"
 
-#: port/frontend/shell/hub.cpp:237 port/frontend/shell/library.cpp:751 port/frontend/shell/orbit.cpp:367 port/frontend/shell/orbit.cpp:464 port/frontend/shell/shell.cpp:1910 port/frontend/shell/shell.cpp:1911 port/frontend/shell/shell.cpp:2234 port/frontend/shell/timeline.cpp:1262 port/frontend/shell/timeline.cpp:1322 port/frontend/shell/timeline.cpp:1333
+#: port/frontend/shell/hub.cpp:237 port/frontend/shell/library.cpp:751 port/frontend/shell/orbit.cpp:367 port/frontend/shell/orbit.cpp:464 port/frontend/shell/shell.cpp:1913 port/frontend/shell/shell.cpp:1914 port/frontend/shell/shell.cpp:2237 port/frontend/shell/timeline.cpp:1262 port/frontend/shell/timeline.cpp:1322 port/frontend/shell/timeline.cpp:1333
 msgid "Play"
 msgstr "⟦Plàÿ~⟧"
 
@@ -4311,7 +4368,7 @@ msgstr[1] "⟦Gràphîç pàçks · ~~~~~~{0} öñ~⟧"
 msgid "Game settings · custom"
 msgstr "⟦Gàmé séttîñgs · çûstöm~~~~~~~~⟧"
 
-#: port/frontend/shell/hub.cpp:248 port/frontend/shell/shell.cpp:2253
+#: port/frontend/shell/hub.cpp:248 port/frontend/shell/shell.cpp:2256
 msgid "Game settings"
 msgstr "⟦Gàmé séttîñgs~~~~~⟧"
 
@@ -4434,7 +4491,7 @@ msgstr[1] "⟦{0} îñstàlléd~~~~⟧"
 msgid "Everything found is installed already"
 msgstr "⟦Évérÿthîñg föûñd îs îñstàlléd àlréàdÿ~~~~~~~~~~~~~~⟧"
 
-#: port/frontend/shell/installs.cpp:319 port/frontend/shell/shell.cpp:3121
+#: port/frontend/shell/installs.cpp:319 port/frontend/shell/shell.cpp:3124
 msgid "Stopping…"
 msgstr "⟦Stöppîñg…~~~⟧"
 
@@ -4442,7 +4499,7 @@ msgstr "⟦Stöppîñg…~~~⟧"
 msgid "Stop"
 msgstr "⟦Stöp~⟧"
 
-#: port/frontend/shell/installs.cpp:325 port/frontend/shell/pages.cpp:1298 port/frontend/shell/shell.cpp:1940
+#: port/frontend/shell/installs.cpp:325 port/frontend/shell/pages.cpp:1298 port/frontend/shell/shell.cpp:1943
 msgid "Install"
 msgstr "⟦Îñstàll~~⟧"
 
@@ -4478,11 +4535,11 @@ msgstr[1] "⟦{0} ñéw tö îñstàll.~~~~~~⟧"
 msgid "Everything found is installed."
 msgstr "⟦Évérÿthîñg föûñd îs îñstàlléd.~~~~~~~~~~~~⟧"
 
-#: port/frontend/shell/installs.cpp:361 port/frontend/shell/settings.cpp:249 port/frontend/shell/settings.cpp:266 port/frontend/shell/settings.cpp:290 port/frontend/shell/shares.cpp:535 port/frontend/shell/shell.cpp:3080
+#: port/frontend/shell/installs.cpp:361 port/frontend/shell/settings.cpp:249 port/frontend/shell/settings.cpp:266 port/frontend/shell/settings.cpp:290 port/frontend/shell/shares.cpp:535 port/frontend/shell/shell.cpp:3083
 msgid "Game files"
 msgstr "⟦Gàmé fîlés~~~~⟧"
 
-#: port/frontend/shell/installs.cpp:362 port/frontend/shell/settings.cpp:1190 port/frontend/shell/shell.cpp:2261
+#: port/frontend/shell/installs.cpp:362 port/frontend/shell/settings.cpp:1190 port/frontend/shell/shell.cpp:2264
 msgid "Updates and DLC"
 msgstr "⟦Üpdàtés àñd DLÇ~~~~~~⟧"
 
@@ -4600,7 +4657,7 @@ msgstr "⟦Sétûp çhéçk~~~~⟧"
 msgid "Diagnostics"
 msgstr "⟦Dîàgñöstîçs~~~~⟧"
 
-#: port/frontend/shell/library.cpp:167 port/frontend/shell/shell.cpp:1314 port/frontend/shell/shell.cpp:3111
+#: port/frontend/shell/library.cpp:167 port/frontend/shell/shell.cpp:1317 port/frontend/shell/shell.cpp:3114
 msgid "Getting ready"
 msgstr "⟦Géttîñg réàdÿ~~~~~⟧"
 
@@ -4675,17 +4732,17 @@ msgstr "⟦Sûrprîsé mé~~~~⟧"
 
 #. the game menu: named groups of games the player makes (Couch co-op, say), shown on the Library's filter row
 #. What's new in 6.0: collections, groups of games the player makes
-#: port/frontend/shell/library.cpp:429 port/frontend/shell/shell.cpp:2272 port/frontend/shell/shell.cpp:2292 port/frontend/shell/shell.cpp:2318 port/frontend/shell/whatsnew.cpp:40
+#: port/frontend/shell/library.cpp:429 port/frontend/shell/shell.cpp:2275 port/frontend/shell/shell.cpp:2295 port/frontend/shell/shell.cpp:2321 port/frontend/shell/whatsnew.cpp:40
 msgid "Collections"
 msgstr "⟦Çölléçtîöñs~~~~⟧"
 
 #. the launcher's tabs
-#: port/frontend/shell/library.cpp:430 port/frontend/shell/library.cpp:761 port/frontend/shell/shell.cpp:1710 port/frontend/shell/shell.cpp:2292
+#: port/frontend/shell/library.cpp:430 port/frontend/shell/library.cpp:761 port/frontend/shell/shell.cpp:1713 port/frontend/shell/shell.cpp:2295
 msgctxt "tab"
 msgid "Library"
 msgstr "⟦Lîbràrÿ~~⟧"
 
-#: port/frontend/shell/library.cpp:430 port/frontend/shell/orbit.cpp:466 port/frontend/shell/shell.cpp:1906
+#: port/frontend/shell/library.cpp:430 port/frontend/shell/orbit.cpp:466 port/frontend/shell/shell.cpp:1909
 msgid "Sort"
 msgstr "⟦Sört~⟧"
 
@@ -4704,7 +4761,7 @@ msgstr "⟦Thîs wéék~~~⟧"
 msgid "Earlier"
 msgstr "⟦Éàrlîér~~⟧"
 
-#: port/frontend/shell/library.cpp:755 port/frontend/shell/orbit.cpp:368 port/frontend/shell/orbit.cpp:467 port/frontend/shell/shell.cpp:1910 port/frontend/shell/shell.cpp:1911 port/frontend/shell/shell.cpp:1913
+#: port/frontend/shell/library.cpp:755 port/frontend/shell/orbit.cpp:368 port/frontend/shell/orbit.cpp:467 port/frontend/shell/shell.cpp:1913 port/frontend/shell/shell.cpp:1914 port/frontend/shell/shell.cpp:1916
 msgid "Options"
 msgstr "⟦Öptîöñs~~⟧"
 
@@ -4717,7 +4774,7 @@ msgstr "⟦Löökîñg för ñéw gàmés…~~~~~~~~⟧"
 msgid "From the last search"
 msgstr "⟦Fröm thé làst séàrçh~~~~~~~~⟧"
 
-#: port/frontend/shell/library.cpp:774 port/frontend/shell/shell.cpp:1906 port/frontend/shell/shell.cpp:2938
+#: port/frontend/shell/library.cpp:774 port/frontend/shell/shell.cpp:1909 port/frontend/shell/shell.cpp:2941
 msgid "Search"
 msgstr "⟦Séàrçh~~⟧"
 
@@ -4730,7 +4787,7 @@ msgid "Sort: {0}"
 msgstr "⟦Sört: ~~{0}⟧"
 
 #. the Library's filters, each with its count after it
-#: port/frontend/shell/library.cpp:804 port/frontend/shell/shell.cpp:2289
+#: port/frontend/shell/library.cpp:804 port/frontend/shell/shell.cpp:2292
 msgctxt "filter"
 msgid "All"
 msgstr "⟦Åll~⟧"
@@ -4786,7 +4843,7 @@ msgstr "⟦Hömé~⟧"
 msgid "Console {0} of {1}"
 msgstr "⟦Çöñsölé ~~~{0} öf ~{1}⟧"
 
-#: port/frontend/shell/orbit.cpp:310 port/frontend/shell/shell.cpp:1876
+#: port/frontend/shell/orbit.cpp:310 port/frontend/shell/shell.cpp:1879
 msgid "Continue"
 msgstr "⟦Çöñtîñûé~~~⟧"
 
@@ -4795,7 +4852,7 @@ msgstr "⟦Çöñtîñûé~~~⟧"
 msgid "Recently played on every console"
 msgstr "⟦Réçéñtlÿ plàÿéd öñ évérÿ çöñsölé~~~~~~~~~~~~⟧"
 
-#: port/frontend/shell/orbit.cpp:332 port/frontend/shell/shell.cpp:1097 port/frontend/shell/timeline.cpp:1302 port/frontend/shell/timeline.cpp:1366
+#: port/frontend/shell/orbit.cpp:332 port/frontend/shell/shell.cpp:1100 port/frontend/shell/timeline.cpp:1302 port/frontend/shell/timeline.cpp:1366
 msgid "{0} h played"
 msgid_plural "{0} h played"
 msgstr[0] "⟦{0} h plàÿéd~~~⟧"
@@ -4822,7 +4879,7 @@ msgid "Turn the dial"
 msgstr "⟦Tûrñ thé dîàl~~~~~⟧"
 
 #. the hint for L2 and R2, which go to the Library and Settings tabs
-#: port/frontend/shell/orbit.cpp:469 port/frontend/shell/shell.cpp:1855
+#: port/frontend/shell/orbit.cpp:469 port/frontend/shell/shell.cpp:1858
 msgid "Library or Settings"
 msgstr "⟦Lîbràrÿ ör Séttîñgs~~~~~~~⟧"
 
@@ -4918,7 +4975,7 @@ msgstr "⟦Thîs pàçk hàs ñö désçrîptîöñ.~~~~~~~~~~~⟧"
 msgid "No presets"
 msgstr "⟦Ñö préséts~~~~⟧"
 
-#: port/frontend/shell/pages.cpp:362 port/frontend/shell/shell.cpp:1930
+#: port/frontend/shell/pages.cpp:362 port/frontend/shell/shell.cpp:1933
 msgid "Presets"
 msgstr "⟦Préséts~~⟧"
 
@@ -5351,7 +5408,7 @@ msgstr "⟦Ñöt föûñd (möst gàmés rûñ wîthöût ît)~~~~~~~~~~~~~~⟧"
 msgid "Missing (only .wud/.wux need it)"
 msgstr "⟦Mîssîñg (öñlÿ .wûd/.wûx ñééd ît)~~~~~~~~~~~~⟧"
 
-#: port/frontend/shell/pages.cpp:1448 port/frontend/shell/shell.cpp:2822 port/frontend/shell/shell.cpp:2849
+#: port/frontend/shell/pages.cpp:1448 port/frontend/shell/shell.cpp:2825 port/frontend/shell/shell.cpp:2852
 msgid "In use"
 msgstr "⟦Îñ ûsé~~⟧"
 
@@ -5934,7 +5991,7 @@ msgstr "⟦Höw thé pîçtûré îs sçàléd. Shàrp bîlîñéàr kééps pî
 #. Settings > Screens: a row that opens the touch screen's settings (where the touchpad's cursor lands, the right stick as the stylus)
 #. Settings > Performance: a row that opens Eden's accuracy shortcuts (Fast GPU, Unsafe CPU, ...); its value: how many are changed
 #. Settings > Launcher: a row that opens Larger text, High contrast, Reduce motion and Hold to confirm
-#: port/frontend/shell/porpoise_rows.cpp:175 port/frontend/shell/settings.cpp:898 port/frontend/shell/settings.cpp:1091 port/frontend/shell/settings.cpp:1603 port/frontend/shell/shell.cpp:1922 port/frontend/shell/switch_extras.cpp:73 port/frontend/shell/widgets.cpp:682
+#: port/frontend/shell/porpoise_rows.cpp:175 port/frontend/shell/settings.cpp:898 port/frontend/shell/settings.cpp:1091 port/frontend/shell/settings.cpp:1603 port/frontend/shell/shell.cpp:1925 port/frontend/shell/switch_extras.cpp:73 port/frontend/shell/widgets.cpp:682
 msgid "Default"
 msgstr "⟦Défàûlt~~⟧"
 
@@ -6566,7 +6623,7 @@ msgstr "⟦Mîçröphöñé~~~~⟧"
 msgid "Use the DualSense mic as the GameCube Microphone and Wii Speak."
 msgstr "⟦Üsé thé DûàlSéñsé mîç às thé GàméÇûbé Mîçröphöñé àñd Wîî Spéàk.~~~~~~~~~~~~~~~~~~~~~~~~~⟧"
 
-#: port/frontend/shell/porpoise_rows.cpp:318 port/frontend/shell/shell.cpp:2245
+#: port/frontend/shell/porpoise_rows.cpp:318 port/frontend/shell/shell.cpp:2248
 msgid "Resume where you left off"
 msgstr "⟦Résûmé whéré ÿöû léft öff~~~~~~~~~~⟧"
 
@@ -6942,7 +6999,7 @@ msgstr "⟦D-pàd léft~~~~⟧"
 msgid "D-pad right"
 msgstr "⟦D-pàd rîght~~~~⟧"
 
-#: port/frontend/shell/porpoise_rows.cpp:616 port/frontend/shell/shell.cpp:3054 port/frontend/shell/shell.cpp:3092
+#: port/frontend/shell/porpoise_rows.cpp:616 port/frontend/shell/shell.cpp:3057 port/frontend/shell/shell.cpp:3095
 msgid "Select"
 msgstr "⟦Séléçt~~⟧"
 
@@ -7616,7 +7673,7 @@ msgstr "⟦Thé émûlàtéd çöñsölé, àñd höw ît rûñs.~~~~~~~~~~~~~~~
 msgid "Where this system's games are."
 msgstr "⟦Whéré thîs sÿstém's gàmés àré.~~~~~~~~~~~~⟧"
 
-#: port/frontend/shell/settings.cpp:250 port/frontend/shell/settings.cpp:351 port/frontend/shell/shell.cpp:2256
+#: port/frontend/shell/settings.cpp:250 port/frontend/shell/settings.cpp:351 port/frontend/shell/shell.cpp:2259
 msgid "Saves"
 msgstr "⟦Sàvés~~⟧"
 
@@ -7810,7 +7867,7 @@ msgstr "⟦Îñstàlléd: ~~~~{0}⟧"
 msgid "{0}: Cross to install"
 msgstr "⟦{0}: Çröss tö îñstàll~~~~~~~⟧"
 
-#: port/frontend/shell/settings.cpp:412 port/frontend/shell/settings.cpp:1426 port/frontend/shell/settings.cpp:1544 port/frontend/shell/shell.cpp:2995
+#: port/frontend/shell/settings.cpp:412 port/frontend/shell/settings.cpp:1426 port/frontend/shell/settings.cpp:1544 port/frontend/shell/shell.cpp:2998
 msgid "Downloading…"
 msgstr "⟦Döwñlöàdîñg…~~~~⟧"
 
@@ -8881,7 +8938,7 @@ msgid "Installs a CIA file. Updates and DLC join their game; games join the libr
 msgstr "⟦Îñstàlls à ÇÎÅ fîlé. Üpdàtés àñd DLÇ jöîñ théîr gàmé; gàmés jöîñ thé lîbràrÿ. Çîrçlé çàñçéls.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~⟧"
 
 #. Settings > Game files: a row opening the list of every system's folder; {0} how many have a folder of their own, {1} how many systems
-#: port/frontend/shell/settings.cpp:1221 port/frontend/shell/shell.cpp:3081
+#: port/frontend/shell/settings.cpp:1221 port/frontend/shell/shell.cpp:3084
 msgid "A folder for each system"
 msgstr "⟦Å földér för éàçh sÿstém~~~~~~~~~⟧"
 
@@ -9413,7 +9470,7 @@ msgstr "⟦Wîî Ü gàmés, îñ thé bàr.~~~~~~~~~⟧"
 msgid "Show the Wii U in the bar. Hidden systems keep their games and settings. At least one stays on."
 msgstr "⟦Shöw thé Wîî Ü îñ thé bàr. Hîddéñ sÿstéms kéép théîr gàmés àñd séttîñgs. Åt léàst öñé stàÿs öñ.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~⟧"
 
-#: port/frontend/shell/settings.cpp:1573 port/frontend/shell/shell.cpp:1871
+#: port/frontend/shell/settings.cpp:1573 port/frontend/shell/shell.cpp:1874
 msgid "Switch"
 msgstr "⟦Swîtçh~~⟧"
 
@@ -10091,7 +10148,7 @@ msgstr "⟦Å pört îs à ñûmbér fröm 1 tö 65535.~~~~~~~~~~~~~~⟧"
 msgid "Password (leave empty if none)"
 msgstr "⟦Pàsswörd (léàvé émptÿ îf ñöñé)~~~~~~~~~~~~⟧"
 
-#: port/frontend/shell/settings.cpp:3208 port/frontend/shell/shell.cpp:1312 port/frontend/shell/shell.cpp:3111
+#: port/frontend/shell/settings.cpp:3208 port/frontend/shell/shell.cpp:1315 port/frontend/shell/shell.cpp:3114
 msgid "Starting the 3DS"
 msgstr "⟦Stàrtîñg thé 3DS~~~~~~⟧"
 
@@ -10147,7 +10204,7 @@ msgstr[1] "⟦{0} gàmés délétéd (~~~~~~{1})⟧"
 msgid "Downloading in the background"
 msgstr "⟦Döwñlöàdîñg îñ thé bàçkgröûñd~~~~~~~~~~~⟧"
 
-#: port/frontend/shell/settings.cpp:3319 port/frontend/shell/shell.cpp:500
+#: port/frontend/shell/settings.cpp:3319 port/frontend/shell/shell.cpp:503
 msgid "Close Playtendoh and start it again from the home screen to move the folders."
 msgstr "⟦Çlösé Plàÿtéñdöh àñd stàrt ît àgàîñ fröm thé hömé sçrééñ tö mövé thé földérs.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~⟧"
 
@@ -10267,7 +10324,7 @@ msgstr "⟦Ñö JÎT mémörÿ: Wîî Ü gàmés wîll rûñ mûçh slöwér~~~~
 msgid "Wii U games will run much slower. Add PPSA99360 to your HEN's app jailbreak list, then start Playtendoh again. Settings > Diagnostics shows what it got."
 msgstr "⟦Wîî Ü gàmés wîll rûñ mûçh slöwér. Ådd PPSÅ99360 tö ÿöûr HÉÑ's àpp jàîlbréàk lîst, théñ stàrt Plàÿtéñdöh àgàîñ. Séttîñgs > Dîàgñöstîçs shöws whàt ît göt.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~⟧"
 
-#: port/frontend/shell/setup.cpp:191 port/frontend/shell/shell.cpp:889 port/libretro/game.cpp:1078 port/main_ps5.cpp:762 port/retro/launch.cpp:38 port/retro/launch.cpp:48
+#: port/frontend/shell/setup.cpp:191 port/frontend/shell/shell.cpp:892 port/libretro/game.cpp:1078 port/main_ps5.cpp:762 port/retro/launch.cpp:38 port/retro/launch.cpp:48
 msgid "This system's emulator is not in this copy of Playtendoh."
 msgstr "⟦Thîs sÿstém's émûlàtör îs ñöt îñ thîs çöpÿ öf Plàÿtéñdöh.~~~~~~~~~~~~~~~~~~~~~~⟧"
 
@@ -10814,433 +10871,433 @@ msgstr "⟦Tûrñ öñ fîlé shàrîñg för à földér öñ ÿöûr çömpût
 msgid "Nothing is ever written to it."
 msgstr "⟦Ñöthîñg îs évér wrîttéñ tö ît.~~~~~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:233
+#: port/frontend/shell/shell.cpp:234
 msgid "Saved your place in the library"
 msgstr "⟦Sàvéd ÿöûr plàçé îñ thé lîbràrÿ~~~~~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:237 port/frontend/shell/shell.cpp:1202 port/frontend/shell/shell.cpp:1216 port/frontend/shell/shell.cpp:1357
+#: port/frontend/shell/shell.cpp:238 port/frontend/shell/shell.cpp:1205 port/frontend/shell/shell.cpp:1219 port/frontend/shell/shell.cpp:1360
 msgid "The game could not start"
 msgstr "⟦Thé gàmé çöûld ñöt stàrt~~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:242
+#: port/frontend/shell/shell.cpp:243
 msgid "Your settings could not be read"
 msgstr "⟦Yöûr séttîñgs çöûld ñöt bé réàd~~~~~~~~~~~~⟧"
 
 #. {0} is where the unreadable settings file is kept: /data/ps5cemu/ps5cemu.json.broken
-#: port/frontend/shell/shell.cpp:244
+#: port/frontend/shell/shell.cpp:245
 msgid "The settings file ps5cemu.json is damaged, so settings were reset. The old file is kept as {0}; fix it on a computer and put it back as ps5cemu.json if you like."
 msgstr "⟦Thé séttîñgs fîlé ps5çémû.jsöñ îs dàmàgéd, sö séttîñgs wéré rését. Thé öld fîlé îs képt às ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{0}; fîx ît öñ à çömpûtér àñd pût ît bàçk às ps5çémû.jsöñ îf ÿöû lîké.~~~~~~~~~~~~~~~~~~~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:250
+#: port/frontend/shell/shell.cpp:251
 msgid "Playtendoh closed after a crash"
 msgstr "⟦Plàÿtéñdöh çlöséd àftér à çràsh~~~~~~~~~~~~⟧"
 
 #. {0} is the crash report's first line in the log, as it is: "signal 11 at 0x7f3a..."
-#: port/frontend/shell/shell.cpp:252
+#: port/frontend/shell/shell.cpp:253
 msgid "Last time, Playtendoh crashed: {0}. To report it on GitHub, use Settings > Diagnostics > Copy logs to USB."
 msgstr "⟦Làst tîmé, Plàÿtéñdöh çràshéd: ~~~~~~~~~~~~{0}. Tö répört ît öñ GîtHûb, ûsé Séttîñgs > Dîàgñöstîçs > Çöpÿ lögs tö ÜSB.~~~~~~~~~~~~~~~~~~~~~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:265
+#: port/frontend/shell/shell.cpp:266
 msgid "Some files could not move"
 msgstr "⟦Sömé fîlés çöûld ñöt mövé~~~~~~~~~~⟧"
 
 #. {0} names the systems whose files did not move into folders of their own: "Wii U, Nintendo 3DS"
-#: port/frontend/shell/shell.cpp:267
+#: port/frontend/shell/shell.cpp:268
 msgid "{0}: their files were left in place and nothing was lost. See the logs with Settings > Diagnostics > Copy logs to USB."
 msgstr "⟦{0}: théîr fîlés wéré léft îñ plàçé àñd ñöthîñg wàs löst. Séé thé lögs wîth Séttîñgs > Dîàgñöstîçs > Çöpÿ lögs tö ÜSB.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:274
+#: port/frontend/shell/shell.cpp:275
 msgid "The folders have moved"
 msgstr "⟦Thé földérs hàvé mövéd~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:546
+#: port/frontend/shell/shell.cpp:549
 msgid "EmulationStation is in. It opens next time Playtendoh starts."
 msgstr "⟦ÉmûlàtîöñStàtîöñ îs îñ. Ît öpéñs ñéxt tîmé Plàÿtéñdöh stàrts.~~~~~~~~~~~~~~~~~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:547
+#: port/frontend/shell/shell.cpp:550
 msgid "EmulationStation is in. Choose it in Settings > Launcher > Layout."
 msgstr "⟦ÉmûlàtîöñStàtîöñ îs îñ. Çhöösé ît îñ Séttîñgs > Làûñçhér > Làÿöût.~~~~~~~~~~~~~~~~~~~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:952
+#: port/frontend/shell/shell.cpp:955
 msgid "The Wii U emulator did not start: {0}"
 msgstr "⟦Thé Wîî Ü émûlàtör dîd ñöt stàrt: ~~~~~~~~~~~~~{0}⟧"
 
-#: port/frontend/shell/shell.cpp:1096 port/frontend/shell/timeline.cpp:1302 port/frontend/shell/timeline.cpp:1366
+#: port/frontend/shell/shell.cpp:1099 port/frontend/shell/timeline.cpp:1302 port/frontend/shell/timeline.cpp:1366
 msgid "{0} min played"
 msgid_plural "{0} min played"
 msgstr[0] "⟦{0} mîñ plàÿéd~~~~⟧"
 msgstr[1] "⟦{0} mîñ plàÿéd~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:1112
+#: port/frontend/shell/shell.cpp:1115
 msgid "today"
 msgstr "⟦tödàÿ~~⟧"
 
-#: port/frontend/shell/shell.cpp:1114
+#: port/frontend/shell/shell.cpp:1117
 msgid "yesterday"
 msgstr "⟦ÿéstérdàÿ~~~⟧"
 
-#: port/frontend/shell/shell.cpp:1116
+#: port/frontend/shell/shell.cpp:1119
 msgid "{0} day ago"
 msgid_plural "{0} days ago"
 msgstr[0] "⟦{0} dàÿ àgö~~~⟧"
 msgstr[1] "⟦{0} dàÿs àgö~~~⟧"
 
-#: port/frontend/shell/shell.cpp:1118
+#: port/frontend/shell/shell.cpp:1121
 msgid "{0} week ago"
 msgid_plural "{0} weeks ago"
 msgstr[0] "⟦{0} wéék àgö~~~⟧"
 msgstr[1] "⟦{0} wééks àgö~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:1119
+#: port/frontend/shell/shell.cpp:1122
 msgid "{0} month ago"
 msgid_plural "{0} months ago"
 msgstr[0] "⟦{0} möñth àgö~~~~⟧"
 msgstr[1] "⟦{0} möñths àgö~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:1194
+#: port/frontend/shell/shell.cpp:1197
 msgid "Still starting"
 msgstr "⟦Stîll stàrtîñg~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:1203
+#: port/frontend/shell/shell.cpp:1206
 msgid "Switch games need your keys: prod.keys (and title.keys) from your own Switch, in {0}/keys. The Setup check shows what else is missing."
 msgstr "⟦Swîtçh gàmés ñééd ÿöûr kéÿs: pröd.kéÿs (àñd tîtlé.kéÿs) fröm ÿöûr öwñ Swîtçh, îñ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{0}/kéÿs. Thé Sétûp çhéçk shöws whàt élsé îs mîssîñg.~~~~~~~~~~~~~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:1311
+#: port/frontend/shell/shell.cpp:1314
 msgid "Starting emulator"
 msgstr "⟦Stàrtîñg émûlàtör~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:1311
+#: port/frontend/shell/shell.cpp:1314
 msgid "Starting the DS"
 msgstr "⟦Stàrtîñg thé DS~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:1313
+#: port/frontend/shell/shell.cpp:1316
 msgid "Starting the Switch"
 msgstr "⟦Stàrtîñg thé Swîtçh~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:1400
+#: port/frontend/shell/shell.cpp:1403
 msgid "Adding {0} to the home screen…"
 msgstr "⟦Åddîñg ~~{0} tö thé hömé sçrééñ…~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:1407
+#: port/frontend/shell/shell.cpp:1410
 msgid "Removing {0} from the home screen…"
 msgstr "⟦Rémövîñg ~~~{0} fröm thé hömé sçrééñ…~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:1419
+#: port/frontend/shell/shell.cpp:1422
 msgid "The tile could not be removed"
 msgstr "⟦Thé tîlé çöûld ñöt bé rémövéd~~~~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:1419
+#: port/frontend/shell/shell.cpp:1422
 msgid "The tile could not be added"
 msgstr "⟦Thé tîlé çöûld ñöt bé àddéd~~~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:1425
+#: port/frontend/shell/shell.cpp:1428
 msgid "Tile removed"
 msgstr "⟦Tîlé rémövéd~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:1426
+#: port/frontend/shell/shell.cpp:1429
 msgid "If it's still on the home screen, delete it there (Options, then Delete)."
 msgstr "⟦Îf ît's stîll öñ thé hömé sçrééñ, délété ît théré (Öptîöñs, théñ Délété).~~~~~~~~~~~~~~~~~~~~~~~~~~~~~⟧"
 
 #. {0} is the tile's folder, /data/homebrew/PPSA99xxx
-#: port/frontend/shell/shell.cpp:1430
+#: port/frontend/shell/shell.cpp:1433
 msgid "Tile updated"
 msgstr "⟦Tîlé ûpdàtéd~~~~⟧"
 
 #. {0} is the tile's folder, /data/homebrew/PPSA99xxx
-#: port/frontend/shell/shell.cpp:1430
+#: port/frontend/shell/shell.cpp:1433
 msgid "Tile added"
 msgstr "⟦Tîlé àddéd~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:1431
+#: port/frontend/shell/shell.cpp:1434
 msgid "Saved in {0}. It will appear on the home screen; if it doesn't, restart the console. The tile starts the game in Playtendoh."
 msgstr "⟦Sàvéd îñ ~~~{0}. Ît wîll àppéàr öñ thé hömé sçrééñ; îf ît döésñ't, réstàrt thé çöñsölé. Thé tîlé stàrts thé gàmé îñ Plàÿtéñdöh.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:1445
+#: port/frontend/shell/shell.cpp:1448
 msgid "The tile's game could not start"
 msgstr "⟦Thé tîlé's gàmé çöûld ñöt stàrt~~~~~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:1473
+#: port/frontend/shell/shell.cpp:1476
 msgid "Not in the library: {0}"
 msgstr "⟦Ñöt îñ thé lîbràrÿ: ~~~~~~~~{0}⟧"
 
 #. the launcher's tabs
-#: port/frontend/shell/shell.cpp:1710
+#: port/frontend/shell/shell.cpp:1713
 msgctxt "tab"
 msgid "Settings"
 msgstr "⟦Séttîñgs~~~⟧"
 
 #. the Timeline's name under it in the console lists
 #. the view of every console's games on one shelf, a stop of its own in the console lists
-#: port/frontend/shell/shell.cpp:1807 port/frontend/shell/timeline.cpp:473 port/frontend/shell/timeline.cpp:961
+#: port/frontend/shell/shell.cpp:1810 port/frontend/shell/timeline.cpp:473 port/frontend/shell/timeline.cpp:961
 msgid "Timeline"
 msgstr "⟦Tîmélîñé~~~⟧"
 
-#: port/frontend/shell/shell.cpp:1861
+#: port/frontend/shell/shell.cpp:1864
 msgid "Hide"
 msgstr "⟦Hîdé~⟧"
 
-#: port/frontend/shell/shell.cpp:1861
+#: port/frontend/shell/shell.cpp:1864
 msgid "Show"
 msgstr "⟦Shöw~⟧"
 
-#: port/frontend/shell/shell.cpp:1861 port/frontend/shell/shell.cpp:1863 port/frontend/shell/shell.cpp:1919 port/frontend/shell/shell.cpp:2967
+#: port/frontend/shell/shell.cpp:1864 port/frontend/shell/shell.cpp:1866 port/frontend/shell/shell.cpp:1922 port/frontend/shell/shell.cpp:2970
 msgid "Done"
 msgstr "⟦Döñé~⟧"
 
-#: port/frontend/shell/shell.cpp:1865 port/frontend/shell/shell.cpp:1935 port/frontend/shell/shell.cpp:1939 port/frontend/shell/shell.cpp:3057 port/frontend/shell/shell.cpp:3125
+#: port/frontend/shell/shell.cpp:1868 port/frontend/shell/shell.cpp:1938 port/frontend/shell/shell.cpp:1942 port/frontend/shell/shell.cpp:3060 port/frontend/shell/shell.cpp:3128
 msgid "Cancel"
 msgstr "⟦Çàñçél~~⟧"
 
-#: port/frontend/shell/shell.cpp:1867 port/frontend/shell/shell.cpp:1869 port/frontend/shell/shell.cpp:1925
+#: port/frontend/shell/shell.cpp:1870 port/frontend/shell/shell.cpp:1872 port/frontend/shell/shell.cpp:1928
 msgid "Close"
 msgstr "⟦Çlösé~~⟧"
 
-#: port/frontend/shell/shell.cpp:1878 port/frontend/shell/shell.cpp:1921 port/frontend/shell/shell.cpp:1922 port/frontend/shell/shell.cpp:1926 port/frontend/shell/shell.cpp:1932
+#: port/frontend/shell/shell.cpp:1881 port/frontend/shell/shell.cpp:1924 port/frontend/shell/shell.cpp:1925 port/frontend/shell/shell.cpp:1929 port/frontend/shell/shell.cpp:1935
 msgid "More info"
 msgstr "⟦Möré îñfö~~~⟧"
 
-#: port/frontend/shell/shell.cpp:1879 port/frontend/shell/shell.cpp:1888 port/frontend/shell/welcome.cpp:100
+#: port/frontend/shell/shell.cpp:1882 port/frontend/shell/shell.cpp:1891 port/frontend/shell/welcome.cpp:100
 msgid "Continue to the Library"
 msgstr "⟦Çöñtîñûé tö thé Lîbràrÿ~~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:1884
+#: port/frontend/shell/shell.cpp:1887
 msgid "Change the language"
 msgstr "⟦Çhàñgé thé làñgûàgé~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:1887
+#: port/frontend/shell/shell.cpp:1890
 msgid "Check again"
 msgstr "⟦Çhéçk àgàîñ~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:1906
+#: port/frontend/shell/shell.cpp:1909
 msgid "Filters"
 msgstr "⟦Fîltérs~~⟧"
 
-#: port/frontend/shell/shell.cpp:1913
+#: port/frontend/shell/shell.cpp:1916
 msgid "Back to the buttons"
 msgstr "⟦Bàçk tö thé bûttöñs~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:1914
+#: port/frontend/shell/shell.cpp:1917
 msgid "Scroll"
 msgstr "⟦Sçröll~~⟧"
 
-#: port/frontend/shell/shell.cpp:1919 port/frontend/shell/shell.cpp:1925
+#: port/frontend/shell/shell.cpp:1922 port/frontend/shell/shell.cpp:1928
 msgid "Pages"
 msgstr "⟦Pàgés~~⟧"
 
-#: port/frontend/shell/shell.cpp:1929
+#: port/frontend/shell/shell.cpp:1932
 msgid "Back to the packs"
 msgstr "⟦Bàçk tö thé pàçks~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:1930
+#: port/frontend/shell/shell.cpp:1933
 msgid "On / off"
 msgstr "⟦Öñ / öff~~~⟧"
 
-#: port/frontend/shell/shell.cpp:1936
+#: port/frontend/shell/shell.cpp:1939
 msgid "Assign"
 msgstr "⟦Åssîgñ~~⟧"
 
-#: port/frontend/shell/shell.cpp:1936
+#: port/frontend/shell/shell.cpp:1939
 msgid "Clear"
 msgstr "⟦Çléàr~~⟧"
 
-#: port/frontend/shell/shell.cpp:1940
+#: port/frontend/shell/shell.cpp:1943
 msgid "Use this folder"
 msgstr "⟦Üsé thîs földér~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:1943
+#: port/frontend/shell/shell.cpp:1946
 msgid "Number"
 msgstr "⟦Ñûmbér~~⟧"
 
-#: port/frontend/shell/shell.cpp:1943
+#: port/frontend/shell/shell.cpp:1946
 msgid "Keep"
 msgstr "⟦Kéép~⟧"
 
-#: port/frontend/shell/shell.cpp:1944
+#: port/frontend/shell/shell.cpp:1947
 msgid "Edit"
 msgstr "⟦Édît~⟧"
 
-#: port/frontend/shell/shell.cpp:1944
+#: port/frontend/shell/shell.cpp:1947
 msgid "Connect"
 msgstr "⟦Çöññéçt~~⟧"
 
-#: port/frontend/shell/shell.cpp:1944
+#: port/frontend/shell/shell.cpp:1947
 msgid "Hold to set up"
 msgstr "⟦Höld tö sét ûp~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:2248
+#: port/frontend/shell/shell.cpp:2251
 msgid "Game hub"
 msgstr "⟦Gàmé hûb~~~⟧"
 
-#: port/frontend/shell/shell.cpp:2253
+#: port/frontend/shell/shell.cpp:2256
 msgid "Game settings: custom"
 msgstr "⟦Gàmé séttîñgs: çûstöm~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:2260
+#: port/frontend/shell/shell.cpp:2263
 msgid "Add mods from USB"
 msgstr "⟦Ådd möds fröm ÜSB~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:2269 port/frontend/shell/shell.cpp:2722 port/frontend/shell/shell.cpp:2737
+#: port/frontend/shell/shell.cpp:2272 port/frontend/shell/shell.cpp:2725 port/frontend/shell/shell.cpp:2740
 msgid "Remove its update or DLC"
 msgstr "⟦Rémövé îts ûpdàté ör DLÇ~~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:2270
+#: port/frontend/shell/shell.cpp:2273
 msgid "Not a favourite"
 msgstr "⟦Ñöt à fàvöûrîté~~~~~~⟧"
 
 #. the game menu: a game left out of the Library's list (for demos and clutter), or put back
-#: port/frontend/shell/shell.cpp:2274 port/frontend/shell/shell.cpp:2774
+#: port/frontend/shell/shell.cpp:2277 port/frontend/shell/shell.cpp:2777
 msgid "Show in the Library"
 msgstr "⟦Shöw îñ thé Lîbràrÿ~~~~~~~⟧"
 
 #. the game menu: a game left out of the Library's list (for demos and clutter), or put back
-#: port/frontend/shell/shell.cpp:2274
+#: port/frontend/shell/shell.cpp:2277
 msgid "Hide from the Library"
 msgstr "⟦Hîdé fröm thé Lîbràrÿ~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:2276
+#: port/frontend/shell/shell.cpp:2279
 msgid "Remove from home screen"
 msgstr "⟦Rémövé fröm hömé sçrééñ~~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:2278
+#: port/frontend/shell/shell.cpp:2281
 msgid "Add to home screen"
 msgstr "⟦Ådd tö hömé sçrééñ~~~~~~~⟧"
 
 #. the first choice of a game's Collections: a collection named with the keyboard, the game put in it
-#: port/frontend/shell/shell.cpp:2302 port/frontend/shell/shell.cpp:2321
+#: port/frontend/shell/shell.cpp:2305 port/frontend/shell/shell.cpp:2324
 msgid "New collection"
 msgstr "⟦Ñéw çölléçtîöñ~~~~~⟧"
 
 #. a game's collection could not be written to the console's storage
-#: port/frontend/shell/shell.cpp:2309
+#: port/frontend/shell/shell.cpp:2312
 msgid "Could not save the collection"
 msgstr "⟦Çöûld ñöt sàvé thé çölléçtîöñ~~~~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:2708
+#: port/frontend/shell/shell.cpp:2711
 msgid "The update"
 msgstr "⟦Thé ûpdàté~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:2713
+#: port/frontend/shell/shell.cpp:2716
 msgid "The DLC"
 msgstr "⟦Thé DLÇ~~⟧"
 
-#: port/frontend/shell/shell.cpp:2718
+#: port/frontend/shell/shell.cpp:2721
 msgid "The update and the DLC"
 msgstr "⟦Thé ûpdàté àñd thé DLÇ~~~~~~~~⟧"
 
 #. after a Wii U game's update or DLC is removed: Updates and DLC (the game's Options) installs it again
-#: port/frontend/shell/shell.cpp:2729
+#: port/frontend/shell/shell.cpp:2732
 msgid "Removed. Reinstall it from Updates and DLC."
 msgstr "⟦Rémövéd. Réîñstàll ît fröm Üpdàtés àñd DLÇ.~~~~~~~~~~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:2731
+#: port/frontend/shell/shell.cpp:2734
 msgid "Removed. Reinstall it with Install a CIA file."
 msgstr "⟦Rémövéd. Réîñstàll ît wîth Îñstàll à ÇÎÅ fîlé.~~~~~~~~~~~~~~~~~~⟧"
 
 #. {0} is the system's reason, as it gives it
-#: port/frontend/shell/shell.cpp:2736
+#: port/frontend/shell/shell.cpp:2739
 msgid "Some files could not be removed: {0}"
 msgstr "⟦Sömé fîlés çöûld ñöt bé rémövéd: ~~~~~~~~~~~~~{0}⟧"
 
-#: port/frontend/shell/shell.cpp:2763
+#: port/frontend/shell/shell.cpp:2766
 msgid "Added to Favourites"
 msgstr "⟦Åddéd tö Fàvöûrîtés~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:2763
+#: port/frontend/shell/shell.cpp:2766
 msgid "Removed from Favourites"
 msgstr "⟦Rémövéd fröm Fàvöûrîtés~~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:2776
+#: port/frontend/shell/shell.cpp:2779
 msgid "Hidden. Find it with the Hidden filter or Search."
 msgstr "⟦Hîddéñ. Fîñd ît wîth thé Hîddéñ fîltér ör Séàrçh.~~~~~~~~~~~~~~~~~~~⟧"
 
 #. a game just hidden from the Library while its filters' row is off: Search still lists it
-#: port/frontend/shell/shell.cpp:2779
+#: port/frontend/shell/shell.cpp:2782
 msgid "Hidden. Find it with Search."
 msgstr "⟦Hîddéñ. Fîñd ît wîth Séàrçh.~~~~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:2989
+#: port/frontend/shell/shell.cpp:2992
 msgid "Playtendoh {0} is out"
 msgstr "⟦Plàÿtéñdöh ~~~~{0} îs öût~~⟧"
 
-#: port/frontend/shell/shell.cpp:2990
+#: port/frontend/shell/shell.cpp:2993
 msgid "You have {0}. Download and install it now? Your games, saves and settings are kept."
 msgstr "⟦Yöû hàvé ~~~{0}. Döwñlöàd àñd îñstàll ît ñöw? Yöûr gàmés, sàvés àñd séttîñgs àré képt.~~~~~~~~~~~~~~~~~~~~~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:2991
+#: port/frontend/shell/shell.cpp:2994
 msgid "Update now"
 msgstr "⟦Üpdàté ñöw~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:2991 port/frontend/shell/shell.cpp:3015 port/frontend/shell/shell.cpp:3054 port/frontend/shell/shell.cpp:3075 port/frontend/shell/shell.cpp:3092
+#: port/frontend/shell/shell.cpp:2994 port/frontend/shell/shell.cpp:3018 port/frontend/shell/shell.cpp:3057 port/frontend/shell/shell.cpp:3078 port/frontend/shell/shell.cpp:3095
 msgid "Later"
 msgstr "⟦Làtér~~⟧"
 
-#: port/frontend/shell/shell.cpp:2991
+#: port/frontend/shell/shell.cpp:2994
 msgid "Skip this version"
 msgstr "⟦Skîp thîs vérsîöñ~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:2994 port/frontend/shell/shell.cpp:2999 port/frontend/shell/shell.cpp:3004
+#: port/frontend/shell/shell.cpp:2997 port/frontend/shell/shell.cpp:3002 port/frontend/shell/shell.cpp:3007
 msgid "Updating to {0}"
 msgstr "⟦Üpdàtîñg tö ~~~~{0}⟧"
 
-#: port/frontend/shell/shell.cpp:2995
+#: port/frontend/shell/shell.cpp:2998
 msgid "Downloading: {0} of {1} MB"
 msgstr "⟦Döwñlöàdîñg: ~~~~~{0} öf ~{1} MB~⟧"
 
-#: port/frontend/shell/shell.cpp:3000
+#: port/frontend/shell/shell.cpp:3003
 msgid "Checking the download"
 msgstr "⟦Çhéçkîñg thé döwñlöàd~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:3005
+#: port/frontend/shell/shell.cpp:3008
 msgid "Installing"
 msgstr "⟦Îñstàllîñg~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:3009
+#: port/frontend/shell/shell.cpp:3012
 msgid "{0} is installed"
 msgstr "⟦{0} îs îñstàlléd~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:3011 port/frontend/shell/shell.cpp:3068
+#: port/frontend/shell/shell.cpp:3014 port/frontend/shell/shell.cpp:3071
 msgid "Restarting Playtendoh…"
 msgstr "⟦Réstàrtîñg Plàÿtéñdöh…~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:3015 port/frontend/shell/shell.cpp:3020
+#: port/frontend/shell/shell.cpp:3018 port/frontend/shell/shell.cpp:3023
 msgid "Restart now"
 msgstr "⟦Réstàrt ñöw~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:3019
+#: port/frontend/shell/shell.cpp:3022
 msgid "Playtendoh will restart to finish the update."
 msgstr "⟦Plàÿtéñdöh wîll réstàrt tö fîñîsh thé ûpdàté.~~~~~~~~~~~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:3024
+#: port/frontend/shell/shell.cpp:3027
 msgid "The update did not finish"
 msgstr "⟦Thé ûpdàté dîd ñöt fîñîsh~~~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:3025
+#: port/frontend/shell/shell.cpp:3028
 msgid "Playtendoh is still {0}."
 msgstr "⟦Plàÿtéñdöh îs stîll ~~~~~~~~{0}.⟧"
 
-#: port/frontend/shell/shell.cpp:3028
+#: port/frontend/shell/shell.cpp:3031
 msgid "Checking for updates"
 msgstr "⟦Çhéçkîñg för ûpdàtés~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:3034
+#: port/frontend/shell/shell.cpp:3037
 msgid "Playtendoh update"
 msgstr "⟦Plàÿtéñdöh ûpdàté~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:3055
+#: port/frontend/shell/shell.cpp:3058
 msgid "Restart"
 msgstr "⟦Réstàrt~~⟧"
 
 #. {0} lists the four folders: /data/cemu, /data/azahar, /data/melonds, /data/eden
-#: port/frontend/shell/shell.cpp:3071
+#: port/frontend/shell/shell.cpp:3074
 msgid "Your Wii U, 3DS, DS and Switch files will move into their own folders in {0}. It only takes a moment. Playtendoh restarts to do it."
 msgstr "⟦Yöûr Wîî Ü, 3DS, DS àñd Swîtçh fîlés wîll mövé îñtö théîr öwñ földérs îñ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{0}. Ît öñlÿ tàkés à möméñt. Plàÿtéñdöh réstàrts tö dö ît.~~~~~~~~~~~~~~~~~~~~~~⟧"
 
-#: port/frontend/shell/shell.cpp:3075
+#: port/frontend/shell/shell.cpp:3078
 msgid "Reorganize"
 msgstr "⟦Réörgàñîzé~~~~⟧"
 
 #. under an archived game's name while it is unpacked, the first time it starts
-#: port/frontend/shell/shell.cpp:3114
+#: port/frontend/shell/shell.cpp:3117
 msgid "Unpacking the game. This only happens once."
 msgstr "⟦Üñpàçkîñg thé gàmé. Thîs öñlÿ hàppéñs öñçé.~~~~~~~~~~~~~~~~~⟧"
 

@@ -478,7 +478,7 @@ msgstr ""
 msgid "the PS5 Vulkan driver did not start"
 msgstr "PS5’ens Vulkan-driver startede ikke"
 
-#: port/app/emulator.cpp:532 port/frontend/shell/settings.cpp:3312 port/frontend/shell/shell.cpp:2410
+#: port/app/emulator.cpp:532 port/frontend/shell/settings.cpp:3312 port/frontend/shell/shell.cpp:2413
 msgid "Playtendoh cannot write to {0}. Is the HEN loaded?"
 msgstr "Playtendoh kan ikke skrive til {0}. Er HEN indlæst?"
 
@@ -1399,7 +1399,7 @@ msgstr "Læser pakkerne…"
 msgid "There are no graphic packs for this game."
 msgstr "Fællesskabets grafikpakker har ingen til dette spil."
 
-#: port/app/ingame.cpp:275 port/app/ingame.cpp:397 port/frontend/shell/hub.cpp:243 port/frontend/shell/pages.cpp:306 port/frontend/shell/shell.cpp:2259
+#: port/app/ingame.cpp:275 port/app/ingame.cpp:397 port/frontend/shell/hub.cpp:243 port/frontend/shell/pages.cpp:306 port/frontend/shell/shell.cpp:2262
 #, menu
 msgid "Graphic packs"
 msgstr "Grafikpakker"
@@ -1743,12 +1743,12 @@ msgid "Running"
 msgstr "Kører"
 
 #. the first start's setup: Cross on its last step
-#: port/app/ingame.cpp:710 port/app/ingame3ds.cpp:1147 port/eden/ingame.cpp:831 port/frontend/shell/firststart.cpp:264 port/frontend/shell/orbit.cpp:461 port/frontend/shell/orbit.cpp:821 port/frontend/shell/reports.cpp:155 port/frontend/shell/setup.cpp:432 port/frontend/shell/shares.cpp:524 port/frontend/shell/shell.cpp:1865 port/frontend/shell/shell.cpp:1869 port/frontend/shell/shell.cpp:1904 port/frontend/shell/shell.cpp:1913 port/frontend/shell/shell.cpp:1921 port/frontend/shell/shell.cpp:1929 port/frontend/shell/shell.cpp:1932 port/frontend/shell/shell.cpp:3054 port/frontend/shell/shell.cpp:3092
+#: port/app/ingame.cpp:710 port/app/ingame3ds.cpp:1147 port/eden/ingame.cpp:831 port/frontend/shell/firststart.cpp:264 port/frontend/shell/orbit.cpp:461 port/frontend/shell/orbit.cpp:821 port/frontend/shell/reports.cpp:155 port/frontend/shell/setup.cpp:432 port/frontend/shell/shares.cpp:524 port/frontend/shell/shell.cpp:1868 port/frontend/shell/shell.cpp:1872 port/frontend/shell/shell.cpp:1907 port/frontend/shell/shell.cpp:1916 port/frontend/shell/shell.cpp:1924 port/frontend/shell/shell.cpp:1932 port/frontend/shell/shell.cpp:1935 port/frontend/shell/shell.cpp:3057 port/frontend/shell/shell.cpp:3095
 #, menu
 msgid "Choose"
 msgstr "Vælg"
 
-#: port/app/ingame.cpp:710 port/app/ingame3ds.cpp:1147 port/eden/ingame.cpp:831 port/frontend/shell/shares.cpp:520 port/frontend/shell/shares.cpp:523 port/frontend/shell/shell.cpp:1878 port/frontend/shell/shell.cpp:1922 port/frontend/shell/shell.cpp:1926 port/frontend/shell/shell.cpp:1929 port/frontend/shell/shell.cpp:1932 port/frontend/shell/shell.cpp:1943
+#: port/app/ingame.cpp:710 port/app/ingame3ds.cpp:1147 port/eden/ingame.cpp:831 port/frontend/shell/shares.cpp:520 port/frontend/shell/shares.cpp:523 port/frontend/shell/shell.cpp:1881 port/frontend/shell/shell.cpp:1925 port/frontend/shell/shell.cpp:1929 port/frontend/shell/shell.cpp:1932 port/frontend/shell/shell.cpp:1935 port/frontend/shell/shell.cpp:1946
 #, menu
 msgid "Change"
 msgstr "Skift"
@@ -1758,7 +1758,7 @@ msgstr "Skift"
 msgid "Back to the game"
 msgstr "Tilbage til spillet"
 
-#: port/app/ingame.cpp:710 port/app/ingame3ds.cpp:1147 port/eden/ingame.cpp:831 port/frontend/shell/firststart.cpp:266 port/frontend/shell/installs.cpp:330 port/frontend/shell/orbit.cpp:457 port/frontend/shell/shares.cpp:520 port/frontend/shell/shares.cpp:526 port/frontend/shell/shell.cpp:1888 port/frontend/shell/shell.cpp:1914 port/frontend/shell/shell.cpp:1921 port/frontend/shell/shell.cpp:1922 port/frontend/shell/shell.cpp:1926 port/frontend/shell/shell.cpp:1930 port/frontend/shell/shell.cpp:1932 port/frontend/shell/shell.cpp:1936 port/frontend/shell/shell.cpp:1940 port/frontend/shell/shell.cpp:1944 port/frontend/shell/timeline.cpp:1335
+#: port/app/ingame.cpp:710 port/app/ingame3ds.cpp:1147 port/eden/ingame.cpp:831 port/frontend/shell/firststart.cpp:266 port/frontend/shell/installs.cpp:330 port/frontend/shell/orbit.cpp:457 port/frontend/shell/shares.cpp:520 port/frontend/shell/shares.cpp:526 port/frontend/shell/shell.cpp:1891 port/frontend/shell/shell.cpp:1917 port/frontend/shell/shell.cpp:1924 port/frontend/shell/shell.cpp:1925 port/frontend/shell/shell.cpp:1929 port/frontend/shell/shell.cpp:1933 port/frontend/shell/shell.cpp:1935 port/frontend/shell/shell.cpp:1939 port/frontend/shell/shell.cpp:1943 port/frontend/shell/shell.cpp:1947 port/frontend/shell/timeline.cpp:1335
 #, menu
 msgid "Back"
 msgstr "Tilbage"
@@ -1827,7 +1827,7 @@ msgstr ""
 msgid "Pause"
 msgstr ""
 
-#: port/app/ingame3ds.cpp:208 port/frontend/shell/firststart.cpp:260 port/frontend/shell/firststart.cpp:262 port/frontend/shell/shell.cpp:1871 port/frontend/shell/shell.cpp:1910
+#: port/app/ingame3ds.cpp:208 port/frontend/shell/firststart.cpp:260 port/frontend/shell/firststart.cpp:262 port/frontend/shell/shell.cpp:1874 port/frontend/shell/shell.cpp:1913
 #, menu
 msgid "Move"
 msgstr "Flyt"
@@ -2253,7 +2253,7 @@ msgstr "{0} af {1} til"
 msgid "Achievements"
 msgstr "Præstationer"
 
-#: port/app/ingame3ds.cpp:749 port/frontend/shell/installs.cpp:376 port/frontend/shell/pages.cpp:326 port/frontend/shell/pages.cpp:943 port/frontend/shell/pages.cpp:1343 port/frontend/shell/shell.cpp:3121
+#: port/app/ingame3ds.cpp:749 port/frontend/shell/installs.cpp:376 port/frontend/shell/pages.cpp:326 port/frontend/shell/pages.cpp:943 port/frontend/shell/pages.cpp:1343 port/frontend/shell/shell.cpp:3124
 #, menu
 msgid "{0} of {1}"
 msgstr "{0} af {1}"
@@ -2361,7 +2361,7 @@ msgstr "Låg"
 msgid "Closed"
 msgstr "Lukket"
 
-#: port/app/ingame3ds.cpp:800 port/frontend/shell/orbit.cpp:459 port/frontend/shell/shell.cpp:1871 port/frontend/shell/shell.cpp:1900 port/frontend/shell/shell.cpp:1908 port/frontend/shell/shell.cpp:1919 port/frontend/shell/shell.cpp:1925 port/frontend/shell/shell.cpp:1940 port/frontend/shell/timeline.cpp:484 port/frontend/shell/timeline.cpp:1331
+#: port/app/ingame3ds.cpp:800 port/frontend/shell/orbit.cpp:459 port/frontend/shell/shell.cpp:1874 port/frontend/shell/shell.cpp:1903 port/frontend/shell/shell.cpp:1911 port/frontend/shell/shell.cpp:1922 port/frontend/shell/shell.cpp:1928 port/frontend/shell/shell.cpp:1943 port/frontend/shell/timeline.cpp:484 port/frontend/shell/timeline.cpp:1331
 #, menu
 msgid "Open"
 msgstr "Åbn"
@@ -2515,7 +2515,7 @@ msgstr "Plads {0} er tom"
 msgid "Saving…"
 msgstr "Gemmer…"
 
-#: port/app/ingame3ds.cpp:1059 port/app/ingame3ds.cpp:1065 port/app/ingame3ds.cpp:1431 port/app/loading_screen.h:71
+#: port/app/ingame3ds.cpp:1059 port/app/ingame3ds.cpp:1065 port/app/ingame3ds.cpp:1431 port/app/loading_screen.h:75
 #, menu
 msgid "Loading…"
 msgstr "Indlæser…"
@@ -2653,7 +2653,7 @@ msgstr "Den er allerede installeret her."
 msgid "An install is already running."
 msgstr "En installation kører allerede."
 
-#: port/app/keyboard_menu.h:61 port/frontend/shell/shell.cpp:3026 port/frontend/shell/shell.cpp:3055 port/frontend/shell/shell.cpp:3075 port/frontend/shell/shell.cpp:3094
+#: port/app/keyboard_menu.h:61 port/frontend/shell/shell.cpp:3029 port/frontend/shell/shell.cpp:3058 port/frontend/shell/shell.cpp:3078 port/frontend/shell/shell.cpp:3097
 #, menu
 msgid "OK"
 msgstr "OK"
@@ -2669,37 +2669,37 @@ msgstr "Spillet beder om"
 msgid "Some text"
 msgstr "Noget tekst"
 
-#: port/app/keyboard_menu.h:96 port/frontend/shell/shell.cpp:2944
+#: port/app/keyboard_menu.h:96 port/frontend/shell/shell.cpp:2947
 #, menu
 msgid "L1 R1: {0}"
 msgstr "L1 R1: {0}"
 
 #. the in-game keyboard's keys
-#: port/app/keyboard_menu.h:153 port/frontend/shell/shell.cpp:2967
+#: port/app/keyboard_menu.h:153 port/frontend/shell/shell.cpp:2970
 #, menu
 msgid "Shift: on"
 msgstr "Skift: til"
 
 #. the in-game keyboard's keys
 #. the in-game keyboard's hints: Cross types the focused key
-#: port/app/keyboard_menu.h:153 port/app/keyboard_menu.h:173 port/frontend/shell/shell.cpp:1860 port/frontend/shell/shell.cpp:1863 port/frontend/shell/shell.cpp:2967
+#: port/app/keyboard_menu.h:153 port/app/keyboard_menu.h:173 port/frontend/shell/shell.cpp:1863 port/frontend/shell/shell.cpp:1866 port/frontend/shell/shell.cpp:2970
 #, menu
 msgid "Shift"
 msgstr "Skift"
 
-#: port/app/keyboard_menu.h:155 port/frontend/shell/shell.cpp:2967
+#: port/app/keyboard_menu.h:155 port/frontend/shell/shell.cpp:2970
 #, menu
 msgid "Space"
 msgstr "Mellemrum"
 
 #. the in-game keyboard's hints: Cross types the focused key
-#: port/app/keyboard_menu.h:157 port/app/keyboard_menu.h:173 port/frontend/shell/porpoise_rows.cpp:1568 port/frontend/shell/porpoise_rows.cpp:2057 port/frontend/shell/shell.cpp:1860 port/frontend/shell/shell.cpp:1863 port/frontend/shell/shell.cpp:2967
+#: port/app/keyboard_menu.h:157 port/app/keyboard_menu.h:173 port/frontend/shell/porpoise_rows.cpp:1568 port/frontend/shell/porpoise_rows.cpp:2057 port/frontend/shell/shell.cpp:1863 port/frontend/shell/shell.cpp:1866 port/frontend/shell/shell.cpp:2970
 #, menu
 msgid "Delete"
 msgstr "Slet"
 
 #. the in-game keyboard's hints: Cross types the focused key
-#: port/app/keyboard_menu.h:173 port/frontend/shell/shares.cpp:300 port/frontend/shell/shell.cpp:1860 port/frontend/shell/shell.cpp:1863
+#: port/app/keyboard_menu.h:173 port/frontend/shell/shares.cpp:300 port/frontend/shell/shell.cpp:1863 port/frontend/shell/shell.cpp:1866
 #, menu
 msgid "Type"
 msgstr "Skriv"
@@ -2977,18 +2977,18 @@ msgid "{0} {1}, {2}"
 msgstr "{1}. {0} {2}"
 
 #. a game's loading screen: the game's shaders read from the cache and made ready, {0} of {1}
-#: port/app/loading_screen.h:62
+#: port/app/loading_screen.h:66
 #, menu
 msgid "Shaders: {0} of {1}"
 msgstr "Shadere: {0} af {1}"
 
 #. a game's loading screen: the graphics pipelines (shaders put together for the GPU) made ready from the cache, {0} of {1}
-#: port/app/loading_screen.h:67
+#: port/app/loading_screen.h:71
 #, menu
 msgid "Pipelines: {0} of {1}"
 msgstr ""
 
-#: port/app/loading_screen.h:75
+#: port/app/loading_screen.h:79
 #, menu
 msgid "Starting"
 msgstr "Starter"
@@ -3041,6 +3041,63 @@ msgstr "Det kunne ikke installeres: {0}"
 #: port/app/pack_updates.cpp:294
 msgid "The new packs could not replace the old ones"
 msgstr "De nye pakker kunne ikke erstatte de gamle"
+
+#: port/app/quotes.h:31
+#, menu
+msgid "On my business card, I am a corporate president. In my mind, I am a game developer. But in my heart, I am a gamer."
+msgstr ""
+
+#: port/app/quotes.h:33
+#, menu
+msgid "Above all, video games are meant to be just one thing: fun."
+msgstr ""
+
+#: port/app/quotes.h:35
+#, menu
+msgid "A good idea is something that does not solve just one single problem, but rather can solve multiple problems at once."
+msgstr ""
+
+#: port/app/quotes.h:37
+#, menu
+msgid "A delayed game is eventually good, but a rushed game is forever bad."
+msgstr ""
+
+#: port/app/quotes.h:38
+#, menu
+msgid "If it's really nice outside, you should go play outside."
+msgstr ""
+
+#: port/app/quotes.h:39
+#, menu
+msgid "My name is Reggie. I'm about kicking ass, I'm about taking names, and we're about making games."
+msgstr ""
+
+#: port/app/quotes.h:41
+#, menu
+msgid "My body is ready."
+msgstr ""
+
+#: port/app/quotes.h:43
+#, menu
+msgid "Creating what you love is the easiest way to grasp how to make something entertaining."
+msgstr ""
+
+#: port/app/quotes.h:45
+#, menu
+msgid "Lateral thinking with withered technology."
+msgstr ""
+
+#. a quote's words in quotation marks, on a game's loading screen: use your language's marks
+#: port/app/quotes.h:53
+#, menu
+msgid "“{0}”"
+msgstr ""
+
+#. under a quote on a game's loading screen, for a line long said to be theirs whose source is not known: {0} is the name
+#: port/app/quotes.h:60
+#, menu
+msgid "Often credited to {0}"
+msgstr ""
 
 #. a row that opens the remote touch screen's page: the game's second screen in a phone's browser, and its code to scan
 #: port/app/remote_menu.h:29 port/frontend/shell/settings.cpp:1713 port/frontend/shell/settings.cpp:1715 port/frontend/shell/settings.cpp:3622
@@ -3447,7 +3504,7 @@ msgstr "Det her er ikke et 3DS-spil, som Azahar kan starte."
 msgid "The game could not be loaded."
 msgstr "Spillet kunne ikke indlæses."
 
-#: port/azahar/core.cpp:626 port/frontend/shell/shell.cpp:1216
+#: port/azahar/core.cpp:626 port/frontend/shell/shell.cpp:1219
 #, menu
 msgid "This game is encrypted. Decrypt it on your 3DS with GodMode9 first."
 msgstr "Spillet er krypteret, og Azahar kører kun dekrypterede spil, med eller uden nøgler: dekryptér det først på din 3DS (GodMode9)."
@@ -3890,7 +3947,7 @@ msgid "Update"
 msgstr "Opdatering"
 
 #. an update found to install ({0}: its version, as 208)
-#: port/frontend/actions.cpp:417 port/frontend/actions.cpp:496 port/frontend/shell/hub.cpp:210 port/frontend/shell/installs.cpp:42 port/frontend/shell/shell.cpp:1087 port/main_ps5.cpp:590
+#: port/frontend/actions.cpp:417 port/frontend/actions.cpp:496 port/frontend/shell/hub.cpp:210 port/frontend/shell/installs.cpp:42 port/frontend/shell/shell.cpp:1090 port/main_ps5.cpp:590
 msgid "DLC"
 msgstr "DLC"
 
@@ -4240,7 +4297,7 @@ msgid "Copy your games to the PS5 or a USB drive, each console's in its own fold
 msgstr ""
 
 #. how many games the Library has
-#: port/frontend/shell/firststart.cpp:629 port/frontend/shell/library.cpp:766 port/frontend/shell/orbit.cpp:330 port/frontend/shell/pages.cpp:1403 port/frontend/shell/shell.cpp:1812 port/frontend/shell/timeline.cpp:478 port/frontend/shell/timeline.cpp:967 port/frontend/shell/timeline.cpp:1124 port/frontend/shell/timeline.cpp:1369
+#: port/frontend/shell/firststart.cpp:629 port/frontend/shell/library.cpp:766 port/frontend/shell/orbit.cpp:330 port/frontend/shell/pages.cpp:1403 port/frontend/shell/shell.cpp:1815 port/frontend/shell/timeline.cpp:478 port/frontend/shell/timeline.cpp:967 port/frontend/shell/timeline.cpp:1124 port/frontend/shell/timeline.cpp:1369
 msgid "{0} game"
 msgid_plural "{0} games"
 msgstr[0] "{0} spil"
@@ -4293,11 +4350,11 @@ msgstr[1] "{0} DLC"
 msgid "Experimental"
 msgstr "Eksperimentel"
 
-#: port/frontend/shell/hub.cpp:230 port/frontend/shell/shell.cpp:2270
+#: port/frontend/shell/hub.cpp:230 port/frontend/shell/shell.cpp:2273
 msgid "Favourite"
 msgstr "Favorit"
 
-#: port/frontend/shell/hub.cpp:237 port/frontend/shell/library.cpp:751 port/frontend/shell/orbit.cpp:367 port/frontend/shell/orbit.cpp:464 port/frontend/shell/shell.cpp:1910 port/frontend/shell/shell.cpp:1911 port/frontend/shell/shell.cpp:2234 port/frontend/shell/timeline.cpp:1262 port/frontend/shell/timeline.cpp:1322 port/frontend/shell/timeline.cpp:1333
+#: port/frontend/shell/hub.cpp:237 port/frontend/shell/library.cpp:751 port/frontend/shell/orbit.cpp:367 port/frontend/shell/orbit.cpp:464 port/frontend/shell/shell.cpp:1913 port/frontend/shell/shell.cpp:1914 port/frontend/shell/shell.cpp:2237 port/frontend/shell/timeline.cpp:1262 port/frontend/shell/timeline.cpp:1322 port/frontend/shell/timeline.cpp:1333
 msgid "Play"
 msgstr "Spil"
 
@@ -4311,7 +4368,7 @@ msgstr[1] "Grafikpakker · {0} til"
 msgid "Game settings · custom"
 msgstr "Spilindstillinger · egne"
 
-#: port/frontend/shell/hub.cpp:248 port/frontend/shell/shell.cpp:2253
+#: port/frontend/shell/hub.cpp:248 port/frontend/shell/shell.cpp:2256
 msgid "Game settings"
 msgstr "Spilindstillinger"
 
@@ -4434,7 +4491,7 @@ msgstr[1] "{0} installeret"
 msgid "Everything found is installed already"
 msgstr "Alt fundet er allerede installeret"
 
-#: port/frontend/shell/installs.cpp:319 port/frontend/shell/shell.cpp:3121
+#: port/frontend/shell/installs.cpp:319 port/frontend/shell/shell.cpp:3124
 msgid "Stopping…"
 msgstr "Stopper…"
 
@@ -4442,7 +4499,7 @@ msgstr "Stopper…"
 msgid "Stop"
 msgstr "Stop"
 
-#: port/frontend/shell/installs.cpp:325 port/frontend/shell/pages.cpp:1298 port/frontend/shell/shell.cpp:1940
+#: port/frontend/shell/installs.cpp:325 port/frontend/shell/pages.cpp:1298 port/frontend/shell/shell.cpp:1943
 msgid "Install"
 msgstr "Installer"
 
@@ -4478,11 +4535,11 @@ msgstr[1] "{0} nye at installere."
 msgid "Everything found is installed."
 msgstr "Alt fundet er installeret."
 
-#: port/frontend/shell/installs.cpp:361 port/frontend/shell/settings.cpp:249 port/frontend/shell/settings.cpp:266 port/frontend/shell/settings.cpp:290 port/frontend/shell/shares.cpp:535 port/frontend/shell/shell.cpp:3080
+#: port/frontend/shell/installs.cpp:361 port/frontend/shell/settings.cpp:249 port/frontend/shell/settings.cpp:266 port/frontend/shell/settings.cpp:290 port/frontend/shell/shares.cpp:535 port/frontend/shell/shell.cpp:3083
 msgid "Game files"
 msgstr "Spilfiler"
 
-#: port/frontend/shell/installs.cpp:362 port/frontend/shell/settings.cpp:1190 port/frontend/shell/shell.cpp:2261
+#: port/frontend/shell/installs.cpp:362 port/frontend/shell/settings.cpp:1190 port/frontend/shell/shell.cpp:2264
 msgid "Updates and DLC"
 msgstr "Opdateringer og DLC"
 
@@ -4600,7 +4657,7 @@ msgstr "Opsætningstjek"
 msgid "Diagnostics"
 msgstr "Diagnosticering"
 
-#: port/frontend/shell/library.cpp:167 port/frontend/shell/shell.cpp:1314 port/frontend/shell/shell.cpp:3111
+#: port/frontend/shell/library.cpp:167 port/frontend/shell/shell.cpp:1317 port/frontend/shell/shell.cpp:3114
 msgid "Getting ready"
 msgstr "Starter Cemu"
 
@@ -4675,17 +4732,17 @@ msgstr "Overrask mig"
 
 #. the game menu: named groups of games the player makes (Couch co-op, say), shown on the Library's filter row
 #. What's new in 6.0: collections, groups of games the player makes
-#: port/frontend/shell/library.cpp:429 port/frontend/shell/shell.cpp:2272 port/frontend/shell/shell.cpp:2292 port/frontend/shell/shell.cpp:2318 port/frontend/shell/whatsnew.cpp:40
+#: port/frontend/shell/library.cpp:429 port/frontend/shell/shell.cpp:2275 port/frontend/shell/shell.cpp:2295 port/frontend/shell/shell.cpp:2321 port/frontend/shell/whatsnew.cpp:40
 msgid "Collections"
 msgstr "Samlinger"
 
 #. the launcher's tabs
-#: port/frontend/shell/library.cpp:430 port/frontend/shell/library.cpp:761 port/frontend/shell/shell.cpp:1710 port/frontend/shell/shell.cpp:2292
+#: port/frontend/shell/library.cpp:430 port/frontend/shell/library.cpp:761 port/frontend/shell/shell.cpp:1713 port/frontend/shell/shell.cpp:2295
 msgctxt "tab"
 msgid "Library"
 msgstr "Bibliotek"
 
-#: port/frontend/shell/library.cpp:430 port/frontend/shell/orbit.cpp:466 port/frontend/shell/shell.cpp:1906
+#: port/frontend/shell/library.cpp:430 port/frontend/shell/orbit.cpp:466 port/frontend/shell/shell.cpp:1909
 msgid "Sort"
 msgstr "Sortér"
 
@@ -4704,7 +4761,7 @@ msgstr "Denne uge"
 msgid "Earlier"
 msgstr "Tidligere"
 
-#: port/frontend/shell/library.cpp:755 port/frontend/shell/orbit.cpp:368 port/frontend/shell/orbit.cpp:467 port/frontend/shell/shell.cpp:1910 port/frontend/shell/shell.cpp:1911 port/frontend/shell/shell.cpp:1913
+#: port/frontend/shell/library.cpp:755 port/frontend/shell/orbit.cpp:368 port/frontend/shell/orbit.cpp:467 port/frontend/shell/shell.cpp:1913 port/frontend/shell/shell.cpp:1914 port/frontend/shell/shell.cpp:1916
 msgid "Options"
 msgstr "Valgmuligheder"
 
@@ -4717,7 +4774,7 @@ msgstr "Leder efter nye spil…"
 msgid "From the last search"
 msgstr "Som fundet sidst"
 
-#: port/frontend/shell/library.cpp:774 port/frontend/shell/shell.cpp:1906 port/frontend/shell/shell.cpp:2938
+#: port/frontend/shell/library.cpp:774 port/frontend/shell/shell.cpp:1909 port/frontend/shell/shell.cpp:2941
 msgid "Search"
 msgstr "Søg"
 
@@ -4730,7 +4787,7 @@ msgid "Sort: {0}"
 msgstr "Sortering: {0}"
 
 #. the Library's filters, each with its count after it
-#: port/frontend/shell/library.cpp:804 port/frontend/shell/shell.cpp:2289
+#: port/frontend/shell/library.cpp:804 port/frontend/shell/shell.cpp:2292
 msgctxt "filter"
 msgid "All"
 msgstr "Alle"
@@ -4786,7 +4843,7 @@ msgstr "Hjem"
 msgid "Console {0} of {1}"
 msgstr "Konsol {0} af {1}"
 
-#: port/frontend/shell/orbit.cpp:310 port/frontend/shell/shell.cpp:1876
+#: port/frontend/shell/orbit.cpp:310 port/frontend/shell/shell.cpp:1879
 msgid "Continue"
 msgstr "Fortsæt"
 
@@ -4795,7 +4852,7 @@ msgstr "Fortsæt"
 msgid "Recently played on every console"
 msgstr "De spil, du senest har spillet, på alle konsoller"
 
-#: port/frontend/shell/orbit.cpp:332 port/frontend/shell/shell.cpp:1097 port/frontend/shell/timeline.cpp:1302 port/frontend/shell/timeline.cpp:1366
+#: port/frontend/shell/orbit.cpp:332 port/frontend/shell/shell.cpp:1100 port/frontend/shell/timeline.cpp:1302 port/frontend/shell/timeline.cpp:1366
 msgid "{0} h played"
 msgid_plural "{0} h played"
 msgstr[0] "{0} t spillet"
@@ -4822,7 +4879,7 @@ msgid "Turn the dial"
 msgstr "Drej skiven"
 
 #. the hint for L2 and R2, which go to the Library and Settings tabs
-#: port/frontend/shell/orbit.cpp:469 port/frontend/shell/shell.cpp:1855
+#: port/frontend/shell/orbit.cpp:469 port/frontend/shell/shell.cpp:1858
 msgid "Library or Settings"
 msgstr ""
 
@@ -4918,7 +4975,7 @@ msgstr "Denne pakke har ingen beskrivelse."
 msgid "No presets"
 msgstr "Ingen forudindstillinger"
 
-#: port/frontend/shell/pages.cpp:362 port/frontend/shell/shell.cpp:1930
+#: port/frontend/shell/pages.cpp:362 port/frontend/shell/shell.cpp:1933
 msgid "Presets"
 msgstr "Forudindstillinger"
 
@@ -5351,7 +5408,7 @@ msgstr "Mangler (melonDS' indbyggede BIOS kører de fleste spil)"
 msgid "Missing (only .wud/.wux need it)"
 msgstr "Mangler (kun .wud/.wux skal bruge den)"
 
-#: port/frontend/shell/pages.cpp:1448 port/frontend/shell/shell.cpp:2822 port/frontend/shell/shell.cpp:2849
+#: port/frontend/shell/pages.cpp:1448 port/frontend/shell/shell.cpp:2825 port/frontend/shell/shell.cpp:2852
 msgid "In use"
 msgstr "I brug"
 
@@ -5934,7 +5991,7 @@ msgstr "Hvordan Dolphin skalerer sit billede. Skarp bilineær holder pixel klare
 #. Settings > Screens: a row that opens the touch screen's settings (where the touchpad's cursor lands, the right stick as the stylus)
 #. Settings > Performance: a row that opens Eden's accuracy shortcuts (Fast GPU, Unsafe CPU, ...); its value: how many are changed
 #. Settings > Launcher: a row that opens Larger text, High contrast, Reduce motion and Hold to confirm
-#: port/frontend/shell/porpoise_rows.cpp:175 port/frontend/shell/settings.cpp:898 port/frontend/shell/settings.cpp:1091 port/frontend/shell/settings.cpp:1603 port/frontend/shell/shell.cpp:1922 port/frontend/shell/switch_extras.cpp:73 port/frontend/shell/widgets.cpp:682
+#: port/frontend/shell/porpoise_rows.cpp:175 port/frontend/shell/settings.cpp:898 port/frontend/shell/settings.cpp:1091 port/frontend/shell/settings.cpp:1603 port/frontend/shell/shell.cpp:1925 port/frontend/shell/switch_extras.cpp:73 port/frontend/shell/widgets.cpp:682
 msgid "Default"
 msgstr "Standard"
 
@@ -6566,7 +6623,7 @@ msgstr "Mikrofon"
 msgid "Use the DualSense mic as the GameCube Microphone and Wii Speak."
 msgstr "DualSensens mikrofon som GameCube-mikrofonen og Wii Speak."
 
-#: port/frontend/shell/porpoise_rows.cpp:318 port/frontend/shell/shell.cpp:2245
+#: port/frontend/shell/porpoise_rows.cpp:318 port/frontend/shell/shell.cpp:2248
 msgid "Resume where you left off"
 msgstr "Fortsæt hvor du slap"
 
@@ -6942,7 +6999,7 @@ msgstr "Retningsknap venstre"
 msgid "D-pad right"
 msgstr "Retningsknap højre"
 
-#: port/frontend/shell/porpoise_rows.cpp:616 port/frontend/shell/shell.cpp:3054 port/frontend/shell/shell.cpp:3092
+#: port/frontend/shell/porpoise_rows.cpp:616 port/frontend/shell/shell.cpp:3057 port/frontend/shell/shell.cpp:3095
 msgid "Select"
 msgstr "Vælg"
 
@@ -7616,7 +7673,7 @@ msgstr "Den emulerede konsol, og hvordan den kører."
 msgid "Where this system's games are."
 msgstr ""
 
-#: port/frontend/shell/settings.cpp:250 port/frontend/shell/settings.cpp:351 port/frontend/shell/shell.cpp:2256
+#: port/frontend/shell/settings.cpp:250 port/frontend/shell/settings.cpp:351 port/frontend/shell/shell.cpp:2259
 msgid "Saves"
 msgstr "Gemte data"
 
@@ -7810,7 +7867,7 @@ msgstr "Installeret: {0}"
 msgid "{0}: Cross to install"
 msgstr "{0}: Kryds for at installere"
 
-#: port/frontend/shell/settings.cpp:412 port/frontend/shell/settings.cpp:1426 port/frontend/shell/settings.cpp:1544 port/frontend/shell/shell.cpp:2995
+#: port/frontend/shell/settings.cpp:412 port/frontend/shell/settings.cpp:1426 port/frontend/shell/settings.cpp:1544 port/frontend/shell/shell.cpp:2998
 msgid "Downloading…"
 msgstr "Henter…"
 
@@ -8881,7 +8938,7 @@ msgid "Installs a CIA file. Updates and DLC join their game; games join the libr
 msgstr "Installerer en CIA i 3DS’ens lager, som Azahars Install CIA: en opdatering eller et DLC kommer til sit spil, og et spil kommer i biblioteket. Cirkel annullerer, mens det kører."
 
 #. Settings > Game files: a row opening the list of every system's folder; {0} how many have a folder of their own, {1} how many systems
-#: port/frontend/shell/settings.cpp:1221 port/frontend/shell/shell.cpp:3081
+#: port/frontend/shell/settings.cpp:1221 port/frontend/shell/shell.cpp:3084
 msgid "A folder for each system"
 msgstr "En mappe til hvert system"
 
@@ -9413,7 +9470,7 @@ msgstr "Cemus spil i bjælken."
 msgid "Show the Wii U in the bar. Hidden systems keep their games and settings. At least one stays on."
 msgstr "Om bjælken viser Wii U-siden (Cemu). Skjult beholdes dens spil og indstillinger, og de kommer tilbage, når den slås til igen. Mindst én side forbliver slået til."
 
-#: port/frontend/shell/settings.cpp:1573 port/frontend/shell/shell.cpp:1871
+#: port/frontend/shell/settings.cpp:1573 port/frontend/shell/shell.cpp:1874
 msgid "Switch"
 msgstr "Skift"
 
@@ -10091,7 +10148,7 @@ msgstr "En port er et tal fra 1 til 65535."
 msgid "Password (leave empty if none)"
 msgstr "Dets adgangskode (tom: ingen)"
 
-#: port/frontend/shell/settings.cpp:3208 port/frontend/shell/shell.cpp:1312 port/frontend/shell/shell.cpp:3111
+#: port/frontend/shell/settings.cpp:3208 port/frontend/shell/shell.cpp:1315 port/frontend/shell/shell.cpp:3114
 msgid "Starting the 3DS"
 msgstr "Starter 3DS’en"
 
@@ -10147,7 +10204,7 @@ msgstr[1] "{0} spil slettet ({1})"
 msgid "Downloading in the background"
 msgstr "Henter i baggrunden"
 
-#: port/frontend/shell/settings.cpp:3319 port/frontend/shell/shell.cpp:500
+#: port/frontend/shell/settings.cpp:3319 port/frontend/shell/shell.cpp:503
 msgid "Close Playtendoh and start it again from the home screen to move the folders."
 msgstr "Luk Playtendoh, og start det igen fra hjemmeskærmen: mapperne flyttes, når det starter."
 
@@ -10267,7 +10324,7 @@ msgstr "Ingen JIT- eller eksekverbar hukommelse: Wii U-spil kører på den meget
 msgid "Wii U games will run much slower. Add PPSA99360 to your HEN's app jailbreak list, then start Playtendoh again. Settings > Diagnostics shows what it got."
 msgstr "Hverken din HEN’s JIT-hukommelse eller eksekverbar hukommelse kunne oprettes, så Wii U-spil falder tilbage på Cemus fortolker. Føj PPSA99360 til din HEN’s app-jailbreak-liste, og start så Playtendoh igen; Indstillinger > Diagnosticering viser, hvad den fik."
 
-#: port/frontend/shell/setup.cpp:191 port/frontend/shell/shell.cpp:889 port/libretro/game.cpp:1078 port/main_ps5.cpp:762 port/retro/launch.cpp:38 port/retro/launch.cpp:48
+#: port/frontend/shell/setup.cpp:191 port/frontend/shell/shell.cpp:892 port/libretro/game.cpp:1078 port/main_ps5.cpp:762 port/retro/launch.cpp:38 port/retro/launch.cpp:48
 msgid "This system's emulator is not in this copy of Playtendoh."
 msgstr "Denne sides emulator er ikke i denne kopi af Playtendoh."
 
@@ -10814,433 +10871,433 @@ msgstr "Slå fildeling til for en mappe på din computer eller NAS, og tilføj d
 msgid "Nothing is ever written to it."
 msgstr "Der skrives aldrig noget til den."
 
-#: port/frontend/shell/shell.cpp:233
+#: port/frontend/shell/shell.cpp:234
 msgid "Saved your place in the library"
 msgstr "Din plads i biblioteket blev gemt"
 
-#: port/frontend/shell/shell.cpp:237 port/frontend/shell/shell.cpp:1202 port/frontend/shell/shell.cpp:1216 port/frontend/shell/shell.cpp:1357
+#: port/frontend/shell/shell.cpp:238 port/frontend/shell/shell.cpp:1205 port/frontend/shell/shell.cpp:1219 port/frontend/shell/shell.cpp:1360
 msgid "The game could not start"
 msgstr "Spillet kunne ikke starte"
 
-#: port/frontend/shell/shell.cpp:242
+#: port/frontend/shell/shell.cpp:243
 msgid "Your settings could not be read"
 msgstr "Dine indstillinger kunne ikke læses"
 
 #. {0} is where the unreadable settings file is kept: /data/ps5cemu/ps5cemu.json.broken
-#: port/frontend/shell/shell.cpp:244
+#: port/frontend/shell/shell.cpp:245
 msgid "The settings file ps5cemu.json is damaged, so settings were reset. The old file is kept as {0}; fix it on a computer and put it back as ps5cemu.json if you like."
 msgstr "Startprogrammets indstillingsfil, ps5cemu.json, har en fejl, så alle indstillinger er tilbage på standard. Filen, som den var, er gemt som {0}: ret den på en computer og læg den tilbage som ps5cemu.json, eller lad den være."
 
-#: port/frontend/shell/shell.cpp:250
+#: port/frontend/shell/shell.cpp:251
 msgid "Playtendoh closed after a crash"
 msgstr "Playtendoh lukkede efter et nedbrud"
 
 #. {0} is the crash report's first line in the log, as it is: "signal 11 at 0x7f3a..."
-#: port/frontend/shell/shell.cpp:252
+#: port/frontend/shell/shell.cpp:253
 msgid "Last time, Playtendoh crashed: {0}. To report it on GitHub, use Settings > Diagnostics > Copy logs to USB."
 msgstr "Sidste gang stoppede Playtendoh med et nedbrud: {0}. Loggen er gemt: Indstillinger > Diagnosticering > Kopiér logfiler til USB lægger den på et drev sammen med sessionerne før, så du kan vedhæfte den til en rapport på GitHub."
 
-#: port/frontend/shell/shell.cpp:265
+#: port/frontend/shell/shell.cpp:266
 msgid "Some files could not move"
 msgstr "Nogle filer kunne ikke flyttes"
 
 #. {0} names the systems whose files did not move into folders of their own: "Wii U, Nintendo 3DS"
-#: port/frontend/shell/shell.cpp:267
+#: port/frontend/shell/shell.cpp:268
 msgid "{0}: their files were left in place and nothing was lost. See the logs with Settings > Diagnostics > Copy logs to USB."
 msgstr "{0}: deres filer blev, hvor de var, og intet gik tabt. Opstartsloggen fortæller hvorfor: Indstillinger > Diagnosticering > Kopiér logfiler til USB."
 
-#: port/frontend/shell/shell.cpp:274
+#: port/frontend/shell/shell.cpp:275
 msgid "The folders have moved"
 msgstr "Mapperne er flyttet"
 
-#: port/frontend/shell/shell.cpp:546
+#: port/frontend/shell/shell.cpp:549
 msgid "EmulationStation is in. It opens next time Playtendoh starts."
 msgstr ""
 
-#: port/frontend/shell/shell.cpp:547
+#: port/frontend/shell/shell.cpp:550
 msgid "EmulationStation is in. Choose it in Settings > Launcher > Layout."
 msgstr ""
 
-#: port/frontend/shell/shell.cpp:952
+#: port/frontend/shell/shell.cpp:955
 msgid "The Wii U emulator did not start: {0}"
 msgstr "Cemu startede ikke: {0}"
 
-#: port/frontend/shell/shell.cpp:1096 port/frontend/shell/timeline.cpp:1302 port/frontend/shell/timeline.cpp:1366
+#: port/frontend/shell/shell.cpp:1099 port/frontend/shell/timeline.cpp:1302 port/frontend/shell/timeline.cpp:1366
 msgid "{0} min played"
 msgid_plural "{0} min played"
 msgstr[0] "{0} min spillet"
 msgstr[1] "{0} min spillet"
 
-#: port/frontend/shell/shell.cpp:1112
+#: port/frontend/shell/shell.cpp:1115
 msgid "today"
 msgstr "i dag"
 
-#: port/frontend/shell/shell.cpp:1114
+#: port/frontend/shell/shell.cpp:1117
 msgid "yesterday"
 msgstr "i går"
 
-#: port/frontend/shell/shell.cpp:1116
+#: port/frontend/shell/shell.cpp:1119
 msgid "{0} day ago"
 msgid_plural "{0} days ago"
 msgstr[0] "for {0} dag siden"
 msgstr[1] "for {0} dage siden"
 
-#: port/frontend/shell/shell.cpp:1118
+#: port/frontend/shell/shell.cpp:1121
 msgid "{0} week ago"
 msgid_plural "{0} weeks ago"
 msgstr[0] "for {0} uge siden"
 msgstr[1] "for {0} uger siden"
 
-#: port/frontend/shell/shell.cpp:1119
+#: port/frontend/shell/shell.cpp:1122
 msgid "{0} month ago"
 msgid_plural "{0} months ago"
 msgstr[0] "for {0} måned siden"
 msgstr[1] "for {0} måneder siden"
 
-#: port/frontend/shell/shell.cpp:1194
+#: port/frontend/shell/shell.cpp:1197
 msgid "Still starting"
 msgstr "Cemu starter stadig"
 
-#: port/frontend/shell/shell.cpp:1203
+#: port/frontend/shell/shell.cpp:1206
 msgid "Switch games need your keys: prod.keys (and title.keys) from your own Switch, in {0}/keys. The Setup check shows what else is missing."
 msgstr "Eden skal bruge din Switchs nøgler for at læse dens spil: prod.keys (og title.keys), hentet fra din egen Switch, i {0}/keys. Opsætningstjekket siger, hvad der ellers mangler."
 
-#: port/frontend/shell/shell.cpp:1311
+#: port/frontend/shell/shell.cpp:1314
 msgid "Starting emulator"
 msgstr "Starter emulatoren"
 
-#: port/frontend/shell/shell.cpp:1311
+#: port/frontend/shell/shell.cpp:1314
 msgid "Starting the DS"
 msgstr "Starter melonDS"
 
-#: port/frontend/shell/shell.cpp:1313
+#: port/frontend/shell/shell.cpp:1316
 msgid "Starting the Switch"
 msgstr "Starter Eden"
 
-#: port/frontend/shell/shell.cpp:1400
+#: port/frontend/shell/shell.cpp:1403
 msgid "Adding {0} to the home screen…"
 msgstr "Opretter hjemmeskærmsikonet til {0}…"
 
-#: port/frontend/shell/shell.cpp:1407
+#: port/frontend/shell/shell.cpp:1410
 msgid "Removing {0} from the home screen…"
 msgstr "Fjerner hjemmeskærmsikonet til {0}…"
 
-#: port/frontend/shell/shell.cpp:1419
+#: port/frontend/shell/shell.cpp:1422
 msgid "The tile could not be removed"
 msgstr "Ikonet kunne ikke fjernes"
 
-#: port/frontend/shell/shell.cpp:1419
+#: port/frontend/shell/shell.cpp:1422
 msgid "The tile could not be added"
 msgstr "Ikonet kunne ikke oprettes"
 
-#: port/frontend/shell/shell.cpp:1425
+#: port/frontend/shell/shell.cpp:1428
 msgid "Tile removed"
 msgstr "Ikonet er fjernet"
 
-#: port/frontend/shell/shell.cpp:1426
+#: port/frontend/shell/shell.cpp:1429
 msgid "If it's still on the home screen, delete it there (Options, then Delete)."
 msgstr "Mappen er væk fra /data/homebrew. Hvis billedet bliver på hjemmeskærmen, så slet det der (OPTIONS, derefter Slet), eller genstart ShadowMount Plus."
 
 #. {0} is the tile's folder, /data/homebrew/PPSA99xxx
-#: port/frontend/shell/shell.cpp:1430
+#: port/frontend/shell/shell.cpp:1433
 msgid "Tile updated"
 msgstr "Ikonet er oprettet igen"
 
 #. {0} is the tile's folder, /data/homebrew/PPSA99xxx
-#: port/frontend/shell/shell.cpp:1430
+#: port/frontend/shell/shell.cpp:1433
 msgid "Tile added"
 msgstr "Ikonet er oprettet"
 
-#: port/frontend/shell/shell.cpp:1431
+#: port/frontend/shell/shell.cpp:1434
 msgid "Saved in {0}. It will appear on the home screen; if it doesn't, restart the console. The tile starts the game in Playtendoh."
 msgstr "Det ligger i {0}. ShadowMount Plus sætter det på PS5’ens hjemmeskærm som enhver anden homebrew: hvis det ikke vises, så genstart ShadowMount Plus eller konsollen. Ikonet starter spillet i Playtendoh, og når spillet lukkes, lukkes appen."
 
-#: port/frontend/shell/shell.cpp:1445
+#: port/frontend/shell/shell.cpp:1448
 msgid "The tile's game could not start"
 msgstr "Ikonets spil kunne ikke starte"
 
-#: port/frontend/shell/shell.cpp:1473
+#: port/frontend/shell/shell.cpp:1476
 msgid "Not in the library: {0}"
 msgstr "Det er ikke i biblioteket: {0}"
 
 #. the launcher's tabs
-#: port/frontend/shell/shell.cpp:1710
+#: port/frontend/shell/shell.cpp:1713
 msgctxt "tab"
 msgid "Settings"
 msgstr "Indstillinger"
 
 #. the Timeline's name under it in the console lists
 #. the view of every console's games on one shelf, a stop of its own in the console lists
-#: port/frontend/shell/shell.cpp:1807 port/frontend/shell/timeline.cpp:473 port/frontend/shell/timeline.cpp:961
+#: port/frontend/shell/shell.cpp:1810 port/frontend/shell/timeline.cpp:473 port/frontend/shell/timeline.cpp:961
 msgid "Timeline"
 msgstr "Tidslinje"
 
-#: port/frontend/shell/shell.cpp:1861
+#: port/frontend/shell/shell.cpp:1864
 msgid "Hide"
 msgstr "Skjul"
 
-#: port/frontend/shell/shell.cpp:1861
+#: port/frontend/shell/shell.cpp:1864
 msgid "Show"
 msgstr "Vis"
 
-#: port/frontend/shell/shell.cpp:1861 port/frontend/shell/shell.cpp:1863 port/frontend/shell/shell.cpp:1919 port/frontend/shell/shell.cpp:2967
+#: port/frontend/shell/shell.cpp:1864 port/frontend/shell/shell.cpp:1866 port/frontend/shell/shell.cpp:1922 port/frontend/shell/shell.cpp:2970
 msgid "Done"
 msgstr "Færdig"
 
-#: port/frontend/shell/shell.cpp:1865 port/frontend/shell/shell.cpp:1935 port/frontend/shell/shell.cpp:1939 port/frontend/shell/shell.cpp:3057 port/frontend/shell/shell.cpp:3125
+#: port/frontend/shell/shell.cpp:1868 port/frontend/shell/shell.cpp:1938 port/frontend/shell/shell.cpp:1942 port/frontend/shell/shell.cpp:3060 port/frontend/shell/shell.cpp:3128
 msgid "Cancel"
 msgstr "Annuller"
 
-#: port/frontend/shell/shell.cpp:1867 port/frontend/shell/shell.cpp:1869 port/frontend/shell/shell.cpp:1925
+#: port/frontend/shell/shell.cpp:1870 port/frontend/shell/shell.cpp:1872 port/frontend/shell/shell.cpp:1928
 msgid "Close"
 msgstr "Luk"
 
-#: port/frontend/shell/shell.cpp:1878 port/frontend/shell/shell.cpp:1921 port/frontend/shell/shell.cpp:1922 port/frontend/shell/shell.cpp:1926 port/frontend/shell/shell.cpp:1932
+#: port/frontend/shell/shell.cpp:1881 port/frontend/shell/shell.cpp:1924 port/frontend/shell/shell.cpp:1925 port/frontend/shell/shell.cpp:1929 port/frontend/shell/shell.cpp:1935
 msgid "More info"
 msgstr "Mere om det"
 
-#: port/frontend/shell/shell.cpp:1879 port/frontend/shell/shell.cpp:1888 port/frontend/shell/welcome.cpp:100
+#: port/frontend/shell/shell.cpp:1882 port/frontend/shell/shell.cpp:1891 port/frontend/shell/welcome.cpp:100
 msgid "Continue to the Library"
 msgstr "Fortsæt til biblioteket"
 
-#: port/frontend/shell/shell.cpp:1884
+#: port/frontend/shell/shell.cpp:1887
 msgid "Change the language"
 msgstr "Skift sprog"
 
-#: port/frontend/shell/shell.cpp:1887
+#: port/frontend/shell/shell.cpp:1890
 msgid "Check again"
 msgstr "Tjek igen"
 
-#: port/frontend/shell/shell.cpp:1906
+#: port/frontend/shell/shell.cpp:1909
 msgid "Filters"
 msgstr "Filtre"
 
-#: port/frontend/shell/shell.cpp:1913
+#: port/frontend/shell/shell.cpp:1916
 msgid "Back to the buttons"
 msgstr "Tilbage til knapperne"
 
-#: port/frontend/shell/shell.cpp:1914
+#: port/frontend/shell/shell.cpp:1917
 msgid "Scroll"
 msgstr "Rul"
 
-#: port/frontend/shell/shell.cpp:1919 port/frontend/shell/shell.cpp:1925
+#: port/frontend/shell/shell.cpp:1922 port/frontend/shell/shell.cpp:1928
 msgid "Pages"
 msgstr "Sider"
 
-#: port/frontend/shell/shell.cpp:1929
+#: port/frontend/shell/shell.cpp:1932
 msgid "Back to the packs"
 msgstr "Tilbage til pakkerne"
 
-#: port/frontend/shell/shell.cpp:1930
+#: port/frontend/shell/shell.cpp:1933
 msgid "On / off"
 msgstr "Til / fra"
 
-#: port/frontend/shell/shell.cpp:1936
+#: port/frontend/shell/shell.cpp:1939
 msgid "Assign"
 msgstr "Tildel"
 
-#: port/frontend/shell/shell.cpp:1936
+#: port/frontend/shell/shell.cpp:1939
 msgid "Clear"
 msgstr "Ryd"
 
-#: port/frontend/shell/shell.cpp:1940
+#: port/frontend/shell/shell.cpp:1943
 msgid "Use this folder"
 msgstr "Brug denne mappe"
 
-#: port/frontend/shell/shell.cpp:1943
+#: port/frontend/shell/shell.cpp:1946
 msgid "Number"
 msgstr "Tal"
 
-#: port/frontend/shell/shell.cpp:1943
+#: port/frontend/shell/shell.cpp:1946
 msgid "Keep"
 msgstr "Behold"
 
-#: port/frontend/shell/shell.cpp:1944
+#: port/frontend/shell/shell.cpp:1947
 msgid "Edit"
 msgstr "Rediger"
 
-#: port/frontend/shell/shell.cpp:1944
+#: port/frontend/shell/shell.cpp:1947
 msgid "Connect"
 msgstr "Forbind"
 
-#: port/frontend/shell/shell.cpp:1944
+#: port/frontend/shell/shell.cpp:1947
 msgid "Hold to set up"
 msgstr "Hold nede for at opsætte"
 
-#: port/frontend/shell/shell.cpp:2248
+#: port/frontend/shell/shell.cpp:2251
 msgid "Game hub"
 msgstr "Spilside"
 
-#: port/frontend/shell/shell.cpp:2253
+#: port/frontend/shell/shell.cpp:2256
 msgid "Game settings: custom"
 msgstr "Spilindstillinger: egne"
 
-#: port/frontend/shell/shell.cpp:2260
+#: port/frontend/shell/shell.cpp:2263
 msgid "Add mods from USB"
 msgstr "Tilføj mods fra USB"
 
-#: port/frontend/shell/shell.cpp:2269 port/frontend/shell/shell.cpp:2722 port/frontend/shell/shell.cpp:2737
+#: port/frontend/shell/shell.cpp:2272 port/frontend/shell/shell.cpp:2725 port/frontend/shell/shell.cpp:2740
 msgid "Remove its update or DLC"
 msgstr "Fjern dets opdatering eller DLC"
 
-#: port/frontend/shell/shell.cpp:2270
+#: port/frontend/shell/shell.cpp:2273
 msgid "Not a favourite"
 msgstr "Fjern fra favoritter"
 
 #. the game menu: a game left out of the Library's list (for demos and clutter), or put back
-#: port/frontend/shell/shell.cpp:2274 port/frontend/shell/shell.cpp:2774
+#: port/frontend/shell/shell.cpp:2277 port/frontend/shell/shell.cpp:2777
 msgid "Show in the Library"
 msgstr "Tilbage i biblioteket"
 
 #. the game menu: a game left out of the Library's list (for demos and clutter), or put back
-#: port/frontend/shell/shell.cpp:2274
+#: port/frontend/shell/shell.cpp:2277
 msgid "Hide from the Library"
 msgstr "Skjul i biblioteket"
 
-#: port/frontend/shell/shell.cpp:2276
+#: port/frontend/shell/shell.cpp:2279
 msgid "Remove from home screen"
 msgstr "Fjern fra hjemmeskærmen"
 
-#: port/frontend/shell/shell.cpp:2278
+#: port/frontend/shell/shell.cpp:2281
 msgid "Add to home screen"
 msgstr "Føj til hjemmeskærmen"
 
 #. the first choice of a game's Collections: a collection named with the keyboard, the game put in it
-#: port/frontend/shell/shell.cpp:2302 port/frontend/shell/shell.cpp:2321
+#: port/frontend/shell/shell.cpp:2305 port/frontend/shell/shell.cpp:2324
 msgid "New collection"
 msgstr "Ny samling"
 
 #. a game's collection could not be written to the console's storage
-#: port/frontend/shell/shell.cpp:2309
+#: port/frontend/shell/shell.cpp:2312
 msgid "Could not save the collection"
 msgstr "Samlingen kunne ikke gemmes"
 
-#: port/frontend/shell/shell.cpp:2708
+#: port/frontend/shell/shell.cpp:2711
 msgid "The update"
 msgstr "Opdateringen"
 
-#: port/frontend/shell/shell.cpp:2713
+#: port/frontend/shell/shell.cpp:2716
 msgid "The DLC"
 msgstr "DLC'en"
 
-#: port/frontend/shell/shell.cpp:2718
+#: port/frontend/shell/shell.cpp:2721
 msgid "The update and the DLC"
 msgstr "Opdateringen og DLC'en"
 
 #. after a Wii U game's update or DLC is removed: Updates and DLC (the game's Options) installs it again
-#: port/frontend/shell/shell.cpp:2729
+#: port/frontend/shell/shell.cpp:2732
 msgid "Removed. Reinstall it from Updates and DLC."
 msgstr "Fjernet. Opdateringer og DLC lægger det tilbage."
 
-#: port/frontend/shell/shell.cpp:2731
+#: port/frontend/shell/shell.cpp:2734
 msgid "Removed. Reinstall it with Install a CIA file."
 msgstr "Fjernet. Installer en CIA-fil lægger det tilbage."
 
 #. {0} is the system's reason, as it gives it
-#: port/frontend/shell/shell.cpp:2736
+#: port/frontend/shell/shell.cpp:2739
 msgid "Some files could not be removed: {0}"
 msgstr "Ikke alt kunne fjernes: {0}"
 
-#: port/frontend/shell/shell.cpp:2763
+#: port/frontend/shell/shell.cpp:2766
 msgid "Added to Favourites"
 msgstr "Føjet til favoritter"
 
-#: port/frontend/shell/shell.cpp:2763
+#: port/frontend/shell/shell.cpp:2766
 msgid "Removed from Favourites"
 msgstr "Fjernet fra favoritter"
 
-#: port/frontend/shell/shell.cpp:2776
+#: port/frontend/shell/shell.cpp:2779
 msgid "Hidden. Find it with the Hidden filter or Search."
 msgstr "Skjult. Bibliotekets filter Skjulte viser det, og Søg finder det."
 
 #. a game just hidden from the Library while its filters' row is off: Search still lists it
-#: port/frontend/shell/shell.cpp:2779
+#: port/frontend/shell/shell.cpp:2782
 msgid "Hidden. Find it with Search."
 msgstr "Skjult. Søg finder det."
 
-#: port/frontend/shell/shell.cpp:2989
+#: port/frontend/shell/shell.cpp:2992
 msgid "Playtendoh {0} is out"
 msgstr "Playtendoh {0} er udkommet"
 
-#: port/frontend/shell/shell.cpp:2990
+#: port/frontend/shell/shell.cpp:2993
 msgid "You have {0}. Download and install it now? Your games, saves and settings are kept."
 msgstr "Det er {0}. Hent og installer nu? Dine spil, gemte data og indstillinger forbliver, som de er."
 
-#: port/frontend/shell/shell.cpp:2991
+#: port/frontend/shell/shell.cpp:2994
 msgid "Update now"
 msgstr "Opdater nu"
 
-#: port/frontend/shell/shell.cpp:2991 port/frontend/shell/shell.cpp:3015 port/frontend/shell/shell.cpp:3054 port/frontend/shell/shell.cpp:3075 port/frontend/shell/shell.cpp:3092
+#: port/frontend/shell/shell.cpp:2994 port/frontend/shell/shell.cpp:3018 port/frontend/shell/shell.cpp:3057 port/frontend/shell/shell.cpp:3078 port/frontend/shell/shell.cpp:3095
 msgid "Later"
 msgstr "Senere"
 
-#: port/frontend/shell/shell.cpp:2991
+#: port/frontend/shell/shell.cpp:2994
 msgid "Skip this version"
 msgstr "Spring denne version over"
 
-#: port/frontend/shell/shell.cpp:2994 port/frontend/shell/shell.cpp:2999 port/frontend/shell/shell.cpp:3004
+#: port/frontend/shell/shell.cpp:2997 port/frontend/shell/shell.cpp:3002 port/frontend/shell/shell.cpp:3007
 msgid "Updating to {0}"
 msgstr "Opdaterer til {0}"
 
-#: port/frontend/shell/shell.cpp:2995
+#: port/frontend/shell/shell.cpp:2998
 msgid "Downloading: {0} of {1} MB"
 msgstr "Henter: {0} af {1} MB"
 
-#: port/frontend/shell/shell.cpp:3000
+#: port/frontend/shell/shell.cpp:3003
 msgid "Checking the download"
 msgstr "Tjekker overførslen"
 
-#: port/frontend/shell/shell.cpp:3005
+#: port/frontend/shell/shell.cpp:3008
 msgid "Installing"
 msgstr "Installerer"
 
-#: port/frontend/shell/shell.cpp:3009
+#: port/frontend/shell/shell.cpp:3012
 msgid "{0} is installed"
 msgstr "{0} er installeret"
 
-#: port/frontend/shell/shell.cpp:3011 port/frontend/shell/shell.cpp:3068
+#: port/frontend/shell/shell.cpp:3014 port/frontend/shell/shell.cpp:3071
 msgid "Restarting Playtendoh…"
 msgstr "Starter Playtendoh igen…"
 
-#: port/frontend/shell/shell.cpp:3015 port/frontend/shell/shell.cpp:3020
+#: port/frontend/shell/shell.cpp:3018 port/frontend/shell/shell.cpp:3023
 msgid "Restart now"
 msgstr "Genstart nu"
 
-#: port/frontend/shell/shell.cpp:3019
+#: port/frontend/shell/shell.cpp:3022
 msgid "Playtendoh will restart to finish the update."
 msgstr "Playtendoh starter igen for at fuldføre opdateringen."
 
-#: port/frontend/shell/shell.cpp:3024
+#: port/frontend/shell/shell.cpp:3027
 msgid "The update did not finish"
 msgstr "Opdateringen blev ikke færdig"
 
-#: port/frontend/shell/shell.cpp:3025
+#: port/frontend/shell/shell.cpp:3028
 msgid "Playtendoh is still {0}."
 msgstr "Playtendoh er stadig {0}."
 
-#: port/frontend/shell/shell.cpp:3028
+#: port/frontend/shell/shell.cpp:3031
 msgid "Checking for updates"
 msgstr "Søger efter opdateringer"
 
-#: port/frontend/shell/shell.cpp:3034
+#: port/frontend/shell/shell.cpp:3037
 msgid "Playtendoh update"
 msgstr "Playtendoh-opdatering"
 
-#: port/frontend/shell/shell.cpp:3055
+#: port/frontend/shell/shell.cpp:3058
 msgid "Restart"
 msgstr "Genstart"
 
 #. {0} lists the four folders: /data/cemu, /data/azahar, /data/melonds, /data/eden
-#: port/frontend/shell/shell.cpp:3071
+#: port/frontend/shell/shell.cpp:3074
 msgid "Your Wii U, 3DS, DS and Switch files will move into their own folders in {0}. It only takes a moment. Playtendoh restarts to do it."
 msgstr "Dine Wii U-, 3DS-, DS- og Switch-filer kommer i deres egne mapper: {0}. De flyttes på samme drev og kopieres aldrig, så det tager et øjeblik uanset størrelsen. Playtendoh starter igen for at gøre det."
 
-#: port/frontend/shell/shell.cpp:3075
+#: port/frontend/shell/shell.cpp:3078
 msgid "Reorganize"
 msgstr "Omorganiser"
 
 #. under an archived game's name while it is unpacked, the first time it starts
-#: port/frontend/shell/shell.cpp:3114
+#: port/frontend/shell/shell.cpp:3117
 msgid "Unpacking the game. This only happens once."
 msgstr "Spillet pakkes ud af sit arkiv. Det sker kun én gang: kopien gemmes til næste start."
 

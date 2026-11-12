@@ -18,7 +18,7 @@ msgid_plural "{0} seconds left, or nothing changes. Touchpad click can be chosen
 msgstr[0] "Encore {0} seconde; ensuite rien ne change. Le clic du pavé tactile compte aussi."
 msgstr[1] "Encore {0} secondes; ensuite rien ne change. Le clic du pavé tactile compte aussi."
 
-#: port/app/emulator.cpp:532 port/frontend/shell/settings.cpp:3312 port/frontend/shell/shell.cpp:2410
+#: port/app/emulator.cpp:532 port/frontend/shell/settings.cpp:3312 port/frontend/shell/shell.cpp:2413
 msgid "Playtendoh cannot write to {0}. Is the HEN loaded?"
 msgstr "Playtendoh ne peut pas écrire dans {0}. Le HEN est-il chargé?"
 
@@ -147,7 +147,7 @@ msgstr "Azahar s’est arrêté en cours de route; {0}/azahar/log/azahar_log.txt
 
 #. the game menu: named groups of games the player makes (Couch co-op, say), shown on the Library's filter row
 #. What's new in 6.0: collections, groups of games the player makes
-#: port/frontend/shell/library.cpp:429 port/frontend/shell/shell.cpp:2272 port/frontend/shell/shell.cpp:2292 port/frontend/shell/shell.cpp:2318 port/frontend/shell/whatsnew.cpp:40
+#: port/frontend/shell/library.cpp:429 port/frontend/shell/shell.cpp:2275 port/frontend/shell/shell.cpp:2295 port/frontend/shell/shell.cpp:2321 port/frontend/shell/whatsnew.cpp:40
 msgid "Collections"
 msgstr "Collections"
 
@@ -315,16 +315,16 @@ msgid "Turn on file sharing for a folder on your computer or NAS, then add it he
 msgstr "Activez le partage de fichiers pour un dossier de votre ordinateur ou NAS, puis ajoutez-le ici. La PS5 y lit les jeux; elle n’y écrit jamais. Pour les jeux Wii U, un câble vaut mieux que le Wi-Fi."
 
 #. the first choice of a game's Collections: a collection named with the keyboard, the game put in it
-#: port/frontend/shell/shell.cpp:2302 port/frontend/shell/shell.cpp:2321
+#: port/frontend/shell/shell.cpp:2305 port/frontend/shell/shell.cpp:2324
 msgid "New collection"
 msgstr "Nouvelle collection"
 
 #. a game's collection could not be written to the console's storage
-#: port/frontend/shell/shell.cpp:2309
+#: port/frontend/shell/shell.cpp:2312
 msgid "Could not save the collection"
 msgstr "Impossible d’enregistrer la collection"
 
-#: port/frontend/shell/shell.cpp:2990
+#: port/frontend/shell/shell.cpp:2993
 msgid "You have {0}. Download and install it now? Your games, saves and settings are kept."
 msgstr "Vous avez {0}. Télécharger et installer la nouvelle version maintenant? Vos jeux, sauvegardes et paramètres restent tels quels."
 

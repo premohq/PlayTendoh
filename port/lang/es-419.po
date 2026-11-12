@@ -136,7 +136,7 @@ msgstr "Se están cargando sus ajustes, paquetes gráficos y controles, y despu�
 
 #. the game menu: named groups of games the player makes (Couch co-op, say), shown on the Library's filter row
 #. What's new in 6.0: collections, groups of games the player makes
-#: port/frontend/shell/library.cpp:429 port/frontend/shell/shell.cpp:2272 port/frontend/shell/shell.cpp:2292 port/frontend/shell/shell.cpp:2318 port/frontend/shell/whatsnew.cpp:40
+#: port/frontend/shell/library.cpp:429 port/frontend/shell/shell.cpp:2275 port/frontend/shell/shell.cpp:2295 port/frontend/shell/shell.cpp:2321 port/frontend/shell/whatsnew.cpp:40
 msgid "Collections"
 msgstr "Colecciones"
 
@@ -339,12 +339,12 @@ msgid "Turn on file sharing for a folder on your computer or NAS, then add it he
 msgstr "Activa el uso compartido de archivos para una carpeta de tu computadora o NAS y agrégala aquí. La PS5 lee los juegos de ella; nunca escribe en ella. Para los juegos de Wii U, un cable funciona mejor que el wifi."
 
 #. the first choice of a game's Collections: a collection named with the keyboard, the game put in it
-#: port/frontend/shell/shell.cpp:2302 port/frontend/shell/shell.cpp:2321
+#: port/frontend/shell/shell.cpp:2305 port/frontend/shell/shell.cpp:2324
 msgid "New collection"
 msgstr "Nueva colección"
 
 #. a game's collection could not be written to the console's storage
-#: port/frontend/shell/shell.cpp:2309
+#: port/frontend/shell/shell.cpp:2312
 msgid "Could not save the collection"
 msgstr "No se pudo guardar la colección"
 

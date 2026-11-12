@@ -49,7 +49,7 @@ msgstr "A on Circle and B on Cross as on the 3DS, or swapped, with X and Y swapp
 msgid "Centre pad"
 msgstr "Center pad"
 
-#: port/frontend/shell/hub.cpp:230 port/frontend/shell/shell.cpp:2270
+#: port/frontend/shell/hub.cpp:230 port/frontend/shell/shell.cpp:2273
 msgid "Favourite"
 msgstr "Favorite"
 
@@ -106,14 +106,14 @@ msgstr "A row of filters above the list."
 msgid "Filters above the list: All, Recently added (last 30 days), Favourites, and for Wii U, Graphic packs on. Off: just Sort and Search."
 msgstr "Filters above the list: All, Recently added (last 30 days), Favorites, and for Wii U, Graphic packs on. Off: just Sort and Search."
 
-#: port/frontend/shell/shell.cpp:2270
+#: port/frontend/shell/shell.cpp:2273
 msgid "Not a favourite"
 msgstr "Not a favorite"
 
-#: port/frontend/shell/shell.cpp:2763
+#: port/frontend/shell/shell.cpp:2766
 msgid "Added to Favourites"
 msgstr "Added to Favorites"
 
-#: port/frontend/shell/shell.cpp:2763
+#: port/frontend/shell/shell.cpp:2766
 msgid "Removed from Favourites"
 msgstr "Removed from Favorites"
