@@ -20,3 +20,13 @@ press down
 press right                   # a value changed
 wait 20
 shot core-changed
+press circle circle circle    # the value's list, the group, then the rows: back on the pages
+press down                    # Picture and sound: the app's own, then the emulator's picture and sound options
+wait 30
+press right
+press down down down down down
+wait 25
+shot core-picture
+press cross                   # More picture options
+wait 30
+shot core-picture-more

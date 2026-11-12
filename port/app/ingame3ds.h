@@ -206,6 +206,7 @@ namespace ps5ingame3ds
 		std::string key, label, help;
 		std::vector<std::string> values;
 		int index = 0;
+		int topic = 0; // where its row goes: the Emulator category (0), Graphics (1), Sound with the volume (2)
 	};
 	void SetCoreOptions(const std::vector<CoreOption>& options);
 	bool TakeCoreOption(std::string& key, int& index);

@@ -544,7 +544,9 @@ namespace ps5shell
 		std::vector<Row> SideRows(const std::string& page, const ps5settings::Launcher& settings);
 		// a page's rows as shown: a › page's behind its row, or that › page's own while it is open
 		std::vector<Row> SubPageRows(const std::vector<Row>& rows) const;
-		std::vector<Row> CoreOptionRows(const ps5settings::Launcher& settings); // Settings > Emulator, a core's options (settings.cpp)
+		// Settings > Emulator, a core's options about the console itself; pictureAndSound: its picture and sound
+		// options instead, a › row each, for the side's Picture and sound page (settings.cpp)
+		std::vector<Row> CoreOptionRows(const ps5settings::Launcher& settings, bool pictureAndSound = false);
 		void OpenSubPage(const Row& row);
 		void CloseSubPage();
 		std::string PanelText(const std::string& page) const;

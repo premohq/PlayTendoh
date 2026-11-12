@@ -16,6 +16,7 @@
 #include "core.h"
 #include "devices.h"
 #include "session.h"
+#include "topics.h"
 #include "../app/achievements.h"
 #include "../app/boxart.h"
 #include "../app/cheats.h"
@@ -1206,7 +1207,7 @@ namespace ps5libretro
 			{
 				if (!option.visible || option.values.empty())
 					continue;
-				ps5ingame3ds::CoreOption row{option.key, option.label, option.info, {}, 0};
+				ps5ingame3ds::CoreOption row{option.key, option.label, option.info, {}, 0, (int)TopicOf(option.key, option.label, option.category)};
 				for (size_t i = 0; i < option.values.size(); i++)
 				{
 					row.values.push_back(option.values[i].second);

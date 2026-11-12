@@ -7,6 +7,7 @@
 // can have its own of, each value its side's (Default) until changed, Square back to Default.
 
 #include "shell_internal.h"
+#include "../../libretro/topics.h"
 #include "../actions.h"
 #include "../sound.h"
 #include "../../app/reports.h"
@@ -666,6 +667,10 @@ namespace ps5shell
 				"border");
 			own(slider("volume", Tr("Volume"), hand.volume, 100, Tr("The games' sound."), Tr("The game's sound. Left and Right change it by 10%.")),
 				"volume");
+			// and the emulator's own picture and sound options, behind a › row each
+			if (OnCore())
+				for (Row& row : CoreOptionRows(settings, true))
+					rows.push_back(std::move(row));
 		}
 		else if (page == "ui-language")
 		{
@@ -1812,12 +1817,15 @@ namespace ps5shell
 	// two), then each of its core's options as a choice, those the core groups behind a › row for each
 	// group, and a way back to the core's own values. A value the player picks is kept for the side
 	// (ps5settings::N3ds::coreOptions) and given to the core at every game's start (libretro/game.cpp).
-	std::vector<Row> Shell::CoreOptionRows(const ps5settings::Launcher& settings)
+	// The core's picture and sound options (libretro/topics.h) are not here but on the side's Picture and
+	// sound page, behind a › row each (pictureAndSound), with the app's own picture and volume.
+	std::vector<Row> Shell::CoreOptionRows(const ps5settings::Launcher& settings, bool pictureAndSound)
 	{
 		std::vector<Row> rows;
 		const int side = SideIndex();
 		const ps5settings::N3ds& own = settings.retro[ps5retro::Slot(side)];
-		if (const ps5retro::Alternative* other = ps5retro::AlternativeOf(side); other && !InGameSettings())
+		const auto topic = [](const ps5libretro::CoreOption& option) { return ps5libretro::TopicOf(option.key, option.label, option.category); };
+		if (const ps5retro::Alternative* other = ps5retro::AlternativeOf(side); other && !InGameSettings() && !pictureAndSound)
 		{
 			Row runtime; runtime.id = "retro-backend"; runtime.kind = Row::Kind::Segmented; runtime.label = Tr("Emulator");
 			runtime.options = {ps5libretro::Plays(side) ? std::string(ps5libretro::CoreTitle(side)) : std::string(other->first), other->backend.name};
@@ -1828,7 +1836,7 @@ namespace ps5shell
 		const std::vector<ps5libretro::CoreOption>& options = ps5libretro::CoreOptions(side);
 		if (options.empty() || own.retroBackend != 0)
 		{
-			if (!ps5libretro::Plays(side) || own.retroBackend != 0)
+			if ((!ps5libretro::Plays(side) || own.retroBackend != 0) && !pictureAndSound)
 			{
 				Row info; info.id = "retro-library"; info.kind = Row::Kind::Action; info.label = Tr("Open emulator settings and saves");
 				info.description = Tr("Opens this emulator's own menus for its settings, controls and saves. Quit them to come back here.");
@@ -1839,7 +1847,7 @@ namespace ps5shell
 		// one › row a group, in the order the core gives its first option; the rest on the page itself
 		std::vector<std::string> groups;
 		for (const auto& option : options)
-			if (!option.category.empty() && std::find(groups.begin(), groups.end(), option.category) == groups.end())
+			if (!option.category.empty() && topic(option) == ps5libretro::Topic::Emulator && std::find(groups.begin(), groups.end(), option.category) == groups.end())
 				groups.push_back(option.category);
 		auto add = [&](const ps5libretro::CoreOption& option, const std::string& group) {
 			Row row;
@@ -1864,14 +1872,42 @@ namespace ps5shell
 			row.help = option.info;
 			rows.push_back(std::move(row));
 		};
+		if (pictureAndSound)
+		{
+			// the core's picture options behind one › row, its sound options behind another
+			for (const ps5libretro::Topic about : {ps5libretro::Topic::Picture, ps5libretro::Topic::Sound})
+			{
+				int count = 0, changed = 0;
+				for (const auto& option : options)
+					if (topic(option) == about)
+					{
+						count++;
+						changed += own.coreOptions.count(option.key) ? 1 : 0;
+					}
+				if (count == 0)
+					continue;
+				Row link;
+				link.kind = Row::Kind::Link;
+				link.id = "sub";
+				// tr: Settings > Picture and sound on a classic console: rows that open the emulator's own picture options, and its sound options
+				link.label = about == ps5libretro::Topic::Picture ? Tr("More picture options") : Tr("More sound options");
+				link.opens = about == ps5libretro::Topic::Picture ? "core-picture" : "core-sound";
+				link.value = changed ? TrP(changed, "{0} changed", "{0} changed") : TrP(count, "{0} option", "{0} options");
+				rows.push_back(link);
+				for (const auto& option : options)
+					if (topic(option) == about)
+						add(option, link.opens);
+			}
+			return rows;
+		}
 		for (const auto& option : options)
-			if (option.category.empty())
+			if (option.category.empty() && topic(option) == ps5libretro::Topic::Emulator)
 				add(option, "");
 		for (size_t g = 0; g < groups.size(); g++)
 		{
 			int count = 0, changed = 0;
 			for (const auto& option : options)
-				if (option.category == groups[g])
+				if (option.category == groups[g] && topic(option) == ps5libretro::Topic::Emulator)
 				{
 					count++;
 					changed += own.coreOptions.count(option.key) ? 1 : 0;
@@ -1885,7 +1921,7 @@ namespace ps5shell
 			link.value = changed ? TrP(changed, "{0} changed", "{0} changed") : TrP(count, "{0} option", "{0} options");
 			rows.push_back(link);
 			for (const auto& option : options)
-				if (option.category == groups[g])
+				if (option.category == groups[g] && topic(option) == ps5libretro::Topic::Emulator)
 					add(option, link.opens);
 		}
 		Row reset;

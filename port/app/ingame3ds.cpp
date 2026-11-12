@@ -597,6 +597,17 @@ namespace ps5ingame3ds
 			const char* filter = kScreenFilters[std::clamp(settings.screenFilter, 0, kScreenFilterCount - 1)];
 			std::vector<Row> rows;
 			const std::string on = Tr("On"), off = Tr("Off");
+			// a libretro core's options, each in the category it is about (CoreOption::topic)
+			std::vector<CoreOption> coreOptions;
+			if (single)
+			{
+				std::lock_guard lock(s_mutex);
+				coreOptions = s_coreOptions;
+			}
+			const auto coreRow = [](const CoreOption& option) {
+				return Row{"core:" + option.key, option.label,
+					option.values.empty() ? std::string() : option.values[std::clamp(option.index, 0, (int)option.values.size() - 1)], true, option.help};
+			};
 			if (single)
 				rows.push_back({"screens", Tr("Screen and border"), BorderName(settings.border), false, Tr("The border around the screen."), {
 					{"border", Tr("Border"), BorderName(settings.border), true, Tr("Artwork around the screen.")},
@@ -638,29 +649,34 @@ namespace ps5ingame3ds
 					{"pictureshape", Tr("Shape"), Tr(kPictureShapes[shape]), true,
 						Tr("Original is the console's own. 4:3 is an old TV's. Square pixels shows them as the game draws them.")},
 				}});
-				// the emulator's own options, as Settings > Emulator has them, changed for this game's console now
-				std::vector<CoreOption> options;
+				// the emulator's own options, as Settings has them, changed for this game's console now: those about
+				// the console itself here; its picture's under Graphics and its sound's with the volume, below
+				std::vector<Row> emulatorRows;
+				for (const CoreOption& option : coreOptions)
+					if (option.topic == 0)
+						emulatorRows.push_back(coreRow(option));
+				if (!emulatorRows.empty())
 				{
-					std::lock_guard lock(s_mutex);
-					options = s_coreOptions;
-				}
-				if (!options.empty())
-				{
-					Row emulator{"emulator", Tr("Emulator"), ps5lang::TrP((long long)options.size(), "{0} option", "{0} options"), false,
+					Row emulator{"emulator", Tr("Emulator"), ps5lang::TrP((long long)emulatorRows.size(), "{0} option", "{0} options"), false,
 						Tr("Every option of this console's emulator. Changes apply now and are kept for every game on it.")};
-					for (const CoreOption& option : options)
-						emulator.rows.push_back({"core:" + option.key, option.label,
-							option.values.empty() ? std::string() : option.values[std::clamp(option.index, 0, (int)option.values.size() - 1)], true, option.help});
+					emulator.rows = std::move(emulatorRows);
 					rows.push_back(std::move(emulator));
 				}
 			}
 			if (single)
-				rows.push_back({"graphics", Tr("Graphics"), Tr(filter), false, Tr("The screen filter and the performance overlay."), {
+			{
+				Row graphics{"graphics", Tr("Graphics"), Tr(filter), false, Tr("The screen filter and the performance overlay."), {
 					{"dsfilter", Tr("Screen filter"), Tr(filter), true,
 						Tr("Sharp keeps pixels crisp and even. Smooth blends them. CRT draws the lines and colours of a tube TV, Curved CRT its rounded glass too.")},
 					{"performance", Tr("Performance overlay"), settings.performance ? on : off, true,
 						Tr("Shows frame rate and speed in the top-left corner.")},
-				}});
+				}};
+				// and the emulator's own picture options: its colours, blending, borders, filters
+				for (const CoreOption& option : coreOptions)
+					if (option.topic == 1)
+						graphics.rows.push_back(coreRow(option));
+				rows.push_back(std::move(graphics));
+			}
 			else if (ds)
 				rows.push_back({"graphics", Tr("Graphics"), Tr(filter), false, Tr("The screen filter and the performance overlay."), {
 					{"dsfilter", Tr("Screen filter"), Tr(filter), true,
@@ -755,7 +771,20 @@ namespace ps5ingame3ds
 					{"noamiibo", Tr("Remove amiibo"), amiiboMessage, false, Tr("Takes the amiibo off the reader.")},
 				}});
 			}
-			rows.push_back(volume);
+			// the volume alone, or with the emulator's own sound options behind one row
+			std::vector<Row> soundRows;
+			for (const CoreOption& option : coreOptions)
+				if (option.topic == 2)
+					soundRows.push_back(coreRow(option));
+			if (soundRows.empty())
+				rows.push_back(volume);
+			else
+			{
+				Row sound{"sound", Tr("Sound"), Percent(settings.volume), false, Tr("The game's sound, and the emulator's sound options.")};
+				sound.rows.push_back(volume);
+				sound.rows.insert(sound.rows.end(), soundRows.begin(), soundRows.end());
+				rows.push_back(std::move(sound));
+			}
 			const std::string ab = settings.aOnCircle ? Tr("A on Circle") : Tr("A on Cross");
 			if (single)
 				rows.push_back({"controls", Tr("Controls"), ab, false, Tr("Stick deadzone and button layout."), {
