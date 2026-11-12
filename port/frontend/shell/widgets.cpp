@@ -350,6 +350,53 @@ namespace ps5shell
 			{disc.CentreX() - mark * 0.5f, disc.CentreY() - mark * 0.5f, mark, mark}, Lighter(KindColour(kind), 0.2f));
 	}
 
+	namespace
+	{
+		constexpr uint32_t Rgb(uint32_t rgb)
+		{
+			return 0xff000000u | (rgb & 0xff) << 16 | (rgb & 0xff00) | (rgb >> 16 & 0xff);
+		}
+		// A console's game case, for 3D box art: how thick it is beside its shorter side, and the plastic's
+		// colour where the case shows above and below its paper (0: a cardboard box, printed all over)
+		struct GameCase
+		{
+			float depth;
+			uint32_t plastic;
+		};
+		GameCase CaseOf(System side)
+		{
+			switch (side)
+			{
+			case System::WiiU: return {0.10f, Rgb(0x2389e0)};	  // a DVD's case, 14 mm, in the Wii U's blue
+			case System::Wii: return {0.10f, Rgb(0xf4f4f4)};	  // the same case in white
+			case System::GameCube: return {0.10f, Rgb(0x1c1c1c)}; // and in black
+			case System::N3ds: return {0.095f, Rgb(0xf4f4f4)};	  // 12 mm, white
+			case System::Nds: return {0.12f, Rgb(0x242424)};	  // 15 mm: a Game Boy Advance game fits beside the card
+			case System::Switch:
+			case System::Switch2: return {0.095f, Rgb(0xe60012)}; // 10 mm on a narrow case; the Switch 2's is red
+			case System::Fds: return {0.09f, Rgb(0xf0ead6)};	  // a disk's slim case
+			default: return {0.20f, 0};							  // a cardboard box, an inch on five: cartridges and Game & Watch
+			}
+		}
+		// Where a case's front is in a cover's slot, and how wide its spine is to the left of it (spine): the
+		// case's thickness beside the cover's shorter side, seen at the turn's angle. A thick box is drawn a
+		// little smaller, whole, never squeezed: on the slot's floor
+		Box FitCase(const Box& slot, const GameCase& its, float& spine)
+		{
+			spine = std::min(slot.w, slot.h) * its.depth * 0.9f;
+			float front = slot.w * 0.93f, height = slot.h;
+			const float whole = spine + front;
+			if (whole > slot.w)
+			{
+				const float fit = slot.w / whole;
+				spine *= fit;
+				front *= fit;
+				height *= fit;
+			}
+			return {slot.x + (slot.w - spine - front) * 0.5f + spine, slot.Bottom() - height, front, height};
+		}
+	}
+
 	void Shell::DrawCover(Canvas& canvas, Game& game, const Box& box, bool focused, float lift, bool status)
 	{
 		const ui::Picture& picture = Cover(game);
@@ -373,10 +420,10 @@ namespace ps5shell
 			// as a box from a shelf's size up (a list's small cover stays flat: its spine would be a hairline)
 			if (m_settings.ui.boxArt3d && box.w >= 100)
 			{
-				DrawBox3d(canvas, picture, m_images->Get(ps5boxart::SpinePath(game.boxArt)), drawn, focused,
+				const Box front = DrawBox3d(canvas, picture, m_images->Get(ps5boxart::SpinePath(game.boxArt)), drawn, focused,
 					game.entry.ambient[0] ? game.entry.ambient[0] : picture.ambient[0]);
 				if (status)
-					StatusBadge(canvas, game, drawn, drawn.h * 0.07f); // under the front's top, which falls toward its far edge
+					StatusBadge(canvas, game, front, 0);
 				return;
 			}
 		}
@@ -384,6 +431,11 @@ namespace ps5shell
 		if (!glow)
 			glow = Accent();
 		glow = ui::Mix(glow, 0xffffffff, 0.25f) | 0xff000000;
+		// 3D box art and no cover yet: the game's card is its box's front, with the case's spine beside it, so
+		// a shelf is all boxes
+		float spine = 0;
+		if (m_settings.ui.boxArt3d && box.w >= 100 && !picture.texture)
+			drawn = FitCase(drawn, CaseOf(m_side), spine);
 		canvas.Shadow(drawn, kRadiusCover, focused ? 26.0f : 12.0f, focused ? 60.0f : 30.0f, focused ? 0x99000000 : 0x73000000);
 		if (picture.texture)
 			canvas.Image(picture.texture, drawn, kRadiusCover);
@@ -411,6 +463,28 @@ namespace ps5shell
 			}
 			canvas.PopClip();
 			DrawGameName(canvas, game, drawn);
+			if (spine > 0)
+			{
+				// the spine in the card's colours, in shade, shorter toward the back (as DrawBox3d's)
+				const GameCase its = CaseOf(m_side);
+				constexpr int kSpineSlices = 10;
+				for (int i = 0; i < kSpineSlices; i++)
+				{
+					const float t = (float)i / kSpineSlices, h = drawn.h * (0.94f + 0.06f * t);
+					const Box strip{drawn.x - spine + spine * t, drawn.Bottom() - h - (drawn.h - h) * 0.35f, spine / kSpineSlices + 1.0f, h};
+					const float shade = 0.5f - 0.2f * t;
+					canvas.LinearGradient(strip, 0, ui::Mix(top, 0xff000000, shade) | 0xff000000, ui::Mix(ui::Mix(bottom, top, 0.25f), 0xff000000, shade) | 0xff000000,
+						strip.x, strip.y, strip.x, strip.Bottom());
+					if (its.plastic)
+					{
+						const float lip = std::max(2.0f, h * 0.018f);
+						const uint32_t plastic = ui::Mix(its.plastic, 0xff000000, 0.38f - 0.2f * t);
+						canvas.Rect({strip.x, strip.y, strip.w, lip}, 0, plastic);
+						canvas.Rect({strip.x, strip.Bottom() - lip, strip.w, lip}, 0, plastic);
+					}
+				}
+				canvas.Line(drawn.x - spine + 0.5f, drawn.y + drawn.h * 0.04f, drawn.x - spine + 0.5f, drawn.Bottom() - drawn.h * 0.02f, 1.0f, 0x30ffffff);
+			}
 		}
 		// light from above, and a hairline edge
 		canvas.LinearGradient(drawn, kRadiusCover, 0x29ffffff, 0x00ffffff, drawn.x, drawn.y, drawn.x + drawn.w * 0.35f, drawn.y + drawn.h * 0.38f);
@@ -421,46 +495,76 @@ namespace ps5shell
 			StatusBadge(canvas, game, drawn, 0);
 	}
 
-	void Shell::DrawBox3d(Canvas& canvas, const ui::Picture& picture, const ui::Picture& spineArt, const Box& box, bool focused, uint32_t ambient)
+	Box Shell::DrawBox3d(Canvas& canvas, const ui::Picture& picture, const ui::Picture& spineArt, const Box& slot, bool focused, uint32_t ambient)
 	{
 		// The cover as its box, turned a little to the right: a spine on the left (the box's own, from GameTDB's
 		// whole cover; else the cover's left edge), in shade, then the front, whose far edge is shorter. The canvas draws no perspective, so each face is
-		// thin upright slices of the picture, each a little shorter than the last
+		// thin upright slices of the picture, each a little shorter than the last. The box in focus turns to
+		// face the player, so the focus ring lies on its front's edges. Returns where the front is.
 		constexpr int kSlices = 40;
-		const float spine = box.w * 0.11f, front = box.w - spine;
-		const float near = box.h, far = box.h * 0.9f, back = box.h * 0.94f;
+		if (focused)
+		{
+			if (m_boxFacing != picture.texture)
+			{
+				m_boxFacing = picture.texture;
+				m_boxTurn = m_settings.ui.reduceMotion ? 0.0f : 1.0f;
+			}
+			m_boxTurn = std::max(0.0f, m_boxTurn - m_dt * 9.0f);
+		}
+		const float turn = focused ? ui::ease::CubicOut(m_boxTurn) : 1.0f;
+		const GameCase its = CaseOf(m_side); // as thick as its console's cases are
+		float spine = 0;
+		const Box face = FitCase(slot, its, spine);
+		const Box box{face.x - spine, face.y, spine + face.w, face.h};
+		const float front = face.w;
+		const float near = box.h, far = box.h * (1.0f - 0.1f * turn), back = box.h * 0.94f;
 		const float floor = box.Bottom();
 		// where a face's top and bottom are, across it: the floor rises half as much as the top falls
+		const auto top = [&](float h) { return floor - h - (box.h - h) * 0.35f; };
 		const auto slice = [&](const ui::Picture& art, float x, float w, float h, float u0, float u1, uint32_t tint) {
-			const float drop = box.h - h;
 			// each slice reaches 2 pixels into the next, so the soft edge of one lies on the next's picture, not on
 			// the ground behind: no seams
-			canvas.Image(art.texture, {x, floor - h - drop * 0.35f, w + 2.0f, h}, 0, tint, u0, 0, u1 + (u1 - u0) * 2.0f / std::max(w, 0.5f), 1);
+			canvas.Image(art.texture, {x, top(h), w + 2.0f, h}, 0, tint, u0, 0, u1 + (u1 - u0) * 2.0f / std::max(w, 0.5f), 1);
 		};
 		uint32_t edge = ambient ? ambient : Accent();
-		canvas.Shadow({box.x + spine * 0.5f, box.y + box.h * 0.04f, box.w - spine * 0.5f, box.h * 0.94f}, 6, focused ? 26.0f : 14.0f,
+		canvas.Shadow({box.x + spine * 0.5f, box.y + box.h * 0.04f, spine * 0.5f + front, box.h * 0.94f}, 6, focused ? 26.0f : 14.0f,
 			focused ? 60.0f : 30.0f, focused ? 0x99000000 : 0x73000000);
-		// the spine, darker toward the back: the box's own, else the cover's first twentieth
+		// the spine, darker toward the back: the box's own, else the cover's first twentieth, lit enough to be
+		// seen on a dark cover's edge
 		const bool own = spineArt.texture != 0;
-		for (int i = 0; i < kSlices / 4; i++)
+		constexpr int kSpineSlices = kSlices / 4;
+		for (int i = 0; i < kSpineSlices; i++)
 		{
-			const float t0 = (float)i / (kSlices / 4), t1 = (float)(i + 1) / (kSlices / 4);
-			const float h = back + (near - back) * t0;
-			const uint32_t shade = own ? ui::Mix(0xff8a8a8a, 0xffc4c4c4, t0) : ui::Mix(0xff5a5a5a, 0xff9a9a9a, t0);
-			slice(own ? spineArt : picture, box.x + spine * t0, spine * (t1 - t0), h, own ? t0 : 0.05f * t0, own ? t1 : 0.05f * t1, shade);
+			const float t0 = (float)i / kSpineSlices, t1 = (float)(i + 1) / kSpineSlices;
+			const float h = back + (near - back) * t0, x = box.x + spine * t0, w = spine * (t1 - t0);
+			slice(own ? spineArt : picture, x, w, h, own ? t0 : 0.05f * t0, own ? t1 : 0.05f * t1, ui::Mix(0xff8a8a8a, 0xffc4c4c4, t0));
+			if (!own)
+				canvas.Rect({x, top(h), w + 1.0f, h}, 0, ui::SetAlpha(ui::Mix(edge, 0xffffffff, 0.35f), 0.16f - 0.08f * (1 - t0)));
+			if (its.plastic)
+			{
+				// a plastic case shows above and below its paper
+				const float lip = std::max(2.0f, h * 0.018f);
+				const uint32_t plastic = ui::Mix(its.plastic, 0xff000000, 0.38f - 0.2f * t0);
+				canvas.Rect({x, top(h), w + 1.0f, lip}, 0, plastic);
+				canvas.Rect({x, top(h) + h - lip, w + 1.0f, lip}, 0, plastic);
+			}
 		}
+		// the spine's far edge, a hairline of light: the box's outline where its shade meets a dark ground
+		canvas.Line(box.x + 0.5f, top(back) + 1, box.x + 0.5f, top(back) + back - 1, 1.0f, 0x30ffffff);
 		// the front: the whole picture, its near edge full height, its far edge shorter
 		for (int i = 0; i < kSlices; i++)
 		{
 			const float t0 = (float)i / kSlices, t1 = (float)(i + 1) / kSlices;
 			const float h = near + (far - near) * t0;
-			slice(picture, box.x + spine + front * t0, front * (t1 - t0), h, t0, t1, ui::Mix(0xffffffff, 0xffd6d6d6, t0));
+			slice(picture, box.x + spine + front * t0, front * (t1 - t0), h, t0, t1, ui::Mix(0xffffffff, 0xffd6d6d6, t0 * turn));
 		}
 		// the fold between spine and front catches the light; the side's colour as a hairline there
 		const float foldTop = floor - near;
 		canvas.Line(box.x + spine, foldTop + 1, box.x + spine, floor - 1, 1.5f, ui::SetAlpha(ui::Mix(edge, 0xffffffff, 0.6f), 0.55f));
+		// the front as a box: the ring's, and the status badge's under its far corner
 		if (focused)
-			Focus({box.x + spine, foldTop, front, near}, 4, ui::Mix(edge, 0xffffffff, 0.25f) | 0xff000000);
+			Focus(face, 4, ui::Mix(edge, 0xffffffff, 0.25f) | 0xff000000);
+		return {face.x, top(far), front, far};
 	}
 
 	void Shell::DrawToggle(Canvas& canvas, float x, float y, bool on, bool focused)
