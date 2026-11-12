@@ -247,9 +247,10 @@ namespace ps5esdeget
 				Fail(ps5lang::TrF("The download is damaged (SHA-256 {0}, not {1})", actual.substr(0, 12), sha.substr(0, 12)));
 				return;
 			}
-			// unpacked beside the app (the same drive), then moved in as one folder
+			// unpacked inside the app's own folder, then moved in as one folder: not beside it, as /data/homebrew
+			// is the HEN's (755) and an app without one may write only in its own folder
 			Set(Status::State::Installing);
-			const fs::path staging = app.string() + ".es-de";
+			const fs::path staging = app / ".es-de-download";
 			ps5update::RemoveAll(staging);
 			std::vector<fs::path> files;
 			std::string error;

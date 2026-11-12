@@ -534,7 +534,7 @@ namespace ps5update
 				return;
 			}
 
-			// unpacked beside the app's folder (the same drive, so each file then moves into place)
+			// unpacked in a folder of the app's own, then each file moved into place
 			Set(Status::State::Installing);
 			const fs::path app = AppFolder();
 			if (app.empty())
@@ -544,7 +544,9 @@ namespace ps5update
 				return;
 			}
 			ps5log::Line("[update] installing in {}", app.string());
-			const fs::path staging = app.string() + ".update";
+			// inside the app's own folder, not beside it: /data/homebrew is the HEN's (755), and an app without
+			// one may write only in its own folder (the same drive, so each file still moves into place)
+			const fs::path staging = app / ".update";
 			RemoveAll(staging);
 			std::vector<fs::path> files;
 			std::string error;
