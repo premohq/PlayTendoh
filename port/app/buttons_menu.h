@@ -128,13 +128,15 @@ namespace ps5menu
 		{
 			m_listening = -1;
 			m_settling = false;
+			m_testing = false;
 			m_message.clear();
 		}
 
-		// Waiting for a press, or for its button to be let go: the sheet's controller is still meanwhile
+		// Waiting for a press, or for its button to be let go, or testing the controller: the sheet's controller
+		// is still meanwhile
 		bool Busy() const
 		{
-			return m_listening >= 0 || m_settling;
+			return m_listening >= 0 || m_settling || m_testing;
 		}
 
 		// The category: test (what the DualSense sends now, heldNow from HeldInput), a row a button, then the
@@ -150,9 +152,15 @@ namespace ps5menu
 			Row category{"buttons", Tr("Buttons"), TrP(set, "{0} button set", "{0} buttons set"), false,
 				Tr("Choose the DualSense button for each button.")};
 			// tr: the row that shows what the controller sends: the button held now, or a dash
-			category.rows.push_back({"buttons-test", Tr("Controller test"),
+			Row test{"buttons-test", Tr("Controller test"),
 				heldNow > kInputNone && heldNow <= kInputTouchPad ? ButtonLabel(kInputNames[heldNow]) : std::string("-"), false,
-				m_message.empty() ? std::string(Tr("This player's DualSense input, live.")) : m_message});
+				// tr: the Controller test row's help: Cross starts the test, during which the D-pad and sticks no longer move through the menu
+				m_testing ? std::string(Tr("Press any button, trigger or stick direction to see it here and on the controller. The test ends 3 seconds after the last one.")) :
+				m_message.empty() ? std::string(Tr("Press Cross to test this player's DualSense. The menu stays still while each button shows.")) : m_message};
+			// what is held, lit on the controller's picture (side_menu.h's DrawPad)
+			if (m_testing && heldNow > kInputNone && heldNow <= kInputTouchPad)
+				test.pad = heldNow;
+			category.rows.push_back(std::move(test));
 			for (size_t i = 0; i < buttons.size(); i++)
 			{
 				const bool listening = (int)i == m_listening;
@@ -199,7 +207,17 @@ namespace ps5menu
 				return true;
 			}
 			if (action.id == "buttons-test")
+			{
+				if (action.chosen)
+				{
+					// the test: the controller is its own until nothing has been pressed for a while (Capture)
+					m_testing = true;
+					m_released = false;
+					m_until = nowUs + kTestUs;
+					m_message.clear();
+				}
 				return true;
+			}
 			if (action.id.rfind("button:", 0) != 0)
 				return false;
 			if (action.chosen)
@@ -219,6 +237,21 @@ namespace ps5menu
 		{
 			using ps5lang::Tr;
 			Asked asked;
+			if (m_testing)
+			{
+				// every press shows on the test's row (the category's heldNow); it ends once nothing has been
+				// pressed for a while, and the sheet reads the controller again when all is let go
+				if (!m_released)
+					m_released = idle;
+				else if (held != kInputNone || touchpad)
+					m_until = nowUs + kTestUs;
+				if (nowUs > m_until)
+				{
+					m_testing = false;
+					m_settling = !idle;
+				}
+				return asked;
+			}
 			if (m_listening < 0)
 			{
 				if (idle)
@@ -255,6 +288,8 @@ namespace ps5menu
 		int m_last = -1;		 // the one the message under the list is about
 		bool m_released = false; // everything was let go since the wait began
 		bool m_settling = false; // the press taken is still held
+		bool m_testing = false;	 // the Controller test's row was chosen: every press is shown, none moves the sheet
+		static constexpr uint64_t kTestUs = 3000000;
 		uint64_t m_until = 0;
 		std::string m_message;
 	};

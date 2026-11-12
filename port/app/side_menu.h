@@ -541,7 +541,7 @@ namespace ps5menu
 			};
 			std::vector<Chip> chips;
 			for (const Row& row : category.rows)
-				if (row.pad > 0 && row.pad < (int)std::size(kSpots))
+				if (row.pad > 0 && row.pad < (int)std::size(kSpots) && row.id != "buttons-test") // the test lights a control, with no chip of its own
 				{
 					const ImVec2 p = spot(row.pad);
 					const int side = row.pad == (int)std::size(kSpots) - 1 ? 0 : kSpots[row.pad].x < 700 ? -1 : 1;

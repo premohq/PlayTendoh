@@ -215,7 +215,7 @@ namespace
 			setting("filter", "Texture filtering", "Linear", "Smooth or sharp pixels."),
 			setting("bright", "Brightness", "60%", "The screens' brightness.", 0.6f)};
 		Row controls{"buttons", "Buttons", "12 buttons set", false, "What each DualSense button does in this game."};
-		controls.rows = {Row{"buttons-test", "Controller test", "-", false, "This player's DualSense input, live."}};
+		controls.rows = {Row{"buttons-test", "Controller test", "-", false, "Press Cross to test this player's DualSense. The menu stays still while each button shows."}};
 		const std::pair<const char*, int> kSet[] = {{"A", 2}, {"B", 1}, {"X", 4}, {"Y", 3}, {"L", 5}, {"R", 6}, {"ZL", 7}, {"ZR", 8},
 			{"Start", 12}, {"Select", 11}, {"Home", 25}};
 		for (size_t i = 0; i < std::size(kSet); i++)
@@ -245,7 +245,7 @@ namespace
 	{
 		using ps5menu::Row;
 		Row controls{"buttons", "Buttons", "8 buttons set", false, "Choose the DualSense button for each button."};
-		controls.rows = {Row{"buttons-test", "Controller test", "-", false, "This player's DualSense input, live."},
+		controls.rows = {Row{"buttons-test", "Controller test", "-", false, "Press Cross to test this player's DualSense. The menu stays still while each button shows."},
 			Row{"controller", "Controller", "Auto: Arkanoid paddle", true,
 				"The controller plugged into the console for this game. Auto picks the one the game was made for, such as the Zapper for Duck Hunt."},
 			Row{"special:0", "Turn the knob", "Touchpad, left stick or D-pad", false, "What the DualSense does for the controller plugged in."},
