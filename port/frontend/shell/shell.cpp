@@ -17,6 +17,7 @@
 #include "../../app/pack_updates.h"
 #include "../../app/reports.h"
 #include "../../app/paths.h"
+#include "../../app/quotes.h"
 #include "../../app/updates.h"
 #include "../../azahar/azahar.h"
 #include "../../azahar/library.h"
@@ -338,7 +339,15 @@ namespace ps5shell
 				details += (details.empty() ? "" : "  /  ") + std::string("Porpoise X"); // every side's menu names its emulator here, last
 				// its in-game menu's cover: Porpoise's own covers folder's, given the launcher's when it has none
 				ps5porpoise::ShareCover(ps5porpoise::Data() + "/covers", m_choice->game.gameId, std::filesystem::path(m_choice->game.path).stem().string(), cover);
-				ps5porpoise::WriteSession(SystemName(m_side), m_choice->game.name, details, cover, ps5boxart::TitleArtPath(std::filesystem::path(m_choice->game.path).stem().string()));
+				// and the quotes every side's loading screen shows, in the menus' language, from a different one each start
+				std::vector<std::pair<std::string, std::string>> quotes;
+				for (size_t i = 0, first = ps5quotes::First(); i < ps5quotes::kCount; i++)
+				{
+					const ps5quotes::Quote& quote = ps5quotes::kQuotes[(first + i) % ps5quotes::kCount];
+					quotes.emplace_back(ps5quotes::Words(quote), ps5quotes::Credit(quote));
+				}
+				ps5porpoise::WriteSession(SystemName(m_side), m_choice->game.name, details, cover,
+					ps5boxart::TitleArtPath(std::filesystem::path(m_choice->game.path).stem().string()), quotes);
 				{
 					// every game's Auto Boost: this one's, the first time
 					ps5porpoise::Pick pick;

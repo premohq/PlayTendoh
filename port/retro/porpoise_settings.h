@@ -13,6 +13,7 @@
 #include <cstdint>
 #include <map>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace ps5porpoise
@@ -33,10 +34,11 @@ namespace ps5porpoise
 	void ClearAchievementsAccount(); // signed out: Porpoise's copy goes too
 	// What Porpoise's loading screen (the Switch side's, in Porpoise X) says of the game about to start:
 	// <data>/playtendoh-session.txt, a line each; banner: a full-screen picture of the game (ps5boxart's title
-	// art) for its ground, in place of its cover's colours. Then the quotes every side's loading screen shows
-	// while it waits (app/quotes.h), in the menus' language, the one to show first first: a quote= line each,
-	// its words in quotation marks, and a quote_by= after it, who said it (a reader that knows neither skips them)
-	void WriteSession(const std::string& side, const std::string& title, const std::string& details, const std::string& cover, const std::string& banner = {});
+	// art) for its ground, in place of its cover's colours. Then quotes: what every side's loading screen shows
+	// while it waits (app/quotes.h), the one to show first first, each its words and who said it: a quote= line
+	// each and a quote_by= after it (a reader that knows neither skips them)
+	void WriteSession(const std::string& side, const std::string& title, const std::string& details, const std::string& cover, const std::string& banner = {},
+		const std::vector<std::pair<std::string, std::string>>& quotes = {});
 
 	// Porpoise's own logs: its trace.txt and Dolphin's core.log, each start's own with the last one's beside it
 	// (trace.prev.txt, core.prev.log; Porpoise-X's porpoise_paths.hpp). Its trace is in the sandbox
