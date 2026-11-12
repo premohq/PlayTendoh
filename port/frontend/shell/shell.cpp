@@ -10,6 +10,7 @@
 #include "../actions.h"
 #include "../sound.h"
 #include "../../app/boxart.h"
+#include "../../retro/porpoise_banner.h"
 #include "../../app/forwarders.h"
 #include "../../app/keyboard.h"
 #include "../../app/mods.h"
@@ -335,6 +336,8 @@ namespace ps5shell
 							details = game.entry.game.publisher; // (no GameTDB entry on a retro side: the library's)
 					}
 				details += (details.empty() ? "" : "  /  ") + std::string("Porpoise X"); // every side's menu names its emulator here, last
+				// its in-game menu's cover: Porpoise's own covers folder's, given the launcher's when it has none
+				ps5porpoise::ShareCover(ps5porpoise::Data() + "/covers", m_choice->game.gameId, std::filesystem::path(m_choice->game.path).stem().string(), cover);
 				ps5porpoise::WriteSession(SystemName(m_side), m_choice->game.name, details, cover, ps5boxart::TitleArtPath(std::filesystem::path(m_choice->game.path).stem().string()));
 				{
 					// every game's Auto Boost: this one's, the first time

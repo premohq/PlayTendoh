@@ -2,12 +2,14 @@
 // Wii banner (opening.bnr) extraction for launcher images. Based on Porpoise-X's porpoise_banner.cpp.
 #include "porpoise_banner.h"
 #include "porpoise_disc.h"
+#include "../app/tga.h"
 #include "../ps5/log.h"
 #include <algorithm>
 #include <array>
 #include <cmath>
 #include <cstdio>
 #include <cstring>
+#include <filesystem>
 #include <map>
 #include <memory>
 #include <vector>
@@ -315,6 +317,43 @@ bool ExtractWiiBanner(const std::string& disc_path, const std::string& output_pa
 	if (!f) { error = "can't write output file"; return false; }
 	std::fwrite(png_data.data(), 1, png_data.size(), f);
 	std::fclose(f);
+	return true;
+}
+
+bool ShareCover(const std::string& coversFolder, const std::string& id, const std::string& stem, const std::string& cover)
+{
+	namespace fs = std::filesystem;
+	std::error_code ec;
+	for (const std::string& name : {id, stem})
+		if (!name.empty())
+			for (const char* ext : {".png", ".jpg", ".jpeg"})
+				if (fs::is_regular_file(coversFolder + "/" + name + ext, ec) && !ec)
+					return true;
+	const std::string name = !id.empty() ? id : stem;
+	if (name.empty() || name.find('/') != std::string::npos || cover.empty())
+		return false;
+	std::string ext = fs::path(cover).extension().string();
+	std::transform(ext.begin(), ext.end(), ext.begin(), [](unsigned char c) { return (char)std::tolower(c); });
+	const std::string out = coversFolder + "/" + name + (ext == ".jpg" || ext == ".jpeg" ? ext : ".png"), staged = out + ".new";
+	fs::create_directories(coversFolder, ec);
+	bool made = false;
+	if (ext == ".png" || ext == ".jpg" || ext == ".jpeg")
+		made = fs::copy_file(cover, staged, fs::copy_options::overwrite_existing, ec) && !ec;
+	else if (ext == ".tga")
+	{
+		std::vector<u8> rgba;
+		int width = 0, height = 0;
+		made = ps5tga::Load(cover, 1024, 1024, rgba, width, height) && stbi_write_png(staged.c_str(), width, height, 4, rgba.data(), width * 4) != 0;
+	}
+	if (made)
+		fs::rename(staged, out, ec);
+	if (!made || ec)
+	{
+		fs::remove(staged, ec);
+		ps5log::Line("[porpoise] {}'s cover could not be given to Porpoise's menu from {}", name, cover);
+		return false;
+	}
+	ps5log::Line("[porpoise] {}'s cover for Porpoise's menu, from {}", name, cover);
 	return true;
 }
 } // namespace ps5porpoise
