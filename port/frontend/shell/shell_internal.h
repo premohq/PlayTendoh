@@ -448,7 +448,7 @@ namespace ps5shell
 		void TimelineBuild(); // its shelves, from every side's catalogue
 		// its ruler in area: the eras, the years, a mark for each console (focusShelf's larger), the player's games
 		// by year, and a pointer under pointerYear (-1: none); ground behind the marks (0: none)
-		void TimelineRuler(Canvas& canvas, const Box& area, uint32_t ink, uint32_t quiet, uint32_t ground, int focusShelf, float pointerYear);
+		void TimelineRuler(Canvas& canvas, const Box& area, uint32_t ink, uint32_t quiet, uint32_t ground, int focusShelf, float pointerYear, bool active = false);
 
 		// Make it yours: first, a first start's look and feel, else what this
 		// version brings that the last did not have
@@ -888,6 +888,10 @@ namespace ps5shell
 		uint32_t m_mediaArrivals = 0; // ps5boxart::MediaArrivals, last looked at
 		uint64_t m_timelineKey = 0;   // what the shelves were made from (TimelineBuild): made again when it changes
 		double m_insertAt = 0;		   // when Cross put the game in the slot (0: not yet)
+		int m_timelineZone = 1;		   // where its focus is: the ruler (0), the shelf (1), what is under it (2)
+		int m_timelineItem = 0;		   // under the shelf: the game's label (0), its manual's code (1), its console's placard (2)
+		int m_timelineCard = -1;	   // which of those is open large (-1: none), and since when
+		double m_timelineCardAt = 0;
 		ScreenId m_hubFrom = ScreenId::Library;
 		int m_hubAction = 0;
 		bool m_hubAbout = false;

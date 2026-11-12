@@ -20,10 +20,10 @@ shot timeline-wii
 press l1                      # the DS's cards
 wait 50
 shot timeline-ds
-press up                      # the era before the DS's: 3D, from the Nintendo 64
+press l2                      # the era before the DS's: 3D, from the Nintendo 64
 wait 50
 shot timeline-n64
-press up up                   # 16-bit, then 8-bit: the NES
+press l2 l2                   # 16-bit, then 8-bit: the NES
 wait 50
 shot timeline-nes
 press l1                      # the first console: Game & Watch, each game its own unit
@@ -37,6 +37,27 @@ shot timeline-gba
 press r1 r1 r1 r1 r1 r1 r1 r1 # the Switch's cards
 wait 50
 shot timeline-switch
+press up                      # from the shelf up to the ruler: Left and Right along its consoles
+wait 20
+press left
+wait 50
+shot timeline-ruler
+press cross                   # down to that console's shelf
+press down                    # and under it: the game's label
+wait 20
+shot timeline-label
+press cross                   # open, large
+wait 30
+shot timeline-game
+press circle
+press right                   # its console's placard (or its manual's code first, where it has one)
+wait 20
+shot timeline-placard
+press cross
+wait 30
+shot timeline-console
+press circle circle           # closed, then back on the shelf
+wait 20
 press circle                  # back on the stop
 wait 40
 press r1                      # on round to the first console

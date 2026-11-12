@@ -8,8 +8,10 @@
 // own proportions, and the kinds their sizes against each other, brought a little closer together (a Switch
 // card stays big enough to see beside an NES cartridge). Over the shelves, a ruler of the years in their eras,
 // every console's mark, and the player's own games by the year each came out; under them, the game in focus on
-// its label, and its console's placard on the slot it goes in. L1 and R1 step consoles, Up and Down eras, Cross
-// puts the game in the slot and starts it, Circle goes back. Its own light ground and ink on every theme. A console
+// its label, and its console's placard on the slot it goes in. L1 and R1 step consoles, L2 and R2 eras, Cross
+// puts the game in the slot and starts it, Circle goes back. Up goes from the shelf to the ruler, where Left and
+// Right move along the consoles' marks; Down to what is under it, the game's label, its manual's code and its
+// console's placard, each of which Cross opens large. Its own light ground and ink on every theme. A console
 // with no games is a slim bay with its thing drawn faint; the era in focus has its line over the shelves.
 
 #include "shell_internal.h"
@@ -494,7 +496,7 @@ namespace ps5shell
 
 	// -- the ruler: its eras, its years, a mark for each console, the player's games by the year each came out --
 
-	void Shell::TimelineRuler(Canvas& canvas, const Box& area, uint32_t ink, uint32_t quiet, uint32_t ground, int focusShelf, float pointerYear)
+	void Shell::TimelineRuler(Canvas& canvas, const Box& area, uint32_t ink, uint32_t quiet, uint32_t ground, int focusShelf, float pointerYear, bool active)
 	{
 		auto yearX = [&](float year) { return area.x + (year - kFirstYear) / kYears * area.w; };
 		const float ruler = area.y + 114;
@@ -559,7 +561,19 @@ namespace ps5shell
 			// its name right of its mark, or left of it at the ruler's end
 			const ui::TextBlock name = m_fonts.Layout(markStyle, one.brief);
 			const bool left = x + size / 2 + 6 + name.width > area.Right() + 24;
-			canvas.Text(name, left ? x - size / 2 - 6 - name.width : x + size / 2 + 6, y, ink);
+			const float nameX = left ? x - size / 2 - 6 - name.width : x + size / 2 + 6;
+			if (i == focusShelf && active)
+			{
+				// the ruler has the focus: its console's mark and name in a ring of their own
+				const float from = std::min(nameX, x - size * 0.65f) - 10, to = std::max(nameX + name.width, x + size * 0.65f) + 10;
+				const Box ring{from, y + 8 - 20, to - from, 40};
+				if (ground)
+					canvas.Rect(ring, 20, ground);
+				canvas.Ring(ring, 20, 3, ink);
+				canvas.Rect(dot, size / 2, colour);
+				canvas.Ring(dot.Scaled(1.3f), size * 0.65f, 2, ink);
+			}
+			canvas.Text(name, nameX, y, ink);
 		}
 		// the game in focus: a playhead on the line at its year, gliding there
 		if (pointerYear >= 0)
@@ -731,6 +745,9 @@ namespace ps5shell
 					m_shelfGame = j;
 		}
 		m_insertAt = 0;
+		m_timelineZone = 1;
+		m_timelineItem = 0;
+		m_timelineCard = -1;
 		m_shelfScroll.value = m_shelfScroll.target = -1; // there at once
 		m_rulerAt.value = m_rulerAt.target = -1;
 		m_onBar = false;
@@ -748,6 +765,36 @@ namespace ps5shell
 		}
 		TimelineShelf& shelf = m_shelves[m_shelfAt];
 		const int last = (int)m_shelves.size() - 1;
+		const Button b = press.button;
+		// what is under the shelf: the game's label, its manual's code, its console's placard (an empty shelf
+		// has the placard alone)
+		const bool hasGame = !shelf.games.empty();
+		const Game* game = hasGame ? &shelf.games[std::clamp(m_shelfGame, 0, (int)shelf.games.size() - 1)] : nullptr;
+		std::vector<int> under;
+		if (game)
+		{
+			under.push_back(0);
+			if (!ManualOf(shelf.side, *game).empty())
+				under.push_back(1);
+		}
+		under.push_back(2);
+		if (m_timelineCard >= 0)
+		{
+			// one of them open, large: Circle closes it, Cross on a game's plays it
+			if (b == Button::Circle || (b == Button::Cross && m_timelineCard != 0))
+			{
+				m_timelineCard = -1;
+				m_feedback.Play(ui::Cue::Back);
+			}
+			else if (b == Button::Cross && game)
+			{
+				m_timelineCard = -1;
+				m_timelineZone = 1;
+				m_insertAt = m_now;
+				m_feedback.Play(ui::Cue::Select);
+			}
+			return;
+		}
 		auto toShelf = [&](int to, bool lastGame = false) {
 			to = std::clamp(to, 0, last);
 			if (to == m_shelfAt)
@@ -757,38 +804,55 @@ namespace ps5shell
 			}
 			m_shelfAt = to;
 			m_shelfGame = lastGame ? std::max(0, (int)m_shelves[to].games.size() - 1) : 0;
+			m_timelineItem = 0;
 			m_feedback.Play(ui::Cue::Focus);
 		};
-		switch (press.button)
+		auto zone = [&](int to) {
+			m_timelineZone = to;
+			if (to == 2 && std::find(under.begin(), under.end(), m_timelineItem) == under.end())
+				m_timelineItem = under.front();
+			m_feedback.Play(ui::Cue::Focus);
+		};
+		switch (b)
 		{
 		case Button::Left:
-			if (m_shelfGame > 0)
-			{
-				m_shelfGame--;
-				m_feedback.Play(ui::Cue::Focus);
-			}
-			else
-				toShelf(m_shelfAt - 1, true);
-			break;
 		case Button::Right:
-			if (m_shelfGame + 1 < (int)shelf.games.size())
+		{
+			const int step = b == Button::Right ? 1 : -1;
+			if (m_timelineZone == 0)
+				toShelf(m_shelfAt + step); // along the ruler's marks
+			else if (m_timelineZone == 2)
 			{
-				m_shelfGame++;
+				const int at = (int)(std::find(under.begin(), under.end(), m_timelineItem) - under.begin());
+				const int next = at + step;
+				if (at >= (int)under.size() || next < 0 || next >= (int)under.size())
+					m_feedback.Play(ui::Cue::Edge, press.repeat);
+				else
+				{
+					m_timelineItem = under[next];
+					m_feedback.Play(ui::Cue::Focus);
+				}
+			}
+			else if (m_shelfGame + step >= 0 && m_shelfGame + step < (int)shelf.games.size())
+			{
+				m_shelfGame += step;
 				m_feedback.Play(ui::Cue::Focus);
 			}
 			else
-				toShelf(m_shelfAt + 1);
+				toShelf(m_shelfAt + step, step < 0);
 			break;
+		}
 		case Button::L1: toShelf(m_shelfAt - 1); break;
 		case Button::R1:
 		case Button::Touchpad: toShelf(m_shelfAt + 1); break;
-		case Button::Up:
-		case Button::Down:
+		case Button::L2:
+		case Button::R2:
 		{
-			// the era before or after: its first console shown
+			// the era before or after: its first console shown (the triggers here, which are the Library and
+			// Settings tabs elsewhere: the Timeline has neither)
 			const int room = RoomOf(shelf.year);
 			int to = m_shelfAt;
-			if (press.button == Button::Down)
+			if (b == Button::R2)
 			{
 				while (to < last && RoomOf(m_shelves[to].year) == room)
 					to++;
@@ -803,16 +867,28 @@ namespace ps5shell
 			toShelf(to);
 			break;
 		}
-		case Button::L2: // the Library (its Timeline stop) and Settings, as the triggers are everywhere
-			m_feedback.Play(ui::Cue::Back);
-			Show(ScreenId::Library);
+		case Button::Up:
+			if (m_timelineZone > 0)
+				zone(m_timelineZone - 1);
+			else
+				m_feedback.Play(ui::Cue::Edge, press.repeat);
 			break;
-		case Button::R2:
-			m_feedback.Play(ui::Cue::Focus);
-			ShowTab(ScreenId::Settings);
+		case Button::Down:
+			if (m_timelineZone < 2)
+				zone(m_timelineZone + 1);
+			else
+				m_feedback.Play(ui::Cue::Edge, press.repeat);
 			break;
 		case Button::Cross:
-			if (!shelf.games.empty())
+			if (m_timelineZone == 0)
+				zone(1); // the console picked on the ruler: down to its shelf
+			else if (m_timelineZone == 2)
+			{
+				m_timelineCard = m_timelineItem;
+				m_timelineCardAt = m_now;
+				m_feedback.Play(ui::Cue::Select);
+			}
+			else if (hasGame)
 			{
 				m_insertAt = m_now;
 				m_feedback.Play(ui::Cue::Select);
@@ -827,7 +903,10 @@ namespace ps5shell
 			break;
 		case Button::Circle:
 			m_feedback.Play(ui::Cue::Back);
-			Show(ScreenId::Library);
+			if (m_timelineZone != 1)
+				m_timelineZone = 1; // back on the shelf first
+			else
+				Show(ScreenId::Library);
 			break;
 		default: break;
 		}
@@ -904,7 +983,7 @@ namespace ps5shell
 		m_rulerAt.omega = m_settings.ui.reduceMotion ? 60.0f : kScrollOmega;
 		m_rulerAt.Update(m_dt);
 		canvas.PushAlpha(Enter(0));
-		TimelineRuler(canvas, {kLeft, 110, kView, 176}, kInk, kInk3, kPaper, m_shelfAt, m_rulerAt.value);
+		TimelineRuler(canvas, {kLeft, 110, kView, 176}, kInk, kInk3, kPaper, m_shelfAt, m_rulerAt.value, m_timelineZone == 0 && m_timelineCard < 0);
 		canvas.PopAlpha();
 
 		// the shelf: its boards, slid to the one in focus
@@ -1058,7 +1137,7 @@ namespace ps5shell
 				DrawOver(canvas, one.media, ghost);
 				canvas.PopAlpha();
 				const bool on = i == m_shelfAt;
-				canvas.Ring(ghost, radius, on ? 3.0f : 1.5f, ui::SetAlpha(kInk, on ? 1.0f : 0.25f));
+				canvas.Ring(ghost, radius, on && m_timelineZone == 1 ? 3.0f : 1.5f, ui::SetAlpha(kInk, on ? 1.0f : 0.25f));
 				canvas.Text(Style({14, ui::Weight::SemiBold, 1.15f}), x + 20, ghost.y - 46, Tr("No games yet"), on ? kInk : kInk3, one.w - 40, 2);
 				continue;
 			}
@@ -1099,7 +1178,8 @@ namespace ps5shell
 			canvas.Shadow(shape, Round(lift.shelf->media) ? shape.w / 2 : 6, 30 * lift.mix, 40, ui::WithAlpha(0x52000000, lift.mix));
 			float radius = 0;
 			const Box drawn = drawPiece(*lift.shelf, lift.index, lifted, true, radius);
-			canvas.Ring(drawn.Scaled(1.04f), radius * 1.04f, 3, ui::WithAlpha(kInk, lift.mix));
+			if (m_timelineZone == 1) // the ring where the focus is: the ruler's mark or what is under the shelf have their own
+				canvas.Ring(drawn.Scaled(1.04f), radius * 1.04f, 3, ui::WithAlpha(kInk, lift.mix));
 		}
 		canvas.PopClip();
 		canvas.PopAlpha();
@@ -1109,9 +1189,15 @@ namespace ps5shell
 		// its manual, where Nintendo keeps one online: a QR code at the label's end, to read it on a phone
 		const std::string manual = focus ? ManualOf(shelf.side, *focus) : std::string();
 		const float x = kLeft, width = manual.empty() ? 1180.0f : 1000.0f;
+		// what is under the shelf has the focus: a ring round its label, its code or its placard
+		const int under = m_timelineZone == 2 && m_timelineCard < 0 ? (focus ? m_timelineItem == 1 && manual.empty() ? 0 : m_timelineItem : 2) : -1;
+		if (under == 0)
+			canvas.Ring({x - 22, 674, width + 44, 340}, 18, 3, kInk);
 		if (!manual.empty())
 		{
 			const Box code{kLeft + 1180 - 150, 694, 150, 150};
+			if (under == 1)
+				canvas.Ring({code.x - 16, code.y - 16, code.w + 32, code.h + 60}, 18, 3, kInk);
 			DrawManualQr(canvas, manual, code);
 			// tr: under a QR code on the Timeline's museum label: it opens the game's manual on a phone
 			const ui::TextBlock caption = m_fonts.Layout(Style({14, ui::Weight::Medium, 1.0f, 0.4f, true, true}), Tr("Manual"));
@@ -1201,6 +1287,8 @@ namespace ps5shell
 			canvas.PopClip();
 		}
 		canvas.Rect(machine, 22, kInk);
+		if (under == 2)
+			canvas.Ring(machine.Inset(-8), 30, 3, kInk);
 		canvas.Rect({machine.CentreX() - 150, slotY, 300, 14}, 7, 0xff000000);
 		canvas.Rect({machine.Right() - 34, machine.y + 22, 10, 10}, 5, m_insertAt > 0 ? Rgb(0x2bd67b) : Rgb(0x5b6070));
 		const uint32_t accent = AccentOf(shelf.side) | 0xff000000;
@@ -1218,7 +1306,8 @@ namespace ps5shell
 			canvas.Text(Style({15, ui::Weight::Regular, 1.3f}), textX, machine.y + 110, Tr(focusEra->placard), Rgb(0xd7d9de), textW, 2);
 		canvas.PopAlpha();
 
-		// its hints, in its ink
+		// its hints, in its ink: what the focus's row does, then the bumpers and triggers, which step consoles and
+		// eras from any of them
 		const ui::TextStyle hint = Style({18, ui::Weight::Regular, 1.0f});
 		struct Item
 		{
@@ -1226,12 +1315,131 @@ namespace ps5shell
 			bool two;
 			std::string words;
 		};
-		// tr: the Timeline's hint for Up and Down, which go to the era before or after
-		const Item items[4] = {{Icon::L1, Icon::R1, true, Tr("Previous or next console")}, {Icon::UpDown, Icon::UpDown, false, Tr("Previous or next era")},
-			{Icon::L2, Icon::R2, true, Tr("Library or Settings")}, {Icon::Circle, Icon::Circle, false, Tr("Back")}};
+		std::vector<Item> items;
+		if (m_timelineCard >= 0)
+		{
+			if (m_timelineCard == 0)
+				items.push_back({Icon::Cross, Icon::Cross, false, Tr("Play")});
+		}
+		else
+		{
+			items.push_back({Icon::L1, Icon::R1, true, Tr("Previous or next console")});
+			items.push_back({Icon::L2, Icon::R2, true, Tr("Previous or next era")});
+			// tr: the Timeline's hint for Up and Down: up to the ruler of years, down to the game's label, manual and console
+			items.push_back({Icon::UpDown, Icon::UpDown, false, Tr("Years or details")});
+			if (m_timelineZone != 1)
+				items.push_back({Icon::Cross, Icon::Cross, false, Tr("Open")});
+			else if (focus)
+				items.push_back({Icon::Cross, Icon::Cross, false, Tr("Play")});
+		}
+		items.push_back({Icon::Circle, Icon::Circle, false, Tr("Back")});
+
+		// the game's label, its manual's code or its console's placard, opened large: a dark card over the page,
+		// as the placard is
+		if (m_timelineCard >= 0)
+		{
+			const float shown = m_settings.ui.reduceMotion ? 1.0f : ui::ease::CubicOut(std::min(1.0f, (float)((m_now - m_timelineCardAt) / 0.22)));
+			canvas.PushAlpha(shown);
+			canvas.Rect({0, 0, 1920, 1080}, 0, ui::SetAlpha(kPaper, 0.86f));
+			const Box card{260, 150 + 24 * (1 - shown), 1400, 780};
+			canvas.Shadow(card, 28, 24, 60, 0x52000000);
+			canvas.Rect(card, 28, kInk);
+			const uint32_t white = 0xffffffff, soft = Rgb(0xd7d9de), quiet = Rgb(0xaeb3bd);
+			const uint32_t accent = AccentOf(shelf.side) | 0xff000000;
+			const ui::TextStyle kicker = Style({17, ui::Weight::Medium, 1.0f, 0.6f, true, true});
+			const float pad = 56;
+			if (m_timelineCard == 2 || !focus)
+			{
+				// the console: its drawing, its year and what its games came on, its era and its placard, and the
+				// player's games and time on it
+				DrawConsole(canvas, shelf.side, card.x + pad + 150, card.y + 260, 260, accent, kInk, accent, ConsoleIcon(shelf.side, 260));
+				const float tx = card.x + pad + 360, tw = card.Right() - pad - tx;
+				canvas.Text(kicker, tx, card.y + pad + 8, Joined({std::to_string(shelf.year), Tr(kMedia[shelf.media].what), Tr(kRooms[room].name)}), quiet, tw, 1);
+				const ui::TextBlock name = canvas.Text(Style({64, ui::Weight::Bold, 1.04f}), tx, card.y + pad + 40, SystemName(shelf.side), white, tw, 2);
+				float y = card.y + pad + 40 + name.height + 22;
+				if (focusEra)
+					y += canvas.Text(Style({26, ui::Weight::Regular, 1.35f}), tx, y, Tr(focusEra->placard), white, tw, 4).height + 20;
+				y += canvas.Text(Style({22, ui::Weight::Regular, 1.35f}), tx, y, Tr(kRooms[room].line), soft, tw, 3).height + 28;
+				uint32_t minutes = 0;
+				for (const Game& game : shelf.games)
+					minutes += game.entry.minutesPlayed;
+				const std::string hours = minutes == 0 ? "" : minutes < 60 ? TrP(minutes, "{0} min played", "{0} min played") : TrP(minutes / 60, "{0} h played", "{0} h played");
+				canvas.Rect({tx, y + 9, 12, 12}, 6, accent);
+				canvas.Text(Style({22, ui::Weight::SemiBold, 1.2f}), tx + 24, y,
+					Joined({shelf.games.empty() ? std::string(Tr("No games yet")) : TrP((int)shelf.games.size(), "{0} game", "{0} games"), hours}), white, tw - 24, 1);
+				if (shelf.games.empty())
+					canvas.Text(Style({20, ui::Weight::Regular, 1.35f}), tx, y + 44, TrF("Put its games in {0}, on the PS5 or a USB drive.", GamesFolder(shelf.side)), soft, tw, 2);
+			}
+			else if (m_timelineCard == 1 && !manual.empty())
+			{
+				// the manual: its code as large as the card lets it, and its address in words under it
+				const Box code{card.CentreX() - 240, card.y + 150, 480, 480};
+				canvas.Text(kicker, card.x + pad, card.y + pad + 8, Tr("Manual"), quiet, card.w - 2 * pad, 1);
+				canvas.Text(Style({30, ui::Weight::Bold, 1.1f}), card.x + pad, card.y + pad + 36, focus->entry.game.name, white, card.w - 2 * pad, 1);
+				DrawManualQr(canvas, manual, code);
+				const ui::TextStyle address = Style({18, ui::Weight::Regular, 1.3f, 0, false, true});
+				const ui::TextBlock words = m_fonts.Layout(address, manual, card.w - 2 * pad, 2);
+				canvas.Text(words, card.CentreX() - words.width * 0.5f, code.Bottom() + 30, soft);
+			}
+			else
+			{
+				// the game: its box art, then all its label says, with as much of what it is as the card holds
+				float tx = card.x + pad;
+				AsSide(shelf.side, [&] {
+					const ui::Picture& picture = Cover(*focus);
+					if (!picture.texture || picture.width <= 0 || picture.height <= 0)
+						return;
+					const float aspect = (float)picture.width / picture.height;
+					const float w = std::min(440.0f, (card.h - 2 * pad) * aspect), h = w / aspect;
+					const Box art{card.x + pad, card.y + pad, w, h};
+					canvas.Shadow(art, 8, 10, 26, 0x66000000);
+					canvas.Image(picture.texture, art, 8);
+					tx = art.Right() + 48;
+				});
+				if (tx == card.x + pad)
+				{
+					// no box art: the thing it came on, as the shelf has it
+					const float fit = std::min(380 / shelf.mediaW, 380 / shelf.mediaH);
+					float radius = 0;
+					drawPiece(shelf, m_shelfGame, {card.x + pad, card.y + pad + 10, shelf.mediaW * fit, shelf.mediaH * fit}, false, radius);
+					tx = card.x + pad + shelf.mediaW * fit + 48;
+				}
+				const float tw = card.Right() - pad - tx;
+				const int year = focus->year ? focus->year : shelf.year;
+				const std::string publisher = focus->known && !focus->info.publisher.empty() ? focus->info.publisher : focus->entry.game.publisher;
+				canvas.Text(kicker, tx, card.y + pad + 8, Joined({SystemName(shelf.side), std::to_string(year), publisher}), quiet, tw, 1);
+				const ui::TextBlock title = canvas.Text(Style({48, ui::Weight::Bold, 1.06f}), tx, card.y + pad + 40, focus->entry.game.name, white, tw, 3);
+				float y = card.y + pad + 40 + title.height + 18;
+				const std::string released = focus->known && focus->info.released.size() > 4 ? TrF("Released {0}", ps5gameinfo::ReleaseDate(focus->info.released)) : "";
+				const std::string about = Joined({released, focus->known ? ps5gameinfo::Genres(focus->info.genre, 3) : ""});
+				if (!about.empty())
+					y += canvas.Text(Style({22, ui::Weight::Regular, 1.25f}), tx, y, about, soft, tw, 2).height + 6;
+				const std::string last = LastPlayedWords(focus->entry.lastPlayed);
+				const std::string played = Joined({Played(*focus), last.empty() ? "" : TrF("Last played {0}", last)});
+				const ui::TextBlock facts = canvas.Text(Style({22, ui::Weight::Regular, 1.25f}), tx, y, played.empty() ? std::string(Tr("Not played yet")) : played, soft, tw, 1);
+				if (focus->report)
+				{
+					const std::string kind = ps5compat::Kind(focus->report->status);
+					canvas.Rect({tx + facts.width + 22, y + 9, 10, 10}, 5, kind == "good" ? kGood : kind == "warn" ? kWarn : kBad);
+					canvas.Text(Style({22, ui::Weight::SemiBold, 1.25f}), tx + facts.width + 40, y, TrC("status", focus->report->status), white, tw, 1);
+				}
+				y += facts.height + 26;
+				if (focus->known && !focus->info.synopsis.empty())
+				{
+					const ui::TextStyle body = Style({20, ui::Weight::Regular, 1.4f});
+					const int lines = std::max(0, (int)((card.Bottom() - pad - y) / (20 * 1.4f)));
+					std::string text = focus->info.synopsis;
+					std::replace(text.begin(), text.end(), '\n', ' ');
+					if (lines > 0)
+						canvas.Text(body, tx, y, text, soft, tw, lines);
+				}
+			}
+			canvas.PopAlpha();
+		}
+
 		float at = 1920 - kSafeX;
 		const float hintY = 1080 - 26 - 28;
-		for (int i = 3; i >= 0; i--)
+		for (int i = (int)items.size() - 1; i >= 0; i--)
 		{
 			const ui::TextBlock words = m_fonts.Layout(hint, items[i].words);
 			at -= words.width;
