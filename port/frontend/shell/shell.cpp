@@ -1517,6 +1517,13 @@ namespace ps5shell
 			// they turn the carousel, or Orbit's dial; the tabs are on the bar, Up and then along it). On the
 			// Library the Timeline is a stop of its own, after the last side
 			const int step = press.button == Button::R1 ? 1 : -1;
+			if (Orbit() && m_orbitHome && m_tab == ScreenId::Library && !m_onBar)
+			{
+				// from Orbit's Home a bumper is the way back to the dial, on the console it was left at: the
+				// next press turns it
+				OrbitHomeOpen(false);
+				return true;
+			}
 			m_orbitHome = false;
 			std::vector<int> ring;
 			for (int i = 0; i < kSides; i++)

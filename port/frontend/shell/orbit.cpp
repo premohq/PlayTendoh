@@ -197,7 +197,14 @@ namespace ps5shell
 			std::string kicker, title, text;
 			std::vector<std::string> buttons;
 			if (LibraryState(kicker, title, text, buttons))
-				return false; // its card's buttons, as in Classic
+			{
+				// a console with no games yet: Circle goes Home, as it does from a console's games (not up to
+				// the bar, where Classic's goes); the rest are its card's buttons, as in Classic
+				if (b != Button::Circle)
+					return false;
+				OrbitHomeOpen(true);
+				return true;
+			}
 		}
 		// the Library's list, as a row: its own Cross, Options, Sort and Search go on working on it
 		// (LibraryUpdate)
@@ -446,8 +453,8 @@ namespace ps5shell
 		};
 		std::vector<Item> items;
 		// tr: Orbit's hints: L1 and R1 turn its dial
-		items.push_back({{Icon::L1, Icon::R1}, nullptr, Tr("Turn the dial")});
-		items.push_back({{}, "R3", Tr("Home")});
+		items.push_back({{Icon::L1, Icon::R1}, nullptr, m_orbitHome ? Tr("Back to the dial") : Tr("Turn the dial")});
+		items.push_back({{}, "R3", m_orbitHome ? Tr("Back") : Tr("Home")});
 		if (m_timelineStop)
 			items.push_back({{Icon::Cross}, nullptr, Tr("Open")});
 		else if (state)
