@@ -1195,6 +1195,11 @@ namespace ps5ingame3ds
 		s_changed = false;
 		s_controllers = {}; // a libretro game's, from its loop (SetControllers)
 		s_levelRequested = false;
+		// the menu shut, and nothing asked of it: the game before this one was left through it, with it still
+		// up, and the next game of the app's run would start under it
+		s_open = false;
+		s_libraryRequested = false;
+		s_resetRequested = false;
 	}
 
 	void SetGame(const std::string& details, const std::string& coverPath)
