@@ -1163,13 +1163,14 @@ namespace ps5libretro
 		}
 		StartSound();
 		ps5ingame3ds::Start(s_name, s_titleId, MenuSettings(), ps5ingame3ds::Console::Retro, system.name, system.colour);
-		// the menu's top: the core's name, and the box art the launcher shows (the folder's own picture, else
+		// the menu's top: the game's publisher where the library has it, then the core's name, last as every
+		// side's menu names its emulator; and the box art the launcher shows (the folder's own picture, else
 		// libretro's thumbnail by the game file's name)
 		{
 			std::string cover = ps5retro::CoverPath(side, game);
 			if (cover.empty())
 				cover = ps5boxart::RetroPath(ps5retro::Thumbnails(side), game.path.stem().string());
-			ps5ingame3ds::SetGame(CoreName(), cover);
+			ps5ingame3ds::SetGame(game.publisher.empty() ? CoreName() : game.publisher + "  /  " + CoreName(), cover);
 		}
 		// RetroAchievements, signed in, for a console it has sets for: the game's file hashed as rcheevos
 		// hashes that console's, its memory as rcheevos addresses it

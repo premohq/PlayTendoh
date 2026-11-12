@@ -946,6 +946,7 @@ namespace ps5azahar
 				for (const std::string& part : {info.publisher, ps5gameinfo::Year(info.released)})
 					if (!part.empty())
 						details += (details.empty() ? "" : "  /  ") + part;
+			details += (details.empty() ? "" : "  /  ") + std::string("Azahar"); // every side's menu names its emulator here, last
 			std::string cover = ps5boxart::Path(ps5boxart::System::N3ds, game.gameId);
 			if (cover.empty())
 				cover = CoverPath(game.titleId);

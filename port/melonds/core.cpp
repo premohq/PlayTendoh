@@ -1100,6 +1100,7 @@ namespace ps5melonds
 						details += (details.empty() ? "" : "  /  ") + part;
 			if (details.empty())
 				details = game.publisher;
+			details += (details.empty() ? "" : "  /  ") + std::string("melonDS"); // every side's menu names its emulator here, last
 			std::string cover = ps5boxart::Path(ps5boxart::System::Nds, game.gameId);
 			if (cover.empty())
 				cover = CoverPath(game.titleId);

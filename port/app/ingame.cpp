@@ -746,6 +746,7 @@ namespace ps5ingame
 			add(ps5gameinfo::Year(info.released));
 		}
 		add(fmt::format("v{}", game.version));
+		add("Cemu"); // every side's menu names its emulator here, last
 		// the account it runs on, where there is more than one (6.13): read once, as the game starts
 		if (const auto accounts = ps5emu::ListAccounts(); accounts.size() > 1)
 			for (const auto& account : accounts)

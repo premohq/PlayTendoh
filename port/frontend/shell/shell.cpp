@@ -334,6 +334,7 @@ namespace ps5shell
 						if (details.empty())
 							details = game.entry.game.publisher; // (no GameTDB entry on a retro side: the library's)
 					}
+				details += (details.empty() ? "" : "  /  ") + std::string("Porpoise X"); // every side's menu names its emulator here, last
 				ps5porpoise::WriteSession(SystemName(m_side), m_choice->game.name, details, cover, ps5boxart::TitleArtPath(std::filesystem::path(m_choice->game.path).stem().string()));
 				{
 					// every game's Auto Boost: this one's, the first time
@@ -358,6 +359,8 @@ namespace ps5shell
 								session.details += (session.details.empty() ? "" : "  /  ") + part;
 					session.cover = game.boxArt.empty() ? ps5eden::CoverPath(game.entry.game) : game.boxArt;
 				}
+				// every side's menu names its emulator here, last
+				session.details += (session.details.empty() ? "" : "  /  ") + std::string(m_choice->system == ps5launcher::System::Switch2 ? "Lichii" : "Eden");
 				ps5eden::WriteSession(session);
 			}
 		}
