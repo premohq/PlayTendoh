@@ -288,7 +288,8 @@ int main(int argc, char* argv[])
 	ImFontConfig config;
 	config.FontDataOwnedByAtlas = false;
 	auto font = [&](std::vector<unsigned char>& file, float size) {
-		return io.Fonts->AddFontFromMemoryTTF(file.data(), (int)file.size(), size, &config);
+		// the characters the console's menus build theirs with (quotation marks, the ellipsis...)
+		return io.Fonts->AddFontFromMemoryTTF(file.data(), (int)file.size(), size, &config, ps5menu::GlyphRanges(""));
 	};
 	const ps5menu::Fonts set{font(semi, ps5menu::kHeading), font(medium, ps5menu::kBody), font(regular, ps5menu::kLabel),
 		font(regular, ps5menu::kCaption), font(semi, ps5menu::kChip)};
@@ -383,6 +384,9 @@ int main(int argc, char* argv[])
 		{"loading-wiiu-pipelines", "Wii U", ps5menu::kBlue, ps5menu::PipelineStep(910, 5120), 910.0f / 5120, 0, 1},
 		{"loading-3ds", "Nintendo 3DS", ps5menu::kGold, ps5menu::LoadingStep(), -1, 1.1f, 1},
 		{"loading-3ds-fade", "Nintendo 3DS", ps5menu::kGold, ps5menu::StartingStep(), -1, 2.0f, ps5menu::LoadingFadeAlpha(ps5menu::kLoadingFade / 2)},
+		// a wait long enough for the quotes at its foot: the first, then the next
+		{"loading-quote", "Wii U", ps5menu::kBlue, ps5menu::PipelineStep(3870, 5120), 3870.0f / 5120, 6.0f, 1},
+		{"loading-quote-next", "Nintendo Switch", ps5menu::kRed, ps5menu::ShaderStep(3120, 4120), 3120.0f / 4120, 15.0f, 1},
 	};
 	for (const LoadingShot& shot : loadingShots)
 	{

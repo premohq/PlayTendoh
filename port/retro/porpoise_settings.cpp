@@ -2,6 +2,7 @@
 // PS5-ECAM: Porpoise-X's settings files (porpoise_settings.h)
 #include "porpoise_settings.h"
 #include "registry.h"
+#include "../app/quotes.h"
 
 #include <algorithm>
 #include <cctype>
@@ -152,6 +153,13 @@ namespace ps5porpoise
 			line("details", details);
 			line("cover", cover);
 			line("banner", banner);
+			const size_t first = ps5quotes::First();
+			for (size_t i = 0; i < ps5quotes::kCount; i++)
+			{
+				const ps5quotes::Quote& quote = ps5quotes::kQuotes[(first + i) % ps5quotes::kCount];
+				line("quote", ps5quotes::Words(quote));
+				line("quote_by", ps5quotes::Credit(quote));
+			}
 			if (!out)
 				return;
 		}

@@ -6,12 +6,14 @@
 // layout (menu_canvas.h): by Eden's program for the Switch and Switch 2 (port/eden/ingame.cpp), into
 // Cemu's frames for the Wii U (ingame.cpp, in place of Cemu's shader cache screen) and into Azahar's
 // for the 3DS (ingame3ds.cpp, while its shader cache loads). Each side makes its fonts and pictures
-// its own way and hands them in; the drawing is this one.
+// its own way and hands them in; the drawing is this one. While it waits, words from the people who made
+// Nintendo's games at its foot (quotes.h), one after another.
 
 #pragma once
 
 #include "lang.h"
 #include "menu_canvas.h"
+#include "quotes.h"
 
 #include <algorithm>
 #include <cmath>
@@ -40,6 +42,8 @@ namespace ps5menu
 
 	// How long the screen takes to fade into the game, in seconds, once the game draws
 	constexpr float kLoadingFade = 0.4f;
+	// The quotes: from this long into the wait (a short one shows none), each this long, faded in and out
+	constexpr float kLoadingQuoteDelay = 1.5f, kLoadingQuoteSeconds = 9.0f, kLoadingQuoteFade = 0.6f;
 
 	// The cover's size each side loads it at (ps5tga::Load), and its small copy's: drawn large, the
 	// small one is its colours blurred
@@ -152,6 +156,28 @@ namespace ps5menu
 			const float run = std::fmod(time * 0.6f, 1.0f);
 			const float a = std::max(0.0f, run * 1.3f - 0.3f), b = std::min(1.0f, run * 1.3f);
 			draw->AddRectFilled(canvas.At(tx + barWidth * a, by + 44), canvas.At(tx + barWidth * b, by + 50), colours.accent, 3 * scale);
+		}
+		// at the foot, once the wait has gone on a moment: a word from the people who made Nintendo's games, who
+		// said it under it, the next every few seconds; from a different one each game
+		if (fonts.body && fonts.caption && time > kLoadingQuoteDelay)
+		{
+			static std::string shownFor;
+			static size_t first = 0;
+			if (shownFor != loading.title)
+			{
+				shownFor = loading.title;
+				first = ps5quotes::First();
+			}
+			const float t = time - kLoadingQuoteDelay, into = std::fmod(t, kLoadingQuoteSeconds);
+			const float shown = std::clamp(std::min(into, kLoadingQuoteSeconds - into) / kLoadingQuoteFade, 0.0f, 1.0f);
+			const ps5quotes::Quote& quote = ps5quotes::kQuotes[(first + (size_t)(t / kLoadingQuoteSeconds)) % ps5quotes::kCount];
+			// from the cover's edge to clear of the app's name, under the cover's shadow
+			const float qx = x0, quoteWidth = 1920 - x0 - 420, creditY = 1080 - 64, lineHeight = 36;
+			const Canvas::Lines lines = canvas.Break(fonts.body, kBody, ps5quotes::Words(quote), quoteWidth);
+			const int count = std::min(3, (int)lines.drawn.size());
+			for (int i = 0; i < count; i++)
+				canvas.Text(fonts.body, kBody, qx, creditY - 12 - (count - i) * lineHeight, Fade(colours.text, shown), lines.drawn[i]);
+			canvas.Text(fonts.caption, kCaption, qx, creditY, Fade(colours.copy, shown), ps5quotes::Credit(quote));
 		}
 		// the app's name, small, in the corner
 		if (fonts.caption)
