@@ -294,6 +294,55 @@ namespace ps5shell
 		if (SideShown(System::Nds))
 			m_checks.push_back(nds);
 
+		// the classic consoles' BIOS files, where their emulator in the app reads one from the side's system
+		// folder (libretro/game.h): the two that cannot start without theirs, and the ones with a built-in
+		// stand-in that use the console's own when it is there
+		struct BiosFile
+		{
+			const char* key; // ps5retro::kSystems'
+			const char* file;
+			bool needed;
+			uintmax_t size; // 0: any
+		};
+		static constexpr BiosFile kBiosFiles[] = {
+			{"fds", "disksys.rom", true, 8192},		   // Mesen's Disk System
+			{"satellaview", "BS-X.bin", true, 0},	   // Mesen-S's
+			{"gb", "gb_bios.bin", false, 0},		   // mGBA's boot ROMs: its own stand-in without
+			{"gbc", "gbc_bios.bin", false, 0},
+			{"sgb", "sgb_bios.bin", false, 0},
+			{"gba", "gba_bios.bin", false, 0},
+			{"pokemini", "bios.min", false, 0},		   // PokeMini's FreeBIOS without
+		};
+		for (const BiosFile& bios : kBiosFiles)
+		{
+			const ps5retro::System* system = ps5retro::Find(bios.key);
+			const int index = system ? ps5retro::kFirst + (int)(system - ps5retro::kSystems.data()) : -1;
+			if (index < 0 || !SideShown((System)index) || !ps5libretro::Plays(index) || Handheld((System)index).retroBackend != 0)
+				continue;
+			const std::filesystem::path folder = std::filesystem::path(system->data) / "system";
+			std::error_code ec;
+			const bool found = std::filesystem::is_regular_file(folder / bios.file, ec) && !ec &&
+				(bios.size == 0 || (std::filesystem::file_size(folder / bios.file, ec) == bios.size && !ec));
+			const std::string name = SystemName((System)index);
+			const bool games = !ps5catalog::Games((ps5catalog::System)index).empty() || Handheld((System)index).gameCount > 0;
+			Check check{std::string(bios.key) + "-bios", std::string(ps5launcher::SideTitle((System)index)) + " BIOS"};
+			// missing and needed is a problem once the console has games; before, as an optional one, it is a note
+			check.state = found ? 0 : bios.needed && games ? 1 : 2;
+			// tr: the Setup check, a console's BIOS file: {0} is the file's name, {1} the console
+			check.detail = found		 ? TrF("{0} found", bios.file) :
+						   bios.needed ? TrF("{0} is missing: {1} games need it", bios.file, name) :
+										 TrF("Using the built-in BIOS. {0} is optional", bios.file);
+			check.action = found ? "" : Tr("How to");
+			// tr: the Setup check's panel for a console's BIOS file
+			check.aboutTitle = Tr("The console's own BIOS");
+			// tr: {0} is a console, {1} its BIOS file's name, {2} the folder it goes in
+			check.about = bios.needed ?
+				TrF("{0} games need the console's BIOS: put {1} from your own console in {2}. Playtendoh does not include a BIOS.", name, bios.file, folder.string()) :
+				TrF("{0} games run on a built-in BIOS, which most games are fine with. To use the console's own, put {1} in {2}. Playtendoh does not include a BIOS.",
+					name, bios.file, folder.string());
+			m_checks.push_back(check);
+		}
+
 		// the Switch's keys and firmware, which Eden needs and none of which come with the app: dumped from
 		// the player's own Switch
 		const std::string edenFiles = ps5eden::GameFilesFolder();
