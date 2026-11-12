@@ -27,7 +27,9 @@ namespace ps5azahar
 			{"zl", "ZL", PadInput::L2},
 			{"zr", "ZR", PadInput::R2},
 			{"start", "Start", PadInput::Options},
-			{"select", "Select", PadInput::Create},
+			// never Create by default: the PS5 keeps that button for its screenshots and clips. The right stick's
+			// click is free on these consoles
+			{"select", "Select", PadInput::R3},
 			{"home", "Home", PadInput::None},
 			{"up", "D-pad up", PadInput::Up},
 			{"down", "D-pad down", PadInput::Down},

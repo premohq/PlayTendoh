@@ -787,8 +787,8 @@ namespace ps5ingame3ds
 				}});
 			}
 			// every button, as Settings > Controls > Buttons has them, set here without leaving the game; the
-			// touchpad is the touch screen, so its click cancels
-			Row buttons = s_buttonsMenu.Category(ButtonRows(settings), s_heldInput, sceKernelGetProcessTime(), true,
+			// touchpad is the touch screen, so its click cancels (a libretro console has none: its click can be chosen)
+			Row buttons = s_buttonsMenu.Category(ButtonRows(settings), s_heldInput, sceKernelGetProcessTime(), !single,
 				Tr("Puts every button back to default. Hold Cross to confirm."));
 			if (single)
 			{
@@ -1078,7 +1078,7 @@ namespace ps5ingame3ds
 				if (s_buttonsMenu.Busy())
 				{
 					menuButtons = 0;
-					const auto asked = read ? s_buttonsMenu.Capture(ps5menu::HeldInput(data), ps5menu::PadIdle(data), touchpad, true, true,
+					const auto asked = read ? s_buttonsMenu.Capture(ps5menu::HeldInput(data), ps5menu::PadIdle(data), touchpad, s_console != Console::Retro, true,
 												  sceKernelGetProcessTime()) : ps5menu::ButtonsMenu::Asked{};
 					if (asked.index >= 0)
 					{

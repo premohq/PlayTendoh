@@ -323,7 +323,9 @@ namespace ps5libretro
 
 		float Axis(uint8_t value) { return std::clamp((int(value) - 128) / 127.0f, -1.0f, 1.0f); }
 
-		bool Held(PadInput input, const ps5pad::Data& data, uint32_t buttons)
+		// buttons: what the shortcuts' filter leaves the game; click: the touchpad's click as a button (the filter's:
+		// pressed once a click has lasted a moment with no shortcut, or as a tap when it was shorter)
+		bool Held(PadInput input, const ps5pad::Data& data, uint32_t buttons, bool click)
 		{
 			constexpr float kStick = 0.5f;
 			switch (input)
@@ -353,7 +355,7 @@ namespace ps5libretro
 			case PadInput::RightStickDown: return Axis(data.rightY) > kStick;
 			case PadInput::RightStickLeft: return Axis(data.rightX) < -kStick;
 			case PadInput::RightStickRight: return Axis(data.rightX) > kStick;
-			case PadInput::TouchPad: return buttons & ps5pad::kTouchPad;
+			case PadInput::TouchPad: return click;
 			}
 			return false;
 		}
@@ -520,16 +522,24 @@ namespace ps5libretro
 				ps5pad::Data data{};
 				if (!ps5pad::Read(player, data))
 					continue;
-				const uint32_t buttons = ps5pad::ApplyTurbo(ps5pad::FilterShortcuts(player, data.buttons).buttons);
+				const ps5pad::Filtered filtered = ps5pad::FilterShortcuts(player, data.buttons);
+				const uint32_t buttons = ps5pad::ApplyTurbo(filtered.buttons);
 				if (blocked || (data.buttons & ps5pad::kIntercepted))
 					continue;
 				Pad& pad = pads[player];
+				bool l3 = false, r3 = false;
 				for (size_t i = 0; i < std::size(kButtons); i++)
-					if (Held(s_mapping[i], data, buttons))
+				{
+					if (Held(s_mapping[i], data, buttons, filtered.touch || filtered.touchClick))
 						pad.buttons |= uint16_t(1u << kButtons[i].first);
-				if (buttons & ps5pad::kL3)
+					l3 = l3 || s_mapping[i] == PadInput::L3;
+					r3 = r3 || s_mapping[i] == PadInput::R3;
+				}
+				// the sticks' clicks as the RetroPad's own, unless one of the console's buttons is on them (Select is,
+				// by default)
+				if (!l3 && (buttons & ps5pad::kL3))
 					pad.buttons |= 1u << RETRO_DEVICE_ID_JOYPAD_L3;
-				if (buttons & ps5pad::kR3)
+				if (!r3 && (buttons & ps5pad::kR3))
 					pad.buttons |= 1u << RETRO_DEVICE_ID_JOYPAD_R3;
 				// the left stick as the D-pad too, past the deadzone, as the DS side's circle pad
 				const float x = Axis(data.leftX), y = Axis(data.leftY);

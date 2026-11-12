@@ -879,6 +879,8 @@ namespace ps5shell
 		ps5pad::Data data{};
 		const int player = m_mappingSide != System::WiiU ? 0 : m_player;
 		const bool touchpadButton = m_mappingSide == System::WiiU && ps5pad::TouchpadButton(player);
+		// a libretro console has no touch screen: its click is a press too
+		const bool clickChosen = m_mappingSide == System::WiiU || m_mappingSide == System::Switch || (ps5retro::IsRetro((int)m_mappingSide) && m_porpoiseButtons.empty());
 		if (!ps5pad::Read(player, data) && !ps5pad::Read(0, data))
 			return;
 		const bool idle = Pressed(data) == ps5emu::PadInput::None && !(data.buttons & ps5pad::kTouchPad) && data.l2 < 60 && data.r2 < 60;
@@ -889,7 +891,7 @@ namespace ps5shell
 		}
 		else if (!m_capture.released)
 			m_capture.released = idle;
-		else if ((data.buttons & ps5pad::kTouchPad) && m_mappingSide != System::WiiU && m_mappingSide != System::Switch)
+		else if ((data.buttons & ps5pad::kTouchPad) && !clickChosen)
 		{
 			m_capture.active = false;
 			m_mapMessage = Tr("Cancelled. Nothing changed.");
@@ -972,7 +974,7 @@ namespace ps5shell
 			// tr: {0} is a button of the Wii U's or the 3DS's controller
 			message = (m_porpoiseButtons.empty() ? TrF("Press the DualSense button, trigger or stick direction for {0} now.", ButtonName(mapping.button)) :
 							TrF("Press the DualSense button or trigger for {0} now.", ButtonName(mapping.button))) + "\n" +
-				(m_mappingSide == System::WiiU || m_mappingSide == System::Switch ?
+				(m_mappingSide == System::WiiU || m_mappingSide == System::Switch || (ps5retro::IsRetro((int)m_mappingSide) && m_porpoiseButtons.empty()) ?
 						TrP(seconds, "{0} second left, or nothing changes. Touchpad click can be chosen too.",
 							"{0} seconds left, or nothing changes. Touchpad click can be chosen too.") :
 						TrP(seconds, "{0} second left. A touchpad click cancels.", "{0} seconds left. A touchpad click cancels."));
