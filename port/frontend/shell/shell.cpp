@@ -328,6 +328,11 @@ namespace ps5shell
 					if (game.entry.game.path == m_choice->game.path)
 					{
 						cover = game.boxArt;
+						// the menu's picture as every side's menu is given it, a TGA: the library's cover may be a
+						// PNG (Porpoise's own download, or the folder's picture), so GameTDB's of the game where it is here
+						if (!cover.ends_with(".tga"))
+							if (const std::string tga = ps5boxart::Path(ps5boxart::System::GameCubeWii, game.entry.game.gameId); !tga.empty())
+								cover = tga;
 						for (const std::string& part : {game.info.publisher, ps5gameinfo::Year(game.info.released)})
 							if (!part.empty())
 								details += (details.empty() ? "" : "  /  ") + part;
