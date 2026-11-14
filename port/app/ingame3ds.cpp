@@ -4,6 +4,8 @@
 #include "emulator.h"
 #include "keyboard_menu.h"
 #include "lang.h"
+#include "loading_screen.h"
+#include "paths.h"
 #include "menu_canvas.h"
 #include "remote_menu.h"
 #include "side_menu.h"
@@ -78,12 +80,15 @@ namespace ps5ingame3ds
 		bool s_undoRequest = false;
 		std::vector<std::string> s_amiibo; // under s_mutex, with the four below
 		std::vector<std::pair<std::string, bool>> s_cheats;
+		bool s_cheatsShown = true; // a libretro core's: only one that takes cheats has the page (SetCheatsShown)
 		bool s_cheevosShown = false; // RetroAchievements, under s_mutex with the two below
 		std::string s_cheevosSummary;
 		std::vector<Achievement> s_cheevos;
 		std::vector<CoreOption> s_coreOptions;			   // under s_mutex: a libretro game's (SetCoreOptions)
 		std::vector<std::pair<std::string, int>> s_coreChanged; // under s_mutex: the menu's changes, for TakeCoreOption
 		std::atomic<bool> s_resetRequested{false};
+		Controllers s_controllers; // under s_mutex: a libretro game's (SetControllers)
+		std::atomic<bool> s_levelRequested{false};
 		std::string s_extrasMessage;
 		ExtrasRequest s_extrasRequest;
 		int s_amiiboIndex = 0;
@@ -122,17 +127,56 @@ namespace ps5ingame3ds
 			ImFont* row = nullptr;	 // label
 			ImFont* small = nullptr; // caption
 			ImFont* chip = nullptr;
+			ImFont* big = nullptr; // the loading screen's game name (a 3DS game's only)
 			bool fontsUploaded = false;
 			int uploadAge = -1;	   // frames since the font upload, until its buffer goes
 			bool pending = false;  // a frame's draw data waits for the render pass
 			ImTextureID border = nullptr;
 			ImTextureID cover = nullptr; // the game's box art, made the first time the menu opens
+			ImTextureID pad = nullptr;	 // the Buttons page's DualSense (assets/ui/dualsense.tga), made then too
 			bool coverTried = false;
 			int coverWidth = 0, coverHeight = 0;
+			ps5menu::LoadingPicture blur; // the cover's small copy, the loading screen's ground, made with it
+			uint64_t fadeFrom = 0;		  // the game's first frame after the loading screen (sceKernelGetProcessTime)
 			std::vector<std::pair<ImTextureID, int>> retired; // textures and their age in frames, until the GPU is done with them
 			uint64_t lastFrame = 0;
 		};
 		Gpu g;
+		// The loading screen (SetLoading), under s_mutex: what Azahar is doing and how far; whether it is
+		// up, and once it ended, that it fades over the game's first frames
+		LoadingStep s_loadingStep = LoadingStep::Loading;
+		size_t s_loadingDone = 0, s_loadingOf = 0;
+		std::atomic<bool> s_loading{false}, s_loadingFades{false};
+		uint64_t s_loadingFrom = 0; // sceKernelGetProcessTime
+
+		void DrawLoading(float scale, float alpha)
+		{
+			ps5menu::Loading loading;
+			LoadingStep step;
+			size_t done, of;
+			{
+				std::lock_guard lock(s_mutex);
+				loading.title = s_name;
+				loading.details = s_details;
+				step = s_loadingStep;
+				done = std::min(s_loadingDone, s_loadingOf);
+				of = s_loadingOf;
+			}
+			loading.system = "Nintendo 3DS";
+			if (step == LoadingStep::Starting)
+				loading.step = ps5menu::StartingStep();
+			else if (step == LoadingStep::Loading || of == 0)
+				loading.step = ps5menu::LoadingStep();
+			else
+			{
+				loading.step = step == LoadingStep::Pipelines ? ps5menu::PipelineStep(done, of) : ps5menu::ShaderStep(done, of);
+				loading.progress = (float)done / of;
+			}
+			loading.cover = {g.cover, g.coverWidth, g.coverHeight};
+			loading.blur = g.blur;
+			ps5menu::DrawLoading(ImGui::GetForegroundDrawList(), ImGui::GetIO().DisplaySize, scale, Colours(),
+				{g.big, g.chip, g.body, g.row, g.small}, loading, (sceKernelGetProcessTime() - s_loadingFrom) / 1e6f, alpha);
+		}
 		uint32_t s_buttons = 0, s_pressed = 0;
 		uint32_t s_menuButtons = 0; // the same, with the left stick's directions as the D-pad's
 
@@ -149,6 +193,30 @@ namespace ps5ingame3ds
 			ps5settings::N3ds mapped;
 			mapped.buttons = settings.buttons;
 			return mapped;
+		}
+
+		// The words of a libretro game's special controllers (port/libretro/devices.h, game.cpp): marked here so
+		// that the in-game fonts have their characters, translated where they show
+		std::string ControllerWords(const std::string& english)
+		{
+			using ps5lang::TrMark;
+			// tr: the Buttons page's Controller row: the game's own choice, the console's pad, a special controller
+			static constexpr const char* kWords[] = {TrMark("Auto"), TrMark("Standard"), TrMark("Arkanoid paddle"),
+				// tr: what the DualSense does with a special controller plugged in (the Arkanoid paddle, the
+				// Zapper or Super Scope light guns, the SNES Mouse, the Power Pad mat)
+				TrMark("Turn the knob"), TrMark("Fire"), TrMark("Aim"), TrMark("Aim at the middle"), TrMark("Shoot away from the screen"),
+				TrMark("Cursor"), TrMark("Turbo"), TrMark("Pause"), TrMark("Move"), TrMark("Left button"), TrMark("Right button"),
+				// tr: {0} is a number on the Power Pad's mat
+				TrMark("Mat {0}"), TrMark("Tilt"),
+				// tr: the DualSense's inputs for a special controller
+				TrMark("Touchpad, left stick or D-pad"), TrMark("Touchpad, motion or right stick"), TrMark("Touchpad or left stick"),
+				TrMark("Cross or R2"), TrMark("Circle or L2"), TrMark("Tilt or turn the DualSense")};
+			(void)kWords;
+			// a Power Pad's button: "Mat 7"
+			if (english.rfind("Mat ", 0) == 0 && english.size() > 4 && std::isdigit((unsigned char)english[4]))
+				return ps5lang::TrF("Mat {0}", std::atoi(english.c_str() + 4));
+			const std::string words = ps5lang::Tr(english.c_str());
+			return words != english ? words : ps5menu::ButtonLabel(english);
 		}
 
 		std::vector<ps5menu::ButtonRow> ButtonRows(const Settings& settings)
@@ -370,6 +438,7 @@ namespace ps5ingame3ds
 			ImGui_ImplVulkan_ForgetDeviceObjects();
 			g.border = nullptr;
 			g.cover = nullptr;
+			g.pad = nullptr;
 			g.coverTried = false;
 			g.retired.clear();
 			g.fontsUploaded = false;
@@ -441,6 +510,8 @@ namespace ps5ingame3ds
 			g.row = add(Weight::Regular, ps5menu::kLabel);
 			g.small = add(Weight::Regular, ps5menu::kCaption);
 			g.chip = add(Weight::SemiBold, ps5menu::kChip);
+			if (s_console == Console::N3ds)
+				g.big = add(Weight::SemiBold, ps5menu::kLoadingTitle);
 			g.context = ImGui::CreateContext(g.atlas);
 			ImGui::SetCurrentContext(g.context);
 			ImGuiIO& io = ImGui::GetIO();
@@ -500,7 +571,7 @@ namespace ps5ingame3ds
 			using Row = ps5menu::Row;
 			std::string time, stateMessage, amiibo, amiiboMessage;
 			std::vector<std::pair<std::string, bool>> cheats;
-			bool noAmiibo, undo;
+			bool noAmiibo, undo, cheatsShown;
 			bool cheevosShown;
 			std::string cheevosSummary;
 			std::vector<Achievement> cheevos;
@@ -518,6 +589,7 @@ namespace ps5ingame3ds
 				amiibo = noAmiibo ? Tr("None") : s_amiibo[s_amiiboIndex];
 				amiiboMessage = s_extrasMessage;
 				cheats = s_cheats;
+				cheatsShown = s_cheatsShown;
 			}
 			const int resolution = std::clamp(settings.resolution, 1, 10);
 			const bool ds = s_console == Console::Nds;
@@ -585,7 +657,7 @@ namespace ps5ingame3ds
 			if (single)
 				rows.push_back({"graphics", Tr("Graphics"), Tr(filter), false, Tr("The screen filter and the performance overlay."), {
 					{"dsfilter", Tr("Screen filter"), Tr(filter), true,
-						Tr("Sharp keeps pixels crisp and even. Smooth blends them. Square pixels can look uneven at most sizes.")},
+						Tr("Sharp keeps pixels crisp and even. Smooth blends them. CRT draws the lines and colours of a tube TV, Curved CRT its rounded glass too.")},
 					{"performance", Tr("Performance overlay"), settings.performance ? on : off, true,
 						Tr("Shows frame rate and speed in the top-left corner.")},
 				}});
@@ -636,21 +708,23 @@ namespace ps5ingame3ds
 					Tr("Saves now, replacing what is in the slot. Keep saving in the game too: updates may not load old states.")},
 			}});
 			Row cheatRows{"cheats", Tr("Cheats"), "", false,
-				ds ? Tr("The game's cheats, from melonds/cheats/<game file>.mch (melonDS's format).") :
-					 Tr("The game's cheats, from azahar/cheats/<title ID>.txt (Gateway format).")};
+				single ? Tr("The game's cheats, from cheats/<game file>.cht in its system's folder (RetroArch's format).") :
+				ds	   ? Tr("The game's cheats, from melonds/cheats/<game file>.mch (melonDS's format).") :
+						 Tr("The game's cheats, from azahar/cheats/<title ID>.txt (Gateway format).")};
 			for (size_t i = 0; i < cheats.size(); i++)
 				cheatRows.rows.push_back({fmt::format("cheat{}", i), cheats[i].first, cheats[i].second ? on : off, true,
 					Tr("Cross, Left or Right turns it on or off. It is remembered.")});
 			if (cheats.empty())
 				cheatRows.rows.push_back({"nocheats", Tr("No cheats for this game"), "", false,
 					// tr: {0} is the app's data folder: /data/ps5cemu, or the PS5CEMU-HAR-data folder on the drive the app is installed on
-					ds ? TrF("Put them in {0}/melonds/cheats/<game file>.mch, then restart the game.", ecam_layout::Parent(ps5paths::MelonDs())) :
+					single ? Tr("Get cheats in the game's settings in the library, or put a .cht file in the system's cheats folder, then restart the game.") :
+					ds ? TrF("Get cheats in the game's settings in the library, or put them in {0}/melonds/cheats/<game file>.mch, then restart the game.", ecam_layout::Parent(ps5paths::MelonDs())) :
 						 // tr: {0} is the app's data folder: /data/ps5cemu, or the PS5CEMU-HAR-data folder on the drive the app is installed on
-						 TrF("Put them in {0}/azahar/cheats/<title ID>.txt, then restart the game.", ecam_layout::Parent(ps5paths::Azahar()))});
+						 TrF("Get cheats in the game's settings in the library, or put them in {0}/azahar/cheats/<title ID>.txt, then restart the game.", ecam_layout::Parent(ps5paths::Azahar()))});
 			else
 				// tr: how many of the game's cheats are on: {0} of {1}
 				cheatRows.value = TrF("{0} of {1} on", std::count_if(cheats.begin(), cheats.end(), [](const auto& c) { return c.second; }), cheats.size());
-			if (!single)
+			if (!single || cheatsShown)
 				rows.push_back(cheatRows);
 			if (cheevosShown) // the DS's and a libretro side's (app/achievements.h)
 			{
@@ -714,8 +788,38 @@ namespace ps5ingame3ds
 			}
 			// every button, as Settings > Controls > Buttons has them, set here without leaving the game; the
 			// touchpad is the touch screen, so its click cancels
-			rows.push_back(s_buttonsMenu.Category(ButtonRows(settings), s_heldInput, sceKernelGetProcessTime(), true,
-				Tr("Puts every button back to default. Hold Cross to confirm.")));
+			Row buttons = s_buttonsMenu.Category(ButtonRows(settings), s_heldInput, sceKernelGetProcessTime(), true,
+				Tr("Puts every button back to default. Hold Cross to confirm."));
+			if (single)
+			{
+				// a libretro game's special controller (port/libretro/devices.h): which, and what the DualSense does
+				// with it, under the test's row
+				Controllers controllers;
+				{
+					std::lock_guard lock(s_mutex);
+					controllers = s_controllers;
+				}
+				std::vector<Row> special;
+				if (!controllers.choices.empty())
+				{
+					const int count = (int)controllers.choices.size();
+					const int choice = std::clamp(settings.controller, 0, count - 1);
+					const std::string value = choice > 0 ? ControllerWords(controllers.choices[choice]) :
+						controllers.found.empty() ? ControllerWords("Auto") : TrF("Auto: {0}", ControllerWords(controllers.found));
+					// tr: the Buttons page's row that plugs a special controller in, for this game: Auto, Standard, the Zapper...
+					special.push_back({"controller", Tr("Controller"), value, true,
+						Tr("The controller plugged into the console for this game. Auto picks the one the game was made for, such as the Zapper for Duck Hunt.")});
+				}
+				for (size_t i = 0; i < controllers.mapping.size(); i++)
+					special.push_back({"special:" + std::to_string(i), ControllerWords(controllers.mapping[i].first),
+						ControllerWords(controllers.mapping[i].second), false, Tr("What the DualSense does for the controller plugged in.")});
+				if (controllers.motion)
+					// tr: a row that takes how the DualSense is held now as level, for a game played by tilting it
+					special.push_back({"level", Tr("Level the motion"), "", false,
+						Tr("Hold the DualSense as you like to play, then press Cross. The game sees it as held level from there.")});
+				buttons.rows.insert(buttons.rows.begin() + std::min<size_t>(1, buttons.rows.size()), special.begin(), special.end());
+			}
+			rows.push_back(std::move(buttons));
 			// a home screen tile's game closes the app instead, as the row says (#48)
 			Row library = ps5emu::ExitAfterGame() ?
 				Row{"library", Tr("Quit to the home screen"), "", false,
@@ -741,6 +845,10 @@ namespace ps5ingame3ds
 				}
 			if (!single)
 				rows.push_back(ps5menu::RemoteRow(ds ? Tr("The touch screen") : Tr("The bottom screen")));
+			// what the menu changes, kept for this game alone or for every game on its system (Settings > the
+			// game's Game settings has the same, a row at a time)
+			rows.push_back({"gameonly", Tr("Settings for this game only"), settings.gameOnly ? on : off, true,
+				Tr("On: this game keeps its own settings, and what you change here stays with it. Off: it uses the system's settings from its next start.")});
 			rows.push_back(library);
 			return rows;
 		}
@@ -805,6 +913,19 @@ namespace ps5ingame3ds
 				CloseMenu();
 				changed = false;
 			}
+			else if (id == "controller")
+			{
+				std::lock_guard lock(s_mutex);
+				const int count = std::max(1, (int)s_controllers.choices.size());
+				next.controller = (std::clamp(settings.controller, 0, count - 1) + (change ? change : 1) + count) % count;
+			}
+			else if (id == "level")
+			{
+				s_levelRequested = true;
+				changed = false;
+			}
+			else if (id.rfind("special:", 0) == 0)
+				changed = false;
 			else if (id == "picturesize")
 				next.pictureSize = (std::clamp(settings.pictureSize, 0, kPictureSizeCount - 1) + change + kPictureSizeCount) % kPictureSizeCount;
 			else if (id == "pictureshape")
@@ -839,7 +960,10 @@ namespace ps5ingame3ds
 				while (next.textureFilter == 1);
 			}
 			else if (id == "dsfilter")
-				next.screenFilter = (std::clamp(settings.screenFilter, 0, kScreenFilterCount - 1) + change + kScreenFilterCount) % kScreenFilterCount;
+			{
+				const int count = s_console == Console::Retro ? kScreenFilterCount : kDsScreenFilterCount;
+				next.screenFilter = (std::clamp(settings.screenFilter, 0, count - 1) + change + count) % count;
+			}
 			else if (id == "rotation")
 				next.rotation = (std::clamp(settings.rotation, 0, kRotationCount - 1) + change + kRotationCount) % kRotationCount;
 			else if (id == "hiddentouch")
@@ -856,6 +980,8 @@ namespace ps5ingame3ds
 				next.speedLimit = NextSpeedLimit(settings.speedLimit, change);
 			else if (id == "performance")
 				next.performance = !settings.performance;
+			else if (id == "gameonly")
+				next.gameOnly = !settings.gameOnly;
 			else if (id == "volume")
 				next.volume = chosen && settings.volume >= 100 ? 0 : std::clamp(settings.volume + change * 10, 0, 100);
 			else if (id == "motion")
@@ -987,6 +1113,7 @@ namespace ps5ingame3ds
 			header.cover = g.cover;
 			header.coverWidth = (float)g.coverWidth;
 			header.coverHeight = (float)g.coverHeight;
+			header.pad = g.pad;
 			s_side.Draw(canvas, {g.head, g.body, g.row, g.small, g.chip}, header, MenuRows(settings), Tiles(settings),
 				{{"cross", Tr("Choose")}, {"leftright", Tr("Change")}, {"circle", s_side.Open().empty() ? Tr("Back to the game") : Tr("Back")}});
 			ps5menu::DrawRemoteCard(canvas, {g.head, g.body, g.row, g.small, g.chip}, s_side.Focus());
@@ -1059,12 +1186,15 @@ namespace ps5ingame3ds
 		s_name = name;
 		s_titleId = titleId;
 		s_console = console;
+		s_cheatsShown = console != Console::Retro; // a libretro core's says so (SetCheatsShown)
 		s_system = system;
 		// its colour, and the dark of it for what is written on it (as the sides' palettes have)
 		const uint32_t ink = (colour >> 16 & 0xff) * 12 / 100 << 16 | (colour >> 8 & 0xff) * 12 / 100 << 8 | (colour & 0xff) * 12 / 100;
 		s_systemColours = ps5menu::Side(colour, ink);
 		s_settings = settings;
 		s_changed = false;
+		s_controllers = {}; // a libretro game's, from its loop (SetControllers)
+		s_levelRequested = false;
 	}
 
 	void SetGame(const std::string& details, const std::string& coverPath)
@@ -1072,6 +1202,26 @@ namespace ps5ingame3ds
 		std::lock_guard lock(s_mutex);
 		s_details = details;
 		s_coverPath = coverPath;
+	}
+
+	void SetLoading(LoadingStep step, size_t done, size_t of)
+	{
+		{
+			std::lock_guard lock(s_mutex);
+			s_loadingStep = step;
+			s_loadingDone = done;
+			s_loadingOf = of;
+		}
+		if (!s_loading.exchange(true))
+			s_loadingFrom = sceKernelGetProcessTime();
+	}
+
+	void EndLoading()
+	{
+		if (!s_loading.exchange(false))
+			return;
+		g.fadeFrom = 0;
+		s_loadingFades = true;
 	}
 
 	void ToggleMenu()
@@ -1165,6 +1315,12 @@ namespace ps5ingame3ds
 		s_cheats = cheats;
 	}
 
+	void SetCheatsShown(bool shown)
+	{
+		std::lock_guard lock(s_mutex);
+		s_cheatsShown = shown;
+	}
+
 	void SetAchievements(bool shown, const std::string& summary, const std::vector<Achievement>& achievements)
 	{
 		std::lock_guard lock(s_mutex);
@@ -1213,6 +1369,14 @@ namespace ps5ingame3ds
 	}
 
 	bool TakeResetRequest() { return s_resetRequested.exchange(false); }
+
+	void SetControllers(const Controllers& controllers)
+	{
+		std::lock_guard lock(s_mutex);
+		s_controllers = controllers;
+	}
+
+	bool TakeLevelRequest() { return s_levelRequested.exchange(false); }
 
 	bool TakeUndoRequest()
 	{
@@ -1331,7 +1495,19 @@ namespace ps5ingame3ds
 				else
 					i++;
 			const bool border = borderTheme > 0 && (g.border || borderFresh);
-			if (!open && !performance && !keyboard && !border)
+			// the loading screen, then the game's first frames with it fading over them
+			const bool loading = s_loading;
+			float fade = 0;
+			if (!loading && s_loadingFades)
+			{
+				const uint64_t now = sceKernelGetProcessTime();
+				if (!g.fadeFrom)
+					g.fadeFrom = now;
+				fade = ps5menu::LoadingFadeAlpha((now - g.fadeFrom) / 1e6f);
+				if (fade <= 0)
+					s_loadingFades = false;
+			}
+			if (!open && !performance && !keyboard && !border && !loading && fade <= 0)
 			{
 				s_buttons = 0; // the menu sees a fresh controller when it next opens
 				return;
@@ -1387,8 +1563,8 @@ namespace ps5ingame3ds
 				if (!pixels.empty())
 					g.border = ImGui_ImplVulkan_GenerateTexture(target.commandBuffer, pixels, {width, height});
 			}
-			// the game's box art, the first time the menu opens
-			if (open && !g.coverTried)
+			// the game's box art, the first time the menu opens or the loading screen shows
+			if ((open || loading) && !g.coverTried)
 			{
 				g.coverTried = true;
 				std::string path;
@@ -1398,14 +1574,19 @@ namespace ps5ingame3ds
 				}
 				std::vector<uint8_t> rgba;
 				int width = 0, height = 0;
-				if (!path.empty() && ps5tga::Load(path, 264, 352, rgba, width, height))
+				if (!path.empty() && ps5tga::Load(path, ps5menu::kLoadingCoverWidth, ps5menu::kLoadingCoverHeight, rgba, width, height, ui::DecodeFile))
 				{
 					g.cover = ImGui_ImplVulkan_GenerateTexture(target.commandBuffer, rgba, {width, height});
 					g.coverWidth = width;
 					g.coverHeight = height;
+					// its small copy: the loading screen's ground, its colours blurred
+					if (ps5tga::Load(path, ps5menu::kLoadingBlurSize, ps5menu::kLoadingBlurSize, rgba, width, height))
+						g.blur = {ImGui_ImplVulkan_GenerateTexture(target.commandBuffer, rgba, {width, height}), width, height};
 				}
 				else
 					ps5log::Line("[ingame3ds] no box art for the menu ({})", path.empty() ? "none fetched" : path);
+				if (!g.pad && ps5tga::Load(ps5paths::Assets() + "/ui/dualsense.tga", 1000, 700, rgba, width, height))
+					g.pad = ImGui_ImplVulkan_GenerateTexture(target.commandBuffer, rgba, {width, height});
 			}
 			ImGuiIO& io = ImGui::GetIO();
 			io.DisplaySize = {(float)target.width, (float)target.height};
@@ -1414,14 +1595,21 @@ namespace ps5ingame3ds
 			g.lastFrame = now;
 			Input();
 			ImGui::NewFrame();
-			if (borderTheme > 0 && g.border)
-				DrawBorder(borderTheme);
-			if (open)
-				DrawMenu(scale);
-			else if (keyboard)
-				DrawKeyboard(scale);
-			if (performance)
-				DrawPerformance(scale);
+			if (loading)
+				DrawLoading(scale, 1.0f);
+			else
+			{
+				if (borderTheme > 0 && g.border)
+					DrawBorder(borderTheme);
+				if (open)
+					DrawMenu(scale);
+				else if (keyboard)
+					DrawKeyboard(scale);
+				if (performance)
+					DrawPerformance(scale);
+				if (fade > 0)
+					DrawLoading(scale, fade);
+			}
 			ImGui::Render();
 			g.pending = true;
 			return;

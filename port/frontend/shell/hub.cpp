@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // PS5-ECAM: a game's hub: everything about one game. Its cover large,
 // its system, IDs and title, chips for what is known for sure (status, version, DLC, format, play
-// time), Play, its graphic packs and the Game menu; GameTDB's description and facts; how it runs.
+// time), Play, its graphic packs and the Game menu; GameTDB's description and facts; how it runs, and its
+// manual as a QR code where Nintendo keeps one online.
 // L1 and R1 go to the games either side of it, as the Library orders them.
 
 #include "shell_internal.h"
@@ -243,7 +244,7 @@ namespace ps5shell
 				false, !m_hubAbout && m_hubAction == 1, Icon::Play, false, 72, 620);
 			bx = b.Right() + 20;
 		}
-		const bool own = m_settings.games.count(ps5settings::GameKey(ps5launcher::SideName(m_side), g.titleId)) > 0;
+		const bool own = ps5settings::HasOwn(m_settings, ps5launcher::SideName(m_side), g.titleId);
 		b = PillButton(canvas, bx, ay, own ? Tr("Game settings · custom") : Tr("Game settings"), false, !m_hubAbout && m_hubAction == actions - 2);
 		bx = b.Right() + 20;
 		IconButton(canvas, bx, ay, Icon::More, !m_hubAbout && m_hubAction == actions - 1);
@@ -296,19 +297,50 @@ namespace ps5shell
 			canvas.Text(Style({20, ui::Weight::Medium, 1.2f}), fxi, fy, facts[i].first, Tertiary(), 270, 1);
 			canvas.Text(Style({26, ui::Weight::Medium, 1.2f}), fxi, fy + 28, facts[i].second, kText, 270, 1);
 		}
+		// its manual, where Nintendo keeps one online: a QR code to read it on a phone, beside how it runs
+		const std::string manual = ManualOf(m_side, game);
+		if (!manual.empty())
+		{
+			const Box card = game.report ? Box{fx + 380, aboutTop + 154, 160, 172} : Box{fx, aboutTop + 154, 540, 172};
+			canvas.Rect(card, kRadiusCard, ui::SetAlpha(kText, 0.06f));
+			canvas.Ring(card, kRadiusCard, 1.5f, ui::SetAlpha(kText, 0.18f));
+			if (game.report)
+			{
+				DrawManualQr(canvas, manual, {card.CentreX() - 54, card.y + 16, 108, 108});
+				const ui::TextBlock caption = m_fonts.Layout(Style({20, ui::Weight::Medium, 1.2f}), Tr("Manual"));
+				canvas.Text(caption, card.CentreX() - caption.width * 0.5f, card.y + 134, Secondary());
+			}
+			else
+			{
+				DrawManualQr(canvas, manual, {card.x + 20, card.y + 20, 132, 132});
+				canvas.Text(Style({26, ui::Weight::SemiBold, 1.2f}), card.x + 176, card.y + 22, Tr("Manual"), kText, card.w - 200, 1);
+				// tr: in the Game hub, beside a QR code to a game's manual on Nintendo's site
+				canvas.Text(Style({21, ui::Weight::Regular, 1.4f}), card.x + 176, card.y + 62, Tr("Scan it with your phone to read the manual on Nintendo's site."),
+					Secondary(), card.w - 200, 3);
+			}
+		}
 		if (game.report)
 		{
 			const std::string kind = ps5compat::Kind(game.report->status);
 			const uint32_t colour = kind == "good" ? kGood : kind == "warn" ? kWarn : kind == "bad" ? kBad : kText;
-			const Box card{fx, aboutTop + 154, 540, 172};
+			const Box card{fx, aboutTop + 154, manual.empty() ? 540.0f : 364.0f, 172};
 			canvas.Rect(card, kRadiusCard, ui::SetAlpha(colour, 0.07f));
 			canvas.Ring(card, kRadiusCard, 1.5f, ui::SetAlpha(colour, 0.25f));
 			canvas.Draw(kind == "good" ? Icon::Check : Icon::Warning, {card.x + 24, card.y + 22, 28, 28}, colour);
 			const std::string heading = kind == "good" ? std::string(Tr("Runs well on PS5")) : TrC("status", game.report->status);
 			canvas.Text(Style({26, ui::Weight::SemiBold, 1.2f}), card.x + 62, card.y + 22, heading, ui::Mix(colour, 0xffffffff, 0.3f), card.w - 86, 1);
-			// tr: {0} is a status from the compatibility list, such as Playable
-			const std::string notes = game.report->notes.empty() ? TrF("The compatibility list has it as “{0}”.", TrC("status", game.report->status)) :
-																   TrC("compatibility note", game.report->notes);
+			// the list's notes; else what players' reports say, how many and how they went
+			const ps5compat::Report& report = *game.report;
+			std::string notes;
+			if (!report.notes.empty())
+				notes = TrC("compatibility note", report.notes);
+			else if (report.sessions > 0)
+				// tr: a game's page, how it runs, from players' automatic reports ({0}: consoles; {1} of {2}: play sessions)
+				notes = TrP(report.consoles, "From reports on {0} console: {1} of {2} sessions went well.",
+					"From reports on {0} consoles: {1} of {2} sessions went well.", report.ended, report.sessions);
+			else
+				// tr: {0} is a status from the compatibility list, such as Playable
+				notes = TrF("The compatibility list has it as “{0}”.", TrC("status", report.status));
 			canvas.Text(Style({21, ui::Weight::Regular, 1.4f}), card.x + 24, card.y + 66, notes, Secondary(), card.w - 48, 3);
 		}
 		canvas.PopOffset();

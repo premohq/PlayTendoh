@@ -12,6 +12,7 @@
 #include "../actions.h"
 #include "../../app/boxart.h"
 #include "../../app/catalog.h"
+#include "../../app/cheats.h"
 #include "../../app/compatibility.h"
 #include "../../app/game_archives.h"
 #include "../../app/gameinfo.h"
@@ -44,6 +45,7 @@
 #include <memory>
 #include <optional>
 #include <string>
+#include <string_view>
 #include <thread>
 #include <unordered_map>
 #include <vector>
@@ -65,8 +67,8 @@ namespace ps5shell
 
 	enum class ScreenId
 	{
-		WhatsNew, // what a version brings, once: on the first start and after an update (whatsnew.cpp)
-		Welcome, // Make it yours: a first start's look and feel, or a new version's new options
+		WhatsNew, // what a version brings, once, after an update (whatsnew.cpp)
+		Welcome, // a new version's new options, once (welcome.cpp)
 		Setup,
 		Library,
 		Hub,
@@ -81,6 +83,7 @@ namespace ps5shell
 		Layout,	 // Make it yours' first step: Classic or Orbit (orbit.cpp)
 		Reports, // Make it yours' second: whether to send reports to the project, asked once (reports.cpp)
 		Timeline, // every console's games on one shelf, oldest to newest (timeline.cpp)
+		Start,	  // the first start's setup, one question a screen (firststart.cpp)
 	};
 
 	struct ShareJob; // shares.cpp: a test or a look around the network, on a thread of its own
@@ -144,15 +147,20 @@ namespace ps5shell
 		float bannerAspect = 3;
 	};
 
-	// A console's controller (or the handheld that is its controller), in a few rounded shapes centred on
-	// cx, cy and about s wide: body its colour, cut its screens and buttons, second the Switch's other
-	// Joy-Con and the Game Boy's screen (consoles.cpp)
-	void DrawConsole(Canvas& canvas, System side, float cx, float cy, float s, uint32_t body, uint32_t cut, uint32_t second);
+	// A console's controller (or the handheld that is its controller), centred on cx, cy and about s wide:
+	// its icon (RetroArch's, port/ui/consoles) in body, its colour, once it is on the GPU; else drawn in a
+	// few rounded shapes, cut its screens and buttons, second the Switch's other Joy-Con and the Game Boy's
+	// screen (consoles.cpp)
+	// the Timeline's mark in the console lists (consoles.cpp): its ruler's line, and a console's dot on each of three stems
+	void DrawTimelineMark(Canvas& canvas, float cx, float cy, float s, uint32_t body, const uint32_t dots[3]);
+	void DrawConsole(Canvas& canvas, System side, float cx, float cy, float s, uint32_t body, uint32_t cut, uint32_t second,
+		const ui::Picture* icon = nullptr);
 
 	struct SettingsPage
 	{
 		std::string id, title, subtitle;
 		Icon icon;
+		bool app = false; // Playtendoh's own, the same on every side: under the side's, past a line
 	};
 
 	class Shell
@@ -177,6 +185,7 @@ namespace ps5shell
 		void DrawMark(Canvas& canvas, float cx, float cy, float radius); // the top left's: every console's controller in a ring
 		float DrawWordmark(Canvas& canvas, float x, float centreY, float height, uint32_t colour); // the logo's name; its width
 		void DrawBareConsole(Canvas& canvas, System side, const Box& box, bool open); // a side's in the bar's carousel: its controller (consoles.cpp)
+		const ui::Picture* ConsoleIcon(System side, float size); // its icon at about size wide, once on the GPU (consoles.cpp)
 		void DrawHints(Canvas& canvas, const std::vector<Hint>& hints);
 		void DrawOverlays(Canvas& canvas);
 		std::vector<Hint> Hints() const;
@@ -227,7 +236,7 @@ namespace ps5shell
 		static ps5boxart::System BoxSide(System side)
 		{
 			return side == System::N3ds ? ps5boxart::System::N3ds : side == System::Nds ? ps5boxart::System::Nds :
-				side == System::Switch	? ps5boxart::System::Switch :
+				side == System::Switch || side == System::Switch2 ? ps5boxart::System::Switch :
 										  ps5boxart::System::WiiU;
 		}
 		ps5boxart::System BoxOf(const ps5emu::Game&) const { return IsPorpoise() ? ps5boxart::System::GameCubeWii : BoxSide(m_side); }
@@ -280,6 +289,10 @@ namespace ps5shell
 		void PollGames();
 		void PollCore(); // Cemu's library, loading beside the launcher (ps5emu::StartCore): ready, or why not
 		void MakeGame(Game& game, const ps5catalog::Entry& entry);
+		// how a game of a side runs (app/compatibility.h), or null: none known, or the badges off (Settings > Launcher)
+		const ps5compat::Report* ReportOf(System side, const Game& game) const;
+		// every game's again: a newer feed came, or the badges were turned on or off
+		void FindReports();
 		// a Switch game's cover: a picture beside it, else GameTDB's box art or its own icon (Settings > Online)
 		std::string SwitchCover(const ps5emu::Game& game) const;
 		std::string IconOf(Game& game);
@@ -324,10 +337,18 @@ namespace ps5shell
 		uint32_t Wash(float alpha) const;
 		void Focus(const Box& box, float radius, uint32_t glow = 0);
 		void DrawFocusRing(Canvas& canvas);
+		// how far a part is into its focused look, 0 to 1, gliding as the focus comes and goes, so what grows
+		// or lifts with the focus does not jump (widgets.cpp); key: what the part is, the same every frame
+		float FocusMix(uint64_t key, bool focused);
+		static uint64_t FocusKey(std::string_view what, uint64_t salt = 0);
 		void Panel(Canvas& canvas, const Box& box, float radius);
 		// 6.0's liquid glass (widgets.cpp): fill, then light caught across its top, a bright edge above and a
 		// shade below, as a lens of glass over what is behind; high contrast: the fill and a plain edge
 		void Glass(Canvas& canvas, const Box& box, float radius, uint32_t fill, float shine = 1.0f);
+		// what the glass drawn from here shows, blurred: everything drawn so far (layer 0 a screen's, layer 1
+		// an overlay's, over the screen and its glass)
+		void GlassBackdrop(Canvas& canvas, int layer);
+		std::vector<Box> m_panes; // the glass drawn since the last backdrop: glass on it is not glass again
 		bool LightGround() const; // dark text on a light ground (the Light theme and its like)
 		// maxWidth: the button's widest, its label smaller (then cut) in a language that needs more (0: as wide as the label)
 		Box PillButton(Canvas& canvas, float x, float y, const std::string& label, bool primary, bool focused, Icon icon = Icon::Play, bool withIcon = false,
@@ -335,7 +356,9 @@ namespace ps5shell
 		Box IconButton(Canvas& canvas, float x, float y, Icon icon, bool focused, float size = 72);
 		float Chip(Canvas& canvas, float x, float y, const std::string& text, const char* kind = "", float height = 38);
 		float Badge(Canvas& canvas, float x, float y, System side);
-		void DrawCover(Canvas& canvas, Game& game, const Box& box, bool focused, float lift);
+		// status: its badge on it, how it runs (a shelf's and a row's covers; not the list's small ones)
+		void DrawCover(Canvas& canvas, Game& game, const Box& box, bool focused, float lift, bool status = false);
+		void StatusBadge(Canvas& canvas, const Game& game, const Box& drawn, float top);
 		void DrawGameName(Canvas& canvas, Game& game, const Box& box);
 		// labelScale: the list's one size for its labels (LabelScale); 0: the row fits its own label,
 		// a little smaller when it is long
@@ -355,6 +378,7 @@ namespace ps5shell
 		// needs, at most the step text takes before an ellipsis, so a longer language's rows are not
 		// each a size of their own
 		float LabelScale(const std::vector<Row>& rows, float boxWidth);
+		void DrawBox3d(Canvas& canvas, const ui::Picture& picture, const ui::Picture& spineArt, const Box& box, bool focused, uint32_t ambient);
 		void DrawToggle(Canvas& canvas, float x, float y, bool on, bool focused);
 		void HoldRing(Canvas& canvas, const Box& box, float progress);
 		float Enter(int part) const; // a screen's part, arriving: 0 to 1, 40 ms apart
@@ -405,14 +429,55 @@ namespace ps5shell
 		void StartFromAnySide(System side, const Game& game);
 		std::string StateShot(const Game& game) const; // the newest picture beside its save states
 		void GameMenuFromAnySide(System side, const Game& game);
-		// The Timeline (timeline.cpp)
+		// The Timeline (timeline.cpp): a stop of its own in the console lists, after the last console (the
+		// Classic carousel's, Orbit's dial), whose card opens it
 		void TimelineOpen();
 		void TimelineUpdate(const ui::Press& press);
 		void TimelineDraw(Canvas& canvas);
+		void TimelineStop(bool on);
+		void TimelineStopUpdate(const ui::Press& press);
+		void TimelineStopDraw(Canvas& canvas);
+		void TimelineStopColours(uint32_t dots[3]) const; // its mark's three dots: the consoles' colours it shows
+		void TimelineMedia(); // the real discs' and cards' pictures, looked for again as they arrive
+		// A game's manual as Nintendo keeps it online (ps5gameinfo::FindManual), the Timeline's label's and the
+		// Game hub's QR code; empty when it has none. And that code drawn on its white card
+		std::string ManualOf(System side, const Game& game);
+		void DrawManualQr(Canvas& canvas, const std::string& address, const Box& box);
+		void TimelineBuild(); // its shelves, from every side's catalogue
+		// its ruler in area: the eras, the years, a mark for each console (focusShelf's larger), the player's games
+		// by year, and a pointer under pointerYear (-1: none); ground behind the marks (0: none)
+		void TimelineRuler(Canvas& canvas, const Box& area, uint32_t ink, uint32_t quiet, uint32_t ground, int focusShelf, float pointerYear);
 
 		// Make it yours: first, a first start's look and feel, else what this
 		// version brings that the last did not have
-		void WelcomeOpen(bool first);
+		// The first start's setup (firststart.cpp): a question a screen, then a summary
+		enum class StartStep
+		{
+			Language,
+			Layout,
+			Covers,
+			Buttons,
+			Reports,
+			Ready,
+		};
+		void StartOpen(bool fromSettings);
+		void StartUpdate(const ui::Press& press);
+		void StartDraw(Canvas& canvas);
+		std::vector<Hint> StartHints() const;
+		std::vector<StartStep> StartSteps() const;
+		std::vector<std::string> StartLanguages() const;
+		void StartGo(int by);
+		void StartChoose();
+		void StartFinish();
+		Box StartCard(Canvas& canvas, const Box& box, bool focused, bool chosen, std::string_view key);
+		void StartHeader(Canvas& canvas, const std::string& question, const std::string& line);
+		void StartFooter(Canvas& canvas, const std::string& note);
+		int m_startStep = 0;
+		int m_startFocus[6] = {};		 // each step's focus, kept going back and forth
+		bool m_startForward = true;		 // the step came from the left (back) or the right
+		bool m_startFromSettings = false; // Settings > Make it yours: back there when done
+		float m_startShown = 0;			 // the layout cards, turning to the focused one
+		void WelcomeOpen(); // an update's new options, once
 		void WelcomeUpdate(const ui::Press& press, const ui::Actions& actions);
 		void WelcomeDraw(Canvas& canvas);
 		std::vector<Row> WelcomeRows();
@@ -421,7 +486,7 @@ namespace ps5shell
 		enum class NewsThen
 		{
 			Side,
-			Welcome,	 // a first start's Make it yours, then the Setup check
+			Welcome,	 // a first start's setup (firststart.cpp)
 			Setup,
 			NewOptions, // an update's Make it yours: its new options
 		};
@@ -468,7 +533,11 @@ namespace ps5shell
 		void SettingsUpdate(const ui::Press& press, const ui::Actions& actions);
 		void SettingsDraw(Canvas& canvas);
 		Box SettingsDialog() const { return {200, 136, 1520, 820}; } // over the Library, on every side and theme (6.5)
-		std::vector<SettingsPage> SettingsPages() const; // the side's (or the game's, in game settings)
+		std::vector<SettingsPage> SettingsPages() const; // the side's then Playtendoh's (or the game's, in game settings)
+		std::vector<SettingsPage> SidePages() const;	 // the side's own: its emulator's, its files, its accounts, its box art
+		std::vector<SettingsPage> GamePages() const;	 // a game's: what it can have its own of
+		// a libretro side whose games its core in the app plays (not its second emulator, a program of its own)
+		bool OnCore() const { return IsRetro() && !IsPorpoise() && ps5libretro::Plays(SideIndex()) && m_settings.retro[ps5retro::Slot(SideIndex())].retroBackend == 0; }
 		std::vector<Row> SettingRows(const std::string& page);
 		std::vector<Row> SideRows(const std::string& page, const ps5settings::Launcher& settings);
 		// a page's rows as shown: a › page's behind its row, or that › page's own while it is open
@@ -528,6 +597,15 @@ namespace ps5shell
 		};
 		PorpoiseGame m_porpoiseGame;
 		std::vector<Row> PorpoiseOnlineRows(const ps5settings::Launcher& settings);
+		// cheats (cheat_rows.cpp, app/cheats.h): Settings > Online's Fetch cheats automatically, every game's
+		// looked for; a game's Cheats page (libretro sides, 3DS, DS), and its Get cheats on the Switch's and Porpoise's
+		Row CheatsAutoRow(const ps5settings::Launcher& settings);
+		void FetchCheats();
+		Row CheatsGetRow();
+		std::vector<Row> CheatRows();
+		void ChangeCheats(const Row& row, int step, bool cross);
+		void CheatsRefresh(); // what a download changed read again
+		uint32_t m_cheatArrivals = 0;
 		std::string PorpoiseCover(const ps5emu::Game& game) const;
 		void ChoosePorpoiseSave(const Row& row);
 		void ImportPorpoiseSaves();
@@ -688,6 +766,8 @@ namespace ps5shell
 		bool m_videoOut = false; // VideoOut was taken (a failure from here needs a fresh process)
 
 		std::vector<Game> m_games;
+		int m_compatGeneration = -1; // the compatibility feed the games' reports are from (ps5compat::Generation)
+		bool m_compatShown = true;	 // and whether they were found at all (Settings > Launcher > How games run)
 		bool m_scanning = false;
 		bool m_listed = false; // the side's scan has finished: m_games is all it found
 		uint32_t m_boxArrivals = 0;
@@ -697,7 +777,9 @@ namespace ps5shell
 		ScreenId m_screen = ScreenId::Library;
 		ScreenId m_tab = ScreenId::Library;
 		bool m_onBar = false;
-		int m_barFocus = kSides; // the sides (0 to kSides - 1), then the Library and Settings tabs
+		int m_barFocus = kSides; // the sides (0 to kSides - 1), then the Library and Settings tabs, and the Timeline's stop
+		static constexpr int kTimelineBar = kSides + 2; // m_barFocus on the carousel's Timeline, after the last side
+		bool m_timelineStop = false; // the console lists' Timeline is in focus, not a side (the side stays loaded under it)
 		float m_barSlide = -1;	 // the side switch's carousel: how far its sides have slid (-1: not drawn yet)
 		double m_screenAt = -10;  // when the screen was entered (its parts arrive)
 		bool m_done = false;	  // a game is chosen and the launch shown
@@ -711,6 +793,17 @@ namespace ps5shell
 		uint32_t m_ringGlow = 0;
 		float m_ringAlpha = 0;
 		float m_ringPulse = 0; // the focus lens's settle as it lands somewhere new (widgets.cpp)
+		// frames since a direction or a button was pressed: the focus moving then is a step the lens glides
+		// to; moving any other time it is the page under it moving (a scroll, a screen arriving), carried
+		int m_sincePress = 1000;
+		bool m_pressRepeat = false; // and that press a held button's repeat
+		ui::Spring m_ringPress;		// the lens pressed in by Cross, springing back (widgets.cpp)
+		struct FocusLook
+		{
+			ui::Spring mix;
+			uint64_t frame = 0;
+		};
+		std::unordered_map<uint64_t, FocusLook> m_focusLooks; // FocusMix's
 
 		// the backdrop: the focused game's colours and picture, changed once the focus rests
 		uint32_t m_ambient[2] = {};
@@ -760,9 +853,12 @@ namespace ps5shell
 		// the hub
 		int m_hubGame = -1;
 		std::string m_wordmark; // the logo's name as a picture, a white shape to tint (port/ui/wordmark.png)
+		std::string m_consoleIcons; // the consoles' icons' folder (port/ui/consoles)
 		// the layout's question, and Orbit
 		std::function<void()> m_layoutThen;
 		int m_layoutFocus = 0;
+		int m_esdeState = 0; // ES-DE's download's state last frame (app/esde_get.h), to say how it ended
+		bool m_layoutAskEsde = false; // ES-DE's card pressed once, where the app hasn't got it: its size shown, Cross again downloads
 		std::function<void()> m_reportsThen;
 		int m_reportsFocus = 1; // 0: Not now, 1: Yes
 		bool m_orbitHome = false;	   // on the dial's middle: the games played last, on every side
@@ -778,11 +874,17 @@ namespace ps5shell
 			const char* brief = "";
 			int media = 0;
 			std::vector<Game> games;
+			std::vector<std::string> mediaArt; // each game's real disc, card (GameTDB's) or cartridge (LaunchBox's), when it has come
+			std::vector<std::string> carts;	   // a libretro side's: each game's cartridge's picture at LaunchBox (empty: none)
 			float x = 0, w = 0;
+			float mediaW = 0, mediaH = 0; // its media's size on the shelf: its true shape, the sizes kept apart a little less
 		};
 		std::vector<TimelineShelf> m_shelves;
 		int m_shelfAt = 0, m_shelfGame = 0;
 		ui::Spring m_shelfScroll;
+		ui::Spring m_rulerAt;		   // the ruler's pointer, gliding to the year of the game in focus
+		uint32_t m_mediaArrivals = 0; // ps5boxart::MediaArrivals, last looked at
+		uint64_t m_timelineKey = 0;   // what the shelves were made from (TimelineBuild): made again when it changes
 		double m_insertAt = 0;		   // when Cross put the game in the slot (0: not yet)
 		ScreenId m_hubFrom = ScreenId::Library;
 		int m_hubAction = 0;
@@ -908,10 +1010,7 @@ namespace ps5shell
 		std::array<int, 4> m_articOctets{192, 168, 1, 2};
 
 		// Make it yours
-		bool m_welcomeFirst = false; // a first start's (else what is new)
 		int m_welcomeRow = 0;
-		bool m_welcomeThenSetup = false; // the Setup check follows (a first start)
-		bool m_welcomeFromSettings = false; // opened from Settings > Launcher: back there when done
 		float m_welcomeScroll = 0;
 		NewsThen m_newsThen = NewsThen::Side; // what follows What's new
 
@@ -928,8 +1027,10 @@ namespace ps5shell
 			std::string about, aboutTitle;		  // the panel beside the list: what it means, what to do
 			std::vector<std::string> chips;		  // what goes there (a games folder's formats)
 			std::string guide, guideTitle;		  // the guide's page for it, as the QR code, and what it is
+			int games = -1;						  // a console's games check: how many were found
 		};
 		std::vector<Check> m_checks;
+		std::vector<const Check*> StartNeeds() const; // the setup's summary: what stands in the way of playing
 		void RunChecks();
 		std::unordered_map<std::string, ui::QrCode> m_qrCodes; // made once each
 

@@ -47,6 +47,22 @@ namespace ps5boxart
 	std::string RetroPath(const std::string& system, const std::string& name);
 	void FetchRetro(const std::string& system, const std::vector<std::string>& names, bool again = false);
 	size_t RetroPending();
+	// Of names in a No-Intro set (libretro's lists), the one that fits a game file's name best, as its cover is
+	// found: the same title, then a subtitle or a word more, an American or worldwide release first; empty: none
+	std::string BestName(const std::vector<std::string>& theirs, const std::string& name);
+
+	// The Timeline's real media (6.0): a game's disc (the GameCube's, the Wii's, the Wii U's) or its card (the
+	// DS's, the 3DS's, the Switch's), GameTDB's scan of it by the cover's ID, clear around its own shape. Kept
+	// beside the covers, covers/boxart/<folder>/media/<ID>.tga, on the same queue, after the covers asked for.
+	std::string MediaPath(System system, const std::string& id);
+	void FetchMedia(System system, const std::vector<std::string>& ids);
+	uint32_t MediaArrivals(); // how many have arrived since the start
+
+	// And the libretro sides' cartridges, the LaunchBox Games Database's pictures of them by the names
+	// ps5gameinfo::FindCart gives: kept as covers/boxart/carts/<picture>.tga, fetched one at a time on a thread
+	// of their own (from images.launchbox-app.com); MediaArrivals counts them too.
+	std::string CartPath(const std::string& picture);
+	void FetchCarts(const std::vector<std::string>& pictures);
 
 	// The cover's TGA when it has been fetched, else empty.
 	std::string Path(System system, const std::string& id);
@@ -66,6 +82,10 @@ namespace ps5boxart
 	int Answered();
 	// The launcher's setting: when off, nothing more is fetched.
 	void SetEnabled(bool enabled);
+	// 3D box art (Settings > Launcher): each GameTDB cover's spine fetched too, from its whole cover
+	void SetSpines(bool spines);
+	// Where a GameTDB cover's spine is kept (<ID>.spine.tga beside it), whether or not it is there yet
+	std::string SpinePath(const std::string& cover);
 	// Before a game starts: nothing more is fetched in this session (the app starts over after the
 	// game), and a cover being fetched is waited for, a few seconds at most.
 	void Stop();

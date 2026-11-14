@@ -1,7 +1,7 @@
 # Playtendoh's site on GitHub Pages (Settings > Pages > Source: GitHub Actions), from site/.
 #
 # It is built again when site/ changes, by hand, when a release is published, with the latest
-# release's notes in the page (site/build.py) for readers GitHub's API turns away, and every day, with
+# release's notes in the page (site/build.py) for readers GitHub's API turns away, and every hour, with
 # the table players' reports make (compatibility.html) from the report intake (tools/log-intake): its
 # address is the repository variable REPORTS_URL (Settings > Secrets and variables > Actions > Variables).
 
@@ -12,11 +12,13 @@ on:
     branches: [Playtendoh] # the github-pages environment allows it (Settings > Environments)
     paths:
       - 'site/**'
+      - 'tools/compat-list.json' # status.json, the console's (tools/compat_feed.py)
+      - 'tools/compat_feed.py'
       - '.github/workflows/pages.yml'
   release:
     types: [published]
   schedule:
-    - cron: '41 4 * * *'
+    - cron: '41 * * * *'
   workflow_dispatch:
 
 permissions:
@@ -60,7 +62,9 @@ jobs:
             echo '{}' > compatibility.json
           fi
       - name: Build
-        run: python3 site/build.py --release latest.json --compat compatibility.json --out _site
+        env:
+          REPORTS_URL: ${{ vars.REPORTS_URL }}
+        run: python3 site/build.py --release latest.json --compat compatibility.json --reports-url "$REPORTS_URL" --out _site
       - uses: actions/upload-pages-artifact@v5
         with:
           path: _site

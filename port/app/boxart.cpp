@@ -13,8 +13,10 @@
 
 #include <algorithm>
 #include <atomic>
+#include <cctype>
 #include <condition_variable>
 #include <cstdio>
+#include <cmath>
 #include <cstring>
 #include <deque>
 #include <filesystem>
@@ -22,6 +24,7 @@
 #include <map>
 #include <mutex>
 #include <set>
+#include <string_view>
 #include <thread>
 
 namespace fs = std::filesystem;
@@ -43,7 +46,10 @@ namespace ps5boxart
 		std::set<std::string> s_queued;						 // folder/ID, under s_mutex
 		bool s_started = false;
 		std::atomic<uint32_t> s_arrivals{0};
+		std::atomic<uint32_t> s_mediaArrivals{0};
+		constexpr std::string_view kMedia = "media/"; // before an ID on the queue: its disc or card, not its cover
 		std::atomic<bool> s_enabled{true};
+		std::atomic<bool> s_spines{false}; // 3D box art: each GameTDB cover's spine too
 		std::atomic<bool> s_stopped{false}; // for good: a game is starting
 		std::atomic<bool> s_busy{false};	// a cover is being fetched
 		std::atomic<int> s_answered{-1};	// Answered()
@@ -58,6 +64,21 @@ namespace ps5boxart
 		std::string Base(System system, const std::string& id)
 		{
 			return fmt::format("{}/boxart/{}/{}", ps5paths::Covers(), Folder(system), id);
+		}
+
+		// The ID on the queue as GameTDB names it, and whether it asks for the disc or card
+		std::string_view Bare(const std::string& id, bool* media = nullptr)
+		{
+			const bool isMedia = id.rfind(kMedia, 0) == 0;
+			if (media)
+				*media = isMedia;
+			return std::string_view(id).substr(isMedia ? kMedia.size() : 0);
+		}
+
+		bool Here(System system, const std::string& id)
+		{
+			std::error_code ec;
+			return fs::exists(Base(system, id) + ".tga", ec);
 		}
 
 		bool Valid(const std::string& id)
@@ -239,20 +260,25 @@ namespace ps5boxart
 		};
 
 		// One game's cover: GameTDB's large one in each region, then its small one
-		Outcome FetchOne(CURL* curl, System system, const std::string& id)
+		Outcome FetchOne(CURL* curl, System system, const std::string& queued)
 		{
-			const std::string base = Base(system, id);
+			const std::string base = Base(system, queued);
+			bool media = false;
+			const std::string id(Bare(queued, &media));
 			std::error_code ec;
 			fs::create_directories(fs::path(base).parent_path(), ec);
 			std::vector<uint8_t> data;
-			// (GameTDB's Wii and GameCube covers are PNGs, at one size)
+			// (GameTDB's Wii and GameCube covers are PNGs, at one size; its discs and cards are PNGs, clear
+			// around their shapes: the discs as "disc", the DS's, 3DS's and Switch's cards as "cart")
 			const bool wii = system == System::GameCubeWii;
-			for (const char* size : {"coverHQ", "cover"})
+			const bool disc = wii || system == System::WiiU;
+			const std::vector<const char*> sizes = media ? std::vector<const char*>{disc ? "disc" : "cart"} : std::vector<const char*>{"coverHQ", "cover"};
+			for (const char* size : sizes)
 				for (const std::string& region : Regions(id))
 				{
 					if (wii && std::string_view(size) == "coverHQ")
 						continue;
-					const std::string url = fmt::format("http://art.gametdb.com/{}/{}/{}/{}.{}", Folder(system), size, region, id, wii ? "png" : "jpg");
+					const std::string url = fmt::format("http://art.gametdb.com/{}/{}/{}/{}.{}", Folder(system), size, region, id, wii || media ? "png" : "jpg");
 					const long status = Get(curl, url, data);
 					if (status < 0)
 						return Outcome::Later;
@@ -275,7 +301,13 @@ namespace ps5boxart
 					}
 					int fitWidth, fitHeight;
 					const std::vector<uint8_t> fitted = Fit(rgba, width, height, fitWidth, fitHeight);
-					if (WriteTga(base + ".tga", fitted, fitWidth, fitHeight))
+					if (media && WriteTga(base + ".tga", fitted, fitWidth, fitHeight))
+					{
+						fs::remove(base + ".none", ec);
+						s_mediaArrivals++;
+						ps5log::Line("[boxart] {} {}'s {}: {}x{}", Folder(system), id, size, fitWidth, fitHeight);
+					}
+					else if (!media && WriteTga(base + ".tga", fitted, fitWidth, fitHeight))
 					{
 						fs::remove(base + ".none", ec);
 						{
@@ -289,7 +321,74 @@ namespace ps5boxart
 				}
 			// GameTDB has none: asked for again in two weeks, or when Settings asks
 			std::ofstream(base + ".none").put('\n');
-			ps5log::Line("[boxart] {} {}: GameTDB has no cover", Folder(system), id);
+			ps5log::Line("[boxart] {} {}: GameTDB has no {}", Folder(system), id, media ? (disc ? "disc" : "card") : "cover");
+			return Outcome::None;
+		}
+
+		// A marker younger than the wait for a cover asked for again
+		bool Recent(const std::string& marker)
+		{
+			std::error_code ec;
+			const auto when = fs::last_write_time(marker, ec);
+			return !ec && fs::file_time_type::clock::now() - when < kNoneAgain;
+		}
+
+		// One game's spine, for 3D box art: the strip between the back and the front of GameTDB's whole cover
+		// (back, spine, front side by side, the back as wide as the front), cut out at its own resolution as
+		// <ID>.spine.tga. The front's width there is the cover's shape at the whole cover's height
+		Outcome FetchSpine(CURL* curl, System system, const std::string& id)
+		{
+			const std::string base = Base(system, id);
+			int coverWidth = 0, coverHeight = 0;
+			if (!ImageSize(base + ".tga", coverWidth, coverHeight) || coverWidth <= 0 || coverHeight <= 0)
+				return Outcome::None;
+			const bool wii = system == System::GameCubeWii;
+			std::vector<uint8_t> data;
+			for (const char* size : {"coverfullHQ", "coverfull"})
+				for (const std::string& region : Regions(id))
+				{
+					const std::string url = fmt::format("http://art.gametdb.com/{}/{}/{}/{}.{}", Folder(system), size, region, id, wii ? "png" : "jpg");
+					const long status = Get(curl, url, data);
+					if (status < 0)
+						return Outcome::Later;
+					if (status == 404 || status == 410)
+						continue;
+					if (status != 200 || data.size() < 8)
+					{
+						ps5log::Line("[boxart] {}: HTTP {}; tried again later", url, status);
+						return Outcome::Later;
+					}
+					std::vector<uint8_t> rgba;
+					int width = 0, height = 0;
+					const bool png = std::memcmp(data.data(), "\x89PNG", 4) == 0;
+					if (!(png ? DecodePng(data, rgba, width, height) : DecodeJpeg(data, rgba, width, height)))
+						continue;
+					const int front = (int)std::lround((double)height * coverWidth / coverHeight);
+					const int spine = width - 2 * front;
+					// a whole cover of another shape (a sleeve, a cover with its flaps): no spine from it
+					if (spine < width / 60 || spine > width / 5)
+					{
+						ps5log::Line("[boxart] {} {}: GameTDB's whole cover is {}x{}, no spine between a {} wide back and front", Folder(system), id,
+							width, height, front);
+						std::ofstream(base + ".spine.none").put('\n');
+						return Outcome::None;
+					}
+					std::vector<uint8_t> strip((size_t)spine * height * 4);
+					for (int y = 0; y < height; y++)
+						std::memcpy(&strip[(size_t)y * spine * 4], &rgba[((size_t)y * width + front) * 4], (size_t)spine * 4);
+					int fitWidth, fitHeight;
+					const std::vector<uint8_t> fitted = Fit(strip, spine, height, fitWidth, fitHeight);
+					if (!WriteTga(base + ".spine.tga", fitted, fitWidth, fitHeight))
+						return Outcome::None;
+					{
+						std::lock_guard lock(s_mutex);
+						s_arrived.push_back(fmt::format("{}/{}", Folder(system), id));
+					}
+					s_arrivals++;
+					ps5log::Line("[boxart] {} {}: spine {}x{} from {}", Folder(system), id, fitWidth, fitHeight, url);
+					return Outcome::Fetched;
+				}
+			std::ofstream(base + ".spine.none").put('\n');
 			return Outcome::None;
 		}
 
@@ -350,10 +449,18 @@ namespace ps5boxart
 					forget();
 					continue;
 				}
-				if (!Path(item.first, item.second).empty() || RecentlyNone(item.first, item.second))
+				// a cover here: its spine still to come, for 3D box art (a disc or card has none: there or not)
+				const bool media = item.second.rfind(kMedia, 0) == 0;
+				const bool have = media ? Here(item.first, item.second) : !Path(item.first, item.second).empty();
+				const std::string base = Base(item.first, item.second);
+				std::error_code here;
+				const bool spine = !media && s_spines && !fs::exists(base + ".spine.tga", here) && !Recent(base + ".spine.none");
+				if (have ? !spine : RecentlyNone(item.first, item.second))
 					continue;
 				s_busy = true;
-				const Outcome outcome = FetchOne(curl, item.first, item.second);
+				Outcome outcome = have ? FetchSpine(curl, item.first, item.second) : FetchOne(curl, item.first, item.second);
+				if (!have && !media && outcome == Outcome::Fetched && s_spines)
+					outcome = FetchSpine(curl, item.first, item.second) == Outcome::Later ? Outcome::Later : Outcome::Fetched;
 				s_busy = false;
 				if (outcome != Outcome::Later)
 				{
@@ -379,6 +486,20 @@ namespace ps5boxart
 				seconds = std::min(seconds * 2, std::chrono::seconds(240));
 			}
 		}
+	}
+
+	std::string MediaPath(System system, const std::string& id)
+	{
+		if (!Valid(id))
+			return {};
+		const std::string path = Base(system, std::string(kMedia) + id) + ".tga";
+		std::error_code ec;
+		return fs::exists(path, ec) ? path : std::string();
+	}
+
+	uint32_t MediaArrivals()
+	{
+		return s_mediaArrivals;
 	}
 
 	std::string Path(System system, const std::string& id)
@@ -626,6 +747,180 @@ namespace ps5boxart
 			return fmt::format("{}/boxart/retro/{}/{}", ps5paths::Covers(), TitleFileName(system), TitleFileName(name));
 		}
 
+		// A cover libretro had none of, by the file's name or the best of its names ("matched", written since 6.0
+		// matches names): a marker from before, written on the file's name alone, is asked for again
+		constexpr const char* kRetroMissed = "matched";
+		bool RetroMissedRecently(const std::string& base)
+		{
+			if (!RecentMarker(base + ".none"))
+				return false;
+			std::string line;
+			std::getline(std::ifstream(base + ".none"), line);
+			return line == kRetroMissed;
+		}
+
+		// A title as names are matched: lower case, what is in brackets left out (regions, revisions), letters
+		// and digits only, in words, without the words names add or leave out ("the", "version")
+		std::vector<std::string> Words(std::string name)
+		{
+			for (const auto& [from, to] : {std::pair<const char*, const char*>{"\xc3\xa9", "e"}, {"\xc3\x89", "e"}, {"&", " and "}})
+				for (size_t at = 0; (at = name.find(from, at)) != std::string::npos; at += std::strlen(to))
+					name.replace(at, std::strlen(from), to);
+			static const std::set<std::string> kLeftOut = {"the", "version", "edition", "a", "and", "of"};
+			std::vector<std::string> words;
+			std::string word;
+			int depth = 0;
+			const auto flush = [&] {
+				if (!word.empty() && !kLeftOut.count(word))
+					words.push_back(word);
+				word.clear();
+			};
+			for (const char c : name)
+			{
+				if (c == '(' || c == '[')
+					flush(), depth++;
+				else if ((c == ')' || c == ']') && depth)
+					depth--;
+				else if (!depth && std::isalnum((unsigned char)c))
+					word += (char)std::tolower((unsigned char)c);
+				else
+					flush();
+			}
+			flush();
+			return words;
+		}
+
+		std::string Joined(const std::vector<std::string>& words, size_t count = std::string::npos)
+		{
+			std::string out;
+			for (size_t i = 0; i < words.size() && i < count; i++)
+				out += words[i];
+			return out;
+		}
+
+		// How well one of libretro's names fits a game file's: 3 the same title, 2 the file's title and then a
+		// subtitle ("Super Mario Land 2" for "Super Mario Land 2 - 6 Golden Coins"), 1 so without the file's last
+		// word (a hack's "DX"); 0 none. Words are compared run together ("FireRed" is "Fire Red")
+		int NameFit(const std::vector<std::string>& file, const std::vector<std::string>& theirs)
+		{
+			const std::string mine = Joined(file), their = Joined(theirs);
+			if (mine.size() < 4)
+				return mine == their ? 3 : 0;
+			if (mine == their)
+				return 3;
+			const auto startsWith = [&](const std::string& head) {
+				for (size_t n = 1; n <= theirs.size(); n++)
+					if (Joined(theirs, n) == head)
+						return true;
+				return false;
+			};
+			if (file.size() >= 2 && startsWith(mine))
+				return 2;
+			if (file.size() >= 3)
+				if (const std::string shorter = Joined(file, file.size() - 1); shorter == their || startsWith(shorter))
+					return 1;
+			return 0;
+		}
+
+		// Among names that fit as well: an American or worldwide release first, then Europe's, never a beta's
+		// or a demo's before a release; then the shortest
+		int Preference(const std::string& name)
+		{
+			int score = 0;
+			if (name.find("(USA") != std::string::npos || name.find("(World") != std::string::npos)
+				score += 4;
+			else if (name.find("Europe") != std::string::npos)
+				score += 2;
+			for (const char* worse : {"(Beta", "(Proto", "(Demo", "(Sample", "(Kiosk", "(Pirate", "(Unl", "[b]", "(Aftermarket"})
+				if (name.find(worse) != std::string::npos)
+					score -= 8;
+			return score;
+		}
+
+		// libretro's names in a console's folder (its Named_Boxarts listing), kept beside its covers for two
+		// weeks. Read on the worker's thread only
+		std::map<std::string, std::vector<std::string>> s_retroIndex;
+		const std::vector<std::string>& RetroIndex(CURL* curl, const std::string& system)
+		{
+			auto [entry, added] = s_retroIndex.try_emplace(system);
+			std::vector<std::string>& names = entry->second;
+			if (!added)
+				return names;
+			const std::string file = fmt::format("{}/boxart/retro/{}/index.txt", ps5paths::Covers(), TitleFileName(system));
+			if (RecentMarker(file))
+			{
+				std::ifstream in(file);
+				for (std::string line; std::getline(in, line);)
+					if (!line.empty())
+						names.push_back(line);
+				if (!names.empty())
+					return names;
+			}
+			char* const folder = curl_easy_escape(curl, system.c_str(), 0);
+			std::vector<uint8_t> page;
+			const long status = folder ? Get(curl, fmt::format("http://{}/{}/Named_Boxarts/", kTitlesHost, folder), page) : -1;
+			curl_free(folder);
+			if (status != 200)
+				return names;
+			// an index page: each picture a link to "<its name>.png", escaped
+			const std::string text(page.begin(), page.end());
+			for (size_t at = 0; (at = text.find("href=\"", at)) != std::string::npos;)
+			{
+				at += 6;
+				const size_t end = text.find('"', at);
+				if (end == std::string::npos)
+					break;
+				const std::string link = text.substr(at, end - at);
+				if (link.size() > 4 && link.ends_with(".png") && link.find('/') == std::string::npos)
+				{
+					int length = 0;
+					if (char* plain = curl_easy_unescape(curl, link.c_str(), (int)link.size() - 4, &length))
+					{
+						names.emplace_back(plain, (size_t)length);
+						curl_free(plain);
+					}
+				}
+				at = end;
+			}
+			std::error_code ec;
+			fs::create_directories(fs::path(file).parent_path(), ec);
+			std::ofstream out(file, std::ios::trunc);
+			for (const std::string& name : names)
+				out << name << '\n';
+			ps5log::Line("[boxart] {}: {} names in libretro's thumbnails", system, names.size());
+			return names;
+		}
+
+		// The name in libretro's thumbnails that fits a game file's best (its console's folder, then the one
+		// whose games it plays too: a Game Boy's and a Game Boy Color's), as {folder, name}; empty when none fits
+		std::pair<std::string, std::string> RetroMatch(CURL* curl, const std::string& system, const std::string& name)
+		{
+			std::vector<std::string> folders = {system};
+			if (system == "Nintendo - Game Boy Color")
+				folders.push_back("Nintendo - Game Boy");
+			else if (system == "Nintendo - Game Boy")
+				folders.push_back("Nintendo - Game Boy Color");
+			const std::vector<std::string> file = Words(name);
+			std::pair<std::string, std::string> best;
+			int bestFit = 0, bestPreference = 0;
+			for (const std::string& folder : folders)
+			{
+				for (const std::string& theirs : RetroIndex(curl, folder))
+				{
+					const int fit = NameFit(file, Words(theirs));
+					if (!fit)
+						continue;
+					const int preference = Preference(theirs);
+					if (fit > bestFit || (fit == bestFit && (preference > bestPreference ||
+						(preference == bestPreference && theirs.size() < best.second.size()))))
+						best = {folder, theirs}, bestFit = fit, bestPreference = preference;
+				}
+				if (bestFit == 3)
+					break;
+			}
+			return best;
+		}
+
 		void RetroWorker()
 		{
 			curl_global_init(CURL_GLOBAL_DEFAULT);
@@ -669,10 +964,25 @@ namespace ps5boxart
 				curl_free(file);
 				std::vector<uint8_t> data, rgba;
 				int width = 0, height = 0;
-				const long status = Get(curl, url, data);
+				long status = Get(curl, url, data);
+				// no picture by the file's own name (a name of the player's: "Pokemon Fire Red"): the one whose
+				// name in libretro's list fits it ("Pokemon - FireRed Version (USA, Europe)")
+				if (status == 404 || status == 410)
+					if (const auto [matchFolder, match] = RetroMatch(curl, item.first, item.second); !match.empty())
+					{
+						char* const otherFolder = curl_easy_escape(curl, matchFolder.c_str(), 0);
+						char* const otherFile = curl_easy_escape(curl, TitleFileName(match).c_str(), 0);
+						if (otherFolder && otherFile)
+						{
+							status = Get(curl, fmt::format("http://{}/{}/Named_Boxarts/{}.png", kTitlesHost, otherFolder, otherFile), data);
+							ps5log::Line("[boxart] {}: {} for {}", matchFolder, match, item.second);
+						}
+						curl_free(otherFolder);
+						curl_free(otherFile);
+					}
 				if (status == 404 || status == 410)
 				{
-					std::ofstream(base + ".none").put('\n'); // asked for again after a while
+					std::ofstream(base + ".none") << kRetroMissed << '\n'; // asked for again after a while
 					missing++;
 				}
 				else if (status == 200 && DecodePng(data, rgba, width, height) && width > 0 && height > 0)
@@ -704,6 +1014,23 @@ namespace ps5boxart
 		}
 	}
 
+	std::string BestName(const std::vector<std::string>& theirs, const std::string& name)
+	{
+		const std::vector<std::string> file = Words(name);
+		std::string best;
+		int bestFit = 0, bestPreference = 0;
+		for (const std::string& one : theirs)
+		{
+			const int fit = NameFit(file, Words(one));
+			if (!fit)
+				continue;
+			const int preference = Preference(one);
+			if (fit > bestFit || (fit == bestFit && (preference > bestPreference || (preference == bestPreference && one.size() < best.size()))))
+				best = one, bestFit = fit, bestPreference = preference;
+		}
+		return best;
+	}
+
 	std::string RetroPath(const std::string& system, const std::string& name)
 	{
 		if (system.empty() || name.empty())
@@ -725,7 +1052,7 @@ namespace ps5boxart
 			std::error_code ec;
 			const std::string base = RetroBase(system, name);
 			if (name.empty() || (!s_retroSeen.insert(system + "/" + name).second && !again) || fs::exists(base + ".tga", ec) ||
-				(!again && RecentMarker(base + ".none")))
+				(!again && RetroMissedRecently(base)))
 				continue;
 			s_retroQueue.emplace_back(system, name);
 			queued++;
@@ -745,6 +1072,110 @@ namespace ps5boxart
 		return s_retroQueue.size() + (s_retroRunning ? 1 : 0);
 	}
 
+	// -- the Timeline's cartridges for the libretro sides: the LaunchBox Games Database's pictures, as
+	// ps5gameinfo::FindCart names them -------------------------------------------------------------------
+
+	namespace
+	{
+		constexpr const char* kCartsHost = "images.launchbox-app.com";
+		std::mutex s_cartMutex;
+		std::deque<std::string> s_cartQueue;		  // under s_cartMutex: the pictures to fetch
+		std::set<std::string> s_cartSeen;			  // under s_cartMutex
+		bool s_cartRunning = false;					  // under s_cartMutex
+
+		std::string CartBase(const std::string& picture) { return fmt::format("{}/boxart/carts/{}", ps5paths::Covers(), picture); }
+
+		bool CartValid(const std::string& picture)
+		{
+			return !picture.empty() && picture.size() <= 64 &&
+				std::all_of(picture.begin(), picture.end(), [](char c) { return std::isalnum((unsigned char)c) || c == '-' || c == '_'; });
+		}
+
+		void CartWorker()
+		{
+			curl_global_init(CURL_GLOBAL_DEFAULT);
+			curl_slist* const resolved = ps5net::AddResolve(nullptr, kCartsHost, 443);
+			static curl_slist* const headers = ps5curl::Headers();
+			CURL* const curl = curl_easy_init();
+			if (curl)
+			{
+				ps5curl::Setup(curl);
+				curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+				if (resolved)
+					curl_easy_setopt(curl, CURLOPT_RESOLVE, resolved);
+			}
+			int fetched = 0;
+			for (;;)
+			{
+				std::string picture;
+				{
+					std::lock_guard lock(s_cartMutex);
+					if (s_cartQueue.empty() || s_stopped || !s_enabled || !curl)
+					{
+						s_cartRunning = false;
+						break;
+					}
+					picture = std::move(s_cartQueue.front());
+					s_cartQueue.pop_front();
+				}
+				const std::string base = CartBase(picture);
+				std::error_code ec;
+				fs::create_directories(fs::path(base).parent_path(), ec);
+				std::vector<uint8_t> data, rgba;
+				int width = 0, height = 0;
+				const long status = Get(curl, fmt::format("https://{}/{}.png", kCartsHost, picture), data);
+				int fitWidth = 0, fitHeight = 0;
+				if (status == 200 && DecodePng(data, rgba, width, height) && width > 0 && height > 0)
+				{
+					const std::vector<uint8_t> fitted = Fit(rgba, width, height, fitWidth, fitHeight);
+					if (WriteTga(base + ".tga", fitted, fitWidth, fitHeight))
+					{
+						fetched++;
+						s_mediaArrivals++;
+					}
+				}
+				else
+					ps5log::Line("[boxart] cartridge {}: HTTP {}; next start", picture, status);
+			}
+			if (fetched)
+				ps5log::Line("[boxart] the Timeline's cartridges: {} fetched", fetched);
+			if (curl)
+				curl_easy_cleanup(curl);
+		}
+	}
+
+	std::string CartPath(const std::string& picture)
+	{
+		if (!CartValid(picture))
+			return {};
+		std::error_code ec;
+		const std::string path = CartBase(picture) + ".tga";
+		return fs::exists(path, ec) ? path : std::string();
+	}
+
+	void FetchCarts(const std::vector<std::string>& pictures)
+	{
+		if (!s_enabled || s_stopped)
+			return;
+		std::lock_guard lock(s_cartMutex);
+		size_t queued = 0;
+		for (const std::string& picture : pictures)
+		{
+			std::error_code ec;
+			if (!CartValid(picture) || !s_cartSeen.insert(picture).second || fs::exists(CartBase(picture) + ".tga", ec))
+				continue;
+			s_cartQueue.push_back(picture);
+			queued++;
+		}
+		if (queued)
+			ps5log::Line("[boxart] {} cartridges to fetch for the Timeline", queued);
+		if (!s_cartRunning && !s_cartQueue.empty())
+		{
+			s_cartRunning = true;
+			std::thread(CartWorker).detach();
+		}
+	}
+
 	void Fetch(System system, const std::vector<std::string>& ids)
 	{
 		if (!s_enabled || s_stopped)
@@ -759,6 +1190,30 @@ namespace ps5boxart
 			queued++;
 		}
 		ps5log::Line("[boxart] {}: {} games have a box ID, {} new to look for", Folder(system), ids.size(), queued);
+		if (!s_started && !s_queue.empty())
+		{
+			s_started = true;
+			std::thread(Worker).detach();
+		}
+		s_wake.notify_one();
+	}
+
+	void FetchMedia(System system, const std::vector<std::string>& ids)
+	{
+		if (!s_enabled || s_stopped)
+			return;
+		std::lock_guard lock(s_mutex);
+		size_t queued = 0;
+		for (const std::string& id : ids)
+		{
+			const std::string media = std::string(kMedia) + id;
+			if (!Valid(id) || Here(system, media) || RecentlyNone(system, media) || !s_queued.insert(fmt::format("{}/{}", Folder(system), media)).second)
+				continue;
+			s_queue.emplace_back(system, media);
+			queued++;
+		}
+		if (queued)
+			ps5log::Line("[boxart] {}: {} discs or cards to look for", Folder(system), queued);
 		if (!s_started && !s_queue.empty())
 		{
 			s_started = true;
@@ -819,6 +1274,22 @@ namespace ps5boxart
 	void SetEnabled(bool enabled)
 	{
 		s_enabled = enabled;
+	}
+
+	void SetSpines(bool spines)
+	{
+		// turned on: the covers already here are asked for again, for their spines
+		if (spines && !s_spines.exchange(true))
+		{
+			std::lock_guard lock(s_mutex);
+			s_queued.clear();
+		}
+		s_spines = spines;
+	}
+
+	std::string SpinePath(const std::string& cover)
+	{
+		return cover.size() > 4 && cover.compare(cover.size() - 4, 4, ".tga") == 0 ? cover.substr(0, cover.size() - 4) + ".spine.tga" : std::string();
 	}
 
 	void Stop()

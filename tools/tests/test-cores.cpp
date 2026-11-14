@@ -34,6 +34,7 @@ namespace
 		unsigned cheevos; // rc_consoles.h's id, 0: none
 		bool runs = true; // false: a bad file it should refuse
 		bool states = true;
+		bool frames = true; // false: loaded and unloaded only (the N64's test image boots, but draws no frame)
 	};
 }
 
@@ -59,6 +60,7 @@ int main(int argc, char* argv[])
 		{"beetlevb", "test.vb", "Virtual Boy", 28},
 		{"pokemini", "test.min", "Pokémon mini", 24},
 		{"paralleln64", "broken.z64", "Nintendo 64", 2, false},
+		{"paralleln64", "test.z64", "Nintendo 64", 2, true, false, false},
 		{"gw", "broken.mgw", "Game & Watch", 0, false},
 	};
 	for (const Case& c : cases)
@@ -80,6 +82,10 @@ int main(int argc, char* argv[])
 		setup.system = (folder / "system").string();
 		setup.saves = (folder / "saves").string();
 		setup.states = (folder / "states").string();
+		// the options the app gives the N64's core on a console (port/libretro/game.cpp)
+		if (std::string(c.core) == "paralleln64")
+			setup.options = {{"parallel-n64-cpucore", "cached_interpreter"}, {"parallel-n64-gfxplugin", "angrylion"},
+				{"parallel-n64-angrylion-multithread", "6"}};
 		std::string error;
 		const bool loaded = ps5libretro::Load(*core, (games / c.game).string(), setup, error);
 		if (!c.runs)
@@ -92,6 +98,12 @@ int main(int argc, char* argv[])
 		Check(loaded, name + ": the game loads" + (loaded ? "" : " (" + error + ")"));
 		if (!loaded)
 			continue;
+		if (!c.frames)
+		{
+			ps5libretro::Unload();
+			Check(!ps5libretro::Loaded(), name + ": unloaded");
+			continue;
+		}
 		ps5libretro::Pad pads[ps5libretro::kPlayers] = {};
 		size_t sound = 0;
 		const int frames = (int)(ps5libretro::FrameRate() * 10);
@@ -125,6 +137,31 @@ int main(int argc, char* argv[])
 		}
 		ps5libretro::Unload();
 		Check(!ps5libretro::Loaded(), name + ": unloaded");
+	}
+	// Mesen's HD packs (the NES side's texture packs): a pack in the system folder's HdPacks/<the game file's
+	// name>/ (make-test-games.py's: one tile replaced, at twice the size) draws the game at twice its size
+	if (const ps5libretro::Core* mesen = ps5libretro::Find("mesen"))
+	{
+		const fs::path folder = work / "mesen-hdpack";
+		fs::create_directories(folder / "system/HdPacks");
+		fs::remove_all(folder / "system/HdPacks/test");
+		fs::copy(games / "hdpack", folder / "system/HdPacks/test", fs::copy_options::recursive);
+		ps5libretro::Setup setup;
+		setup.system = setup.saves = setup.states = (folder / "system").string();
+		setup.options["mesen_hdpacks"] = "enabled";
+		std::string error;
+		const bool loaded = ps5libretro::Load(*mesen, (games / "test.nes").string(), setup, error);
+		Check(loaded, "NES HD pack: the game loads with a pack" + (loaded ? "" : " (" + error + ")"));
+		if (loaded)
+		{
+			ps5libretro::Pad pads[ps5libretro::kPlayers] = {};
+			for (int i = 0; i < 10; i++)
+				ps5libretro::Run(pads);
+			const auto& picture = ps5libretro::LastPicture();
+			Check(picture.width == 512 && picture.height == 480,
+				"NES HD pack: the pack's scale (" + std::to_string(picture.width) + "x" + std::to_string(picture.height) + ", 512x480 wanted)");
+			ps5libretro::Unload();
+		}
 	}
 	// the DualSense's buttons reach the game: a program that copies its joypad register to RAM, read back
 	// through the memory RetroAchievements sees
@@ -170,6 +207,138 @@ int main(int argc, char* argv[])
 		char what[160];
 		std::snprintf(what, sizeof(what), "%s input: button %u read by the game (%02x at rest, %02x held)", in.system, in.button, rest, held);
 		Check(rest == in.rest && held == in.held, what);
+		ps5libretro::Unload();
+	}
+	// the NES's special controllers (port/libretro/devices.h): Mesen plugs in what an NES 2.0 header asks for and
+	// says so (patches/libretro/Mesen 0002); the Arkanoid paddle turned by the mouse's movement and fired by its
+	// button, as the program reads it from the second port; another controller given to a port
+	if (const ps5libretro::Core* mesen = ps5libretro::Find("mesen"))
+	{
+		const unsigned arkanoid = RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_MOUSE, 0), zapper = RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_POINTER, 0);
+		const fs::path folder = work / "devices";
+		fs::create_directories(folder);
+		ps5libretro::Setup setup;
+		setup.system = setup.saves = setup.states = folder.string();
+		std::string error;
+		ps5libretro::Pad pads[ps5libretro::kPlayers] = {};
+		auto knob = [&](int16_t move, bool fire, uint8_t& bits, uint8_t& last) {
+			pads[0].mouse[0] = move;
+			pads[0].mouseButtons = fire ? 1 << RETRO_DEVICE_ID_MOUSE_LEFT : 0;
+			for (int i = 0; i < 40; i++)
+				ps5libretro::Run(pads);
+			ps5libretro::CheevosRead(2, &bits, 1);
+			ps5libretro::CheevosRead(0, &last, 1);
+		};
+		if (ps5libretro::Load(*mesen, (games / "arkanoid.nes").string(), setup, error))
+		{
+			ps5libretro::CheevosMemory(7);
+			Check(ps5libretro::PortDevice(1) == arkanoid && ps5libretro::PortDevice(0) == RETRO_DEVICE_JOYPAD,
+				"NES: an Arkanoid game's header plugs the paddle into the second port, and Mesen says so");
+			uint8_t right = 0, left = 0, last = 0, fired = 0;
+			knob(10, false, right, last);
+			knob(-10, true, left, fired);
+			char what[200];
+			std::snprintf(what, sizeof(what), "NES: the paddle's knob turned all the way right then left by the mouse's movement (%02x, %02x read, "
+				"0b and ab wanted), fired by its button (%02x, %02x)", right, left, last, fired);
+			Check(right == 0x0b && left == 0xab && !(last & 0x08) && (fired & 0x08), what);
+			ps5libretro::Unload();
+		}
+		else
+			Check(false, "NES: the Arkanoid test program loads (" + error + ")");
+		if (ps5libretro::Load(*mesen, (games / "zapper.nes").string(), setup, error))
+		{
+			Check(ps5libretro::PortDevice(1) == zapper, "NES: a Zapper game's header plugs the Zapper into the second port");
+			ps5libretro::Unload();
+		}
+		if (ps5libretro::Load(*mesen, (games / "test.nes").string(), setup, error))
+		{
+			const bool pad = ps5libretro::PortDevice(1) == RETRO_DEVICE_JOYPAD;
+			ps5libretro::SetDevice(1, arkanoid);
+			for (int i = 0; i < 2; i++)
+				ps5libretro::Run(pads);
+			Check(pad && ps5libretro::PortDevice(1) == arkanoid, "NES: a game with no such header has a pad, and the paddle when given it");
+			ps5libretro::SetDevice(1, RETRO_DEVICE_JOYPAD);
+			Check(ps5libretro::PortDevice(1) == RETRO_DEVICE_JOYPAD, "NES: and Auto again");
+			ps5libretro::Unload();
+		}
+	// cheats (app/cheats.h): every core that takes them has them linked; a code given through the frontend changes
+	// what the game sees (Mesen's and Mesen-S's as the CPU reads the byte, which the program copies, and no more once
+	// taken back; mGBA's GameShark code written to RAM each frame)
+	struct CheatCase
+	{
+		const char* core;
+		const char* game;
+		const char* system;
+		unsigned cheevos; // the memory read as RetroAchievements maps it; 0: the core's system RAM
+		const char* code;
+		uint32_t address; // where the change shows, 0xffffffff: only given (the N64's test image draws no frame)
+		uint8_t value;
+	};
+	const CheatCase cheatCases[] = {
+		{"mesen", "cheat.nes", "NES", 7, "0300:AB", 0x0301, 0xAB},
+		{"mesens", "cheat.sfc", "SNES", 3, "7E0100AB", 0x0101, 0xAB},
+		{"mgba", "test.gb", "Game Boy", 0, "01AB01C1", 0x0101, 0xAB}, // $C101: its work RAM's byte 0x101
+		{"mgba", "test.gba", "Game Boy Advance", 5, "32000100 000000AB", 0xffffffff, 0},
+		{"paralleln64", "test.z64", "Nintendo 64", 2, "8033B21E 0008", 0xffffffff, 0},
+	};
+	for (const CheatCase& c : cheatCases)
+	{
+		const std::string name = std::string(c.system) + " cheats (" + c.core + ")";
+		const ps5libretro::Core* core = ps5libretro::Find(c.core);
+		if (!core)
+			continue;
+		Check(core->cheatReset && core->cheatSet, name + ": retro_cheat_reset and retro_cheat_set linked");
+		ps5libretro::Setup setup;
+		const fs::path folder = work / "cheats" / c.core / c.game;
+		fs::create_directories(folder);
+		setup.system = setup.saves = setup.states = folder.string();
+		if (std::string(c.core) == "paralleln64")
+			setup.options = {{"parallel-n64-cpucore", "cached_interpreter"}, {"parallel-n64-gfxplugin", "angrylion"}};
+		std::string error;
+		if (!ps5libretro::Load(*core, (games / c.game).string(), setup, error))
+		{
+			Check(false, name + ": the game loads (" + error + ")");
+			continue;
+		}
+		Check(ps5libretro::TakesCheats(), name + ": the frontend gives it cheats");
+		ps5libretro::Pad pads[ps5libretro::kPlayers] = {};
+		const bool frames = c.address != 0xffffffff;
+		if (frames)
+		{
+			if (c.cheevos)
+				ps5libretro::CheevosMemory(c.cheevos);
+			for (int i = 0; i < 10; i++)
+				ps5libretro::Run(pads);
+		}
+		uint8_t before = 0, with = 0, after = 0;
+		const auto read = [&](uint8_t& byte) {
+			if (c.cheevos)
+				ps5libretro::CheevosRead(c.address, &byte, 1);
+			else if (const auto* ram = static_cast<const uint8_t*>(core->getMemoryData(RETRO_MEMORY_SYSTEM_RAM));
+				ram && c.address < core->getMemorySize(RETRO_MEMORY_SYSTEM_RAM))
+				byte = ram[c.address];
+		};
+		if (frames)
+			read(before);
+		ps5libretro::SetCheats({c.code});
+		if (frames)
+		{
+			for (int i = 0; i < 10; i++)
+				ps5libretro::Run(pads);
+			read(with);
+			ps5libretro::SetCheats({});
+			for (int i = 0; i < 10; i++)
+				ps5libretro::Run(pads);
+			read(after);
+			char what[200];
+			std::snprintf(what, sizeof(what), "%s: %s seen by the game (%02x before, %02x with it, %02x after it is taken back)", name.c_str(), c.code, before, with, after);
+			// mGBA's code writes RAM, which keeps the value once it is taken back; Mesen's change only what is read
+			const bool written = std::string(c.core) == "mgba";
+			Check(before != c.value && with == c.value && (written || after != c.value), what);
+		}
+		else
+			Check(true, name + ": " + c.code + " given and taken back");
+		ps5libretro::SetCheats({});
 		ps5libretro::Unload();
 	}
 	std::printf("%s\n", failures ? "SOME CORES FAILED" : "EVERY CORE PASSED");
