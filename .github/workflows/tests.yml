@@ -13,7 +13,10 @@ jobs:
   pc:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
 
       - name: Packages
         run: |
@@ -21,13 +24,13 @@ jobs:
           sudo apt-get install -y --no-install-recommends clang-18 pkg-config libarchive-dev libzip-dev libzstd-dev libssl-dev libfmt-dev libvulkan-dev nlohmann-json3-dev p7zip-full ffmpeg
 
       - name: Downloads kept between runs
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/ps5cemu-deps
           key: deps-${{ hashFiles('tools/deps.json') }}
 
       - name: What the tests need
-        run: python3 -B tools/deps.py fetch pacbrew pugixml dr_mp3 rapidjson prosperoedenx melonds libretro-common reshade
+        run: python3 -B tools/deps.py fetch pacbrew pugixml dr_mp3 rapidjson prosperoedenx melonds libretro-common rcheevos reshade
 
       - name: String tables
         run: |
