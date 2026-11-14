@@ -21,6 +21,7 @@
 #include "../../azahar/library.h"
 #include "../../eden/eden.h"
 #include "../../eden/library.h"
+#include "../../app/esde_get.h"
 #include "../../esde/esde.h"
 #include "../../melonds/library.h"
 #include "../../ps5/kernel.h"
@@ -133,8 +134,10 @@ namespace ps5shell
 		m_fonts.TakeChanged(first, rows);
 		m_images = std::make_unique<ui::Images>(m_gfx);
 		m_wordmark = host.assets + "/wordmark.png";
+		m_consoleIcons = host.assets + "/consoles";
 		ps5sound::Start(m_settings.music, m_settings.musicVolume, m_settings.menuSounds);
 		ps5boxart::SetEnabled(m_settings.boxArt);
+		ps5boxart::SetSpines(m_settings.ui.boxArt3d);
 		// reports to the project: kept in the data folder's reports/, and only with the player's yes
 		ps5reports::SetFolder(ps5paths::Root() + "/reports");
 		ps5reports::SetEnabled(ps5reports::Available() && m_settings.ui.reports);
@@ -194,13 +197,13 @@ namespace ps5shell
 		m_side = ps5launcher::SideNamed(side);
 		if (!SideShown(m_side) && m_status.autoLaunch.empty())
 			m_side = FirstShownSide();
-		// a version this console has not run before: What's new, once, before anything else, on a first
-		// start too (a home screen tile's game starts at once instead, and What's new waits for the next
-		// start); then a first start's look and feel to choose, or an update's new options
+		// a version this console has not run before: What's new, once, before anything else (a home screen
+		// tile's game starts at once instead, and What's new waits for the next start), then an update's new
+		// options. A first start has nothing new to it: its setup instead (firststart.cpp)
 		const bool firstStart = !m_settings.ui.setupDone;
 		const bool newVersion = m_settings.ui.lastVersion != PS5CEMU_VERSION;
 		const bool updated = !firstStart && !returning && newVersion;
-		const bool news = newVersion && !returning && m_status.autoLaunch.empty();
+		const bool news = newVersion && !returning && m_status.autoLaunch.empty() && !firstStart;
 		if (newVersion && m_status.autoLaunch.empty())
 		{
 			ps5log::Line("[ui] version {} (last run: {})", PS5CEMU_VERSION, m_settings.ui.lastVersion.empty() ? "3.5.0 or earlier" : m_settings.ui.lastVersion);
@@ -211,11 +214,11 @@ namespace ps5shell
 		if (news)
 			WhatsNewOpen(then);
 		else if (then == NewsThen::Welcome)
-			WelcomeOpen(true); // then the Setup check, then the side
+			StartOpen(false); // then the side
 		else if (then == NewsThen::Setup)
 			SetupOpen(true); // then the side (FinishStart)
 		else if (then == NewsThen::NewOptions)
-			WelcomeOpen(false); // then the side
+			WelcomeOpen(); // then the side
 		else
 		{
 			// reports to the project, never asked yet (a start that went to the Setup check instead): asked
@@ -284,6 +287,7 @@ namespace ps5shell
 		}
 		// the background work stops behind the launch (4.2, rule 4), the screen kept drawn
 		ps5boxart::Stop();
+		ps5cheats::Stop();
 		ps5packs::Stop();
 		ps5mods::Stop();
 		ps5forwarders::Stop();
@@ -371,8 +375,14 @@ namespace ps5shell
 	{
 		const Host& host = TheHost();
 		m_now = host.clock();
-		m_dt = (float)std::clamp(m_now - m_lastFrame, 0.0, 0.05);
 		const double interval = m_now - m_lastFrame;
+		// VideoOut flips at 59.94 Hz and the launcher keeps up (its frame log), so a frame is shown a whole
+		// number of refreshes after the last: motion advances by exactly that, not by the clock read a
+		// little early or late as the CPU's work varied, which made a glide shimmer by a fraction of a pixel
+		constexpr double kRefresh = 1001.0 / 60000.0;
+		const double refreshes = std::round(interval / kRefresh);
+		m_dt = (float)std::clamp(refreshes >= 1 && refreshes <= 3 && std::fabs(interval - refreshes * kRefresh) < kRefresh * 0.25 ? refreshes * kRefresh : interval,
+			0.0, 0.05);
 		m_lastFrame = m_now;
 		m_iconLookedThisFrame = false;
 		if (++m_frames % 120 == 0)
@@ -402,10 +412,24 @@ namespace ps5shell
 				m_input.Reset(); // what was pressed for the mapping is not the menu's
 		}
 		m_feedback.Update(m_now);
+		// for the focus lens: a step glides, the page moving under it carries it (DrawFocusRing)
+		m_sincePress = actions.presses.empty() ? std::min(m_sincePress + 1, 1000) : 0;
+		if (!m_settings.ui.reduceMotion && std::any_of(actions.presses.begin(), actions.presses.end(), [](const ui::Press& press) {
+				return press.button == Button::Cross && !press.repeat;
+			}))
+			m_ringPress.velocity = 260; // layout units a second, inward
+		if (!actions.presses.empty())
+			m_pressRepeat = std::all_of(actions.presses.begin(), actions.presses.end(), [](const ui::Press& press) { return press.repeat; });
+		// what FocusMix was not asked about for a while is forgotten
+		if (m_frames % 60 == 0)
+			std::erase_if(m_focusLooks, [this](const auto& look) { return m_frames - look.second.frame > 30; });
 		Update(actions);
 		if (m_status.coreStarting)
 			PollCore();
 		PollGames();
+		// how games run: the site's newer feed, fetched as the app started, or the badges turned on or off
+		if (ps5compat::Generation() != m_compatGeneration || m_compatShown != m_settings.ui.compatBadges)
+			FindReports();
 		PollPacks();
 		PollMods();
 		PollTiles();
@@ -510,6 +534,17 @@ namespace ps5shell
 				m_done = true;
 			return;
 		}
+		// ES-DE's download, from Settings or the setup: how it ended, said once, on whatever screen is up
+		if (const ps5esdeget::Status esde = ps5esdeget::GetStatus(); (int)esde.state != m_esdeState)
+		{
+			using State = ps5esdeget::Status::State;
+			m_esdeState = (int)esde.state;
+			if (esde.state == State::Done)
+				Toast(m_settings.ui.emulationStation ? Tr("EmulationStation is in. It opens next time Playtendoh starts.")
+													 : Tr("EmulationStation is in. Choose it in Settings > Launcher > Layout."));
+			else if (esde.state == State::Failed)
+				Toast(esde.message);
+		}
 		for (const ui::Press& press : actions.presses)
 		{
 			if (m_launch.active || m_capture.active)
@@ -537,6 +572,7 @@ namespace ps5shell
 			case ScreenId::Layout: LayoutUpdate(press); break;
 			case ScreenId::Reports: ReportsUpdate(press); break;
 			case ScreenId::Timeline: TimelineUpdate(press); break;
+			case ScreenId::Start: StartUpdate(press); break;
 			}
 		}
 		// what is held to confirm goes on without presses
@@ -559,6 +595,8 @@ namespace ps5shell
 	{
 		m_drawing = &canvas;
 		DrawBackdrop(canvas);
+		// the glass on every screen shows the side's backdrop under it, blurred
+		GlassBackdrop(canvas, 0);
 		const float appear = m_launch.active ? 1.0f - ui::ease::CubicOut((float)((m_now - m_launch.at) / kLaunchSeconds)) * 0.85f : 1.0f;
 		canvas.PushAlpha(appear);
 		switch (m_screen)
@@ -579,6 +617,7 @@ namespace ps5shell
 		case ScreenId::Layout: LayoutDraw(canvas); break;
 		case ScreenId::Reports: ReportsDraw(canvas); break;
 		case ScreenId::Timeline: TimelineDraw(canvas); break;
+		case ScreenId::Start: StartDraw(canvas); break;
 		}
 		const bool overlay = m_picker.open || m_help.open || m_menu.open || m_keyboard.open || m_update.open || m_unpack.open || m_reorganize.open;
 		if (overlay)
@@ -589,6 +628,9 @@ namespace ps5shell
 			DrawHints(canvas, Hints());
 		}
 		canvas.PopAlpha();
+		// and a sheet, a picker or the keyboard over it shows the screen under it, blurred
+		if (overlay)
+			GlassBackdrop(canvas, 1);
 		DrawOverlays(canvas);
 		m_drawing = nullptr;
 	}
@@ -726,6 +768,7 @@ namespace ps5shell
 
 	void Shell::SwitchSide(System side)
 	{
+		m_timelineStop = false;
 		if (side == m_side)
 			return;
 		m_feedback.Play(ui::Cue::Select);
@@ -750,35 +793,92 @@ namespace ps5shell
 	void Shell::MakeGame(Game& game, const ps5catalog::Entry& entry)
 	{
 		game.entry = entry;
-		// a GameCube or Wii game's ID, from its disc: its cover's name
+		// a GameCube or Wii game's ID, from its disc: its cover's name and its GameTDB entry. A disc whose
+		// header can't be read has it in its name, as USB loaders keep them: RMCE01.wbfs, or the folder
+		// Mario Kart Wii [RMCE01]
+		std::string folderName;
+		auto trim = [](std::string text) {
+			const size_t first = text.find_first_not_of(" _-.");
+			return first == std::string::npos ? std::string() : text.substr(first, text.find_last_not_of(" _-.") - first + 1);
+		};
 		if (IsPorpoise())
 		{
-			const std::string key = ps5porpoise::GameKey(entry.game.path.string());
-			if (key.size() == 6 && std::all_of(key.begin(), key.end(), [](char c) { return (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9'); }))
-				game.entry.game.gameId = key;
+			auto isId = [](const std::string& key) {
+				return key.size() == 6 && std::all_of(key.begin(), key.end(), [](char c) { return (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9'); });
+			};
+			const std::filesystem::path& path = entry.game.path;
+			folderName = path.parent_path().filename().string();
+			const size_t open = folderName.rfind('['), close = folderName.rfind(']');
+			const std::string tagged = open != std::string::npos && close == open + 7 ? folderName.substr(open + 1, 6) : std::string();
+			for (const std::string& key : {ps5porpoise::GameKey(path.string()), path.stem().string(), tagged})
+				if (isId(key))
+				{
+					game.entry.game.gameId = key;
+					break;
+				}
+			// the folder's name without its tag, when it is a game's own (Mario Kart Wii)
+			folderName = !tagged.empty() && tagged == game.entry.game.gameId ? trim(folderName.substr(0, open)) : std::string();
 		}
 		game.boxArt = IsPorpoise() ? PorpoiseCover(game.entry.game) : IsRetro() ? RetroCover(entry.game) : IsSwitch() ? SwitchCover(entry.game) : ps5boxart::Path(BoxOf(entry.game), entry.game.gameId);
-		game.known = !IsRetro() && ps5gameinfo::Find(BoxOf(entry.game), entry.game.gameId, game.info);
-		// the list names games in English: GameTDB's title finds one whose own name is in the menus'
-		// language (7.7). It has no DS or Switch games yet.
-		const bool reported = IsWiiU() || Is3ds();
-		game.report = !reported ? nullptr : ps5compat::Find(Is3ds(), entry.game.name);
-		if (!game.report && game.known && reported)
-			game.report = ps5compat::Find(Is3ds(), game.info.title);
+		game.known = (!IsRetro() || IsPorpoise()) && ps5gameinfo::Find(BoxOf(game.entry.game), game.entry.game.gameId, game.info);
+		// a disc named only by its ID (RMCE01.wbfs, RMCE01 [RMCE01].iso): GameTDB's title, else its
+		// folder's; a name of the player's own (a hack keeps the game's ID) stays
+		if (IsPorpoise() && !game.entry.game.gameId.empty())
+		{
+			std::string& name = game.entry.game.name;
+			const std::string id = game.entry.game.gameId, tag = "[" + id + "]";
+			std::string bare = name;
+			if (const size_t at = bare.find(tag); at != std::string::npos)
+				bare.erase(at, tag.size());
+			bare = trim(bare);
+			if (bare.empty() || bare == id)
+				name = game.known && !game.info.title.empty() ? game.info.title : !folderName.empty() ? folderName : name;
+		}
+		game.report = ReportOf(m_side, game);
 		game.year = game.known && game.info.released.size() >= 4 ? std::atoi(game.info.released.substr(0, 4).c_str()) : 0;
-		std::string name = Lower(entry.game.name);
+		std::string name = Lower(game.entry.game.name);
 		if (name.rfind("the ", 0) == 0)
 			name = name.substr(4);
 		game.sortName = name;
 	}
 
+	const ps5compat::Report* Shell::ReportOf(System side, const Game& game) const
+	{
+		if (!m_settings.ui.compatBadges)
+			return nullptr;
+		// by its title ID, else its name; the feed names games in English: GameTDB's title finds one whose
+		// own name is in the menus' language (7.7)
+		const char* key = ps5launcher::SideName(side);
+		const ps5compat::Report* report = ps5compat::Find(key, game.entry.game.titleId, game.entry.game.name);
+		if (!report && game.known && !game.info.title.empty())
+			report = ps5compat::Find(key, 0, game.info.title);
+		return report;
+	}
+
+	void Shell::FindReports()
+	{
+		m_compatShown = m_settings.ui.compatBadges;
+		for (Game& game : m_games)
+			game.report = ReportOf(m_side, game);
+		for (SideGame& one : m_homeGames)
+			one.game.report = ReportOf(one.side, one.game);
+		for (TimelineShelf& shelf : m_shelves)
+			for (Game& game : shelf.games)
+				game.report = ReportOf(shelf.side, game);
+		m_compatGeneration = ps5compat::Generation(); // after: the first Find reads the kept feed
+	}
+
 	std::string Shell::SwitchCover(const ps5emu::Game& game) const
 	{
 		// a picture of the player's own beside the game first; then GameTDB's box art, or the game's own icon
-		// as Settings > Online chooses (empty until it is there: the card with the icon, or the name)
+		// as Settings > Online chooses; the icon too for a game GameTDB has none of (every Switch 2 game's: its
+		// NUP's own). Empty until one is there: the card with the name
 		if (std::string own = ps5eden::BoxArt(game); !own.empty())
 			return own;
-		return Handheld(m_side).nxCovers == 1 ? ps5eden::CoverPath(game) : ps5boxart::Path(ps5boxart::System::Switch, game.gameId);
+		if (Handheld(m_side).nxCovers != 1)
+			if (std::string box = ps5boxart::Path(ps5boxart::System::Switch, game.gameId); !box.empty())
+				return box;
+		return ps5eden::CoverPath(game);
 	}
 
 	void Shell::LoadGames()
@@ -810,6 +910,8 @@ namespace ps5shell
 			m_listed = true;
 			ps5log::Line("[launcher] {} games", m_games.size());
 			FetchBoxArt();
+			if (m_settings.cheats)
+				FetchCheats(); // every game's, once a start (app/cheats.h)
 			RememberCount();
 		}
 		m_libraryIndex = -1;
@@ -902,6 +1004,7 @@ namespace ps5shell
 							game.boxArt = path;
 							m_images->Forget(game.boxArt);
 						}
+						m_images->Forget(ps5boxart::SpinePath(path)); // or its spine, for 3D box art
 					}
 			}
 			for (Game& game : m_games)
@@ -1017,7 +1120,7 @@ namespace ps5shell
 	{
 		ps5lang::Load(m_settings.ui.language);
 		m_fonts.SetLanguage(ps5lang::Current());
-		if (m_screen == ScreenId::Setup)
+		if (m_screen == ScreenId::Setup || m_screen == ScreenId::Start)
 			RunChecks();
 	}
 
@@ -1028,23 +1131,7 @@ namespace ps5shell
 	}
 
 	// A libretro side's console as libretro's thumbnails name its folder (their covers, by the game file's name)
-	const char* Shell::RetroThumbnails(int side)
-	{
-		if (!ps5retro::IsRetro(side))
-			return "";
-		const std::string_view key = ps5retro::Of(side).key;
-		return key == "nes" || key == "vs"		? "Nintendo - Nintendo Entertainment System" :
-			key == "fds"						? "Nintendo - Family Computer Disk System" :
-			key == "snes"						? "Nintendo - Super Nintendo Entertainment System" :
-			key == "satellaview"				? "Nintendo - Satellaview" :
-			key == "gb" || key == "sgb"			? "Nintendo - Game Boy" :
-			key == "gbc"						? "Nintendo - Game Boy Color" :
-			key == "gba"						? "Nintendo - Game Boy Advance" :
-			key == "n64" || key == "ique"		? "Nintendo - Nintendo 64" :
-			key == "vb"							? "Nintendo - Virtual Boy" :
-			key == "pokemini"					? "Nintendo - Pokemon Mini" :
-			key == "gw"							? "Handheld Electronic Game" : "";
-	}
+	const char* Shell::RetroThumbnails(int side) { return ps5retro::Thumbnails(side); }
 
 	std::string Shell::RetroCover(const ps5emu::Game& game)
 	{
@@ -1169,8 +1256,11 @@ namespace ps5shell
 		}
 		else if (IsPorpoise())
 		{
+			// its trace and Dolphin's log (the sandbox's trace while /data can't be reached), and its debug
+			// folder's app, crash and each game's logs when that is on
 			session.emulator = "porpoise";
-			session.logs = {std::string(ps5retro::Of(SideIndex()).data) + "/debug"}; // app, crash and each game's logs
+			session.logs = {ps5porpoise::LogsFolder(), ps5paths::SandboxDownload() + "/" + ps5porpoise::kSandboxTrace,
+				std::string(ps5retro::Of(SideIndex()).data) + "/debug"};
 		}
 		else if (IsRetro())
 		{
@@ -1402,7 +1492,10 @@ namespace ps5shell
 			m_settingRow = 0;
 		}
 		if (tab == ScreenId::Settings)
+		{
 			m_onBar = false; // the dialog has the focus: the bar is under its dim
+			m_timelineStop = false; // Settings are a side's: the side under the Timeline's stop
+		}
 		Show(tab);
 	}
 
@@ -1421,27 +1514,68 @@ namespace ps5shell
 		if (press.button == Button::L1 || press.button == Button::R1)
 		{
 			// the previous or next side shown, in the bar's order, round from the last to the first (6.0:
-			// they turn the carousel; the tabs are on the bar, Up and then along it)
+			// they turn the carousel, or Orbit's dial; the tabs are on the bar, Up and then along it). On the
+			// Library the Timeline is a stop of its own, after the last side
 			const int step = press.button == Button::R1 ? 1 : -1;
 			m_orbitHome = false;
-			for (int i = 1; i < kSides; i++)
+			std::vector<int> ring;
+			for (int i = 0; i < kSides; i++)
+				if (SideShown(BarSide(i)))
+					ring.push_back(i);
+			if (m_tab == ScreenId::Library)
+				ring.push_back(kTimelineBar);
+			const int count = (int)ring.size();
+			const int now = m_timelineStop ? kTimelineBar : BarIndex(m_side);
+			const int at = (int)(std::find(ring.begin(), ring.end(), now) - ring.begin());
+			if (count < 2 || at >= count)
 			{
-				const System next = BarSide(((BarIndex(m_side) + step * i) % kSides + kSides) % kSides);
-				if (!SideShown(next))
-					continue;
-				if (m_onBar && m_barFocus < kSides)
-					m_barFocus = BarIndex(next);
-				SwitchSide(next);
+				m_feedback.Play(ui::Cue::Denied);
 				return true;
 			}
-			m_feedback.Play(ui::Cue::Denied);
+			const int next = ring[((at + step) % count + count) % count];
+			if (m_onBar && (m_barFocus < kSides || m_barFocus == kTimelineBar))
+				m_barFocus = next;
+			if (next == kTimelineBar)
+				TimelineStop(true);
+			else if (BarSide(next) == m_side)
+			{
+				m_timelineStop = false;
+				m_feedback.Play(ui::Cue::Focus);
+			}
+			else
+				SwitchSide(BarSide(next));
+			return true;
+		}
+		if (press.button == Button::L2 || press.button == Button::R2)
+		{
+			// the triggers: the Library and Settings tabs (6.0), from either layout
+			const ScreenId tab = press.button == Button::L2 ? ScreenId::Library : ScreenId::Settings;
+			if (m_tab == tab)
+			{
+				m_feedback.Play(ui::Cue::Edge, press.repeat);
+				return true;
+			}
+			ShowTab(tab);
+			if (m_onBar)
+				m_barFocus = tab == ScreenId::Library ? kSides : kSides + 1;
+			m_feedback.Play(ui::Cue::Focus);
 			return true;
 		}
 		if (press.button == Button::Touchpad)
 		{
-			// the Library's opens the Timeline (L1 and R1 step the sides); elsewhere the next side
-			if (m_screen == ScreenId::Library)
-				TimelineOpen();
+			// the next console (6.0: the Timeline is a stop on the console lists, no longer the touchpad's);
+			// from the Timeline's stop, the first
+			if (m_timelineStop)
+			{
+				const System first = FirstShownSide();
+				if (first == m_side)
+				{
+					m_timelineStop = false;
+					m_feedback.Play(ui::Cue::Focus);
+				}
+				else
+					SwitchSide(first);
+			}
 			else if (SidesShown() > 1)
 				SwitchSide(NextShownSide(m_side));
 			else
@@ -1455,15 +1589,27 @@ namespace ps5shell
 		case Button::Left:
 		case Button::Right:
 		{
+			// along the bar: the sides shown and the Timeline (the carousel's: Orbit's are on its dial),
+			// then the two tabs
 			const int step = press.button == Button::Right ? 1 : -1;
-			int next = m_barFocus + step;
-			while (next >= 0 && next < kSides && !SideShown(BarSide(next))) // past the sides not shown
-				next += step;
-			if (next < 0 || next > kSides + 1 || (Orbit() && next < kSides)) // Orbit's sides are on its dial
+			std::vector<int> stops;
+			if (!Orbit())
+			{
+				for (int i = 0; i < kSides; i++)
+					if (SideShown(BarSide(i)))
+						stops.push_back(i);
+				stops.push_back(kTimelineBar);
+			}
+			stops.push_back(kSides);
+			stops.push_back(kSides + 1);
+			const int at = (int)(std::find(stops.begin(), stops.end(), m_barFocus) - stops.begin());
+			const int to = at + step;
+			if (at >= (int)stops.size() || to < 0 || to >= (int)stops.size())
 			{
 				m_feedback.Play(ui::Cue::Edge, press.repeat);
 				break;
 			}
+			const int next = stops[to];
 			m_barFocus = next;
 			// onto a tab opens it, as the PS5's bar does
 			if (next == kSides && m_tab != ScreenId::Library)
@@ -1474,7 +1620,15 @@ namespace ps5shell
 			break;
 		}
 		case Button::Cross:
-			if (m_barFocus < kSides && BarSide(m_barFocus) != m_side)
+			if (m_barFocus == kTimelineBar)
+			{
+				// the Timeline's stop, on the Library, its card in focus
+				if (m_tab != ScreenId::Library)
+					ShowTab(ScreenId::Library);
+				TimelineStop(true);
+				m_onBar = false;
+			}
+			else if (m_barFocus < kSides && (BarSide(m_barFocus) != m_side || m_timelineStop))
 				SwitchSide(BarSide(m_barFocus));
 			else
 			{
@@ -1566,9 +1720,12 @@ namespace ps5shell
 		constexpr float kTile = 42, kPitch = 112;
 		if (!orbit)
 		{
-			int order[kSides];
+			// and the Timeline, a stop of its own after the last side (6.0)
+			int order[kSides + 1];
 			int shown = 0, anchor = 0;
-			const int anchorBar = m_onBar && m_barFocus < kSides ? m_barFocus : BarIndex(m_side);
+			const int anchorBar = m_onBar && (m_barFocus < kSides || m_barFocus == kTimelineBar) ? m_barFocus
+								  : m_timelineStop											  ? kTimelineBar
+																							  : BarIndex(m_side);
 			for (int i = 0; i < kSides; i++)
 			{
 				if (!SideShown(BarSide(i)))
@@ -1577,6 +1734,9 @@ namespace ps5shell
 					anchor = shown;
 				order[shown++] = i;
 			}
+			if (anchorBar == kTimelineBar)
+				anchor = shown;
+			order[shown++] = kTimelineBar;
 			const bool round = shown > kAtOnce;
 			const float loop = shown * kPitch;
 			const float target = anchor * kPitch;
@@ -1596,7 +1756,8 @@ namespace ps5shell
 			bool focusOnSide = false;
 			for (int k = 0; k < shown; k++)
 			{
-				const System side = BarSide(order[k]);
+				const bool timeline = order[k] == kTimelineBar;
+				const System side = BarSide(timeline ? 0 : order[k]);
 				float offset = k * kPitch - m_barSlide; // from the middle
 				if (round)
 					offset = std::remainder(offset, loop);
@@ -1608,7 +1769,18 @@ namespace ps5shell
 				const Box box{cx - size / 2, y + h / 2 - size / 2, size, size};
 				// fainter further out; a sixth only as it comes in or goes
 				canvas.PushAlpha(std::clamp(std::min(1.0f - 0.22f * away, (kAtOnce + 1) * 0.5f - away), 0.0f, 1.0f));
-				DrawBareConsole(canvas, side, box, side == m_side);
+				if (timeline)
+				{
+					// as quiet as the others, in its consoles' colours while it is open
+					uint32_t dots[3];
+					TimelineStopColours(dots);
+					const uint32_t quiet = ui::Mix(kText, kInk1, 0.55f) | 0xff000000;
+					if (!m_timelineStop)
+						dots[0] = dots[1] = dots[2] = quiet;
+					DrawTimelineMark(canvas, box.CentreX(), box.CentreY(), box.w, quiet, dots);
+				}
+				else
+					DrawBareConsole(canvas, side, box, side == m_side && !m_timelineStop);
 				canvas.PopAlpha();
 				if (m_onBar && m_barFocus == order[k])
 					focused = box.Scaled(1.45f), focusOnSide = true;
@@ -1619,9 +1791,11 @@ namespace ps5shell
 				Focus(focused, focused.w * 0.27f);
 			// under it, the side in its middle: its name, and the open one's count of games (as the Library's)
 			{
-				const System inMiddle = shown ? BarSide(order[anchor]) : m_side;
-				std::string caption = SystemName(inMiddle);
-				if (inMiddle == m_side && m_listed)
+				const bool timelineMiddle = order[anchor] == kTimelineBar;
+				const System inMiddle = shown && !timelineMiddle ? BarSide(order[anchor]) : m_side;
+				// tr: the Timeline's name under it in the console lists
+				std::string caption = timelineMiddle ? std::string(Tr("Timeline")) : SystemName(inMiddle);
+				if (!timelineMiddle && inMiddle == m_side && m_listed && !m_timelineStop)
 				{
 					const int listed = (int)std::count_if(m_games.begin(), m_games.end(), [](const Game& g) { return !g.entry.hidden; });
 					caption += " · ";
@@ -1664,8 +1838,11 @@ namespace ps5shell
 
 	std::vector<Hint> Shell::Hints() const
 	{
-		// the touchpad's next side; none when one side is shown (its hint goes: DrawHints leaves out an empty one)
-		const std::string other = m_screen == ScreenId::Library ? std::string(Tr("Timeline")) : SidesShown() > 1 ? SystemName(NextShownSide(m_side)) : "";
+		// the touchpad's next side (from the Timeline's stop, the first); none when one side is shown and open
+		// (its hint goes: DrawHints leaves out an empty one)
+		const std::string other = m_timelineStop ? SystemName(FirstShownSide()) : SidesShown() > 1 ? SystemName(NextShownSide(m_side)) : "";
+		// tr: the hint for L2 and R2, which go to the Library and Settings tabs
+		const std::string tabs = Tr("Library or Settings");
 		if (m_update.open || m_unpack.open || m_reorganize.open)
 			return {}; // their sheets' own
 		// tr: the hints along the bottom: what a button does on this screen, a word or two
@@ -1681,15 +1858,15 @@ namespace ps5shell
 		if (m_menu.open)
 			return {{Icon::Cross, Tr("Choose")}, {Icon::Circle, Tr("Close")}};
 		if (m_onBar && (m_screen == ScreenId::Library || m_screen == ScreenId::Settings) && !InGameSettings())
-			return {{Icon::LeftRight, Tr("Move")}, {Icon::Cross, m_barFocus < kSides && BarSide(m_barFocus) != m_side ? Tr("Switch") : Tr("Open")},
-				{Icon::Touchpad, other}};
+			return {{Icon::LeftRight, Tr("Move")}, {Icon::Cross, m_barFocus < kSides && (BarSide(m_barFocus) != m_side || m_timelineStop) ? Tr("Switch") : Tr("Open")},
+				{Icon::R2, tabs}, {Icon::Touchpad, other}};
 		switch (m_screen)
 		{
 		case ScreenId::WhatsNew:
 			return {{Icon::Cross, Tr("Continue")}};
 		case ScreenId::Welcome:
 			return {{Icon::LeftRight, Tr("Change")}, {Icon::Triangle, Tr("More info")},
-				{Icon::Circle, m_welcomeThenSetup ? Tr("Continue to the Setup check") : m_welcomeFromSettings ? Tr("Back") : Tr("Continue to the Library")}};
+				{Icon::Circle, Tr("Continue to the Library")}};
 		case ScreenId::Setup:
 		{
 			std::vector<Hint> hints;
@@ -1701,6 +1878,7 @@ namespace ps5shell
 			hints.push_back({Icon::Circle, !m_setupFirst ? Tr("Back") : Tr("Continue to the Library")});
 			return hints;
 		}
+		case ScreenId::Start: return StartHints();
 		case ScreenId::Layout:
 		case ScreenId::Reports:
 		case ScreenId::Timeline: return {}; // their own, on their own grounds
@@ -1708,6 +1886,8 @@ namespace ps5shell
 		{
 			if (Orbit())
 				return {}; // its own, with the keys its dial has (OrbitHintsDraw)
+			if (m_timelineStop)
+				return {{Icon::Cross, Tr("Open")}, {Icon::R2, tabs}, {Icon::Touchpad, other}};
 			std::string kicker, title, text;
 			std::vector<std::string> buttons;
 			if (LibraryState(kicker, title, text, buttons))
@@ -1718,7 +1898,7 @@ namespace ps5shell
 				return {{Icon::Cross, Tr("Open")}, {Icon::Touchpad, other}};
 			if (m_libraryZone == 0)
 				return {{Icon::Cross, Tr("Play")}, {Icon::Options, Tr("Options")}, {Icon::LeftRight, Tr("Move")}, {Icon::Touchpad, other}};
-			return {{Icon::Cross, Tr("Play")}, {Icon::Options, Tr("Options")}, {Icon::R2, Tr("Jump by letter")}, {Icon::Touchpad, other}};
+			return {{Icon::Cross, Tr("Play")}, {Icon::Options, Tr("Options")}, {Icon::R2, tabs}, {Icon::Touchpad, other}};
 		}
 		case ScreenId::Hub: return {{Icon::Cross, m_hubAbout ? Tr("Back to the buttons") : Tr("Choose")}, {Icon::Options, Tr("Options")},
 			{Icon::UpDown, Tr("Scroll")}, {Icon::Circle, Tr("Back")}};
@@ -1732,7 +1912,7 @@ namespace ps5shell
 				return {{Icon::LeftRight, Tr("Change")}, {Icon::Square, Tr("Default")}, {Icon::Triangle, Tr("More info")}, {Icon::Circle, Tr("Back")}};
 			}
 			if (!m_onRows)
-				return {{Icon::UpDown, Tr("Pages")}, {Icon::Cross, Tr("Open")}, {Icon::Circle, Tr("Close")}, {Icon::Touchpad, other}};
+				return {{Icon::UpDown, Tr("Pages")}, {Icon::Cross, Tr("Open")}, {Icon::Circle, Tr("Close")}, {Icon::R2, tabs}, {Icon::Touchpad, other}};
 			return {{Icon::LeftRight, Tr("Change")}, {Icon::Triangle, Tr("More info")}, {Icon::Circle, Tr("Back")}};
 		case ScreenId::Packs:
 			return m_presetsFocus ?
@@ -1799,7 +1979,7 @@ namespace ps5shell
 			canvas.Rect({0, 0, 1920, 1080}, 0, 0xffebe8e7); // #e7e8eb, on every theme
 			return;
 		}
-		if (m_screen == ScreenId::Setup || m_screen == ScreenId::Welcome || m_screen == ScreenId::WhatsNew)
+		if (m_screen == ScreenId::Setup || m_screen == ScreenId::Welcome || m_screen == ScreenId::WhatsNew || m_screen == ScreenId::Start)
 		{
 			// What's new's seam between its second and third columns of cards, never through one
 			DrawBrandBackdrop(canvas, m_screen == ScreenId::WhatsNew ? 1252.0f : 1140.0f);
@@ -2058,7 +2238,7 @@ namespace ps5shell
 			m_menu.items.push_back({"hub", Tr("Game hub")});
 		// a game with settings of its own says so (a GameCube or Wii game's are in its file of Porpoise's)
 		std::error_code ownError;
-		const bool own = m_settings.games.count(ps5settings::GameKey(ps5launcher::SideName(m_side), g.entry.game.titleId)) > 0 ||
+		const bool own = ps5settings::HasOwn(m_settings, ps5launcher::SideName(m_side), g.entry.game.titleId) ||
 			(IsPorpoise() && std::filesystem::exists(ps5porpoise::GameFile(g.entry.game.path.string()), ownError));
 		m_menu.items.push_back({"settings", own ? Tr("Game settings: custom") : Tr("Game settings")});
 		// its own, by account (6.15); a Switch game's too, by its real title ID (not one the library made up)

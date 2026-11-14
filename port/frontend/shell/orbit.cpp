@@ -110,6 +110,8 @@ namespace ps5shell
 	void Shell::OrbitHomeOpen(bool home)
 	{
 		m_orbitHome = home;
+		if (home)
+			m_timelineStop = false;
 		m_feedback.Play(home ? ui::Cue::Select : ui::Cue::Back);
 		if (!home)
 			return;
@@ -197,8 +199,8 @@ namespace ps5shell
 			if (LibraryState(kicker, title, text, buttons))
 				return false; // its card's buttons, as in Classic
 		}
-		// the Library's list, as a row: its own Cross, Options, Sort, Search and jumps by letter go on
-		// working on it (LibraryUpdate)
+		// the Library's list, as a row: its own Cross, Options, Sort and Search go on working on it
+		// (LibraryUpdate)
 		m_libraryZone = 2;
 		const int total = (int)m_shelf.size() + ArticTiles();
 		switch (b)
@@ -382,7 +384,7 @@ namespace ps5shell
 		}
 		auto drawTile = [&](int i, const Box& box, bool focused) {
 			if (m_orbitHome)
-				AsSide(m_homeGames[i].side, [&] { DrawCover(canvas, m_homeGames[i].game, box, focused, 0); });
+				AsSide(m_homeGames[i].side, [&] { DrawCover(canvas, m_homeGames[i].game, box, focused, 0, true); });
 			else if (i < offset)
 			{
 				// the 3DS's Artic Base, ahead of its games
@@ -392,31 +394,37 @@ namespace ps5shell
 					Focus(box, kRadiusCover);
 			}
 			else
-				DrawCover(canvas, m_games[m_shelf[i - offset]], box, focused, 0);
+				DrawCover(canvas, m_games[m_shelf[i - offset]], box, focused, 0, true);
 		};
 		canvas.PushClip({640, 690, 1280, 390});
+		// each tile's lift glides: the one gaining the focus grows and makes room as the one losing it settles
+		// back, rather than both jumping (6.0)
+		auto tileKey = [&](int i) {
+			if (m_orbitHome)
+				return FocusKey(m_homeGames[i].game.entry.game.path.string(), (uint64_t)m_homeGames[i].side + 1);
+			return i < offset ? FocusKey("artic") : FocusKey(m_games[m_shelf[i - offset]].entry.game.path.string(), (uint64_t)m_side + 1);
+		};
+		const float scale = m_settings.ui.reduceMotion ? 1.0f : kFocusScale;
+		std::vector<std::pair<float, int>> lifted; // (how far lifted, which), drawn last, the most lifted on top
+		std::vector<Box> boxes(total);
 		float along = kRailLeft - m_orbitRail.value;
-		Box focused{};
 		for (int i = 0; i < total; i++)
 		{
 			const float w = tileWidth(i);
-			const Box box{along + (i == at ? kFocusRoom : 0), kRailBottom - kCoverHeight, w, kCoverHeight};
-			const float step = w + kRailGap + (i == at ? kFocusRoom * 2 : 0);
 			if (along > 1920 + w)
 				break;
-			if (i == at)
-				focused = box;
-			else if (box.Right() > 640)
-				drawTile(i, box, false);
-			along += step;
+			const float mix = FocusMix(tileKey(i), i == at);
+			const float grow = 1 + (scale - 1) * mix;
+			boxes[i] = {along + kFocusRoom * mix, kRailBottom - kCoverHeight * grow - 8 * mix, w * grow, kCoverHeight * grow};
+			if (mix > 0.002f || i == at)
+				lifted.push_back({mix + (i == at ? 1 : 0), i});
+			else if (boxes[i].Right() > 640)
+				drawTile(i, boxes[i], false);
+			along += w + kRailGap + kFocusRoom * 2 * mix;
 		}
-		// lifted, and over its neighbours
-		if (focused.w > 0 && total > 0)
-		{
-			const float scale = m_settings.ui.reduceMotion ? 1.0f : kFocusScale;
-			const Box lifted{focused.x, focused.Bottom() - focused.h * scale - 8, focused.w * scale, focused.h * scale};
-			drawTile(at, lifted, !m_onBar);
-		}
+		std::sort(lifted.begin(), lifted.end());
+		for (const auto& [mix, i] : lifted)
+			drawTile(i, boxes[i], i == at && !m_onBar);
 		canvas.PopClip();
 		canvas.PopAlpha();
 		OrbitHintsDraw(canvas, false);
@@ -440,7 +448,9 @@ namespace ps5shell
 		// tr: Orbit's hints: L1 and R1 turn its dial
 		items.push_back({{Icon::L1, Icon::R1}, nullptr, Tr("Turn the dial")});
 		items.push_back({{}, "R3", Tr("Home")});
-		if (state)
+		if (m_timelineStop)
+			items.push_back({{Icon::Cross}, nullptr, Tr("Open")});
+		else if (state)
 			items.push_back({{Icon::Cross}, nullptr, Tr("Choose")});
 		else
 		{
@@ -449,7 +459,7 @@ namespace ps5shell
 				items.push_back({{Icon::Square}, nullptr, Tr("Sort")});
 			items.push_back({{Icon::Options}, nullptr, Tr("Options")});
 		}
-		items.push_back({{Icon::Touchpad}, nullptr, Tr("Timeline")});
+		items.push_back({{Icon::L2, Icon::R2}, nullptr, Tr("Library or Settings")});
 		constexpr float kIcon = 28, kGap = 30;
 		const float y = 1080 - 30 - 28;
 		float width = 0;
@@ -492,6 +502,7 @@ namespace ps5shell
 		// EmulationStation, the third choice, where the app has it (port/esde/esde.h)
 		m_layoutFocus = m_settings.ui.emulationStation ? 2 : std::clamp(m_settings.ui.layout, 0, 1);
 		m_layoutShown = (float)m_layoutFocus;
+		m_layoutAskEsde = false;
 		m_onBar = false;
 		Show(ScreenId::Layout);
 		m_screenAt = m_now;
@@ -506,6 +517,7 @@ namespace ps5shell
 		{
 			const int last = 2;
 			const int next = std::clamp(m_layoutFocus + (press.button == Button::Right ? 1 : -1), 0, last);
+			m_layoutAskEsde = false; // passing over ES-DE's card starts nothing
 			if (next == m_layoutFocus)
 				m_feedback.Play(ui::Cue::Edge, press.repeat);
 			else
@@ -515,9 +527,25 @@ namespace ps5shell
 			}
 			break;
 		}
+		case Button::Triangle:
+			// the covers flat or as boxes, for either launcher (Settings > Launcher > 3D box art)
+			m_settings.ui.boxArt3d = !m_settings.ui.boxArt3d;
+			ps5boxart::SetSpines(m_settings.ui.boxArt3d);
+			SaveSettings();
+			m_feedback.Play(ui::Cue::Select);
+			break;
 		case Button::Cross:
 		case Button::Circle:
 		{
+			// ES-DE where the app hasn't got it: the first Cross shows its size, a second downloads it, Circle
+			// takes the question back
+			if (m_layoutFocus == 2 && !ps5esde::Available() && (press.button == Button::Cross ? !m_layoutAskEsde : m_layoutAskEsde))
+			{
+				m_layoutAskEsde = press.button == Button::Cross;
+				m_feedback.Play(m_layoutAskEsde ? ui::Cue::Select : ui::Cue::Back);
+				break;
+			}
+			m_layoutAskEsde = false;
 			// Circle leaves it as it is: nothing here has to be answered, as the rest of Make it yours
 			if (press.button == Button::Cross)
 			{
@@ -531,7 +559,8 @@ namespace ps5shell
 					Toast(Tr("EmulationStation opens next time Playtendoh starts. Hold L1 while it starts to use this launcher instead."));
 				else
 				{
-					// a download of its own (app/esde_get.h): this launcher until it is in
+					// a download of its own (app/esde_get.h), the player having said yes to its size: this
+					// launcher until it is in
 					ps5esdeget::Start();
 					Toast(Tr("Downloading EmulationStation. It opens next time Playtendoh starts."));
 				}
@@ -747,15 +776,33 @@ namespace ps5shell
 		canvas.PopAlpha();
 
 		canvas.PushAlpha(Enter(2));
-		canvas.Text(Style({19, ui::Weight::Regular, 1.3f}), left, 926,
-			m_layoutFocus == 2 ? std::string(Tr("Hold L1 while Playtendoh starts to use its own launcher. Switch back any time in Settings > Launcher > Layout."))
-							   : std::string(Tr("Both have Timeline, every console on one shelf. Press the touchpad to open it.")),
-			kInk2, 1180, 2);
+		// ES-DE where the app hasn't got it: a download, asked for with its size first
+		const bool download = m_layoutFocus == 2 && !ps5esde::Available();
 		// tr: the button of the first start's question: {0} is the layout in focus, Classic or Orbit
-		const std::string use = TrF("Use {0}", cards[m_layoutFocus].name);
+		const std::string use = !download	   ? TrF("Use {0}", cards[m_layoutFocus].name)
+								: m_layoutAskEsde ? TrF("Download {0} MB", ps5esdeget::kAboutBytes >> 20)
+												  : std::string(Tr("Download ES-DE"));
 		const ui::TextStyle useStyle = Style({22, ui::Weight::SemiBold, 1.0f});
 		const float useWidth = m_fonts.Width(useStyle, use) + 72 + 36;
 		const Box button{1920 - 140 - useWidth, 912, useWidth, 68};
+		// the covers flat or as boxes (Triangle), beside the button, for Classic and Orbit alike
+		// tr: the first start's layout question: Triangle turns the covers flat or into 3D boxes
+		const std::string boxes = m_settings.ui.boxArt3d ? Tr("Box art: 3D") : Tr("Box art: flat");
+		const float boxesWidth = m_fonts.Width(useStyle, boxes) + 72 + 36;
+		const Box boxesChip{button.x - 24 - boxesWidth, 912, boxesWidth, 68};
+		if (m_layoutFocus < 2)
+		{
+			canvas.Ring(boxesChip, 34, 2, kInk2);
+			canvas.Draw(Icon::Triangle, {boxesChip.x + 32, boxesChip.CentreY() - 13, 26, 26}, kInk);
+			const ui::TextBlock boxesLabel = m_fonts.Layout(useStyle, boxes);
+			canvas.Text(boxesLabel, boxesChip.x + 68, boxesChip.CentreY() - boxesLabel.height * 0.5f, kInk);
+		}
+		canvas.Text(Style({19, ui::Weight::Regular, 1.3f}), left, 926,
+			download && m_layoutAskEsde
+				? TrF("ES-DE is a separate download of about {0} MB. Cross again to download it, Circle to cancel. Playtendoh's own launcher opens until it's in.", ps5esdeget::kAboutBytes >> 20)
+			: m_layoutFocus == 2 ? std::string(Tr("Hold L1 while Playtendoh starts to use its own launcher. Switch back any time in Settings > Launcher > Layout."))
+							   : std::string(Tr("Both have the Timeline, every console's games on one shelf, after the last console.")),
+			kInk2, (m_layoutFocus < 2 ? boxesChip.x : button.x) - 24 - left, 2);
 		canvas.Rect(button, 34, kInk);
 		canvas.Draw(Icon::Cross, {button.x + 32, button.CentreY() - 13, 26, 26}, 0xff1b0f0a);
 		const ui::TextBlock label = m_fonts.Layout(useStyle, use);

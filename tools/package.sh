@@ -12,7 +12,7 @@
 #     tile-installer.elf              moves the home screen tiles the app made into /data/homebrew
 #     assets/ui/                      the launcher's font (fonts/lexend.sdf), the in-game menus'
 #                                     (fonts/Lexend-*.ttf), sounds and the two sides' tiles
-#     assets/compatibility.md         the compatibility list, for the game pages' status
+#     assets/compatibility.json       how games run, the list's alone, until the site's is fetched
 #     assets/cemu/                    Cemu's game profiles and the Wii U system fonts (the community
 #                                     graphic packs are not in the app: it downloads them, #74)
 #     assets/gametdb/                 GameTDB's game information (descriptions, publishers, dates)
@@ -48,6 +48,24 @@ if [[ -f $elf.linkcheck ]] && ((!check)); then
     exit 2
 fi
 mkdir -p "$work"
+
+# The ELF's image: its segments as they are loaded, .bss with them. 6.0's grew to 503 MiB (ParaLLEl-N64's
+# globals beside Mesen's HQX tables) and PS5-680 restarted as the app started, before its first log line;
+# 5.1's was 346 MiB and 6.0's first builds about 353. A large static table stops here, not on a console.
+image=$(python3 -B - "$elf" <<'EOF'
+import struct, sys
+data = open(sys.argv[1], "rb").read(1 << 16)
+phoff, = struct.unpack_from("<Q", data, 0x20)
+size, count = struct.unpack_from("<HH", data, 0x36)
+ends = [vaddr + memsz for kind, vaddr, memsz in
+        (struct.unpack_from("<I12xQ16xQ", data, phoff + i * size) for i in range(count)) if kind == 1]
+print(max(ends) >> 20)
+EOF
+)
+if ((image > 400)); then
+    echo "$elf loads as $image MiB, over 400: a static table that belongs on the heap (llvm-nm-18 -S --size-sort)" >&2
+    exit 2
+fi
 
 # The host tool that converts and signs the ELF: PS5_Vulkan's native tooling, which its RADV
 # titles go through, with the boilerplate's zlib.
@@ -136,6 +154,13 @@ make -s -C "$PS5CEMU_ROOT/port/payloads" PS5_PAYLOAD_SDK="$PS5_PAYLOAD_SDK" OUTP
 ui=$app/assets/ui
 mkdir -p "$ui/fonts" "$ui/sounds" "$ui/icons"
 cp "$PS5CEMU_ROOT/port/ui/wordmark.png" "$ui/"
+# the in-game menus' DualSense on their Buttons page: Zacksly's drawing (CC BY 3.0, its licence beside it)
+python3 -B "$PS5CEMU_ROOT/tools/render-pad-art.py" "$PS5CEMU_ROOT/port/ui/dualsense.png" "$ui/dualsense.tga"
+cp "$PS5CEMU_ROOT/port/ui/CC-BY-3.0-Zacksly.txt" "$ui/"
+# the consoles' marks: RetroArch's XMB Monochrome icons (CC BY 4.0, its licence beside them; tools/render-console-icons.py)
+mkdir -p "$ui/consoles"
+cp "$PS5CEMU_ROOT"/port/ui/consoles/*.png "$ui/consoles/"
+cp "$PS5CEMU_ROOT/port/ui/CC-BY-4.0-RetroArch.txt" "$ui/"
 cp "$PS5CEMU_ROOT/port/ui/fonts/lexend.sdf" "$PS5CEMU_ROOT"/port/ui/fonts/Lexend-*.ttf "$PS5CEMU_ROOT/tools/fonts/OFL.txt" "$ui/fonts/"
 cp "$PS5CEMU_ROOT"/port/frontend/ui/sounds/*.wav "$ui/sounds/"
 cp "$work/icons/ui/icons/ps5cemu-72.tga" "$work/icons/ui/icons/azahar-72.tga" "$work/icons/ui/icons/melonds-72.tga" \
@@ -164,8 +189,9 @@ mkdir -p "$app/assets/lang"
 for po in "$PS5CEMU_ROOT"/port/lang/*.po; do
     [[ $(basename "$po") == qps.po ]] || sed -e '/^#[^,]/d' -e '/^#$/d' -e '/^$/d' "$po" >"$app/assets/lang/$(basename "$po")"
 done
-# the compatibility list the game pages show a status from (app/compatibility.h)
-cp "$PS5CEMU_ROOT/docs/COMPATIBILITY.md" "$app/assets/compatibility.md"
+# how games run, from the owner's statuses, for a console that has not fetched the site's yet
+# (app/compatibility.h, tools/compat_feed.py)
+python3 -B "$PS5CEMU_ROOT/tools/compat_feed.py" --out "$app/assets/compatibility.json"
 # the 3DS side's border themes (tools/render-borders.py, committed)
 mkdir -p "$app/assets/borders"
 cp "$PS5CEMU_ROOT"/port/azahar/borders/*.png "$app/assets/borders/"

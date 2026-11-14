@@ -116,6 +116,9 @@ add_library(CemuPS5 STATIC
 	app/netfs.h
 	app/controllers.cpp
 	app/boxart.cpp
+	app/cheats.cpp
+	app/cheat_fetch.cpp
+	app/cheats.h
 	app/shots.cpp
 	app/boxart.h
 	app/catalog.cpp
@@ -125,6 +128,7 @@ add_library(CemuPS5 STATIC
 	app/report_send.cpp
 	app/compatibility.cpp
 	app/compatibility.h
+	app/compat_fetch.cpp
 	app/covers.cpp
 	app/gameinfo.cpp
 	app/gameinfo.h
@@ -195,6 +199,8 @@ add_library(CemuPS5 STATIC
 	retro/porpoise_disc.h
 	libretro/core.h
 	libretro/cores.cpp
+	libretro/devices.cpp
+	libretro/devices.h
 	libretro/game.cpp
 	libretro/game.h
 	libretro/plays.h
@@ -235,12 +241,14 @@ add_library(CemuPS5 STATIC
 	frontend/shell/settings.cpp
 	frontend/shell/consoles.cpp
 	frontend/shell/porpoise_rows.cpp
+	frontend/shell/cheat_rows.cpp
 	frontend/shell/switch_extras.cpp
 	frontend/shell/setup.cpp
 	frontend/shell/shares.cpp
 	frontend/shell/shell.cpp
 	frontend/shell/shell_internal.h
 	frontend/shell/welcome.cpp
+	frontend/shell/firststart.cpp
 	frontend/shell/reports.cpp
 	frontend/shell/orbit.cpp
 	frontend/shell/timeline.cpp
@@ -327,6 +335,8 @@ set_source_files_properties(
 	app/wiiu_archives.cpp
 	app/netfs.cpp
 	app/boxart.cpp
+	app/cheats.cpp
+	app/cheat_fetch.cpp
 	app/shots.cpp
 	app/saves.cpp
 	app/reorganize.cpp
@@ -343,6 +353,7 @@ set_source_files_properties(
 	retro/porpoise_saves.cpp
 	retro/porpoise_settings.cpp
 	libretro/cores.cpp
+	libretro/devices.cpp
 	libretro/game.cpp
 	libretro/session.cpp
 	eden/launch.cpp
@@ -367,11 +378,13 @@ set_source_files_properties(
 	frontend/shell/settings.cpp
 	frontend/shell/consoles.cpp
 	frontend/shell/porpoise_rows.cpp
+	frontend/shell/cheat_rows.cpp
 	frontend/shell/switch_extras.cpp
 	frontend/shell/setup.cpp
 	frontend/shell/shares.cpp
 	frontend/shell/shell.cpp
 	frontend/shell/welcome.cpp
+	frontend/shell/firststart.cpp
 	frontend/shell/reports.cpp
 	frontend/shell/orbit.cpp
 	frontend/shell/timeline.cpp

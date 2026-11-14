@@ -13,6 +13,7 @@
 
 #include "app/achievements.h"
 #include "app/catalog.h"
+#include "app/compatibility.h"
 #include "app/emulator.h"
 #include "app/file_modes.h"
 #include "app/forwarders.h"
@@ -33,6 +34,7 @@
 #include "frontend/launcher.h"
 #include "retro/library.h"
 #include "retro/launch.h"
+#include "retro/porpoise_settings.h"
 #include "libretro/game.h"
 #include "melonds/library.h"
 #include "melonds/melonds.h"
@@ -103,15 +105,21 @@ extern "C" int32_t sceKernelGetSystemSwVersion(SceKernelSwVersion* version);
 namespace
 {
 	// The session before this one's first crash report (ps5/crash.h, Cemu's handler: boot.prev.log's
-	// first "[crash] " line, without it), or empty when it ended without one
+	// first "[crash] " line, without it), or empty when it ended without one. The GameCube and Wii sides'
+	// program writes its own trace: a crash in it, when it ran after that session, is that game's.
 	std::string LastCrash()
 	{
-		std::ifstream log(ps5paths::Logs() + "/boot.prev.log");
+		const std::string previous = ps5paths::Logs() + "/boot.prev.log";
+		std::ifstream log(previous);
 		std::string line;
 		while (std::getline(log, line))
 			if (line.rfind("[crash] ", 0) == 0)
 				return line.substr(8, 160);
-		return {};
+		struct stat info{};
+		if (stat(previous.c_str(), &info) != 0)
+			return {};
+		return ps5porpoise::LastCrash({ps5porpoise::LogsFolder() + "/trace.txt", ps5paths::SandboxDownload() + "/" + ps5porpoise::kSandboxTrace},
+			(int64_t)info.st_mtime);
 	}
 
 	// The console's firmware, as its settings show it ("11.60"), for the boot log and Diagnostics:
@@ -831,12 +839,15 @@ int main(int argc, char* argv[])
 			reportsFirstLook = false;
 			ps5reports::StartSending();
 		}
+		// how games run (the launcher's badges): the site's newest, fetched once a launch while the launcher is up
+		ps5compat::StartFetch();
 		std::optional<ps5launcher::Choice> choice;
 		const ps5shell::Outcome outcome = ps5shell::Run(settings, status, prepare, choice);
 		const uint64_t stopping = sceKernelGetProcessTime();
 		ps5emu::FinishCoreStart(); // a 3DS or DS game chosen while Cemu's library was still loading waits for it
 		ps5update::Stop(); // nothing of the launcher's runs beside a game
 		ps5reports::StopSending();
+		ps5compat::StopFetch();
 		ps5packs::Stop();
 		ps5mods::Stop();
 		ps5forwarders::Stop();
@@ -895,7 +906,7 @@ int main(int argc, char* argv[])
 		ps5emu::SetExitAfterGame(tile.exitAfterGame && IsTileGame(tile, game));
 		// the side's settings, and the game's own over them
 		const ps5settings::Launcher forGame = ps5settings::ForGame(settings, side, game.titleId);
-		if (settings.games.count(ps5settings::GameKey(side, game.titleId)))
+		if (ps5settings::HasOwn(settings, side, game.titleId))
 			ps5log::Line("[main] {} starts with settings of its own", game.name);
 		// a handheld's touchpad is its touch screen, whatever a Wii U player's click was made earlier on
 		if (choice->system != ps5launcher::System::WiiU)

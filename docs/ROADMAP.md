@@ -23,7 +23,7 @@ has run on a PS5 yet.
    its 16 MiB VMA blocks, its renamed pipeline cache writes). Left: the configure-time files
    (`headless/*.cmake`), the 54 of the 59 core fixes that conflict (the PS5 memory work first), a
    compile, the port's own checks, then the pin in `tools/deps.json` and `patches/eglantine` remade.
-   The proven core (`c8a5c2a`, built and checked on 9 November) stays pinned until then.
+   The port's own core stays pinned until then: EglantinePS5 `972abeb` (10 November, Ocarina of Time into gameplay).
 2. **Translations:** the new strings in all 27 languages; 12 are done (`tools/lang.py check` lists the
    rest).
 3. **One full build**, every step of `.github/workflows/tests.yml`, and the PC preview.
@@ -146,7 +146,13 @@ game's own disc, cartridge or card, as images from a database, instead of box ar
 Wii pages list them too), for what it covers, so the Wii U, the Wii and the GameCube can start there. The
 cartridges and cards of the other systems have a source to find: a database with no account or key first,
 as the screenshots below (`thumbnails.libretro.com` has box art, title screens and snaps, no media). The
-drawn shape stays for a game with no picture.
+drawn shape stays for a game with no picture. Done for the DS, 3DS and Switch cards (GameTDB's), and for the
+libretro sides' cartridges, from the region each game file's name gives: the LaunchBox Games Database's
+"Cart - Front" pictures (no account; `tools/render-carts.py` makes the table, the app fetches the pictures
+from `images.launchbox-app.com`), which also gives those games their years on the ruler; a Game & Watch
+game is its own unit, from the same pictures. Left: the Disk Card, the Satellaview's Memory Pak, the iQue
+Card and VS. boards, which it has few or none of;
+and a drawn Famicom or Super Famicom shape for a Japanese game it has no picture of.
 
 **Orbit's background, the gaps:** the 3DS has no save-state picture yet (its frame needs reading back from
 the GPU), the Wii U and the Switch have no save states to take one from, and Game & Watch has no screenshot
@@ -310,10 +316,12 @@ both patches applying to ES-DE 3.5.0, the glue compiling. Next:
 
 **Moving to Lichii's newest (the owner, 9 November 2026):** see *6.0: Before it ships*, step 1.
 
-**The core is Lichii, as its PS5 port runs it (9 November 2026):** EglantinePS5 at its v1.000.110 line
-(`c8a5c2a`), whose core is zortos293/Lichii at `3140648a` with the port's 59 core patches over it (its
+**The core is Lichii, as its PS5 port runs it (9 November 2026):** EglantinePS5 at its main of 10 November
+(`972abeb`, past v1.000.110), whose core is zortos293/Lichii at `3140648a` with the port's 71 core patches over it (its
 `tools/eglantine-patches`): NUP containers, Ocarina of Time, Mario Kart World's memory work on a PS5 without
-Pro memory, and the JIT's code cache in pieces. The owner asked on 5 November for Lichii's all-in-one
+Pro memory, and the JIT's code cache in pieces. Playtendoh adds one more from upstream Lichii until the port
+has it (`patches/eglantine` 0015, its core patch 0076): Ocarina of Time's helper calls, whose rejected compute
+programs stopped the GPU as the game entered a scene (10 November). The owner asked on 5 November for Lichii's all-in-one
 (`9b1a32dbb1`, 956 commits on); that move was written (patches/eglantine 0010, in the history at 04c38d3) and
 did not configure: the port patches the core by text anchors, and Lichii's rewritten sockets and GPU thread
 moved more than fifteen of them, the multiplayer hardening's thirteen among them. Lichii gains about 200 commits a day, so a newer core comes by moving the port's pin when

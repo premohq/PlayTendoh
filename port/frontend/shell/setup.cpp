@@ -192,6 +192,7 @@ namespace ps5shell
 					count > 0			? TrP(count, "{0} game in {1}", "{0} games in {1}", where) :
 					readable			? TrF("None in {0} yet", where) :
 										  TrF("{0} cannot be read", where);
+				games.games = runtime ? count : 0;
 				games.aboutTitle = TrF("{0} games", SystemName(side));
 				games.about = TrF("Put this system's games in {0}, or choose any folder, such as one on a USB drive. Subfolders are searched too.", folder);
 				m_checks.push_back(games);
@@ -212,6 +213,7 @@ namespace ps5shell
 			Check games{std::string(ps5launcher::SideName(side)) + "-games", gamesTitle};
 			games.action = Tr("Choose a folder");
 			games.state = count > 0 ? 0 : 1;
+			games.games = count;
 			const std::string where = ShortPath(Place(folder), 44);
 			// tr: {1} is a folder
 			games.detail = count > 0 ? TrP(count, "{0} game in {1}", "{0} games in {1}", where) :
@@ -535,7 +537,7 @@ namespace ps5shell
 			const float textWidth = std::min(m_fonts.Width(style, name), 520.0f);
 			const float width = 28 + 30 + 14 + textWidth + 14 + 24 + 26;
 			const Box pill{1920 - kSafeX - width, 132, width, 64};
-			const Box drawn = m_setupOnLanguage ? pill.Scaled(1.03f) : pill;
+			const Box drawn = pill.Scaled(1.0f + 0.03f * FocusMix(FocusKey("setup-language"), m_setupOnLanguage));
 			Glass(canvas, drawn, drawn.h / 2, m_setupOnLanguage ? Surface2() : Surface());
 			canvas.Draw(Icon::Globe, {drawn.x + 28, drawn.CentreY() - 15, 30, 30}, kText);
 			canvas.Text(style, drawn.x + 28 + 30 + 14, drawn.CentreY() - 13, name, kText, textWidth + 1, 1);
