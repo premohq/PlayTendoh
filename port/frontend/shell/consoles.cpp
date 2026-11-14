@@ -28,16 +28,22 @@ namespace ps5shell
 				   (side == System::Switch || side == System::Switch2) ? kNxDefault : kWiiuDefault;
 		}
 
-		// the second colour a controller is drawn in: the Switches' other Joy-Con (the Switch 2's left
-		// rail), the Game Boy's screen
+		// the second colour a controller is drawn in: the Switches' other Joy-Con, the Game Boy's screen
 		uint32_t Second(System side, uint32_t colour)
 		{
 			return side == System::Switch || side == System::Switch2 ? kJoyConBlue : ps5retro::Is((int)side, "gb") ? ui::Mix(colour, 0xffffffff, 0.5f) : colour;
 		}
 	}
 
-	void DrawConsole(Canvas& canvas, System side, float cx, float cy, float s, uint32_t body, uint32_t cut, uint32_t second)
+	void DrawConsole(Canvas& canvas, System side, float cx, float cy, float s, uint32_t body, uint32_t cut, uint32_t second, const ui::Picture* icon)
 	{
+		if (icon && icon->texture)
+		{
+			// white on clear, square, the console about the drawing's width in it
+			const float size = s * 1.06f;
+			canvas.Image(icon->texture, {cx - size / 2, cy - size / 2, size, size}, 0, body);
+			return;
+		}
 		// a shape by its centre, width and height, in the drawing's width (s)
 		auto shape = [&](float x, float y, float w, float h, float r, uint32_t colour) {
 			canvas.Rect({cx + (x - w / 2) * s, cy + (y - h / 2) * s, w * s, h * s}, r * s, colour);
@@ -55,24 +61,10 @@ namespace ps5shell
 			shape(-0.37f, -0.12f, 0.09f, 0.09f, 0.045f, cut);
 			shape(0.37f, -0.12f, 0.09f, 0.09f, 0.045f, cut);
 		}
-		else if (side == System::Switch2)
+		else if (side == System::Switch || side == System::Switch2)
 		{
-			// the Joy-Con 2, its own (the owner's, 2026-11-05): taller, dark, the two colours on the rails
-			// between them (second the left one's, body the right one's), the sticks and the C button
-			const uint32_t grey = ui::Mix(cut, 0xffffffff, 0.3f);
-			shape(-0.25f, 0, 0.36f, 0.98f, 0.18f, grey);
-			shape(-0.15f, 0, 0.16f, 0.98f, 0, grey);
-			shape(0.25f, 0, 0.36f, 0.98f, 0.18f, grey);
-			shape(0.15f, 0, 0.16f, 0.98f, 0, grey);
-			shape(-0.085f, 0, 0.04f, 0.86f, 0.02f, second);
-			shape(0.085f, 0, 0.04f, 0.86f, 0.02f, body);
-			shape(-0.25f, -0.2f, 0.14f, 0.14f, 0.07f, cut);
-			shape(0.25f, 0.16f, 0.14f, 0.14f, 0.07f, cut);
-			shape(0.25f, -0.04f, 0.06f, 0.06f, 0.03f, ui::Mix(grey, 0xffffffff, 0.7f));
-		}
-		else if (side == System::Switch)
-		{
-			// the two Joy-Con, each flat on the side that slides onto the console
+			// the two Joy-Con, each flat on the side that slides onto the console (the Switch 2's too, until
+			// its icon, the Switch's squared, is on the GPU)
 			shape(-0.25f, 0, 0.34f, 0.86f, 0.17f, second);
 			shape(-0.16f, 0, 0.16f, 0.86f, 0, second);
 			shape(0.25f, 0, 0.34f, 0.86f, 0.17f, body);
@@ -236,6 +228,41 @@ namespace ps5shell
 		}
 	}
 
+	void DrawTimelineMark(Canvas& canvas, float cx, float cy, float s, uint32_t body, const uint32_t dots[3])
+	{
+		// the Timeline's ruler in little: its line with a year's tick at each end, and three consoles' dots
+		// on stems of their own heights, as its ruler has them over the years
+		auto shape = [&](float x, float y, float w, float h, float r, uint32_t colour) {
+			canvas.Rect({cx + (x - w / 2) * s, cy + (y - h / 2) * s, w * s, h * s}, r * s, colour);
+		};
+		shape(0, 0.3f, 1.0f, 0.08f, 0.04f, body);
+		shape(-0.46f, 0.36f, 0.06f, 0.2f, 0.03f, body);
+		shape(0.46f, 0.36f, 0.06f, 0.2f, 0.03f, body);
+		constexpr float kX[3] = {-0.27f, 0.02f, 0.3f}, kY[3] = {0.0f, -0.32f, -0.12f};
+		for (int i = 0; i < 3; i++)
+		{
+			shape(kX[i], (kY[i] + 0.3f) / 2, 0.05f, 0.3f - kY[i], 0, body);
+			shape(kX[i], kY[i], 0.24f, 0.24f, 0.12f, dots[i]);
+		}
+	}
+
+	const ui::Picture* Shell::ConsoleIcon(System side, float size)
+	{
+		// RetroArch's XMB Monochrome icons (CC BY 4.0, tools/render-console-icons.py), at 192 and at 64 for
+		// the marks drawn small (the layout's 1920 is the screen's 3840: under 48 wide is under 96 pixels);
+		// the Switch 2's the Switch's with a raised 2, as a square is written; none for a side the set has
+		// no icon of (the Super Game Boy, ...): its drawing stays
+		std::string_view name = side == System::WiiU ? "wiiu" : side == System::Switch ? "switch" : side == System::Switch2 ? "switch2" :
+								side == System::N3ds ? "3ds" : side == System::Nds ? "ds" : "";
+		if (ps5retro::IsRetro((int)side))
+			name = ps5retro::Of((int)side).key;
+		static constexpr std::string_view kDrawn[] = {"sgb", "satellaview", "vs", "ique"};
+		if (name.empty() || std::find(std::begin(kDrawn), std::end(kDrawn), name) != std::end(kDrawn) || m_consoleIcons.empty())
+			return nullptr;
+		const ui::Picture& picture = m_images->Get(m_consoleIcons + "/" + std::string(name) + (size < 48 ? "-small.png" : ".png"));
+		return picture.texture ? &picture : nullptr;
+	}
+
 	void Shell::DrawMark(Canvas& canvas, float cx, float cy, float radius)
 	{
 		// a dark disc on every theme, every console's controller in a ring on it in the bar's order from
@@ -252,9 +279,10 @@ namespace ps5shell
 			const System side = BarSide(i);
 			const float angle = kTau * i / kSides - kTau / 4;
 			const uint32_t colour = side == m_side ? Vivid(side) : ui::Mix(Vivid(side), kGroundLow, 0.25f);
-			DrawConsole(canvas, side, cx + std::cos(angle) * ring, cy + std::sin(angle) * ring, size, colour, kGround, second(side, colour));
+			DrawConsole(canvas, side, cx + std::cos(angle) * ring, cy + std::sin(angle) * ring, size, colour, kGround, second(side, colour),
+				ConsoleIcon(side, size));
 		}
-		DrawConsole(canvas, m_side, cx, cy, radius * 0.72f, Vivid(m_side), kGround, second(m_side, Vivid(m_side)));
+		DrawConsole(canvas, m_side, cx, cy, radius * 0.72f, Vivid(m_side), kGround, second(m_side, Vivid(m_side)), ConsoleIcon(m_side, radius * 0.72f));
 	}
 
 	void Shell::DrawDial(Canvas& canvas)
@@ -264,7 +292,8 @@ namespace ps5shell
 		// the pointer, at three o'clock; its NES pad in the middle is Home
 		constexpr uint32_t kGround = 0xff2b1d16, kGroundLow = 0xff1d130e, kHub = 0xff231711; // #161d2b, #0e131d, #111723
 		constexpr float cx = 90, cy = 540, radius = 500, ring = 350, hub = 238;
-		int order[kSides];
+		// and the Timeline, a stop of its own after the last side (6.0)
+		int order[kSides + 1];
 		int shown = 0, open = 0;
 		for (int i = 0; i < kSides; i++)
 		{
@@ -274,6 +303,9 @@ namespace ps5shell
 				open = shown;
 			order[shown++] = i;
 		}
+		if (m_timelineStop)
+			open = shown;
+		order[shown++] = kTimelineBar;
 		if (m_dialTurn < 0)
 			m_dialTurn = (float)open;
 		const float way = std::remainder((float)open - m_dialTurn, (float)shown); // the short way round
@@ -290,21 +322,32 @@ namespace ps5shell
 			const float x = cx + std::cos(angle) * ring, y = cy + std::sin(angle) * ring;
 			if (x < -size || y < -size || y > 1080 + size)
 				continue;
+			if (order[k] == kTimelineBar)
+			{
+				uint32_t dots[3];
+				TimelineStopColours(dots);
+				const bool lit = m_timelineStop && !m_orbitHome;
+				for (uint32_t& dot : dots)
+					dot = lit ? dot : ui::Mix(dot, kGroundLow, 0.3f);
+				const uint32_t ink = lit ? 0xffffffff : ui::Mix(0xffffffff, kGroundLow, 0.45f);
+				DrawTimelineMark(canvas, x, y, size * (lit ? 1.15f : 1.0f), ink, dots);
+				continue;
+			}
 			const System side = BarSide(order[k]);
-			const bool lit = side == m_side && !m_orbitHome;
+			const bool lit = side == m_side && !m_orbitHome && !m_timelineStop;
 			const uint32_t colour = lit ? Vivid(side) : ui::Mix(Vivid(side), kGroundLow, 0.3f);
-			DrawConsole(canvas, side, x, y, size * (lit ? 1.15f : 1.0f), colour, kGround, Second(side, colour));
+			DrawConsole(canvas, side, x, y, size * (lit ? 1.15f : 1.0f), colour, kGround, Second(side, colour), ConsoleIcon(side, size));
 		}
 		const Box middle{cx - hub, cy - hub, hub * 2, hub * 2};
 		canvas.Rect(middle, hub, kHub);
 		canvas.Ring(middle, hub, 1.5f, 0x12ffffff);
 		const uint32_t nes = Vivid(System::Nes);
-		DrawConsole(canvas, System::Nes, cx, cy, 360, nes, kGround, Second(System::Nes, nes));
+		DrawConsole(canvas, System::Nes, cx, cy, 360, nes, kGround, Second(System::Nes, nes), ConsoleIcon(System::Nes, 360));
 		if (m_orbitHome)
 			canvas.Ring(middle.Scaled(1.04f), hub * 1.04f, 3, nes);
 		else
 		{
-			const uint32_t accent = Vivid(m_side);
+			const uint32_t accent = m_timelineStop ? 0xffffffff : Vivid(m_side);
 			const Box pointer{cx + ring - 68, cy - 68, 136, 136};
 			canvas.Glow(pointer, 68, 40, ui::SetAlpha(accent, 0.33f));
 			canvas.Ring(pointer, 68, 3, accent);
@@ -325,13 +368,11 @@ namespace ps5shell
 	void Shell::DrawBareConsole(Canvas& canvas, System side, const Box& box, bool open)
 	{
 		// a side in the bar's carousel (6.0): only its controller as the mark draws it, on the bar's own
-		// ground; the open side's in its colour, the others in one quiet ink. The Switch 2's stays dark:
-		// its Joy-Con 2 are drawn in its cut colour, the mark's ground
-		constexpr uint32_t kDark = 0xff2b1d16; // #161d2b
+		// ground; the open side's in its colour, the others in one quiet ink
 		const uint32_t quiet = ui::Mix(kText, kInk1, 0.55f) | 0xff000000;
 		const uint32_t colour = open ? Vivid(side) : quiet;
-		const uint32_t cut = side == System::Switch2 ? (open ? kDark : quiet) : kInk1 | 0xff000000;
-		DrawConsole(canvas, side, box.CentreX(), box.CentreY(), box.w, colour, cut, open ? Second(side, colour) : quiet);
+		const uint32_t cut = kInk1 | 0xff000000;
+		DrawConsole(canvas, side, box.CentreX(), box.CentreY(), box.w, colour, cut, open ? Second(side, colour) : quiet, ConsoleIcon(side, box.w));
 	}
 
 	// -- the later consoles' motifs: each one's own, in its colour, on the bubbles' places and speeds ----------

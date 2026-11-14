@@ -18,6 +18,7 @@
 
 #include "lang.h"
 
+#include <cstddef>
 #include <cstdint>
 #include <iterator>
 #include <map>
@@ -51,6 +52,10 @@ namespace ps5ingame3ds
 		// a libretro core's (Console::Retro): the picture's size on the TV and its shape (kPictureSizes, kPictureShapes)
 		int pictureSize = 0;
 		int pictureShape = 0;
+		int controller = 0; // the Buttons page's Controller row: SetControllers' choices, 0 Auto (for this game only)
+		// the menu's Settings for this game only: on, the game keeps settings of its own and what the menu
+		// changes is its own (ps5settings::SetGameOwn); off, it follows its system's
+		bool gameOnly = false;
 		// the console's buttons on the DualSense where not the default (ps5settings::N3ds::buttons): the menu's
 		// Buttons change them, and the A and B row's swap is in them
 		std::map<std::string, std::string> buttons;
@@ -61,11 +66,14 @@ namespace ps5ingame3ds
 	{
 		N3ds,  // Azahar's
 		Nds,   // melonDS's
-		Retro, // a libretro core's (port/libretro): one screen, the DS's rows that apply to it, no cheats
+		Retro, // a libretro core's (port/libretro): one screen, the DS's rows that apply to it, cheats where its core takes them
 	};
 	// tr: how the DS's screens are scaled to the TV: the filters' names
-	constexpr const char* kScreenFilters[] = {ps5lang::TrMark("Sharp"), ps5lang::TrMark("Smooth"), ps5lang::TrMark("Square pixels")};
+	// the last two, a tube TV's, for the libretro consoles only (port/melonds/shaders/screens.frag)
+	constexpr const char* kScreenFilters[] = {ps5lang::TrMark("Sharp"), ps5lang::TrMark("Smooth"), ps5lang::TrMark("Square pixels"),
+		ps5lang::TrMark("CRT"), ps5lang::TrMark("Curved CRT")};
 	constexpr int kScreenFilterCount = (int)std::size(kScreenFilters);
+	constexpr int kDsScreenFilterCount = 3;
 	// tr: the DS's (and the 3DS's) two screens turned together, a quarter turn at a time, for the games held on their side:
 	// upright, a quarter turn clockwise, upside down, a quarter turn counterclockwise
 	constexpr const char* kRotations[] = {ps5lang::TrMark("Upright"), ps5lang::TrMark("90° right"), ps5lang::TrMark("Upside down"),
@@ -105,6 +113,20 @@ namespace ps5ingame3ds
 	// The menu's top, once: GameTDB's facts on a line ("Nintendo  /  2015"), and the TGA of the
 	// game's box art or icon (empty: none).
 	void SetGame(const std::string& details, const std::string& coverPath);
+	// The loading screen (loading_screen.h, every side's), for a 3DS game: while Azahar makes the game's
+	// cached shaders ready before its first step, port/azahar/core.cpp presents a frame now and then
+	// and the screen is drawn in it, saying what Azahar is doing, done of of (of 0: not counted).
+	// EndLoading as the game starts: the screen fades over its first frames. Start and SetGame first.
+	enum class LoadingStep
+	{
+		Loading,
+		Shaders,
+		Pipelines,
+		Starting,
+	};
+	void SetLoading(LoadingStep step, size_t done = 0, size_t of = 0);
+	void EndLoading();
+
 	// Touchpad click + Options.
 	void ToggleMenu();
 	bool MenuOpen();
@@ -138,6 +160,8 @@ namespace ps5ingame3ds
 	// what the menu asked for, once.
 	void SetExtras(const std::vector<std::string>& amiibo, const std::vector<std::pair<std::string, bool>>& cheats);
 	void SetExtrasMessage(const std::string& message);
+	// A libretro core's game: whether the page has Cheats (its core takes them); after Start
+	void SetCheatsShown(bool shown);
 	struct ExtrasRequest
 	{
 		enum Kind
@@ -187,6 +211,20 @@ namespace ps5ingame3ds
 	bool TakeCoreOption(std::string& key, int& index);
 	// The Reset tile (a console that can be reset): asked for once
 	bool TakeResetRequest();
+	// A libretro game's special controllers (port/libretro/devices.h), on its Buttons page: the Controller
+	// row's choices (English; the first is Auto, the second the pad; none: no row), what Auto plugged in
+	// (English; empty: the pad), what the DualSense does with the controller in use (what, and which input,
+	// English), and whether the game reads the DualSense's motion (a row to level it, asked for once). From
+	// the game's loop.
+	struct Controllers
+	{
+		std::vector<std::string> choices;
+		std::string found;
+		std::vector<std::pair<std::string, std::string>> mapping;
+		bool motion = false;
+	};
+	void SetControllers(const Controllers& controllers);
+	bool TakeLevelRequest();
 
 	void SetBorder(int theme, std::vector<uint8_t> rgba, int width, int height);
 	// The theme's picture from the app's assets/borders (tools/render-borders.py), as SetBorder takes it

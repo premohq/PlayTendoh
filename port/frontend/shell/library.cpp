@@ -50,7 +50,7 @@ namespace ps5shell
 			if (!report)
 				return 4;
 			const std::string kind = ps5compat::Kind(report->status);
-			return report->status == "Playable" ? 0 : kind == "good" ? 0 : kind == "warn" ? 1 : report->status == "Crashes" ? 2 : 3;
+			return kind == "good" ? 0 : kind == "warn" ? 1 : kind == "bad" ? 2 : 3;
 		}
 
 		// a game's facts in a line, the empty ones left out
@@ -386,6 +386,11 @@ namespace ps5shell
 
 	void Shell::LibraryUpdate(const ui::Press& press)
 	{
+		if (m_timelineStop)
+		{
+			TimelineStopUpdate(press); // the console lists' Timeline (timeline.cpp)
+			return;
+		}
 		if (Orbit() && OrbitUpdate(press))
 			return;
 		const Button b = press.button;
@@ -589,46 +594,6 @@ namespace ps5shell
 					FocusBar();
 				break;
 			case Button::Down: move(at + 1); break;
-			case Button::L2:
-			case Button::R2:
-			{
-				// to the previous or next group: letter, year or status, as sorted
-				const int sort = m_settings.ui.librarySort[side];
-				auto group = [&](int index) -> int {
-					if (index < offset)
-						return -1;
-					const Game& game = m_games[m_shelf[index - offset]];
-					if (sort == 2)
-						return game.year;
-					if (sort == 3)
-						return StatusRank(game.report);
-					if (sort == 0)
-						return (index - offset) / 10;
-					const char c = game.sortName.empty() ? '#' : game.sortName[0];
-					return std::isalpha((unsigned char)c) ? c : '#';
-				};
-				const int current = group(at);
-				int to = at;
-				if (b == Button::R2)
-				{
-					while (to < total - 1 && group(to) == current)
-						to++;
-				}
-				else
-				{
-					while (to > 0 && group(to - 1) == current)
-						to--;
-					if (to == at && to > 0)
-					{
-						const int previous = group(to - 1);
-						to--;
-						while (to > 0 && group(to - 1) == previous)
-							to--;
-					}
-				}
-				move(to);
-				break;
-			}
 			default: break;
 			}
 		}
@@ -645,6 +610,11 @@ namespace ps5shell
 
 	void Shell::LibraryDraw(Canvas& canvas)
 	{
+		if (m_timelineStop)
+		{
+			TimelineStopDraw(canvas); // the console lists' Timeline (timeline.cpp)
+			return;
+		}
 		if (Orbit())
 		{
 			OrbitDraw(canvas);
@@ -721,7 +691,10 @@ namespace ps5shell
 			canvas.PushClip({0, 160, rowRight + 8, kRecentTop + kRecentHeight + 40 - 160});
 			float x = kSafeX - m_recentScroll.value;
 			int lastGroup = -1;
-			Box focusedBox{};
+			// the game in focus lifted from its bottom left, so it rises clear of its neighbours, gliding up as
+			// the focus arrives and down as it leaves (6.0; both jumped before)
+			const float most = m_settings.ui.reduceMotion ? 0.0f : 0.05f;
+			std::vector<std::pair<float, std::pair<int, Box>>> raised;
 			for (int i = 0; i < (int)m_recent.size(); i++)
 			{
 				Game& g = m_games[m_recent[i]];
@@ -733,22 +706,21 @@ namespace ps5shell
 					lastGroup = group;
 				}
 				const bool focused = !m_onBar && m_libraryZone == 0 && i == m_recentIndex;
+				const float mix = FocusMix(FocusKey(g.entry.game.path.string(), (uint64_t)m_side + 101), focused);
 				if (box.x < 1920)
 				{
-					if (focused)
-						focusedBox = box;
+					const float lift = 1 + most * mix;
+					const Box drawn{box.x, box.Bottom() - box.h * lift, box.w * lift, box.h * lift};
+					if (mix > 0.002f || focused)
+						raised.push_back({mix + (focused ? 1 : 0), {i, drawn}});
 					else
-						DrawCover(canvas, g, box, false, 0);
+						DrawCover(canvas, g, drawn, false, 0, true);
 				}
-				x = box.Right() + kRecentGap + (focused ? 12 : 0);
+				x = box.Right() + kRecentGap + 12 * mix;
 			}
-			if (focusedBox.w > 0)
-			{
-				// lifted from its bottom left, so it rises clear of its neighbours
-				const float lift = m_settings.ui.reduceMotion ? 0.0f : 0.05f;
-				const Box lifted{focusedBox.x, focusedBox.Bottom() - focusedBox.h * (1 + lift), focusedBox.w * (1 + lift), focusedBox.h * (1 + lift)};
-				DrawCover(canvas, m_games[m_recent[m_recentIndex]], lifted, true, 0);
-			}
+			std::sort(raised.begin(), raised.end(), [](const auto& a, const auto& b) { return a.first < b.first; });
+			for (const auto& [mix, which] : raised)
+				DrawCover(canvas, m_games[m_recent[which.first]], which.second, !m_onBar && m_libraryZone == 0 && which.first == m_recentIndex, 0, true);
 			canvas.PopClip();
 			// the panel: the game's console, its name, play time, when it was last played, its update and
 			// DLC, how it runs, and what Cross and Options do with it

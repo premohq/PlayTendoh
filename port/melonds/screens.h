@@ -60,9 +60,11 @@ namespace ps5melonds::screens
 		kSharp,	 // each DS pixel a solid square, its edges blended over one TV pixel
 		kSmooth, // bilinear
 		kPixels, // the nearest DS pixel
+		kCrt,	 // a tube TV's lines and grille (a libretro side's picture)
+		kCrtCurved,
 		kFilterCount,
 	};
-	constexpr const char* kFilterNames[kFilterCount] = {"Sharp", "Smooth", "Square pixels"};
+	constexpr const char* kFilterNames[kFilterCount] = {"Sharp", "Smooth", "Square pixels", "CRT", "Curved CRT"};
 
 	struct Frame
 	{
@@ -76,6 +78,7 @@ namespace ps5melonds::screens
 		bool cursor = false;	   // the touch cursor, over the bottom screen
 		float cursorX = 0, cursorY = 0; // 0 to 1 across it, as the TV shows it
 		bool cursorOnTop = false;  // over the top screen instead: the bottom one is not shown and touched all the same
+		bool cursorOnPicture = false; // over a libretro core's picture instead (a light gun's crosshair)
 		// A libretro core's one picture (port/libretro), in place of the DS's screens: pictureWidth x
 		// pictureHeight of kPictureMax square at most, 32 bits a pixel as the screens'; null: the one shown
 		// last. Shown at pictureRect with the filter, when that is not empty.
@@ -83,7 +86,8 @@ namespace ps5melonds::screens
 		uint32_t pictureWidth = 0, pictureHeight = 0;
 		Rect pictureRect;
 	};
-	constexpr uint32_t kPictureMax = 1024;
+	// 2048: a Mesen HD pack draws the NES up to eight times its size (256 x 240 at 8x is 2048 x 1920)
+	constexpr uint32_t kPictureMax = 2048;
 
 	// The device and the swapchain on VideoOut. False, with the reason, when they cannot be made (what
 	// was made is destroyed again). who: the boot log's word for it ("ds", "retro").

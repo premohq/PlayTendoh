@@ -30,7 +30,8 @@
 // that does not fit), PREVIEW_SYSTEM_LANGUAGE the PS5's (its number: 4 is German, 0 Japanese).
 // PREVIEW_WHATSNEW starts as after an update (Make it yours, with what the version brings); PREVIEW_THEME
 // names a theme (ui/theme.h's id: link-jack, midnight...); PREVIEW_SIDES the sides shown (1 Wii U, 2 3DS, 4 DS);
-// PREVIEW_FILTERS turns the Library's filters' row on.
+// PREVIEW_FILTERS turns the Library's filters' row on; PREVIEW_LARGER_TEXT, PREVIEW_REDUCE_MOTION and
+// PREVIEW_HIGH_CONTRAST turn on Settings > Launcher's accessibility rows.
 
 #include "console.h"
 
@@ -43,8 +44,10 @@
 #include "azahar/library.h"
 #include "melonds/library.h"
 #include "eden/library.h"
+#include "retro/library.h"
 #include "frontend/shell.h"
 #include "libretro/game.h"
+#include "retro/library.h"
 #include "stream/stream.h"
 
 #include <algorithm>
@@ -93,7 +96,8 @@ int main(int argc, char* argv[])
 	// tiles, Eden's launch picture)
 	ps5paths::detail::AppDirSlot() = preview::output + "/app";
 	ps5gameinfo::SetFolder("port/app/gametdb"); // the repository's: the preview runs from its root
-	ps5compat::SetPath("docs/COMPATIBILITY.md");
+	// how games run: the feed preview-shell.sh made from the list and a few made-up reports (no fetch)
+	ps5compat::SetPaths(preview::output + "/compatibility.json", "");
 	if (std::getenv("PREVIEW_UPDATE"))
 		ps5update::Start(); // as the app's check finding a newer release
 	preview::LoadScript(argv[2]);
@@ -102,6 +106,9 @@ int main(int argc, char* argv[])
 	settings.gamesFolder = argv[3];
 	settings.n3ds.gamesFolder = argv[4];
 	settings.nds.gamesFolder = argv[5];
+	// the other sides' games in the games folder's folder of their key (gba/: preview-shell.sh puts a few there)
+	for (size_t i = 0; i < ps5retro::kSystems.size(); i++)
+		settings.retro[i].gamesFolder = std::string(argv[3]) + "/" + std::string(ps5retro::kSystems[i].key);
 	if (!std::getenv("PREVIEW_FIRST"))
 	{
 		// earlier sessions: the side last used, the games last played, the counts their scans saved
@@ -124,12 +131,22 @@ int main(int argc, char* argv[])
 		settings.nx.recent = {0x0100000000010000, 0x0100152000022000};
 		settings.nx.gameCount = 5;
 	}
+	if (std::getenv("PREVIEW_BOXART3D"))
+		settings.ui.boxArt3d = true;
 	if (std::getenv("PREVIEW_REMOTE"))
 		settings.remoteScreen = true;
 	if (std::getenv("PREVIEW_FILTERS"))
 		settings.ui.libraryFilters = true;
+	if (std::getenv("PREVIEW_NO_BADGES"))
+		settings.ui.compatBadges = false; // Settings > Launcher > How games run, off
 	if (const char* theme = std::getenv("PREVIEW_THEME"))
 		settings.ui.theme = theme;
+	if (std::getenv("PREVIEW_LARGER_TEXT"))
+		settings.ui.largerText = true;
+	if (std::getenv("PREVIEW_REDUCE_MOTION"))
+		settings.ui.reduceMotion = true;
+	if (std::getenv("PREVIEW_HIGH_CONTRAST"))
+		settings.ui.highContrast = true;
 	// the side it opens on: wiiu, 3ds, ds or switch
 	if (const char* side = std::getenv("PREVIEW_SIDE"))
 		settings.ui.lastSide = side;
@@ -161,6 +178,8 @@ int main(int argc, char* argv[])
 			ps5melonds::StartScan(settings.nds.gamesFolder);
 		else if (system == ps5launcher::System::Switch)
 			ps5eden::StartScan(settings.nx.gamesFolder);
+		else if (ps5retro::IsRetro((int)system)) // as main_ps5.cpp's: the side's folder looked through
+			ps5retro::StartScan((int)system, settings.retro[ps5retro::Slot((int)system)].gamesFolder);
 		else
 			status.coreReady = true;
 	}, choice);

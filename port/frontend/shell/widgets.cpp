@@ -76,16 +76,25 @@ namespace ps5shell
 		if (asked)
 		{
 			const float target[5] = {m_ringBox.x, m_ringBox.y, m_ringBox.w, m_ringBox.h, m_ringRadius};
-			// a new place: the lens lands with a small settle, so a step is seen to arrive
-			if (m_ringShown && (std::fabs(target[0] - m_ring[0].target) > 1 || std::fabs(target[1] - m_ring[1].target) > 1) &&
-				!m_settings.ui.reduceMotion)
+			// a step (a press this frame or the last): the lens glides from where it is to the new place,
+			// with a small settle as it lands, so a step is seen to arrive (not for a held direction's
+			// repeats, which would throb). Any other move is the page under the focus moving (a list
+			// scrolling, a screen sliding in, a highlight gliding): the lens is carried with it, as if on it,
+			// and only what was left of a glide goes on. (It used to chase those as well, a frame behind the
+			// whole time a list scrolled, and its settle came after the scroll had stopped.)
+			const bool step = m_sincePress <= 1;
+			const bool moved = std::fabs(target[0] - m_ring[0].target) > 1 || std::fabs(target[1] - m_ring[1].target) > 1;
+			if (m_ringShown && step && moved && !m_pressRepeat && !m_settings.ui.reduceMotion)
 				m_ringPulse = 1.0f;
 			for (int i = 0; i < 5; i++)
 			{
 				if (!m_ringShown)
 					m_ring[i].Snap(target[i]);
+				else if (!step)
+					m_ring[i].value += target[i] - m_ring[i].target;
 				m_ring[i].target = target[i];
 				m_ring[i].omega = omega;
+				m_ring[i].damping = m_settings.ui.reduceMotion ? 1.0f : kFocusDamping;
 			}
 			m_ringShown = true;
 		}
@@ -98,9 +107,16 @@ namespace ps5shell
 		for (auto& spring : m_ring)
 			spring.Update(m_dt);
 		m_ringPulse = std::max(0.0f, m_ringPulse - m_dt * 5.0f);
-		// out a few pixels as it lands, then back: sin over the pulse's 0.2 s
-		const float settle = 3.0f * std::sin(m_ringPulse * 3.14159265f);
-		const Box box = Box{m_ring[0].value, m_ring[1].value, m_ring[2].value, m_ring[3].value}.Inset(-settle);
+		// Cross on what has the focus: the lens presses in and springs back, at once, before whatever it
+		// opens arrives (as tvOS's focused items answer a click)
+		m_ringPress.target = 0;
+		m_ringPress.omega = 28;
+		m_ringPress.damping = 0.55f;
+		m_ringPress.Update(m_dt);
+		// out a few pixels as it lands, then back: over the pulse's 0.2 s, eased so it swells and settles
+		// rather than bouncing
+		const float settle = 2.5f * std::sin(ui::ease::CubicOut(1 - m_ringPulse) * 3.14159265f) * (m_ringPulse > 0 ? 1.0f : 0.0f);
+		const Box box = Box{m_ring[0].value, m_ring[1].value, m_ring[2].value, m_ring[3].value}.Inset(-settle + m_ringPress.value);
 		const float radius = m_ring[4].value;
 		canvas.PushAlpha(m_ringAlpha);
 		// the glow in the element's own colour, breathing (±6 % over 2.4 s) while the focus rests
@@ -132,23 +148,89 @@ namespace ps5shell
 		return ui::Luminance(kText) < 0.5f;
 	}
 
+	uint64_t Shell::FocusKey(std::string_view what, uint64_t salt)
+	{
+		// FNV-1a
+		uint64_t hash = 14695981039346656037ull ^ (salt * 1099511628211ull);
+		for (char c : what)
+			hash = (hash ^ (uint8_t)c) * 1099511628211ull;
+		return hash;
+	}
+
+	float Shell::FocusMix(uint64_t key, bool focused)
+	{
+		if (m_settings.ui.reduceMotion)
+			return focused ? 1.0f : 0.0f;
+		// the same key asked twice in a frame (two buttons named alike): the second is a part of its own
+		auto at = m_focusLooks.find(key);
+		while (at != m_focusLooks.end() && at->second.frame == m_frames)
+			at = m_focusLooks.find(key = key * 1099511628211ull + 1);
+		const bool fresh = at == m_focusLooks.end();
+		if (fresh)
+			at = m_focusLooks.try_emplace(key).first;
+		FocusLook& look = at->second;
+		// what is first seen unfocused is so at once; first seen focused, it grows in (a screen opening on it)
+		if (fresh && !focused)
+			look.mix.Snap(0);
+		look.mix.target = focused ? 1.0f : 0.0f;
+		look.mix.omega = kFocusOmega * 1.1f;
+		look.mix.Update(m_dt);
+		look.frame = m_frames;
+		// past its ends, no further: a spring's tail rounds into place, nothing grows beyond its focused size
+		return std::clamp(look.mix.value, 0.0f, 1.0f);
+	}
+
+	void Shell::GlassBackdrop(Canvas& canvas, int layer)
+	{
+		if (m_settings.ui.highContrast)
+			return; // high contrast's surfaces are opaque
+		canvas.Backdrop(layer);
+		m_panes.clear();
+	}
+
 	void Shell::Glass(Canvas& canvas, const Box& box, float radius, uint32_t fill, float shine)
 	{
-		canvas.Rect(box, radius, fill);
 		if (m_settings.ui.highContrast)
 		{
+			canvas.Rect(box, radius, fill);
 			canvas.Ring(box, radius, 1.5f, kGlassEdge);
 			return;
 		}
 		const bool light = LightGround();
+		// 6.0's liquid glass, on every screen: the backdrop under the pane blurred, bent at its rim as a thick
+		// lens bends it, lit along the edge facing the light, shaded toward legibility, its fill laid over as a
+		// tint. Glass on glass is not glass again (a button on a sheet, a row on a card): the fill alone, on
+		// the pane under it, as Apple's material rules have it
+		const Box placed = canvas.Placed(box);
+		const bool onGlass = std::any_of(m_panes.begin(), m_panes.end(), [&](const Box& pane) {
+			const float w = std::min(pane.Right(), placed.Right()) - std::max(pane.x, placed.x);
+			const float h = std::min(pane.Bottom(), placed.Bottom()) - std::max(pane.y, placed.y);
+			// on it: mostly inside a pane at least its size (a smaller card peeking out under it is not under it)
+			return w > 0 && h > 0 && w * h > placed.w * placed.h * 0.6f && pane.w * pane.h >= placed.w * placed.h;
+		});
+		if (canvas.HasBackdrop() && !onGlass)
+		{
+			m_panes.push_back(placed);
+			Canvas::GlassLook look;
+			look.vibrancy = kGlassVibrancy;
+			// the rim's lens no wider than its corner allows, so a small pill bends at its ends and not across
+			look.rim = std::min(kGlassRim, std::max(6.0f, std::min(radius, std::min(box.w, box.h) * 0.5f)));
+			look.bend = kGlassBend * std::min(1.0f, look.rim / kGlassRim);
+			look.light = kGlassLight * std::min(1.0f, shine);
+			look.dispersion = kGlassDispersion;
+			look.shade = light ? kGlassShadeLight : kGlassShadeDark;
+			canvas.Frost(box, radius, fill, look);
+		}
+		else
+			canvas.Rect(box, radius, fill);
 		// light caught across the top, fading by the middle
-		canvas.LinearGradient(box, radius, ui::SetAlpha(0xffffffff, (light ? 0.42f : 0.10f) * shine), 0x00ffffff, box.x, box.y,
+		canvas.LinearGradient(box, radius, ui::SetAlpha(0xffffffff, (light ? 0.30f : 0.07f) * shine), 0x00ffffff, box.x, box.y,
 			box.x + box.w * 0.18f, box.y + std::min(box.h, 220.0f));
 		// a faint shade at the foot, so it sits on what is behind
-		canvas.LinearGradient(box, radius, 0x00000000, ui::SetAlpha(0xff000000, light ? 0.035f : 0.10f), box.x, box.Bottom() - std::min(box.h, 160.0f),
+		canvas.LinearGradient(box, radius, 0x00000000, ui::SetAlpha(0xff000000, light ? 0.03f : 0.08f), box.x, box.Bottom() - std::min(box.h, 160.0f),
 			box.x, box.Bottom());
 		// the edge: the whole of it faint, its top bright, as glass catches the light
-		canvas.Ring(box, radius, 1.0f, light ? ui::SetAlpha(0xff000000, 0.07f) : ui::SetAlpha(0xffffffff, 0.07f));
+		canvas.Ring(box, radius, 1.0f, light ? ui::SetAlpha(0xff000000, 0.06f) : ui::SetAlpha(0xffffffff, 0.08f));
 		canvas.PushClip({box.x - 2, box.y - 2, box.w + 4, std::min(box.h * 0.45f, radius * 0.8f + 4)});
 		canvas.Ring(box, radius, 1.5f, ui::SetAlpha(0xffffffff, (light ? 0.95f : 0.30f) * std::min(1.0f, shine)));
 		canvas.PopClip();
@@ -171,9 +253,11 @@ namespace ps5shell
 		const float text = room > 0 ? std::min(m_fonts.Width(style, label), room) : m_fonts.Width(style, label);
 		const float width = pad * 2 + text + (withIcon ? 28 + 14 : 0);
 		Box box{x, y, width, height};
-		const Box drawn = focused ? box.Scaled(1.04f) : box;
-		if (focused)
-			canvas.Shadow(drawn, height / 2, 18, 30, 0x73000000);
+		// grown a little with the focus, and lifted on its shadow, gliding there and back
+		const float mix = FocusMix(FocusKey(label, (uint64_t)icon + 1), focused);
+		const Box drawn = box.Scaled(1.0f + 0.04f * mix);
+		if (mix > 0.01f)
+			canvas.Shadow(drawn, height / 2, 18 * mix, 30, ui::WithAlpha(0x73000000, mix));
 		if (primary)
 			canvas.Rect(drawn, height / 2, kText);
 		else
@@ -197,7 +281,7 @@ namespace ps5shell
 	Box Shell::IconButton(Canvas& canvas, float x, float y, Icon icon, bool focused, float size)
 	{
 		Box box{x, y, size, size};
-		const Box drawn = focused ? box.Scaled(1.04f) : box;
+		const Box drawn = box.Scaled(1.0f + 0.04f * FocusMix(FocusKey("icon", (uint64_t)icon + 1), focused));
 		Glass(canvas, drawn, size / 2, Surface2());
 		canvas.Draw(icon, drawn.Inset(size * 0.3f), kText);
 		if (focused)
@@ -246,17 +330,63 @@ namespace ps5shell
 		canvas.Text(block, box.x + box.w * 0.09f, box.Bottom() - box.w * 0.09f - block.height, 0xffffffff); // on the cover: white, whatever the theme
 	}
 
-	void Shell::DrawCover(Canvas& canvas, Game& game, const Box& box, bool focused, float lift)
+	void Shell::StatusBadge(Canvas& canvas, const Game& game, const Box& drawn, float top)
 	{
-		const Box drawn = box.Scaled(1.0f + lift);
+		if (!game.report || drawn.w < 100)
+			return;
+		const std::string kind = ps5compat::Kind(game.report->status);
+		if (kind.empty())
+			return;
+		// how it runs, in the cover's top right corner: a dark disc whatever the theme (it sits on a picture,
+		// as the name on a card does), the status's colour and mark in it, the game page's Check and Warning
+		// (and a dash for Not playable), so it reads without its colour too
+		const float size = std::clamp(drawn.w * 0.14f, 30.0f, 40.0f), inset = std::clamp(drawn.w * 0.04f, 8.0f, 14.0f);
+		const Box disc{drawn.Right() - inset - size, drawn.y + top + inset, size, size};
+		canvas.Shadow(disc, size * 0.5f, 3, 8, 0x66000000);
+		canvas.Rect(disc, size * 0.5f, 0xd914161a);
+		canvas.Ring(disc, size * 0.5f, 1.5f, ui::SetAlpha(KindColour(kind), 0.55f));
+		const float mark = size * 0.62f;
+		canvas.Draw(kind == "good" ? Icon::Check : kind == "warn" ? Icon::Warning : Icon::Dash,
+			{disc.CentreX() - mark * 0.5f, disc.CentreY() - mark * 0.5f, mark, mark}, Lighter(KindColour(kind), 0.2f));
+	}
+
+	void Shell::DrawCover(Canvas& canvas, Game& game, const Box& box, bool focused, float lift, bool status)
+	{
 		const ui::Picture& picture = Cover(game);
+		Box drawn = box.Scaled(1.0f + lift);
+		// box art whole, never cut to the slot's shape: as wide or as tall as the slot lets it, on its floor
+		if (picture.texture && picture.width > 0 && picture.height > 0)
+		{
+			const float aspect = (float)picture.width / picture.height;
+			if (drawn.w > drawn.h * aspect)
+			{
+				const float w = drawn.h * aspect;
+				drawn.x += (drawn.w - w) * 0.5f;
+				drawn.w = w;
+			}
+			else
+			{
+				const float h = drawn.w / aspect;
+				drawn.y += drawn.h - h;
+				drawn.h = h;
+			}
+			// as a box from a shelf's size up (a list's small cover stays flat: its spine would be a hairline)
+			if (m_settings.ui.boxArt3d && box.w >= 100)
+			{
+				DrawBox3d(canvas, picture, m_images->Get(ps5boxart::SpinePath(game.boxArt)), drawn, focused,
+					game.entry.ambient[0] ? game.entry.ambient[0] : picture.ambient[0]);
+				if (status)
+					StatusBadge(canvas, game, drawn, drawn.h * 0.07f); // under the front's top, which falls toward its far edge
+				return;
+			}
+		}
 		uint32_t glow = game.entry.ambient[0] ? game.entry.ambient[0] : picture.ambient[0];
 		if (!glow)
 			glow = Accent();
 		glow = ui::Mix(glow, 0xffffffff, 0.25f) | 0xff000000;
 		canvas.Shadow(drawn, kRadiusCover, focused ? 26.0f : 12.0f, focused ? 60.0f : 30.0f, focused ? 0x99000000 : 0x73000000);
 		if (picture.texture)
-			canvas.ImageCover(picture.texture, picture.width, picture.height, drawn, kRadiusCover, 0xffffffff, 0.0f);
+			canvas.Image(picture.texture, drawn, kRadiusCover);
 		else
 		{
 			// no box art: a card in the game's colours (or the side's), the side's band, its icon and name;
@@ -287,6 +417,50 @@ namespace ps5shell
 		canvas.Ring(drawn, kRadiusCover, 1, 0x14ffffff);
 		if (focused)
 			Focus(drawn, kRadiusCover, glow);
+		if (status)
+			StatusBadge(canvas, game, drawn, 0);
+	}
+
+	void Shell::DrawBox3d(Canvas& canvas, const ui::Picture& picture, const ui::Picture& spineArt, const Box& box, bool focused, uint32_t ambient)
+	{
+		// The cover as its box, turned a little to the right: a spine on the left (the box's own, from GameTDB's
+		// whole cover; else the cover's left edge), in shade, then the front, whose far edge is shorter. The canvas draws no perspective, so each face is
+		// thin upright slices of the picture, each a little shorter than the last
+		constexpr int kSlices = 40;
+		const float spine = box.w * 0.11f, front = box.w - spine;
+		const float near = box.h, far = box.h * 0.9f, back = box.h * 0.94f;
+		const float floor = box.Bottom();
+		// where a face's top and bottom are, across it: the floor rises half as much as the top falls
+		const auto slice = [&](const ui::Picture& art, float x, float w, float h, float u0, float u1, uint32_t tint) {
+			const float drop = box.h - h;
+			// each slice reaches 2 pixels into the next, so the soft edge of one lies on the next's picture, not on
+			// the ground behind: no seams
+			canvas.Image(art.texture, {x, floor - h - drop * 0.35f, w + 2.0f, h}, 0, tint, u0, 0, u1 + (u1 - u0) * 2.0f / std::max(w, 0.5f), 1);
+		};
+		uint32_t edge = ambient ? ambient : Accent();
+		canvas.Shadow({box.x + spine * 0.5f, box.y + box.h * 0.04f, box.w - spine * 0.5f, box.h * 0.94f}, 6, focused ? 26.0f : 14.0f,
+			focused ? 60.0f : 30.0f, focused ? 0x99000000 : 0x73000000);
+		// the spine, darker toward the back: the box's own, else the cover's first twentieth
+		const bool own = spineArt.texture != 0;
+		for (int i = 0; i < kSlices / 4; i++)
+		{
+			const float t0 = (float)i / (kSlices / 4), t1 = (float)(i + 1) / (kSlices / 4);
+			const float h = back + (near - back) * t0;
+			const uint32_t shade = own ? ui::Mix(0xff8a8a8a, 0xffc4c4c4, t0) : ui::Mix(0xff5a5a5a, 0xff9a9a9a, t0);
+			slice(own ? spineArt : picture, box.x + spine * t0, spine * (t1 - t0), h, own ? t0 : 0.05f * t0, own ? t1 : 0.05f * t1, shade);
+		}
+		// the front: the whole picture, its near edge full height, its far edge shorter
+		for (int i = 0; i < kSlices; i++)
+		{
+			const float t0 = (float)i / kSlices, t1 = (float)(i + 1) / kSlices;
+			const float h = near + (far - near) * t0;
+			slice(picture, box.x + spine + front * t0, front * (t1 - t0), h, t0, t1, ui::Mix(0xffffffff, 0xffd6d6d6, t0));
+		}
+		// the fold between spine and front catches the light; the side's colour as a hairline there
+		const float foldTop = floor - near;
+		canvas.Line(box.x + spine, foldTop + 1, box.x + spine, floor - 1, 1.5f, ui::SetAlpha(ui::Mix(edge, 0xffffffff, 0.6f), 0.55f));
+		if (focused)
+			Focus({box.x + spine, foldTop, front, near}, 4, ui::Mix(edge, 0xffffffff, 0.25f) | 0xff000000);
 	}
 
 	void Shell::DrawToggle(Canvas& canvas, float x, float y, bool on, bool focused)
@@ -382,7 +556,9 @@ namespace ps5shell
 		}
 		const ui::TextStyle caption = Style(kCaptionStyle);
 		const ui::TextStyle value = Style(kLabelStyle);
-		const bool described = focused && !row.description.empty();
+		// the focused row's line of help rises in under its label as the focus arrives, and goes as it leaves,
+		// the label gliding up to make room (both jumped before)
+		const float described = row.description.empty() ? 0.0f : FocusMix(FocusKey(row.label, FocusKey(row.setting) + 7), focused);
 		const float inner = box.w - 56;
 		const float right = box.Right() - 28;
 		const RowControl layout = RowControlOf(row, box.w, focused);
@@ -393,7 +569,7 @@ namespace ps5shell
 		const float textX = box.x + 28 + (row.icon ? pictureSize + 14 : 0);
 		const float bannerWidth = row.banner ? pictureSize * row.bannerAspect + 20 : 0;
 		const ui::TextBlock labelBlock = m_fonts.Layout(label, row.label, layout.labelWidth - (textX - box.x - 28) - bannerWidth, 1);
-		const float labelY = described ? box.y + 16 : box.CentreY() - labelBlock.height * 0.5f;
+		const float labelY = box.CentreY() - labelBlock.height * 0.5f + (box.y + 16 - (box.CentreY() - labelBlock.height * 0.5f)) * described;
 		canvas.Text(labelBlock, textX, labelY, kText);
 		if (row.icon)
 			canvas.Image(row.icon, {box.x + 28, box.CentreY() - pictureSize * 0.5f, pictureSize, pictureSize}, 6);
@@ -401,10 +577,15 @@ namespace ps5shell
 		if (InGameSettings() && (!row.setting.empty() || !row.opens.empty()))
 			Chip(canvas, box.x + 28 + labelBlock.width + 14, labelY + labelBlock.height * 0.5f - 15, row.fromSide ? Tr("Default") : Tr("This game"),
 				row.fromSide ? "" : "good", 30);
-		if (described)
-			canvas.Text(caption, textX, labelY + labelBlock.height + 4, row.description, Secondary(), inner - (textX - box.x - 28) - bannerWidth, 1);
+		if (described > 0.01f)
+		{
+			canvas.PushAlpha(described * described);
+			canvas.Text(caption, textX, labelY + labelBlock.height + 4 + 6 * (1 - described), row.description, Secondary(),
+				inner - (textX - box.x - 28) - bannerWidth, 1);
+			canvas.PopAlpha();
+		}
 		// the control, on the right
-		const float centre = described ? labelY + labelBlock.height * 0.5f : box.CentreY();
+		const float centre = box.CentreY() + (labelY + labelBlock.height * 0.5f - box.CentreY()) * described;
 		// the value's text: as wide as it may be, and no wider than the label leaves it
 		const float valueRoom = std::max(60.0f, std::min(valueMost, inner - labelBlock.width - 24 - fixed));
 		switch (row.kind)
@@ -533,7 +714,8 @@ namespace ps5shell
 	void Shell::DrawSheet(Canvas& canvas, const Box& box, float appear)
 	{
 		canvas.Shadow(box, kRadiusSheet, 24, 60, ui::WithAlpha(0x99000000, appear));
-		Glass(canvas, box, kRadiusSheet, m_settings.ui.highContrast ? kInk2 : ui::SetAlpha(kInk1, 0.90f));
+		// over the screen, blurred: thick enough for a sheet's words, thin enough to show what it is over
+		Glass(canvas, box, kRadiusSheet, m_settings.ui.highContrast ? kInk2 : ui::SetAlpha(kInk1, 0.62f));
 	}
 
 	void Shell::Scrim(Canvas& canvas, float alpha)

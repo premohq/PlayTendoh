@@ -4,7 +4,7 @@
 // itself (src/index.js) over a stand-in for D1, given a report the app wrote when there is one (argv).
 import { readFileSync } from 'node:fs';
 import { scrub, validate, compatibility } from './src/report.js';
-import worker from './src/index.js';
+import worker, { rebuildSite } from './src/index.js';
 
 let failures = 0;
 const check = (ok, what) => {
@@ -67,6 +67,8 @@ const zelda = table.games.find((g) => g.titleId === '0100f2c0115b6000');
 check(mk8 && mk8.consoles === 3 && mk8.sessions === 4 && mk8.ended === 3 && mk8.crashed === 1 && mk8.status === 'mixed', 'the table counts consoles and endings');
 check(mk8 && mk8.medianMinutes === 42 && mk8.models.join() === 'base,pro' && mk8.firmware.join() === '11.60,9.00', 'play time, models and firmware');
 check(zelda && zelda.status === 'fails' && zelda.commonError === 'keys missing', 'a game that never ended: fails, with why');
+const once = compatibility([{ ...validate({ ...good, install: 'e'.repeat(32), result: 'ended' }).row, received: 700 }], 1000).games[0];
+check(once && once.status === 'works' && once.consoles === 1, 'a game that ended well on one console: works');
 add('d', 'crashed', 600, { logs: [{ file: 'core.log', text: 'the emulator log' }] });
 const published = JSON.stringify(compatibility(rows, 1000));
 check(!published.includes('a'.repeat(32)) && !published.includes('"log"') && !published.includes('install') &&
@@ -114,6 +116,21 @@ const servedText = JSON.stringify(served);
 check(served.games.length === 1 && served.games[0].crashed === 1 && !servedText.includes(saved.install) && !servedText.includes('number 1999') && !servedText.includes('<path>'),
 	'Worker: the table, with no install ID and no log');
 check((await worker.fetch(new Request('https://intake.test/v1/reports'), env, ctx)).status === 404, 'Worker: nothing else is served');
+
+
+// -- every hour: the site built again, only with a token -------------------------------------------------
+const asked = [];
+const github = async (url, init) => { asked.push({ url, init }); return new Response(null, { status: 204 }); };
+check((await rebuildSite({}, github)) === false && asked.length === 0, 'Worker: no token, no rebuild asked for');
+check((await rebuildSite({ PAGES_TOKEN: 't' }, github)) === true && asked.length === 1
+	&& asked[0].url === 'https://api.github.com/repos/premohq/PlayTendoh/actions/workflows/pages.yml/dispatches'
+	&& JSON.parse(asked[0].init.body).ref === 'Playtendoh' && asked[0].init.headers.authorization === 'Bearer t',
+	'Worker: with a token, the Pages workflow started on Playtendoh');
+let deleted = 0;
+const daily = { DB: { prepare(sql) { return { bind() { return { async run() { if (sql.startsWith('DELETE')) deleted++; } }; } }; } } };
+await worker.scheduled({ cron: '17 3 * * *' }, daily, ctx);
+await worker.scheduled({ cron: '41 * * * *' }, daily, ctx);
+check(deleted === 1, 'Worker: old reports go once a day, not every hour');
 
 console.log(failures ? 'intake: FAILED' : 'intake: all passed');
 process.exit(failures ? 1 : 0);

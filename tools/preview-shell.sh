@@ -7,7 +7,7 @@
 #
 # PREVIEW_FIRST=1 starts it as on a first start, PREVIEW_REMOTE=1 with the remote touch screen on,
 # PREVIEW_UPDATE=1 with a newer release found, PREVIEW_NO_DATA=1 with /data out of reach,
-# PREVIEW_LAYOUT=1 in Orbit, PREVIEW_LAUNCH_ERROR=1 after a game that did not start; PREVIEW_LANGUAGE=de (a code of app/lang.cpp's, or
+# PREVIEW_LAYOUT=1 in Orbit, PREVIEW_BOXART3D=1 with 3D box art, PREVIEW_NO_BADGES=1 with How games run off, PREVIEW_LAUNCH_ERROR=1 after a game that did not start; PREVIEW_LANGUAGE=de (a code of app/lang.cpp's, or
 # qps, tools/lang.py pseudo's longer text) in that language, PREVIEW_SYSTEM_LANGUAGE=4 with the PS5 set to
 # its language number.
 #
@@ -31,12 +31,37 @@ ln -sfn "$PS5CEMU_PACBREW/include/fmt" "$out/include/fmt"
 # console preview has them
 games=$out/games
 rm -rf "$games" "$out/data"
+# PREVIEW_CATALOG: a library.json to start from, every side's games as last seen (museum-library.json: the
+# Timeline's, a few on most consoles)
 mkdir -p "$games/Mario Kart 8" "$games/Splatoon" "$games/Super Mario 3D World [00050000101C9400]" "$out/data"
+[[ -n ${PREVIEW_CATALOG:-} ]] && cp "$PREVIEW_CATALOG" "$out/data/library.json"
 for title in "BotW Update v208" "BotW DLC"; do
     mkdir -p "$games/Installs/$title/code" "$games/Installs/$title/content" "$games/Installs/$title/meta"
     echo '<menu/>' >"$games/Installs/$title/meta/meta.xml"
 done
 python3 -B tools/launcher-preview/make-3ds-samples.py "$games/3ds" "$games/ds"
+# Wii discs as USB loaders keep them, each the head of a WBFS file (its ID and the Wii's magic word at
+# 0x200): one in a folder named for it, one alone and named by its ID; and Game Boy Advance games
+python3 -B - "$games/wii" <<'PY'
+import os, sys
+for name in ("Mario Kart Wii [RMCE01]/RMCE01.wbfs", "RSBE01.wbfs", "wbfs/Wii Sports [RSPE01]/RSPE01.wbfs"):
+    path = os.path.join(sys.argv[1], name)
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    head = bytearray(0x400)
+    head[0:4] = b"WBFS"
+    head[0x200:0x206] = os.path.basename(name)[:6].encode()
+    head[0x218:0x21c] = bytes.fromhex("5d1c9ea3")
+    open(path, "wb").write(head)
+PY
+mkdir -p "$games/gba/Pokemon"
+: >"$games/gba/Metroid Fusion (USA).gba"
+: >"$games/gba/Pokemon/Pokemon - Emerald Version (USA, Europe).gba"
+# how games run, as the console reads it (port/app/compatibility.h): the list's, and made-up reports for
+# some of these games so each badge shows
+python3 -B tools/compat_feed.py --reports tools/launcher-preview/compat-reports.json --out "$out/compatibility.json"
+for game in "Advance Wars (USA).gba" "Golden Sun (USA, Europe).gba"; do
+    : >"$games/gba/$game"
+done
 # Switch games where Eden keeps them (the Switch side's default folder, ps5eden::DefaultGamesFolder):
 # empty files by a dump's names, one in a folder of its own with its update, and Eden's keys
 roms=$out/eden/roms
@@ -81,9 +106,9 @@ flags=(-std=c++20 -O1 -g -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-
     -I "$PS5CEMU_ROOT/.deps/reshade/deps/stb" $(pkg-config --cflags freetype2))
 sources=(tools/launcher-preview/shell.cpp tools/launcher-preview/console.cpp
     port/frontend/shell/hub.cpp port/frontend/shell/installs.cpp port/frontend/shell/library.cpp port/frontend/shell/pages.cpp
-    port/frontend/shell/settings.cpp port/frontend/shell/consoles.cpp port/frontend/shell/orbit.cpp port/frontend/shell/timeline.cpp port/frontend/shell/porpoise_rows.cpp port/frontend/shell/switch_extras.cpp port/frontend/shell/setup.cpp port/frontend/shell/shares.cpp port/frontend/shell/shell.cpp port/frontend/shell/welcome.cpp port/frontend/shell/reports.cpp port/frontend/shell/whatsnew.cpp port/frontend/shell/widgets.cpp
+    port/frontend/shell/settings.cpp port/frontend/shell/consoles.cpp port/frontend/shell/orbit.cpp port/frontend/shell/timeline.cpp port/frontend/shell/porpoise_rows.cpp port/frontend/shell/switch_extras.cpp port/frontend/shell/setup.cpp port/frontend/shell/shares.cpp port/frontend/shell/shell.cpp port/frontend/shell/welcome.cpp port/frontend/shell/firststart.cpp port/frontend/shell/reports.cpp port/frontend/shell/whatsnew.cpp port/frontend/shell/widgets.cpp port/frontend/shell/cheat_rows.cpp
     port/ui/canvas.cpp port/ui/feedback.cpp port/ui/gfx.cpp port/ui/images.cpp port/ui/input.cpp port/ui/qr.cpp port/ui/text.cpp port/ui/theme.cpp
-    port/ui/vkfn.cpp port/app/catalog.cpp port/app/reports.cpp port/app/saves.cpp port/app/reorganize.cpp port/app/gameinfo.cpp port/app/lang.cpp port/app/compatibility.cpp port/app/keyboard.cpp port/frontend/actions.cpp
+    port/ui/vkfn.cpp port/app/catalog.cpp port/app/cheats.cpp port/app/reports.cpp port/app/saves.cpp port/app/reorganize.cpp port/app/gameinfo.cpp port/app/lang.cpp port/app/compatibility.cpp port/app/keyboard.cpp port/frontend/actions.cpp
     port/frontend/settings.cpp port/azahar/library.cpp port/azahar/controls.cpp port/azahar/unavailable.cpp
     port/retro/library.cpp port/retro/launch.cpp port/retro/porpoise_settings.cpp port/retro/porpoise_saves.cpp port/retro/porpoise_game.cpp port/retro/porpoise_banner.cpp port/retro/porpoise_disc.cpp port/melonds/library.cpp port/melonds/unavailable.cpp port/eden/library.cpp port/eden/nx_files.cpp port/eden/controls.cpp port/eden/extras.cpp port/eden/save_transfer.cpp)
 

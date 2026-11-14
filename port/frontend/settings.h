@@ -63,6 +63,9 @@ namespace ps5settings
 		int dsFilter = 0;			  // how the DS's screens are scaled to the TV: sharp, smooth, square pixels (ps5melonds::screens::Filter)
 		int pictureSize = 0;		  // a libretro side's picture on the TV: fit, whole pixels, fill (ps5ingame3ds::kPictureSizes)
 		int pictureShape = 0;		  // and its shape: the core's, 4:3, square pixels, 16:9 (ps5ingame3ds::kPictureShapes)
+		// a libretro game's controller (port/libretro/devices.h's choices): 0 Auto, 1 the pad, else a special
+		// one (the Zapper...). A game's own only (its in-game Buttons page), never the side's
+		int retroController = 0;
 		// the touchpad touches the bottom screen while only the top one is shown (the top screen alone):
 		// its cursor over the top screen, for the games that want a touch now and then (Star Fox 64 3D)
 		bool hiddenTouch = false;
@@ -137,10 +140,15 @@ namespace ps5settings
 		return nx;
 	}
 
+	// The GPU shortcuts are EglantinePS5's own for every Switch 2 game (its settings_store.h,
+	// LoadPerformance), the setup its author proves games in: the fast GPU fences and no reactive
+	// flushing, without which the core's split GPU thread stays off.
 	inline N3ds Switch2Defaults()
 	{
 		N3ds nx;
 		nx.gamesFolder = "/data/eglantineps5/roms";
+		nx.nxFastGpu = true;
+		nx.nxReactiveFlushing = false;
 		return nx;
 	}
 
@@ -157,6 +165,7 @@ namespace ps5settings
 		bool reduceMotion = false;
 		int holdMs = 800;			 // hold to confirm, 400 to 1500
 		bool gamePictures = true;	 // the focused game's picture behind the menus
+		bool boxArt3d = false;		 // covers as boxes, a spine and a turn (Make it yours, Settings > Launcher)
 		int layout = 0;				 // the Library's layout: 0 Classic, 1 Orbit (Make it yours, Settings > Launcher)
 		bool layoutChosen = false;	 // asked once, on a first start or the first start of 6.0
 		bool setupDone = false;		 // the Setup check was shown once
@@ -176,6 +185,7 @@ namespace ps5settings
 		int reorganizeAsked = 0;
 		std::string theme;			 // the launcher's look (ui/theme.h): a built-in theme's id, or user:<file> in themes/; empty: the default
 		bool libraryFilters = false;		 // the Library's filter row (Settings > Launcher); off: every game, as All
+		bool compatBadges = true;			 // how each game runs, on its cover and page (Settings > Launcher)
 		// the app opens on EmulationStation (ES-DE, port/esde/esde.h) instead of the launcher, when it has
 		// ES-DE; L1 held at the start opens the launcher all the same (Settings > Launcher)
 		bool emulationStation = false;
@@ -333,14 +343,20 @@ namespace ps5settings
 		N3ds nds = DsDefaults();
 		N3ds nx = SwitchDefaults();
 		N3ds nx2 = Switch2Defaults(); // Switch 2's side settings, separate from Switch
+		// 1: the Switch 2 side's GPU shortcuts are Switch2Defaults' (saved before: the Switch's, once replaced)
+		int switch2Defaults = 1;
 		// the other sides', in ps5retro::kSystems' order, each with its default games folder
 		std::array<N3ds, ps5retro::kSystems.size()> retro = [] { std::array<N3ds, ps5retro::kSystems.size()> values{}; for (size_t i = 0; i < values.size(); i++) values[i].gamesFolder = ps5retro::kSystems[i].games; return values; }();
 		// games' own settings, by GameKey: "3ds:0004000000055d00" -> {"resolution": 3}
 		std::map<std::string, GameValues> games;
+		// and a libretro side's games' own core options (Game settings > Emulator), by GameKey:
+		// "nes:60..." -> {"mesen_aspect_ratio": "4:3"}; an empty value is the core's own, whatever the side's
+		std::map<std::string, std::map<std::string, std::string>> gameCoreOptions;
 		// The launcher's own sound, on both sides (frontend/sound.h): its music ("setup" or "off") and the music's volume in percent, and the menu's sounds.
 		std::string music = "setup";
 		int musicVolume = 50;
 		bool boxArt = true;			  // box art from GameTDB (Settings > Online)
+		bool cheats = false;		  // every game's cheats downloaded (Settings > Online's Fetch cheats automatically: app/cheats.h)
 		bool menuSounds = true;
 		// The side the launcher opens on after a game, the one last played ("wiiu", "3ds", "ds" or "switch");
 		// empty: a fresh start.
@@ -370,6 +386,12 @@ namespace ps5settings
 	// The settings a game starts with: its side's, with the game's own over them (and hardware shaders
 	// off for the Pokemon games, PokemonByDefault, unless the game says otherwise)
 	Launcher ForGame(const Launcher& settings, const std::string& side, uint64_t titleId);
+	// Whether a game has settings of its own (games, or a libretro game's gameCoreOptions)
+	bool HasOwn(const Launcher& settings, const std::string& side, uint64_t titleId);
+	// An in-game menu's For this game only, saved at once: on, the game keeps every setting it can have of
+	// its own as current (what it plays with now) has them, and the menu's changes are its own from then;
+	// off, its own are taken away and it follows its side's again
+	void SetGameOwn(const std::string& side, uint64_t titleId, bool own, const Launcher& current);
 	bool PokemonByDefault(uint64_t titleId);
 	// After a game's menu changed settings: each one it changed (from before, what the game started
 	// with, to after) saved in ps5cemu.json, into the game's own settings when it has some and the
