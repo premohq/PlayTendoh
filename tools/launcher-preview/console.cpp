@@ -385,10 +385,11 @@ namespace ps5cheats
 
 namespace ps5boxart
 {
-	std::string Path(System system, const std::string& id)
+	std::string Path(System system, const std::string& id, Art art)
 	{
+		if (art == Art::Disc) return MediaPath(system, id);
 		const std::string path =
-			output + "/boxart/" + (system == System::WiiU ? "wiiu/" : system == System::Switch ? "switch/" : system == System::GameCubeWii ? "wii/" : "3ds/") + id + ".tga";
+			output + "/boxart/" + (system == System::WiiU ? "wiiu/" : system == System::Switch ? "switch/" : system == System::GameCubeWii ? "wii/" : "3ds/") + id + (art == Art::Back ? "-back" : "") + ".tga";
 		return !id.empty() && std::ifstream(path).good() ? path : std::string();
 	}
 	// the Timeline's discs and cards, the same way: build/preview/boxart/<wiiu|wii|3ds|ds|switch>/media/<ID>.tga
@@ -408,7 +409,7 @@ namespace ps5boxart
 		return !picture.empty() && std::ifstream(path).good() ? path : std::string();
 	}
 	void FetchCarts(const std::vector<std::string>&) {}
-	void Fetch(System, const std::vector<std::string>&) {}
+	void Fetch(System, const std::vector<std::string>&, Art) {}
 	void Refetch(System, const std::vector<std::string>&, bool) {}
 	// a libretro side's cover, the same way: build/preview/boxart/retro/<folder>/<the game file's name>.tga
 	std::string RetroPath(const std::string& system, const std::string& name)

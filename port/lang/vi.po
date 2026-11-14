@@ -119,7 +119,7 @@ msgstr "Bàn di cảm ứng"
 #, menu
 msgctxt "button"
 msgid "Touchpad click"
-msgstr ""
+msgstr "Bấm vào bàn di chuột"
 
 #: port/app/buttons_menu.h:90 port/frontend/actions.cpp:508
 #, menu
@@ -385,12 +385,12 @@ msgstr "Nút DualSense nào nhấn từng nút."
 #: port/app/buttons_menu.h:153 port/frontend/shell/porpoise_rows.cpp:870 port/frontend/shell/porpoise_rows.cpp:949
 #, menu
 msgid "Controller test"
-msgstr ""
+msgstr "Kiểm tra bộ điều khiển"
 
 #: port/app/buttons_menu.h:155 port/frontend/shell/porpoise_rows.cpp:871
 #, menu
 msgid "This player's DualSense input, live."
-msgstr ""
+msgstr "Đầu vào DualSense của người chơi này, trực tiếp."
 
 #: port/app/buttons_menu.h:160 port/app/side_menu.h:522 port/frontend/shell/pages.cpp:966
 #, menu
@@ -406,7 +406,7 @@ msgstr "Chưa gán"
 #: port/app/buttons_menu.h:162
 #, menu
 msgid "Press Cross, then the DualSense button to use. If another button already uses it, the two swap."
-msgstr ""
+msgstr "Nhấn Chữ thập, sau đó nhấn nút DualSense để sử dụng. Nếu một nút khác đã sử dụng nó thì cả hai sẽ hoán đổi."
 
 #. {0} is a button of the console's controller
 #. {0} is a button of the Wii U's or the 3DS's controller
@@ -462,7 +462,7 @@ msgstr "Có lỗi"
 #: port/app/compatibility.cpp:71
 msgctxt "status"
 msgid "Not playable"
-msgstr ""
+msgstr "Không thể chơi được"
 
 #: port/app/emulator.cpp:373
 msgid "the PS5 Vulkan driver did not start"
@@ -526,19 +526,19 @@ msgstr "Đã dừng để chạy trò chơi"
 
 #: port/app/esde_get.cpp:190
 msgid "EmulationStation isn't on GitHub for this version yet. Try again after an update."
-msgstr ""
+msgstr "EmulationStation chưa có trên GitHub cho phiên bản này. Hãy thử lại sau khi cập nhật."
 
 #: port/app/esde_get.cpp:191
 msgid "EmulationStation could not be downloaded. Is the PS5 online?"
-msgstr ""
+msgstr "Không thể tải xuống EmulationStation. PS5 có trực tuyến không?"
 
 #: port/app/esde_get.cpp:197
 msgid "Playtendoh runs from an image that can't be changed. Copy the es-de folder into it yourself."
-msgstr ""
+msgstr "Playtendoh chạy từ một hình ảnh không thể thay đổi. Hãy tự sao chép thư mục es-de vào đó."
 
 #: port/app/esde_get.cpp:203
 msgid "EmulationStation needs {0} MB free on the drive Playtendoh is on"
-msgstr ""
+msgstr "EmulationStation cần {0} MB miễn phí trên ổ đĩa Playtendoh đang bật"
 
 #: port/app/esde_get.cpp:222 port/app/updates.cpp:505
 msgid "The download could not start"
@@ -546,7 +546,7 @@ msgstr "Không thể bắt đầu tải xuống"
 
 #: port/app/esde_get.cpp:239
 msgid "Stopped"
-msgstr ""
+msgstr "Đã dừng"
 
 #: port/app/esde_get.cpp:239 port/app/updates.cpp:524
 msgid "The download did not finish: is the PS5 online?"
@@ -562,7 +562,7 @@ msgstr "Không thể giải nén: {0}"
 
 #: port/app/esde_get.cpp:270
 msgid "EmulationStation could not be installed ({0})"
-msgstr ""
+msgstr "Không thể cài đặt EmulationStation ({0})"
 
 #: port/app/esde_get.cpp:291 port/app/pack_updates.cpp:194 port/app/updates.cpp:621
 msgid "GitHub could not be found: is the PS5 online?"
@@ -570,15 +570,15 @@ msgstr "Không tìm thấy GitHub: PS5 có đang kết nối mạng không?"
 
 #: port/app/esde_get.cpp:348
 msgid "EmulationStation is downloading"
-msgstr ""
+msgstr "EmulationStation đang tải xuống"
 
 #: port/app/esde_get.cpp:354
 msgid "Playtendoh runs from an image that can't be changed"
-msgstr ""
+msgstr "Playtendoh chạy từ hình ảnh không thể thay đổi"
 
 #: port/app/esde_get.cpp:360
 msgid "Its folder could not be removed"
-msgstr ""
+msgstr "Không thể xóa thư mục của nó"
 
 #: port/app/forwarders.cpp:151
 msgid "Home screen tiles need elfldr, which is not answering on port 9021. Load elfldr, then try again."
@@ -1762,59 +1762,59 @@ msgstr "Bản lưu của {0}"
 #: port/app/ingame3ds.cpp:204
 #, menu
 msgid "Auto"
-msgstr ""
+msgstr "Tự động"
 
 #. the Buttons page's Controller row: the game's own choice, the console's pad, a special controller
 #: port/app/ingame3ds.cpp:204 port/frontend/shell/porpoise_rows.cpp:292
 #, menu
 msgid "Standard"
-msgstr ""
+msgstr "Tiêu chuẩn"
 
 #. the Buttons page's Controller row: the game's own choice, the console's pad, a special controller
 #: port/app/ingame3ds.cpp:204
 #, menu
 msgid "Arkanoid paddle"
-msgstr ""
+msgstr "Mái chèo Arkanoid"
 
 #: port/app/ingame3ds.cpp:207
 #, menu
 msgid "Turn the knob"
-msgstr ""
+msgstr "Xoay núm"
 
 #: port/app/ingame3ds.cpp:207
 #, menu
 msgid "Fire"
-msgstr ""
+msgstr "lửa"
 
 #: port/app/ingame3ds.cpp:207
 #, menu
 msgid "Aim"
-msgstr ""
+msgstr "Mục tiêu"
 
 #: port/app/ingame3ds.cpp:207
 #, menu
 msgid "Aim at the middle"
-msgstr ""
+msgstr "Hãy nhắm vào giữa"
 
 #: port/app/ingame3ds.cpp:207
 #, menu
 msgid "Shoot away from the screen"
-msgstr ""
+msgstr "Bắn ra khỏi màn hình"
 
 #: port/app/ingame3ds.cpp:208
 #, menu
 msgid "Cursor"
-msgstr ""
+msgstr "Con trỏ"
 
 #: port/app/ingame3ds.cpp:208
 #, menu
 msgid "Turbo"
-msgstr ""
+msgstr "tăng áp"
 
 #: port/app/ingame3ds.cpp:208
 #, menu
 msgid "Pause"
-msgstr ""
+msgstr "Tạm dừng"
 
 #: port/app/ingame3ds.cpp:208 port/frontend/shell/firststart.cpp:260 port/frontend/shell/firststart.cpp:262 port/frontend/shell/shell.cpp:1861 port/frontend/shell/shell.cpp:1900
 #, menu
@@ -1824,57 +1824,57 @@ msgstr "Di chuyển"
 #: port/app/ingame3ds.cpp:208
 #, menu
 msgid "Left button"
-msgstr ""
+msgstr "Nút trái"
 
 #: port/app/ingame3ds.cpp:208
 #, menu
 msgid "Right button"
-msgstr ""
+msgstr "Nút phải"
 
 #. {0} is a number on the Power Pad's mat
 #: port/app/ingame3ds.cpp:210 port/app/ingame3ds.cpp:217
 #, menu
 msgid "Mat {0}"
-msgstr ""
+msgstr "Thảm {0}"
 
 #. {0} is a number on the Power Pad's mat
 #: port/app/ingame3ds.cpp:210
 #, menu
 msgid "Tilt"
-msgstr ""
+msgstr "Nghiêng"
 
 #. the DualSense's inputs for a special controller
 #: port/app/ingame3ds.cpp:212
 #, menu
 msgid "Touchpad, left stick or D-pad"
-msgstr ""
+msgstr "Bàn di chuột, thanh bên trái hoặc D-pad"
 
 #. the DualSense's inputs for a special controller
 #: port/app/ingame3ds.cpp:212
 #, menu
 msgid "Touchpad, motion or right stick"
-msgstr ""
+msgstr "Bàn di chuột, chuyển động hoặc thanh bên phải"
 
 #. the DualSense's inputs for a special controller
 #: port/app/ingame3ds.cpp:212
 #, menu
 msgid "Touchpad or left stick"
-msgstr ""
+msgstr "Bàn di chuột hoặc thanh bên trái"
 
 #: port/app/ingame3ds.cpp:213
 #, menu
 msgid "Cross or R2"
-msgstr ""
+msgstr "Chữ thập hoặc R2"
 
 #: port/app/ingame3ds.cpp:213
 #, menu
 msgid "Circle or L2"
-msgstr ""
+msgstr "Tròn hoặc L2"
 
 #: port/app/ingame3ds.cpp:213
 #, menu
 msgid "Tilt or turn the DualSense"
-msgstr ""
+msgstr "Nghiêng hoặc xoay DualSense"
 
 #. the 3DS's screen layouts
 #: port/app/ingame3ds.cpp:259 port/frontend/shell/settings.cpp:64
@@ -2009,27 +2009,27 @@ msgstr "Khi chỉ có màn hình trên, bàn di cảm ứng vẫn chạm vào m�
 #: port/app/ingame3ds.cpp:635
 #, menu
 msgid "How big the picture is on the TV, and its shape."
-msgstr ""
+msgstr "Hình ảnh trên TV có kích thước lớn như thế nào và hình dạng của nó."
 
 #: port/app/ingame3ds.cpp:636 port/frontend/shell/settings.cpp:658
 #, menu
 msgid "Size"
-msgstr ""
+msgstr "Kích thước"
 
 #: port/app/ingame3ds.cpp:637 port/frontend/shell/settings.cpp:659
 #, menu
 msgid "Fit makes it as large as the screen allows. Whole pixels keeps every pixel the same size, with a frame around it. Fill screen stretches it edge to edge."
-msgstr ""
+msgstr "Fit làm cho nó lớn đến mức màn hình cho phép. Toàn bộ pixel giữ cho mọi pixel có cùng kích thước, có khung bao quanh nó. Màn hình lấp đầy trải dài từ cạnh này sang cạnh khác."
 
 #: port/app/ingame3ds.cpp:638 port/frontend/shell/settings.cpp:661
 #, menu
 msgid "Shape"
-msgstr ""
+msgstr "hình dạng"
 
 #: port/app/ingame3ds.cpp:639 port/frontend/shell/settings.cpp:662
 #, menu
 msgid "Original is the console's own. 4:3 is an old TV's. Square pixels shows them as the game draws them."
-msgstr ""
+msgstr "Bản gốc là của riêng bàn điều khiển. 4:3 là TV cũ. Các pixel vuông hiển thị chúng khi trò chơi thu hút chúng."
 
 #: port/app/ingame3ds.cpp:649 port/frontend/shell/settings.cpp:258 port/frontend/shell/settings.cpp:336 port/frontend/shell/settings.cpp:545 port/frontend/shell/settings.cpp:1822
 #, menu
@@ -2041,12 +2041,12 @@ msgstr "Trình giả lập"
 #, menu
 msgid "{0} option"
 msgid_plural "{0} options"
-msgstr[0] ""
+msgstr[0] "{0} tùy chọn"
 
 #: port/app/ingame3ds.cpp:650
 #, menu
 msgid "Every option of this console's emulator. Changes apply now and are kept for every game on it."
-msgstr ""
+msgstr "Mọi tùy chọn của trình giả lập bảng điều khiển này. Các thay đổi được áp dụng ngay bây giờ và được lưu giữ cho mọi trò chơi trên đó."
 
 #: port/app/ingame3ds.cpp:658 port/app/ingame3ds.cpp:665
 #, menu
@@ -2191,7 +2191,7 @@ msgstr "Mã gian lận"
 #: port/app/ingame3ds.cpp:711
 #, menu
 msgid "The game's cheats, from cheats/<game file>.cht in its system's folder (RetroArch's format)."
-msgstr ""
+msgstr "Các mánh gian lận của trò chơi, từ cheats/<game file>.cht trong thư mục hệ thống của nó (định dạng của RetroArch)."
 
 #: port/app/ingame3ds.cpp:712
 #, menu
@@ -2217,18 +2217,18 @@ msgstr "Trò chơi này không có mã gian lận"
 #: port/app/ingame3ds.cpp:720
 #, menu
 msgid "Get cheats in the game's settings in the library, or put a .cht file in the system's cheats folder, then restart the game."
-msgstr ""
+msgstr "Nhận các mánh gian lận trong cài đặt trò chơi trong thư viện hoặc đặt tệp .cht vào thư mục gian lận của hệ thống, sau đó khởi động lại trò chơi."
 
 #: port/app/ingame3ds.cpp:721
 #, menu
 msgid "Get cheats in the game's settings in the library, or put them in {0}/melonds/cheats/<game file>.mch, then restart the game."
-msgstr ""
+msgstr "Nhận các mánh gian lận trong cài đặt của trò chơi trong thư viện hoặc đặt chúng vào {0}/melonds/cheats/<game file>.mch, sau đó khởi động lại trò chơi."
 
 #. {0} is the app's data folder: /data/ps5cemu, or the PS5CEMU-HAR-data folder on the drive the app is installed on
 #: port/app/ingame3ds.cpp:723
 #, menu
 msgid "Get cheats in the game's settings in the library, or put them in {0}/azahar/cheats/<title ID>.txt, then restart the game."
-msgstr ""
+msgstr "Nhận các mánh gian lận trong cài đặt của trò chơi trong thư viện hoặc đặt chúng vào {0}/azahar/cheats/<title ID>.txt, sau đó khởi động lại trò chơi."
 
 #. how many of the game's cheats are on: {0} of {1}
 #: port/app/ingame3ds.cpp:726
@@ -2371,39 +2371,39 @@ msgstr "A ở nút Tròn và B ở nút Chữ thập, như vị trí trên 3DS, 
 #: port/app/ingame3ds.cpp:792 port/eden/ingame.cpp:601
 #, menu
 msgid "Puts every button back to default. Hold Cross to confirm."
-msgstr ""
+msgstr "Đặt mọi nút trở về mặc định. Giữ Chữ thập để xác nhận."
 
 #: port/app/ingame3ds.cpp:808
 #, menu
 msgid "Auto: {0}"
-msgstr ""
+msgstr "Tự động: {0}"
 
 #. the Buttons page's row that plugs a special controller in, for this game: Auto, Standard, the Zapper...
 #: port/app/ingame3ds.cpp:810 port/frontend/shell/porpoise_rows.cpp:308
 #, menu
 msgid "Controller"
-msgstr ""
+msgstr "Bộ điều khiển"
 
 #: port/app/ingame3ds.cpp:811
 #, menu
 msgid "The controller plugged into the console for this game. Auto picks the one the game was made for, such as the Zapper for Duck Hunt."
-msgstr ""
+msgstr "Bộ điều khiển được cắm vào bảng điều khiển cho trò chơi này. Tự động chọn trò chơi được tạo ra, chẳng hạn như Zapper cho Duck Hunt."
 
 #: port/app/ingame3ds.cpp:815
 #, menu
 msgid "What the DualSense does for the controller plugged in."
-msgstr ""
+msgstr "DualSense làm gì đối với bộ điều khiển được cắm vào."
 
 #. a row that takes how the DualSense is held now as level, for a game played by tilting it
 #: port/app/ingame3ds.cpp:818
 #, menu
 msgid "Level the motion"
-msgstr ""
+msgstr "Cân bằng chuyển động"
 
 #: port/app/ingame3ds.cpp:819
 #, menu
 msgid "Hold the DualSense as you like to play, then press Cross. The game sees it as held level from there."
-msgstr ""
+msgstr "Giữ DualSense theo ý muốn chơi, sau đó nhấn Chữ thập. Trò chơi coi nó như được giữ ở mức độ từ đó."
 
 #: port/app/ingame3ds.cpp:832
 #, menu
@@ -2438,12 +2438,12 @@ msgstr "Màn hình dưới"
 #: port/app/ingame3ds.cpp:850
 #, menu
 msgid "Settings for this game only"
-msgstr ""
+msgstr "Chỉ cài đặt cho trò chơi này"
 
 #: port/app/ingame3ds.cpp:851
 #, menu
 msgid "On: this game keeps its own settings, and what you change here stays with it. Off: it uses the system's settings from its next start."
-msgstr ""
+msgstr "Bật: trò chơi này giữ các cài đặt riêng và những gì bạn thay đổi ở đây vẫn giữ nguyên. Tắt: nó sử dụng cài đặt của hệ thống từ lần khởi động tiếp theo."
 
 #: port/app/ingame3ds.cpp:869
 #, menu
@@ -2463,7 +2463,7 @@ msgstr "Ô {0} trống"
 #: port/app/ingame3ds.cpp:878
 #, menu
 msgid "Reset"
-msgstr ""
+msgstr "Đặt lại"
 
 #. {0} is the version the last update replaced, as in 5.0.0
 #. no save of this Switch game in standalone ProsperoEden or on a USB drive
@@ -2475,7 +2475,7 @@ msgstr "Giữ nút Chữ thập"
 #: port/app/ingame3ds.cpp:879
 #, menu
 msgid "Restarts the game, as the console's reset button does. What isn't saved is lost."
-msgstr ""
+msgstr "Khởi động lại trò chơi, giống như nút đặt lại của bảng điều khiển. Những gì không được lưu sẽ bị mất."
 
 #: port/app/ingame3ds.cpp:885
 #, menu
@@ -2555,17 +2555,17 @@ msgstr "Xoay trái 90°"
 #: port/app/ingame3ds.h:84
 #, menu
 msgid "Fit"
-msgstr ""
+msgstr "Phù hợp"
 
 #: port/app/ingame3ds.h:84
 #, menu
 msgid "Whole pixels"
-msgstr ""
+msgstr "Toàn bộ pixel"
 
 #: port/app/ingame3ds.h:84
 #, menu
 msgid "Fill screen"
-msgstr ""
+msgstr "Lấp đầy màn hình"
 
 #. the 3DS borders' names (artwork around the screens)
 #: port/app/ingame3ds.h:182 port/frontend/shell/settings.cpp:53
@@ -2963,7 +2963,7 @@ msgstr "Shader: {0}/{1}"
 #: port/app/loading_screen.h:67
 #, menu
 msgid "Pipelines: {0} of {1}"
-msgstr ""
+msgstr "Đường ống: {0} của {1}"
 
 #: port/app/loading_screen.h:75
 #, menu
@@ -3087,12 +3087,12 @@ msgstr "Giữ nút Chữ thập đến khi vòng tròn đầy."
 #: port/app/side_menu.h:503
 #, menu
 msgid "Your controller"
-msgstr ""
+msgstr "Bộ điều khiển của bạn"
 
 #: port/app/side_menu.h:505
 #, menu
 msgid "Each button shows the console's button it presses."
-msgstr ""
+msgstr "Mỗi nút hiển thị nút của bảng điều khiển mà nó nhấn."
 
 #: port/app/update_files.cpp:93
 msgid "the download has no eboot.bin"
@@ -3100,7 +3100,7 @@ msgstr "tệp tải xuống không có eboot.bin"
 
 #: port/app/update_files.cpp:93
 msgid "the download has no {0}"
-msgstr ""
+msgstr "bản tải xuống không có {0}"
 
 #: port/app/update_files.cpp:118
 msgid "{0} could not be written (is /data full?)"
@@ -3882,40 +3882,40 @@ msgstr "Tựa"
 
 #: port/frontend/shell/cheat_rows.cpp:22
 msgid "From libretro-database, by the game file's name."
-msgstr ""
+msgstr "Từ libretro-database, theo tên tệp trò chơi."
 
 #: port/frontend/shell/cheat_rows.cpp:23
 msgid "From Sharkive, by the game's title ID."
-msgstr ""
+msgstr "Từ Sharkive, theo tên trò chơi là ID."
 
 #: port/frontend/shell/cheat_rows.cpp:24
 msgid "From switch-cheats-db, for every version of the game."
-msgstr ""
+msgstr "Từ switch-cheats-db cho mọi phiên bản của trò chơi."
 
 #: port/frontend/shell/cheat_rows.cpp:25
 msgid "From codes.rc24.xyz, by the disc's ID."
-msgstr ""
+msgstr "Từ codes.rc24.xyz, đến ID của đĩa."
 
 #: port/frontend/shell/cheat_rows.cpp:37
 msgid "Fetch cheats automatically"
-msgstr ""
+msgstr "Tự động tìm nạp gian lận"
 
 #: port/frontend/shell/cheat_rows.cpp:40
 msgid "Cheats for every game in your library, each off until you turn it on."
-msgstr ""
+msgstr "Cheat cho mọi trò chơi trong thư viện của bạn, tắt từng trò chơi cho đến khi bạn bật nó lên."
 
 #: port/frontend/shell/cheat_rows.cpp:41
 msgid "Downloads cheats for every game on the systems that have them: NES, SNES, the Game Boys, N64, DS, 3DS, Switch, GameCube and Wii. Each cheat is off until you turn it on in the game's settings or the in-game menu. Cheats can crash a game or spoil a save: save first."
-msgstr ""
+msgstr "Tải xuống các mánh gian lận cho mọi trò chơi trên các hệ thống có chúng: NES, SNES, Game Boys, N64, DS, 3DS, Switch, GameCube và Wii. Mỗi mánh gian lận sẽ bị tắt cho đến khi bạn bật nó trong cài đặt của trò chơi hoặc menu trong trò chơi. Trò gian lận có thể làm hỏng trò chơi hoặc làm hỏng một bản lưu: hãy lưu trước."
 
 #: port/frontend/shell/cheat_rows.cpp:83
 msgid "Get cheats"
-msgstr ""
+msgstr "Nhận gian lận"
 
 #: port/frontend/shell/cheat_rows.cpp:84
 msgid "{0} cheat"
 msgid_plural "{0} cheats"
-msgstr[0] ""
+msgstr[0] "{0} lần gian lận"
 
 #: port/frontend/shell/cheat_rows.cpp:85 port/frontend/shell/settings.cpp:1125 port/frontend/shell/shares.cpp:292
 msgid "Looking…"
@@ -3923,11 +3923,11 @@ msgstr "Đang tìm…"
 
 #: port/frontend/shell/cheat_rows.cpp:86
 msgid "None found"
-msgstr ""
+msgstr "Không tìm thấy"
 
 #: port/frontend/shell/cheat_rows.cpp:87
 msgid "Not reached: is the PS5 online?"
-msgstr ""
+msgstr "Chưa đạt được: PS5 có trực tuyến không?"
 
 #: port/frontend/shell/cheat_rows.cpp:88 port/frontend/shell/settings.cpp:397
 msgid "Cross to download"
@@ -3935,49 +3935,49 @@ msgstr "Nhấn Chữ thập để tải xuống"
 
 #: port/frontend/shell/cheat_rows.cpp:90
 msgid "Downloads this game's cheats, adding any new ones to what is here. Each is off until you turn it on. Cheats can crash a game or spoil a save: save first."
-msgstr ""
+msgstr "Tải xuống các mánh gian lận của trò chơi này, thêm bất kỳ mánh gian lận mới nào vào đây. Mỗi cái đều tắt cho đến khi bạn bật nó lên. Trò gian lận có thể làm hỏng trò chơi hoặc làm hỏng một bản lưu: hãy lưu trước."
 
 #: port/frontend/shell/cheat_rows.cpp:107
 msgid "Cheat"
-msgstr ""
+msgstr "gian lận"
 
 #: port/frontend/shell/cheat_rows.cpp:110
 msgid "Applies when the game starts. Turn it on or off while playing in the in-game menu's Cheats."
-msgstr ""
+msgstr "Áp dụng khi trò chơi bắt đầu. Bật hoặc tắt nó trong khi chơi trong Cheats của menu trong trò chơi."
 
 #: port/frontend/shell/cheat_rows.cpp:118
 msgid "{0} more in the in-game menu"
 msgid_plural "{0} more in the in-game menu"
-msgstr[0] ""
+msgstr[0] "{0} cái nữa trong menu trong trò chơi"
 
 #: port/frontend/shell/cheat_rows.cpp:119
 msgid "Every cheat is listed in the in-game menu's Cheats."
-msgstr ""
+msgstr "Mọi mánh gian lận đều được liệt kê trong Mánh gian lận của menu trong trò chơi."
 
 #: port/frontend/shell/cheat_rows.cpp:128
 msgid "No cheats yet"
-msgstr ""
+msgstr "Chưa có gian lận nào"
 
 #: port/frontend/shell/cheat_rows.cpp:129
 msgid "Get cheats downloads them. Your own files work too."
-msgstr ""
+msgstr "Nhận các mánh gian lận tải chúng xuống. Các tập tin của riêng bạn cũng hoạt động."
 
 #. {0} is where the game's cheats file goes
 #: port/frontend/shell/cheat_rows.cpp:131
 msgid "Get cheats downloads them. Or put your own file at {0}."
-msgstr ""
+msgstr "Nhận các mánh gian lận tải chúng xuống. Hoặc đặt tệp của riêng bạn tại {0}."
 
 #: port/frontend/shell/cheat_rows.cpp:149
 msgid "This game has no ID to look its cheats up by"
-msgstr ""
+msgstr "Trò chơi này không có ID để tìm kiếm các trò gian lận của nó bằng cách"
 
 #: port/frontend/shell/cheat_rows.cpp:154
 msgid "Looking for cheats…"
-msgstr ""
+msgstr "Đang tìm kiếm gian lận…"
 
 #: port/frontend/shell/cheat_rows.cpp:172
 msgid "The cheat could not be saved: {0}"
-msgstr ""
+msgstr "Không thể lưu mã gian lận: {0}"
 
 #. the first start's steps, as the bar at the top right names them
 #: port/frontend/shell/firststart.cpp:27 port/frontend/shell/settings.cpp:214 port/frontend/shell/settings.cpp:674 port/frontend/shell/settings.cpp:997 port/frontend/shell/settings.cpp:1037 port/frontend/shell/settings.cpp:1095 port/frontend/shell/settings.cpp:2234 port/frontend/shell/setup.cpp:642
@@ -3987,17 +3987,17 @@ msgstr "Ngôn ngữ"
 #. the first start's steps, as the bar at the top right names them
 #: port/frontend/shell/firststart.cpp:27
 msgid "Covers"
-msgstr ""
+msgstr "bìa"
 
 #. the first start's steps, as the bar at the top right names them
 #: port/frontend/shell/firststart.cpp:27
 msgid "Reports"
-msgstr ""
+msgstr "Báo cáo"
 
 #. the first start's steps, as the bar at the top right names them
 #: port/frontend/shell/firststart.cpp:27
 msgid "Ready"
-msgstr ""
+msgstr "Sẵn sàng"
 
 #. after EmulationStation is picked as the launcher on the first start or in Settings
 #: port/frontend/shell/firststart.cpp:117 port/frontend/shell/orbit.cpp:559 port/frontend/shell/settings.cpp:2342
@@ -4006,22 +4006,22 @@ msgstr "EmulationStation sẽ mở vào lần tới Playtendoh khởi động. G
 
 #: port/frontend/shell/firststart.cpp:121 port/frontend/shell/orbit.cpp:565
 msgid "Downloading EmulationStation. It opens next time Playtendoh starts."
-msgstr ""
+msgstr "Đang tải xuống EmulationStation. Nó sẽ mở vào lần tiếp theo Playtendoh khởi động."
 
 #. the first start's setup: Cross on its last step
 #: port/frontend/shell/firststart.cpp:264
 msgid "Start playing"
-msgstr ""
+msgstr "Bắt đầu chơi"
 
 #. the first start's first question
 #: port/frontend/shell/firststart.cpp:364
 msgid "Which language?"
-msgstr ""
+msgstr "Ngôn ngữ nào?"
 
 #. the first start's first question
 #: port/frontend/shell/firststart.cpp:364
 msgid "Playtendoh speaks your PS5's language. Pick another if you like."
-msgstr ""
+msgstr "Playtendoh nói ngôn ngữ PS5 của bạn. Chọn cái khác nếu bạn thích."
 
 #. the first start's languages: a tag on the PS5's own language
 #: port/frontend/shell/firststart.cpp:384 port/frontend/shell/pages.cpp:1324
@@ -4030,17 +4030,17 @@ msgstr "PS5"
 
 #: port/frontend/shell/firststart.cpp:401
 msgid "Change it later in Settings > Language."
-msgstr ""
+msgstr "Thay đổi nó sau trong Cài đặt > Ngôn ngữ."
 
 #. the first start's question: the Library's layouts (Classic, Orbit) or EmulationStation
 #: port/frontend/shell/firststart.cpp:407
 msgid "How do you want to browse your games?"
-msgstr ""
+msgstr "Bạn muốn duyệt trò chơi của mình như thế nào?"
 
 #. the first start's question: the Library's layouts (Classic, Orbit) or EmulationStation
 #: port/frontend/shell/firststart.cpp:407
 msgid "Your games, saves and settings are the same in each."
-msgstr ""
+msgstr "Các trò chơi, phần lưu và cài đặt của bạn đều giống nhau."
 
 #: port/frontend/shell/firststart.cpp:414 port/frontend/shell/orbit.cpp:733 port/frontend/shell/porpoise_rows.cpp:311 port/frontend/shell/settings.cpp:1523
 msgid "Classic"
@@ -4068,139 +4068,139 @@ msgstr "EmulationStation"
 #. the first start's layouts: EmulationStation, downloaded when the setup is done
 #: port/frontend/shell/firststart.cpp:417
 msgid "ES-DE's menus and themes. Downloaded when you finish (about 850 MB); games still play here."
-msgstr ""
+msgstr "Menu và chủ đề của ES-DE. Tải xuống khi bạn hoàn thành (khoảng 850 MB); trò chơi vẫn chơi ở đây."
 
 #: port/frontend/shell/firststart.cpp:444
 msgid "Change it later in Settings > Launcher > Layout."
-msgstr ""
+msgstr "Thay đổi nó sau trong Cài đặt > Trình khởi chạy > Bố cục."
 
 #. the first start's question: covers flat, or as 3D boxes with a spine
 #: port/frontend/shell/firststart.cpp:450
 msgid "How should covers look?"
-msgstr ""
+msgstr "Bìa nên trông như thế nào?"
 
 #. the first start's question: covers flat, or as 3D boxes with a spine
 #: port/frontend/shell/firststart.cpp:450
 msgid "As flat pictures, or as boxes on a shelf."
-msgstr ""
+msgstr "Như những bức tranh phẳng, hay như những chiếc hộp trên kệ."
 
 #. the first start's covers question: the two choices
 #: port/frontend/shell/firststart.cpp:491
 msgid "Flat"
-msgstr ""
+msgstr "phẳng"
 
 #. the first start's covers question: the two choices
 #: port/frontend/shell/firststart.cpp:491
 msgid "3D boxes"
-msgstr ""
+msgstr "Hộp 3D"
 
 #: port/frontend/shell/firststart.cpp:493
 msgid "Each game's cover as a picture. Shows the most games at once."
-msgstr ""
+msgstr "Bìa của mỗi trò chơi như một bức tranh. Hiển thị nhiều trò chơi nhất cùng một lúc."
 
 #: port/frontend/shell/firststart.cpp:494
 msgid "Each game as its box, with the spine. Covers come from GameTDB."
-msgstr ""
+msgstr "Mỗi trò chơi như một chiếc hộp, có xương sống. Vỏ đến từ GameTDB."
 
 #: port/frontend/shell/firststart.cpp:498
 msgid "Change it later in Settings > Launcher > 3D box art."
-msgstr ""
+msgstr "Thay đổi nó sau trong Cài đặt > Trình khởi chạy > Hình hộp 3D."
 
 #. the first start's question: which of the PS5's buttons is a Nintendo controller's A
 #: port/frontend/shell/firststart.cpp:504
 msgid "Which button is A?"
-msgstr ""
+msgstr "Nút nào là nút A?"
 
 #. the first start's question: which of the PS5's buttons is a Nintendo controller's A
 #: port/frontend/shell/firststart.cpp:504
 msgid "For every game. In Playtendoh's menus, Cross always chooses."
-msgstr ""
+msgstr "Đối với mọi trò chơi. Trong menu của Playtendoh, Chữ thập luôn chọn."
 
 #. the first start's buttons question: the two choices
 #: port/frontend/shell/firststart.cpp:538
 msgid "Circle is A"
-msgstr ""
+msgstr "Tròn là A"
 
 #. the first start's buttons question: the two choices
 #: port/frontend/shell/firststart.cpp:538
 msgid "Cross is A"
-msgstr ""
+msgstr "Chữ thập là A"
 
 #: port/frontend/shell/firststart.cpp:540
 msgid "Where A is on a Nintendo controller: on the right."
-msgstr ""
+msgstr "Trong đó A nằm trên bộ điều khiển Nintendo: ở bên phải."
 
 #: port/frontend/shell/firststart.cpp:540
 msgid "Where most PlayStation games confirm: at the bottom."
-msgstr ""
+msgstr "Nơi mà hầu hết các trò chơi PlayStation đều xác nhận: ở phía dưới."
 
 #: port/frontend/shell/firststart.cpp:544
 msgid "Change it later in each system's Controls."
-msgstr ""
+msgstr "Thay đổi nó sau trong phần Điều khiển của mỗi hệ thống."
 
 #. the first start's question: whether the app may send reports of how games run to the project
 #: port/frontend/shell/firststart.cpp:549 port/frontend/shell/reports.cpp:75
 msgid "Help Playtendoh get better?"
-msgstr ""
+msgstr "Giúp cải thiện Playtendoh?"
 
 #: port/frontend/shell/firststart.cpp:550
 msgid "When a game ends, Playtendoh can send a short report on how it ran. Nothing is sent while you play."
-msgstr ""
+msgstr "Khi trò chơi kết thúc, Playtendoh có thể gửi một báo cáo ngắn về cách trò chơi diễn ra. Không có gì được gửi trong khi bạn chơi."
 
 #: port/frontend/shell/firststart.cpp:561 port/frontend/shell/reports.cpp:131
 msgid "Yes, send reports"
-msgstr ""
+msgstr "Có, gửi báo cáo"
 
 #: port/frontend/shell/firststart.cpp:561 port/frontend/shell/reports.cpp:131
 msgid "Not now"
-msgstr ""
+msgstr "Không phải bây giờ"
 
 #: port/frontend/shell/firststart.cpp:563
 msgid "The game, how it ran and its settings, to fix problems and grow the list of working games."
-msgstr ""
+msgstr "Trò chơi, cách nó chạy và các cài đặt của nó, để khắc phục sự cố và phát triển danh sách các trò chơi đang hoạt động."
 
 #: port/frontend/shell/firststart.cpp:564
 msgid "Nothing is sent. You can turn it on any time."
-msgstr ""
+msgstr "Không có gì được gửi đi. Bạn có thể bật nó bất cứ lúc nào."
 
 #: port/frontend/shell/firststart.cpp:579
 msgid "What a report never has"
-msgstr ""
+msgstr "Những gì một báo cáo không bao giờ có"
 
 #: port/frontend/shell/firststart.cpp:581
 msgid "Your PSN name or ID, your console's serial or addresses, your accounts, folders, saves or game list."
-msgstr ""
+msgstr "Tên PSN hoặc ID, số sê-ri hoặc địa chỉ của bảng điều khiển, tài khoản, thư mục, bản lưu hoặc danh sách trò chơi của bạn."
 
 #: port/frontend/shell/firststart.cpp:582
 msgid "Scan the code for every field a report has."
-msgstr ""
+msgstr "Quét mã cho mọi trường có trong báo cáo."
 
 #: port/frontend/shell/firststart.cpp:584
 msgid "Change it later in Settings > Accounts and updates > Send reports."
-msgstr ""
+msgstr "Thay đổi cài đặt này sau trong Cài đặt > Tài khoản và cập nhật > Gửi báo cáo."
 
 #. the first start's last step: a summary, nothing to answer
 #: port/frontend/shell/firststart.cpp:591
 msgid "You're ready to play"
-msgstr ""
+msgstr "Bạn đã sẵn sàng để chơi"
 
 #. the first start's last step: a summary, nothing to answer
 #: port/frontend/shell/firststart.cpp:591
 msgid "Almost ready"
-msgstr ""
+msgstr "Gần như đã sẵn sàng"
 
 #: port/frontend/shell/firststart.cpp:592
 msgid "Everything Playtendoh needs is here."
-msgstr ""
+msgstr "Mọi thứ Playtendoh cần đều có ở đây."
 
 #: port/frontend/shell/firststart.cpp:593
 msgid "One thing to sort out before some games will play."
 msgid_plural "{0} things to sort out before some games will play."
-msgstr[0] ""
+msgstr[0] "{0} điều cần sắp xếp trước khi chơi một số trò chơi"
 
 #: port/frontend/shell/firststart.cpp:607
 msgid "Your games"
-msgstr ""
+msgstr "Trò chơi của bạn"
 
 #: port/frontend/shell/firststart.cpp:613 port/frontend/shell/timeline.cpp:1062
 msgid "No games yet"
@@ -4208,7 +4208,7 @@ msgstr "Chưa có game"
 
 #: port/frontend/shell/firststart.cpp:615
 msgid "Copy your games to the PS5 or a USB drive, each console's in its own folder. They show up the next time you open its library. Settings > Game files says where each one goes."
-msgstr ""
+msgstr "Sao chép trò chơi của bạn vào ổ PS5 hoặc USB, mỗi bảng điều khiển nằm trong thư mục riêng. Chúng xuất hiện vào lần tiếp theo bạn mở thư viện của nó. Cài đặt > Tệp trò chơi cho biết từng tệp sẽ đi đến đâu."
 
 #. how many games the Library has
 #: port/frontend/shell/firststart.cpp:629 port/frontend/shell/library.cpp:766 port/frontend/shell/orbit.cpp:323 port/frontend/shell/pages.cpp:1401 port/frontend/shell/shell.cpp:1802 port/frontend/shell/timeline.cpp:476 port/frontend/shell/timeline.cpp:888 port/frontend/shell/timeline.cpp:1045
@@ -4219,31 +4219,31 @@ msgstr[0] "{0} trò chơi"
 #: port/frontend/shell/firststart.cpp:635
 msgid "{0} game found. Add more any time: each console has its own folder."
 msgid_plural "{0} games found. Add more any time: each console has its own folder."
-msgstr[0] ""
+msgstr[0] "{0} trò chơi được tìm thấy Thêm nhiều hơn bất cứ lúc nào: mỗi bảng điều khiển có thư mục riêng."
 
 #: port/frontend/shell/firststart.cpp:641
 msgid "Checked"
-msgstr ""
+msgstr "Đã kiểm tra"
 
 #: port/frontend/shell/firststart.cpp:641
 msgid "Before you play"
-msgstr ""
+msgstr "Trước khi bạn chơi"
 
 #: port/frontend/shell/firststart.cpp:649
 msgid "Storage and game speed are fine"
-msgstr ""
+msgstr "Dung lượng lưu trữ và tốc độ chơi game ổn"
 
 #: port/frontend/shell/firststart.cpp:675
 msgid "EmulationStation downloads when you start (about 850 MB). It opens next time Playtendoh starts."
-msgstr ""
+msgstr "Tải xuống EmulationStation khi bạn bắt đầu (khoảng 850 MB). Nó sẽ mở vào lần tiếp theo Playtendoh khởi động."
 
 #: port/frontend/shell/firststart.cpp:689
 msgid "Scan it for how, on your phone."
-msgstr ""
+msgstr "Quét nó để biết cách thực hiện trên điện thoại của bạn."
 
 #: port/frontend/shell/firststart.cpp:695
 msgid "Settings > Setup check has the details any time."
-msgstr ""
+msgstr "Cài đặt > Kiểm tra thiết lập có thông tin chi tiết bất kỳ lúc nào."
 
 #. a chip: the game's update, by its version ("Update v208")
 #. an update found to install ({0}: its version, as 208)
@@ -4333,12 +4333,12 @@ msgstr "Định dạng"
 #. under a QR code on the Timeline's museum label: it opens the game's manual on a phone
 #: port/frontend/shell/hub.cpp:310 port/frontend/shell/hub.cpp:316 port/frontend/shell/porpoise_rows.cpp:367 port/frontend/shell/porpoise_rows.cpp:379 port/frontend/shell/porpoise_rows.cpp:391 port/frontend/shell/porpoise_rows.cpp:403 port/frontend/shell/timeline.cpp:1117
 msgid "Manual"
-msgstr ""
+msgstr "Hướng dẫn sử dụng"
 
 #. in the Game hub, beside a QR code to a game's manual on Nintendo's site
 #: port/frontend/shell/hub.cpp:318
 msgid "Scan it with your phone to read the manual on Nintendo's site."
-msgstr ""
+msgstr "Quét nó bằng điện thoại của bạn để đọc hướng dẫn sử dụng trên trang web của Nintendo."
 
 #: port/frontend/shell/hub.cpp:330
 msgid "Runs well on PS5"
@@ -4348,7 +4348,7 @@ msgstr "Chạy tốt trên PS5"
 #: port/frontend/shell/hub.cpp:339
 msgid "From reports on {0} console: {1} of {2} sessions went well."
 msgid_plural "From reports on {0} consoles: {1} of {2} sessions went well."
-msgstr[0] ""
+msgstr[0] "Từ báo cáo trên {0} bảng điều khiển: {1} của các phiên {2} đã diễn ra tốt đẹp."
 
 #. {0} is a status from the compatibility list, such as Playable
 #: port/frontend/shell/hub.cpp:343
@@ -4780,7 +4780,7 @@ msgstr "Xoay vòng quay"
 #. the hint for L2 and R2, which go to the Library and Settings tabs
 #: port/frontend/shell/orbit.cpp:462 port/frontend/shell/shell.cpp:1845 port/frontend/shell/timeline.cpp:1231
 msgid "Library or Settings"
-msgstr ""
+msgstr "Thư viện hoặc Cài đặt"
 
 #: port/frontend/shell/orbit.cpp:718 port/frontend/shell/reports.cpp:73 port/frontend/shell/settings.cpp:1627
 msgid "Make it yours"
@@ -4822,11 +4822,11 @@ msgstr "Dùng {0}"
 
 #: port/frontend/shell/orbit.cpp:783
 msgid "Download {0} MB"
-msgstr ""
+msgstr "Tải xuống {0} MB"
 
 #: port/frontend/shell/orbit.cpp:784
 msgid "Download ES-DE"
-msgstr ""
+msgstr "Tải xuống ES-DE"
 
 #. the first start's layout question: Triangle turns the covers flat or into 3D boxes
 #: port/frontend/shell/orbit.cpp:790
@@ -4840,7 +4840,7 @@ msgstr "Bìa hộp: phẳng"
 
 #: port/frontend/shell/orbit.cpp:802
 msgid "ES-DE is a separate download of about {0} MB. Cross again to download it, Circle to cancel. Playtendoh's own launcher opens until it's in."
-msgstr ""
+msgstr "ES-DE là bản tải xuống riêng biệt của khoảng {0} MB. Chữ thập một lần nữa để tải xuống, Tròn để hủy. Trình khởi chạy riêng của Playtendoh sẽ mở cho đến khi nó được đưa vào."
 
 #: port/frontend/shell/orbit.cpp:803
 msgid "Hold L1 while Playtendoh starts to use its own launcher. Switch back any time in Settings > Launcher > Layout."
@@ -4848,7 +4848,7 @@ msgstr "Giữ L1 khi Playtendoh khởi động để dùng trình khởi chạy 
 
 #: port/frontend/shell/orbit.cpp:804
 msgid "Both have the Timeline, every console's games on one shelf, after the last console."
-msgstr ""
+msgstr "Cả hai đều có Dòng thời gian, các trò chơi của mọi bảng điều khiển đều nằm trên một kệ, sau bảng điều khiển cuối cùng."
 
 #: port/frontend/shell/pages.cpp:307
 msgid "Cross turns a pack on or off. Right shows its presets. Changes apply next time the game starts."
@@ -5042,15 +5042,15 @@ msgstr "Không có DualSense"
 
 #: port/frontend/shell/pages.cpp:794 port/frontend/shell/pages.cpp:814
 msgid "Built-in layouts can't be changed. Choose one of your own at the top."
-msgstr ""
+msgstr "Không thể thay đổi bố cục tích hợp. Chọn một trong những của riêng bạn ở trên cùng."
 
 #: port/frontend/shell/pages.cpp:798 port/frontend/shell/pages.cpp:798 port/frontend/shell/porpoise_rows.cpp:734
 msgid "Clear all"
-msgstr ""
+msgstr "Xóa tất cả"
 
 #: port/frontend/shell/pages.cpp:798 port/frontend/shell/porpoise_rows.cpp:1568
 msgid "Keep them"
-msgstr ""
+msgstr "Giữ chúng"
 
 #: port/frontend/shell/pages.cpp:848
 msgid "Cleared. No DualSense button is set for it."
@@ -5074,18 +5074,20 @@ msgstr "Nút này"
 
 #: port/frontend/shell/pages.cpp:974
 msgid "Press the DualSense button or trigger for {0} now."
-msgstr ""
+msgstr "Hãy nhấn nút DualSense hoặc kích hoạt {0} ngay bây giờ."
 
 #. a GameCube or GBA button's mapping: a DualSense button, never a stick's direction or the touchpad
 #: port/frontend/shell/pages.cpp:984
 msgid "Left and Right, or Cross, choose the layout. Built-in layouts can't be changed; choose one of your own to set buttons."
-msgstr ""
+msgstr "Trái và Phải, hoặc Chữ thập, chọn bố cục. Không thể thay đổi bố cục tích hợp; chọn một trong những nút của riêng bạn để đặt nút."
 
 #: port/frontend/shell/pages.cpp:985 port/frontend/shell/pages.cpp:986
 msgid ""
 "Cross chooses what this DualSense button does. If another button already did that, the two swap.\n"
 "Square makes it do nothing."
 msgstr ""
+"Cross chọn nút DualSense này làm gì. Nếu một nút khác đã thực hiện điều đó thì cả hai sẽ hoán đổi.\n"
+"Square làm cho nó không làm gì cả."
 
 #. a Switch button's mapping: each is on a DualSense button (the touchpad's click too), never on none
 #: port/frontend/shell/pages.cpp:989
@@ -5282,11 +5284,11 @@ msgstr "Đã tìm thấy trong {0}"
 #. {0} is the Switch 2 emulator's data folder
 #: port/frontend/shell/pages.cpp:1423
 msgid "Missing: put it in {0}"
-msgstr ""
+msgstr "Thiếu: cho vào {0}"
 
 #: port/frontend/shell/pages.cpp:1430
 msgid "Saves and settings"
-msgstr ""
+msgstr "Lưu và cài đặt"
 
 #: port/frontend/shell/pages.cpp:1436 port/frontend/shell/settings.cpp:1099
 msgid "Your DS's BIOS"
@@ -5323,12 +5325,12 @@ msgstr "Trò chơi là tệp .nsp và .xci, ở đây hoặc mỗi trò trong m�
 
 #: port/frontend/shell/pages.cpp:1453
 msgid "Games are .nup files, or folders with exefs/main and romfs/, each with its update. Network shares can't be used. Triangle uses this folder."
-msgstr ""
+msgstr "Trò chơi là các tệp .nup hoặc các thư mục có exefs/main and romfs/, mỗi tệp có bản cập nhật. Không thể sử dụng chia sẻ mạng. Tam giác sử dụng thư mục này."
 
 #. {0} is a list of file types (.gb .gbc)
 #: port/frontend/shell/pages.cpp:1455
 msgid "Games are {0} files, here or in subfolders. Triangle uses this folder."
-msgstr ""
+msgstr "Trò chơi là các tệp {0}, ở đây hoặc trong các thư mục con. Tam giác sử dụng thư mục này."
 
 #: port/frontend/shell/pages.cpp:1456
 msgid "Games can be .wua, .wud, .wux, folders with code, content and meta, or in .zip, .7z or .rar. Triangle uses this folder."
@@ -5411,87 +5413,87 @@ msgstr "Như trên, từ New 3DS hoặc New 2DS đang chạy ứng dụng Artic 
 
 #: port/frontend/shell/porpoise_rows.cpp:71
 msgid "Enhancements"
-msgstr ""
+msgstr "Cải tiến"
 
 #: port/frontend/shell/porpoise_rows.cpp:71
 msgid "Bloom, colour, texture filtering, resampling, lighting and fog."
-msgstr ""
+msgstr "Bloom, màu sắc, lọc kết cấu, lấy mẫu lại, ánh sáng và sương mù."
 
 #: port/frontend/shell/porpoise_rows.cpp:72
 msgid "Rendering"
-msgstr ""
+msgstr "Kết xuất"
 
 #: port/frontend/shell/porpoise_rows.cpp:72
 msgid "Shaders, the texture cache and texture packs."
-msgstr ""
+msgstr "Shader, bộ đệm kết cấu và gói kết cấu."
 
 #: port/frontend/shell/porpoise_rows.cpp:73
 msgid "Button layout, vibration, sticks, turbo and the triggers."
-msgstr ""
+msgstr "Bố trí nút, độ rung, gậy, turbo và bộ kích hoạt."
 
 #: port/frontend/shell/porpoise_rows.cpp:74 port/frontend/shell/porpoise_rows.cpp:75 port/frontend/shell/porpoise_rows.cpp:76
 msgid "This player's light bar. Buttons are the same as player 1's."
-msgstr ""
+msgstr "Thanh ánh sáng của người chơi này. Các nút giống như của người chơi 1."
 
 #: port/frontend/shell/porpoise_rows.cpp:75 port/frontend/shell/porpoise_rows.cpp:195 port/frontend/shell/porpoise_rows.cpp:197 port/frontend/shell/porpoise_rows.cpp:207 port/frontend/shell/porpoise_rows.cpp:209 port/frontend/shell/porpoise_rows.cpp:219 port/frontend/shell/porpoise_rows.cpp:221 port/frontend/shell/porpoise_rows.cpp:231 port/frontend/shell/porpoise_rows.cpp:233
 msgid "Player 3"
-msgstr ""
+msgstr "Người chơi 3"
 
 #: port/frontend/shell/porpoise_rows.cpp:76 port/frontend/shell/porpoise_rows.cpp:195 port/frontend/shell/porpoise_rows.cpp:197 port/frontend/shell/porpoise_rows.cpp:207 port/frontend/shell/porpoise_rows.cpp:209 port/frontend/shell/porpoise_rows.cpp:219 port/frontend/shell/porpoise_rows.cpp:221 port/frontend/shell/porpoise_rows.cpp:231 port/frontend/shell/porpoise_rows.cpp:233
 msgid "Player 4"
-msgstr ""
+msgstr "Người chơi 4"
 
 #: port/frontend/shell/porpoise_rows.cpp:77 port/frontend/shell/porpoise_rows.cpp:83 port/frontend/shell/porpoise_rows.cpp:87 port/frontend/shell/porpoise_rows.cpp:257
 msgid "Port 1"
-msgstr ""
+msgstr "Cổng 1"
 
 #: port/frontend/shell/porpoise_rows.cpp:77 port/frontend/shell/porpoise_rows.cpp:78 port/frontend/shell/porpoise_rows.cpp:79 port/frontend/shell/porpoise_rows.cpp:80
 msgid "What's plugged into this port, and who plays it."
-msgstr ""
+msgstr "Cái gì được cắm vào cổng này và ai chơi nó."
 
 #: port/frontend/shell/porpoise_rows.cpp:78 port/frontend/shell/porpoise_rows.cpp:84 port/frontend/shell/porpoise_rows.cpp:88 port/frontend/shell/porpoise_rows.cpp:257
 msgid "Port 2"
-msgstr ""
+msgstr "Cảng 2"
 
 #: port/frontend/shell/porpoise_rows.cpp:79 port/frontend/shell/porpoise_rows.cpp:85 port/frontend/shell/porpoise_rows.cpp:89 port/frontend/shell/porpoise_rows.cpp:257
 msgid "Port 3"
-msgstr ""
+msgstr "Cảng 3"
 
 #: port/frontend/shell/porpoise_rows.cpp:80 port/frontend/shell/porpoise_rows.cpp:86 port/frontend/shell/porpoise_rows.cpp:90 port/frontend/shell/porpoise_rows.cpp:257
 msgid "Port 4"
-msgstr ""
+msgstr "Cổng 4"
 
 #: port/frontend/shell/porpoise_rows.cpp:81 port/frontend/shell/porpoise_rows.cpp:1114
 msgid "GBA video"
-msgstr ""
+msgstr "video GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:81 port/frontend/shell/porpoise_rows.cpp:1115
 msgid "Each GBA's screen on the TV."
-msgstr ""
+msgstr "Màn hình của từng GBA trên TV."
 
 #: port/frontend/shell/porpoise_rows.cpp:82 port/frontend/shell/porpoise_rows.cpp:1114
 msgid "GBA sound"
-msgstr ""
+msgstr "âm thanh GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:82 port/frontend/shell/porpoise_rows.cpp:1115
 msgid "Each GBA's sound."
-msgstr ""
+msgstr "Mỗi âm thanh của GBA."
 
 #: port/frontend/shell/porpoise_rows.cpp:83 port/frontend/shell/porpoise_rows.cpp:84 port/frontend/shell/porpoise_rows.cpp:85 port/frontend/shell/porpoise_rows.cpp:86
 msgid "This port's GBA screen."
-msgstr ""
+msgstr "Màn hình GBA của cổng này."
 
 #: port/frontend/shell/porpoise_rows.cpp:87 port/frontend/shell/porpoise_rows.cpp:88 port/frontend/shell/porpoise_rows.cpp:89 port/frontend/shell/porpoise_rows.cpp:90
 msgid "This port's GBA sound."
-msgstr ""
+msgstr "Âm thanh GBA của cổng này."
 
 #: port/frontend/shell/porpoise_rows.cpp:91
 msgid "The pointer's reach, your grip, motion and real Wii Remotes."
-msgstr ""
+msgstr "Tầm với của con trỏ, cách cầm, chuyển động của bạn và Điều khiển từ xa Wii thực sự."
 
 #: port/frontend/shell/porpoise_rows.cpp:92
 msgid "Settings that may not work on PS5 or need extra setup."
-msgstr ""
+msgstr "Các cài đặt có thể không hoạt động trên PS5 hoặc cần thiết lập thêm."
 
 #: port/frontend/shell/porpoise_rows.cpp:99
 msgid "Higher is sharper but can slow games down."
@@ -5599,35 +5601,35 @@ msgstr "Khi bật tạo khung hình, khung hình riêng của trò chơi đượ
 
 #: port/frontend/shell/porpoise_rows.cpp:125
 msgid "Color filter"
-msgstr ""
+msgstr "Bộ lọc màu"
 
 #: port/frontend/shell/porpoise_rows.cpp:125
 msgid "For color blindness: moves the colors you may not tell apart to ones you can."
-msgstr ""
+msgstr "Đối với bệnh mù màu: di chuyển các màu mà bạn có thể không phân biệt được với những màu mà bạn có thể."
 
 #: port/frontend/shell/porpoise_rows.cpp:126
 msgid "Red-weak"
-msgstr ""
+msgstr "Đỏ-yếu"
 
 #: port/frontend/shell/porpoise_rows.cpp:126
 msgid "Green-weak"
-msgstr ""
+msgstr "Xanh-yếu"
 
 #: port/frontend/shell/porpoise_rows.cpp:126
 msgid "Blue-weak"
-msgstr ""
+msgstr "Màu xanh yếu"
 
 #: port/frontend/shell/porpoise_rows.cpp:126
 msgid "Grayscale"
-msgstr ""
+msgstr "Thang độ xám"
 
 #: port/frontend/shell/porpoise_rows.cpp:127
 msgid "Color filter in games"
-msgstr ""
+msgstr "Bộ lọc màu trong game"
 
 #: port/frontend/shell/porpoise_rows.cpp:127
 msgid "Applies the color filter to games too."
-msgstr ""
+msgstr "Áp dụng bộ lọc màu cho trò chơi."
 
 #: port/frontend/shell/porpoise_rows.cpp:128
 msgid "Frame rate counter"
@@ -5655,235 +5657,235 @@ msgstr "Như PS5"
 
 #: port/frontend/shell/porpoise_rows.cpp:134
 msgid "Aspect ratio"
-msgstr ""
+msgstr "tỷ lệ khung hình"
 
 #: port/frontend/shell/porpoise_rows.cpp:134
 msgid "The picture's shape. Automatic follows the game."
-msgstr ""
+msgstr "Hình dạng của bức tranh. Tự động theo dõi trò chơi."
 
 #: port/frontend/shell/porpoise_rows.cpp:135
 msgid "Force 16:9"
-msgstr ""
+msgstr "Lực lượng 16:9"
 
 #: port/frontend/shell/porpoise_rows.cpp:135
 msgid "Force 4:3"
-msgstr ""
+msgstr "Lực 4:3"
 
 #: port/frontend/shell/porpoise_rows.cpp:135
 msgid "Stretch to fill"
-msgstr ""
+msgstr "Kéo dài để lấp đầy"
 
 #: port/frontend/shell/porpoise_rows.cpp:136
 msgid "Fills the bars beside a 4:3 picture. Your own 1920x1080 PNGs go in /data/porpoise/borders."
-msgstr ""
+msgstr "Lấp đầy các thanh bên cạnh hình ảnh 4:3. PNG 1920x1080 của riêng bạn sẽ nằm trong /data/porpoise/borders."
 
 #: port/frontend/shell/porpoise_rows.cpp:137
 msgid "V-Sync"
-msgstr ""
+msgstr "Đồng bộ hóa V"
 
 #: port/frontend/shell/porpoise_rows.cpp:137
 msgid "Syncs frames to the TV's refresh for the smoothest motion."
-msgstr ""
+msgstr "Đồng bộ hóa khung hình với quá trình làm mới của TV để có chuyển động mượt mà nhất."
 
 #: port/frontend/shell/porpoise_rows.cpp:138
 msgid "Syncs frames to the TV's refresh for the smoothest motion. Off uses the emulator's own timing."
-msgstr ""
+msgstr "Đồng bộ hóa khung hình với quá trình làm mới của TV để có chuyển động mượt mà nhất. Tắt sử dụng thời gian riêng của trình mô phỏng."
 
 #: port/frontend/shell/porpoise_rows.cpp:140
 msgid "Shader compilation"
-msgstr ""
+msgstr "Biên soạn Shader"
 
 #: port/frontend/shell/porpoise_rows.cpp:140
 msgid "Ubershaders prevent stutter when something new is drawn, but use more GPU."
-msgstr ""
+msgstr "Ubershaders ngăn chặn tình trạng giật hình khi có nội dung mới được vẽ nhưng sử dụng nhiều GPU hơn."
 
 #: port/frontend/shell/porpoise_rows.cpp:141
 msgid "Synchronous"
-msgstr ""
+msgstr "Đồng bộ"
 
 #: port/frontend/shell/porpoise_rows.cpp:141
 msgid "Ubershaders"
-msgstr ""
+msgstr "Ubershaders"
 
 #: port/frontend/shell/porpoise_rows.cpp:141
 msgid "Async ubershaders"
-msgstr ""
+msgstr "Trình tạo ubershader không đồng bộ"
 
 #: port/frontend/shell/porpoise_rows.cpp:141
 msgid "Async, skip drawing"
-msgstr ""
+msgstr "Không đồng bộ, bỏ qua bản vẽ"
 
 #: port/frontend/shell/porpoise_rows.cpp:142
 msgid "Build shaders before starting"
-msgstr ""
+msgstr "Xây dựng shader trước khi bắt đầu"
 
 #: port/frontend/shell/porpoise_rows.cpp:142
 msgid "Shaders the game used last time are built while it loads. It starts a moment later."
-msgstr ""
+msgstr "Các shader mà trò chơi sử dụng lần trước sẽ được tạo trong khi tải. Nó bắt đầu một lúc sau."
 
 #: port/frontend/shell/porpoise_rows.cpp:143
 msgid "Builds the shaders the game used last time while it loads, so effects don't stutter. The game takes a moment longer to start."
-msgstr ""
+msgstr "Xây dựng các shader mà trò chơi đã sử dụng lần trước trong khi tải để các hiệu ứng không bị giật. Trò chơi mất một chút thời gian để bắt đầu."
 
 #: port/frontend/shell/porpoise_rows.cpp:145
 msgid "Threaded GPU recording"
-msgstr ""
+msgstr "Ghi GPU theo luồng"
 
 #: port/frontend/shell/porpoise_rows.cpp:145
 msgid "The driver records drawing on its own thread. Turn it off if a game crashes."
-msgstr ""
+msgstr "Trình điều khiển ghi lại bản vẽ trên chủ đề của chính nó. Tắt nó đi nếu trò chơi gặp sự cố."
 
 #: port/frontend/shell/porpoise_rows.cpp:146
 msgid "Records drawing on a separate thread. Can speed up demanding games. Turn it off if a game crashes or looks wrong. Applies next time a game starts."
-msgstr ""
+msgstr "Ghi lại bản vẽ trên một chủ đề riêng biệt. Có thể tăng tốc các trò chơi đòi hỏi khắt khe. Tắt nó đi nếu trò chơi gặp sự cố hoặc có vẻ không ổn. Áp dụng vào lần tiếp theo khi trận đấu bắt đầu."
 
 #: port/frontend/shell/porpoise_rows.cpp:148
 msgid "Texture cache accuracy"
-msgstr ""
+msgstr "Độ chính xác của bộ đệm kết cấu"
 
 #: port/frontend/shell/porpoise_rows.cpp:148
 msgid "Safe fixes some games' text and effects; Fast is quickest."
-msgstr ""
+msgstr "Sửa lỗi an toàn về văn bản và hiệu ứng của một số trò chơi; Nhanh là nhanh nhất."
 
 #: port/frontend/shell/porpoise_rows.cpp:149
 msgid "Fast"
-msgstr ""
+msgstr "Nhanh"
 
 #: port/frontend/shell/porpoise_rows.cpp:149
 msgid "Middle"
-msgstr ""
+msgstr "giữa"
 
 #: port/frontend/shell/porpoise_rows.cpp:149 port/frontend/shell/porpoise_rows.cpp:313
 msgid "Safe"
-msgstr ""
+msgstr "An toàn"
 
 #: port/frontend/shell/porpoise_rows.cpp:150
 msgid "Crop overscan"
-msgstr ""
+msgstr "Cắt quét quá mức"
 
 #: port/frontend/shell/porpoise_rows.cpp:150
 msgid "Hides the black borders some games draw at the edges."
-msgstr ""
+msgstr "Ẩn các đường viền màu đen của một số trò chơi vẽ ở các cạnh."
 
 #: port/frontend/shell/porpoise_rows.cpp:152
 msgid "Crop left"
-msgstr ""
+msgstr "Cắt trái"
 
 #: port/frontend/shell/porpoise_rows.cpp:152
 msgid "Trims the left edge of the picture."
-msgstr ""
+msgstr "Cắt cạnh trái của hình ảnh."
 
 #: port/frontend/shell/porpoise_rows.cpp:154
 msgid "Crop right"
-msgstr ""
+msgstr "Cắt phải"
 
 #: port/frontend/shell/porpoise_rows.cpp:154
 msgid "Trims the right edge of the picture."
-msgstr ""
+msgstr "Cắt cạnh phải của hình ảnh."
 
 #: port/frontend/shell/porpoise_rows.cpp:156
 msgid "Crop top"
-msgstr ""
+msgstr "Cắt đầu"
 
 #: port/frontend/shell/porpoise_rows.cpp:156
 msgid "Trims the top edge of the picture."
-msgstr ""
+msgstr "Cắt cạnh trên của hình ảnh."
 
 #: port/frontend/shell/porpoise_rows.cpp:158
 msgid "Crop bottom"
-msgstr ""
+msgstr "Cắt đáy"
 
 #: port/frontend/shell/porpoise_rows.cpp:158
 msgid "Trims the bottom edge of the picture."
-msgstr ""
+msgstr "Cắt cạnh dưới của hình ảnh."
 
 #: port/frontend/shell/porpoise_rows.cpp:160
 msgid "Skip duplicate frames"
-msgstr ""
+msgstr "Bỏ qua các khung trùng lặp"
 
 #: port/frontend/shell/porpoise_rows.cpp:160
 msgid "Saves work when a game shows the same frame twice."
-msgstr ""
+msgstr "Lưu công việc khi trò chơi hiển thị cùng một khung hình hai lần."
 
 #: port/frontend/shell/porpoise_rows.cpp:162
 msgid "Anisotropic filtering"
-msgstr ""
+msgstr "Lọc bất đẳng hướng"
 
 #: port/frontend/shell/porpoise_rows.cpp:162
 msgid "Sharper textures on floors and walls seen at an angle."
-msgstr ""
+msgstr "Kết cấu sắc nét hơn trên sàn và tường nhìn ở một góc."
 
 #: port/frontend/shell/porpoise_rows.cpp:164
 msgid "Extra bloom"
-msgstr ""
+msgstr "nở thêm"
 
 #: port/frontend/shell/porpoise_rows.cpp:164
 msgid "Adds a soft glow around bright areas."
-msgstr ""
+msgstr "Thêm ánh sáng dịu nhẹ xung quanh các vùng sáng."
 
 #: port/frontend/shell/porpoise_rows.cpp:165 port/frontend/shell/porpoise_rows.cpp:263 port/frontend/shell/porpoise_rows.cpp:313
 msgid "Low"
-msgstr ""
+msgstr "Thấp"
 
 #: port/frontend/shell/porpoise_rows.cpp:165 port/frontend/shell/porpoise_rows.cpp:265
 msgid "Medium"
-msgstr ""
+msgstr "Trung bình"
 
 #: port/frontend/shell/porpoise_rows.cpp:165
 msgid "High"
-msgstr ""
+msgstr "Cao"
 
 #: port/frontend/shell/porpoise_rows.cpp:166
 msgid "Saturation"
-msgstr ""
+msgstr "Độ bão hòa"
 
 #: port/frontend/shell/porpoise_rows.cpp:166
 msgid "How rich the colours are. 0 is as the game has them."
-msgstr ""
+msgstr "Màu sắc phong phú biết bao. 0 giống như trò chơi có chúng."
 
 #: port/frontend/shell/porpoise_rows.cpp:168
 msgid "Contrast"
-msgstr ""
+msgstr "tương phản"
 
 #: port/frontend/shell/porpoise_rows.cpp:168
 msgid "How far apart the darks and the lights are. 0 is as the game has them."
-msgstr ""
+msgstr "Bóng tối và ánh sáng cách nhau bao xa. 0 giống như trò chơi có chúng."
 
 #: port/frontend/shell/porpoise_rows.cpp:170
 msgid "Warmth"
-msgstr ""
+msgstr "Sự ấm áp"
 
 #: port/frontend/shell/porpoise_rows.cpp:170
 msgid "Warmer (more red) or cooler (more blue). 0 is as the game has it."
-msgstr ""
+msgstr "Ấm hơn (nhiều màu đỏ hơn) hoặc mát hơn (nhiều màu xanh hơn). 0 giống như trò chơi có nó."
 
 #: port/frontend/shell/porpoise_rows.cpp:172
 msgid "Texture filtering"
-msgstr ""
+msgstr "Lọc kết cấu"
 
 #: port/frontend/shell/porpoise_rows.cpp:172
 msgid "Force sharp or smooth textures, or leave it to the game."
-msgstr ""
+msgstr "Buộc các kết cấu sắc nét hoặc mịn hoặc để nó cho trò chơi."
 
 #: port/frontend/shell/porpoise_rows.cpp:173 port/frontend/shell/porpoise_rows.cpp:182 port/frontend/shell/porpoise_rows.cpp:184
 msgid "The game's own"
-msgstr ""
+msgstr "Trò chơi là của riêng"
 
 #: port/frontend/shell/porpoise_rows.cpp:173
 msgid "Nearest (sharp)"
-msgstr ""
+msgstr "Gần nhất (sắc nét)"
 
 #: port/frontend/shell/porpoise_rows.cpp:173
 msgid "Linear (smooth)"
-msgstr ""
+msgstr "Tuyến tính (trơn tru)"
 
 #: port/frontend/shell/porpoise_rows.cpp:174
 msgid "Output resampling"
-msgstr ""
+msgstr "Lấy mẫu lại đầu ra"
 
 #: port/frontend/shell/porpoise_rows.cpp:174
 msgid "How the picture is scaled. Sharp bilinear keeps pixels crisp."
-msgstr ""
+msgstr "Hình ảnh được thu nhỏ như thế nào. Sắc nét song tuyến giữ cho pixel sắc nét."
 
 #. Settings > Screens: a row that opens the touch screen's settings (where the touchpad's cursor lands, the right stick as the stylus)
 #. Settings > Performance: a row that opens Eden's accuracy shortcuts (Fast GPU, Unsafe CPU, ...); its value: how many are changed
@@ -5894,67 +5896,67 @@ msgstr "Mặc định"
 
 #: port/frontend/shell/porpoise_rows.cpp:175
 msgid "Sharp bilinear"
-msgstr ""
+msgstr "Song tuyến sắc nét"
 
 #: port/frontend/shell/porpoise_rows.cpp:175
 msgid "Area sampling"
-msgstr ""
+msgstr "Lấy mẫu khu vực"
 
 #: port/frontend/shell/porpoise_rows.cpp:177
 msgid "Per-pixel lighting"
-msgstr ""
+msgstr "Ánh sáng trên mỗi pixel"
 
 #: port/frontend/shell/porpoise_rows.cpp:177
 msgid "Smoother lighting on surfaces. A little heavier."
-msgstr ""
+msgstr "Ánh sáng mượt mà hơn trên các bề mặt. Nặng hơn một chút."
 
 #: port/frontend/shell/porpoise_rows.cpp:179
 msgid "Disable fog"
-msgstr ""
+msgstr "Tắt sương mù"
 
 #: port/frontend/shell/porpoise_rows.cpp:179
 msgid "Removes distance fog. Some games use fog for their look."
-msgstr ""
+msgstr "Loại bỏ sương mù khoảng cách. Một số trò chơi sử dụng sương mù để tạo giao diện."
 
 #: port/frontend/shell/porpoise_rows.cpp:181
 msgid "Bloom"
-msgstr ""
+msgstr "nở hoa"
 
 #: port/frontend/shell/porpoise_rows.cpp:181
 msgid "A graphics mod for this game's glow. Applies next time it starts."
-msgstr ""
+msgstr "Một mod đồ họa cho trò chơi này tỏa sáng. Áp dụng vào lần tiếp theo nó bắt đầu."
 
 #: port/frontend/shell/porpoise_rows.cpp:182 port/frontend/shell/porpoise_rows.cpp:184
 msgid "Blurred"
-msgstr ""
+msgstr "bị mờ"
 
 #: port/frontend/shell/porpoise_rows.cpp:182 port/frontend/shell/porpoise_rows.cpp:184
 msgid "Native resolution"
-msgstr ""
+msgstr "Độ phân giải gốc"
 
 #: port/frontend/shell/porpoise_rows.cpp:183
 msgid "Depth of field"
-msgstr ""
+msgstr "Độ sâu trường ảnh"
 
 #: port/frontend/shell/porpoise_rows.cpp:183
 msgid "A graphics mod for the blur on faraway things. Applies next time it starts."
-msgstr ""
+msgstr "Một mod đồ họa để làm mờ những thứ ở xa. Áp dụng vào lần tiếp theo nó bắt đầu."
 
 #: port/frontend/shell/porpoise_rows.cpp:185
 msgid "Hide the HUD"
-msgstr ""
+msgstr "Ẩn HUD"
 
 #: port/frontend/shell/porpoise_rows.cpp:185
 msgid "Hides the game's HUD, for clean screenshots. Applies the next time it starts."
-msgstr ""
+msgstr "Ẩn HUD của trò chơi để có ảnh chụp màn hình rõ ràng. Áp dụng vào lần tiếp theo nó bắt đầu."
 
 #: port/frontend/shell/porpoise_rows.cpp:186
 msgid "Native resolution goop"
-msgstr ""
+msgstr "Goop có độ phân giải gốc"
 
 #: port/frontend/shell/porpoise_rows.cpp:186
 msgid "Super Mario Sunshine's goop at the game's own resolution. Applies the next time it starts."
-msgstr ""
+msgstr "Super Mario Sunshine goop ở độ phân giải riêng của trò chơi. Áp dụng vào lần tiếp theo nó bắt đầu."
 
 #: port/frontend/shell/porpoise_rows.cpp:187 port/frontend/shell/settings.cpp:731 port/frontend/shell/settings.cpp:738
 msgid "Custom textures"
@@ -5962,107 +5964,107 @@ msgstr "Kết cấu tùy chỉnh"
 
 #: port/frontend/shell/porpoise_rows.cpp:187
 msgid "Loads HD texture packs."
-msgstr ""
+msgstr "Tải gói kết cấu HD."
 
 #: port/frontend/shell/porpoise_rows.cpp:188
 msgid "Loads HD texture packs. Put each pack's folder, named with the game's ID (like GALE01), in /data/porpoise/saves/User/Load/Textures."
-msgstr ""
+msgstr "Tải gói kết cấu HD. Đặt thư mục của từng gói, được đặt tên theo ID của trò chơi (như GALE01), vào /data/porpoise/saves/User/Load/Textures."
 
 #: port/frontend/shell/porpoise_rows.cpp:190 port/frontend/shell/porpoise_rows.cpp:202 port/frontend/shell/porpoise_rows.cpp:214 port/frontend/shell/porpoise_rows.cpp:226
 msgid "Device"
-msgstr ""
+msgstr "Thiết bị"
 
 #: port/frontend/shell/porpoise_rows.cpp:190 port/frontend/shell/porpoise_rows.cpp:202 port/frontend/shell/porpoise_rows.cpp:214 port/frontend/shell/porpoise_rows.cpp:226
 msgid "What's plugged into this controller port."
-msgstr ""
+msgstr "Cái gì cắm vào cổng điều khiển này."
 
 #: port/frontend/shell/porpoise_rows.cpp:191 port/frontend/shell/porpoise_rows.cpp:203 port/frontend/shell/porpoise_rows.cpp:215 port/frontend/shell/porpoise_rows.cpp:227
 msgid "What's plugged into this controller port. GBA (Integrated) is a Game Boy Advance on the link cable, for games like Four Swords Adventures. It needs the GBA BIOS at /data/porpoise/saves/User/GBA/gba_bios.bin. Best set per game."
-msgstr ""
+msgstr "Cái gì cắm vào cổng điều khiển này. GBA (Tích hợp) là Game Boy Advance trên cáp liên kết, dành cho các trò chơi như Four Swords Adventures. Nó cần GBA BIOS tại /data/porpoise/saves/User/GBA/gba_bios.bin. Bộ tốt nhất cho mỗi trò chơi."
 
 #: port/frontend/shell/porpoise_rows.cpp:192 port/frontend/shell/porpoise_rows.cpp:204 port/frontend/shell/porpoise_rows.cpp:216 port/frontend/shell/porpoise_rows.cpp:228 port/frontend/shell/porpoise_rows.cpp:1162
 msgid "GameCube Controller"
-msgstr ""
+msgstr "Bộ điều khiển GameCube"
 
 #: port/frontend/shell/porpoise_rows.cpp:192 port/frontend/shell/porpoise_rows.cpp:204 port/frontend/shell/porpoise_rows.cpp:216 port/frontend/shell/porpoise_rows.cpp:228 port/frontend/shell/porpoise_rows.cpp:1162
 msgid "GBA (Integrated)"
-msgstr ""
+msgstr "GBA (Tích hợp)"
 
 #: port/frontend/shell/porpoise_rows.cpp:193 port/frontend/shell/porpoise_rows.cpp:196 port/frontend/shell/porpoise_rows.cpp:205 port/frontend/shell/porpoise_rows.cpp:208 port/frontend/shell/porpoise_rows.cpp:217 port/frontend/shell/porpoise_rows.cpp:220 port/frontend/shell/porpoise_rows.cpp:229 port/frontend/shell/porpoise_rows.cpp:232
 msgid "Controlled by"
-msgstr ""
+msgstr "Kiểm soát bởi"
 
 #: port/frontend/shell/porpoise_rows.cpp:193 port/frontend/shell/porpoise_rows.cpp:205 port/frontend/shell/porpoise_rows.cpp:217 port/frontend/shell/porpoise_rows.cpp:229
 msgid "Who plays this GBA by holding their GBA button."
-msgstr ""
+msgstr "Ai chơi GBA này bằng cách giữ nút GBA của họ."
 
 #: port/frontend/shell/porpoise_rows.cpp:194 port/frontend/shell/porpoise_rows.cpp:206 port/frontend/shell/porpoise_rows.cpp:218 port/frontend/shell/porpoise_rows.cpp:230
 msgid "A player: they play it while holding their GBA button, with its sound on their controller. Its own controller: the controller in this port is the GBA, no button needed. Nobody: only from the web page."
-msgstr ""
+msgstr "Người chơi: họ chơi trò chơi đó trong khi giữ nút GBA với âm thanh trên bộ điều khiển của họ. Bộ điều khiển riêng: bộ điều khiển ở cổng này là GBA, không cần nút bấm. Không có ai: chỉ từ trang web."
 
 #: port/frontend/shell/porpoise_rows.cpp:195 port/frontend/shell/porpoise_rows.cpp:207 port/frontend/shell/porpoise_rows.cpp:219 port/frontend/shell/porpoise_rows.cpp:231 port/frontend/shell/porpoise_rows.cpp:1153
 msgid "Its own controller"
-msgstr ""
+msgstr "Bộ điều khiển riêng của nó"
 
 #: port/frontend/shell/porpoise_rows.cpp:196 port/frontend/shell/porpoise_rows.cpp:208 port/frontend/shell/porpoise_rows.cpp:220 port/frontend/shell/porpoise_rows.cpp:232
 msgid "Whose controller is in this port."
-msgstr ""
+msgstr "Bộ điều khiển của ai ở cổng này."
 
 #: port/frontend/shell/porpoise_rows.cpp:198 port/frontend/shell/porpoise_rows.cpp:210 port/frontend/shell/porpoise_rows.cpp:222 port/frontend/shell/porpoise_rows.cpp:234 port/frontend/shell/porpoise_rows.cpp:621
 msgid "GBA button"
-msgstr ""
+msgstr "Nút GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:198 port/frontend/shell/porpoise_rows.cpp:210 port/frontend/shell/porpoise_rows.cpp:222 port/frontend/shell/porpoise_rows.cpp:234
 msgid "Hold the GBA button, press it to toggle, or keep it always on or off."
-msgstr ""
+msgstr "Giữ nút GBA, nhấn nút này để chuyển đổi hoặc giữ nút này luôn bật hoặc tắt."
 
 #: port/frontend/shell/porpoise_rows.cpp:199 port/frontend/shell/porpoise_rows.cpp:211 port/frontend/shell/porpoise_rows.cpp:223 port/frontend/shell/porpoise_rows.cpp:235 port/frontend/shell/porpoise_rows.cpp:369 port/frontend/shell/porpoise_rows.cpp:381 port/frontend/shell/porpoise_rows.cpp:393 port/frontend/shell/porpoise_rows.cpp:405
 msgid "Toggle"
-msgstr ""
+msgstr "Chuyển đổi"
 
 #: port/frontend/shell/porpoise_rows.cpp:199 port/frontend/shell/porpoise_rows.cpp:211 port/frontend/shell/porpoise_rows.cpp:223 port/frontend/shell/porpoise_rows.cpp:235 port/frontend/shell/porpoise_rows.cpp:369 port/frontend/shell/porpoise_rows.cpp:381 port/frontend/shell/porpoise_rows.cpp:393 port/frontend/shell/porpoise_rows.cpp:405
 msgid "Always on"
-msgstr ""
+msgstr "Luôn bật"
 
 #: port/frontend/shell/porpoise_rows.cpp:199 port/frontend/shell/porpoise_rows.cpp:211 port/frontend/shell/porpoise_rows.cpp:223 port/frontend/shell/porpoise_rows.cpp:235 port/frontend/shell/porpoise_rows.cpp:369 port/frontend/shell/porpoise_rows.cpp:381 port/frontend/shell/porpoise_rows.cpp:393 port/frontend/shell/porpoise_rows.cpp:405
 msgid "Always off"
-msgstr ""
+msgstr "Luôn tắt"
 
 #: port/frontend/shell/porpoise_rows.cpp:200 port/frontend/shell/porpoise_rows.cpp:212 port/frontend/shell/porpoise_rows.cpp:224 port/frontend/shell/porpoise_rows.cpp:236
 msgid "GBA game"
-msgstr ""
+msgstr "trò chơi GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:200
 msgid "The GBA game loaded at start, from games/gba/port1. None: BIOS only."
-msgstr ""
+msgstr "Trò chơi GBA được tải khi bắt đầu, từ games/gba/port1. Không có: chỉ BIOS."
 
 #: port/frontend/shell/porpoise_rows.cpp:201 port/frontend/shell/porpoise_rows.cpp:213 port/frontend/shell/porpoise_rows.cpp:225 port/frontend/shell/porpoise_rows.cpp:237
 msgid "Save beside the game"
-msgstr ""
+msgstr "Lưu bên cạnh trò chơi"
 
 #: port/frontend/shell/porpoise_rows.cpp:201 port/frontend/shell/porpoise_rows.cpp:213 port/frontend/shell/porpoise_rows.cpp:225 port/frontend/shell/porpoise_rows.cpp:237
 msgid "Keeps this GBA's save next to its game instead of with the other saves."
-msgstr ""
+msgstr "Giữ bản lưu của GBA này bên cạnh trò chơi của nó thay vì cùng với các bản lưu khác."
 
 #: port/frontend/shell/porpoise_rows.cpp:212
 msgid "The GBA game loaded at start, from games/gba/port2. None: BIOS only."
-msgstr ""
+msgstr "Trò chơi GBA được tải khi bắt đầu, từ games/gba/port2. Không có: chỉ BIOS."
 
 #: port/frontend/shell/porpoise_rows.cpp:224
 msgid "The GBA game loaded at start, from games/gba/port3. None: BIOS only."
-msgstr ""
+msgstr "Trò chơi GBA được tải khi bắt đầu, từ games/gba/port3. Không có: chỉ BIOS."
 
 #: port/frontend/shell/porpoise_rows.cpp:236
 msgid "The GBA game loaded at start, from games/gba/port4. None: BIOS only."
-msgstr ""
+msgstr "Trò chơi GBA được tải khi bắt đầu, từ games/gba/port4. Không có: chỉ BIOS."
 
 #: port/frontend/shell/porpoise_rows.cpp:238
 msgid "Console"
-msgstr ""
+msgstr "Bảng điều khiển"
 
 #: port/frontend/shell/porpoise_rows.cpp:238
 msgid "Which console's controls to use, if a game is detected wrongly."
-msgstr ""
+msgstr "Nên sử dụng điều khiển nào của bảng điều khiển nếu phát hiện sai trò chơi."
 
 #: port/frontend/shell/porpoise_rows.cpp:240
 msgid "Button layout"
@@ -6074,7 +6076,7 @@ msgstr "PlayStation: Chữ thập là A và Tròn là B. GameCube: Tròn là A v
 
 #: port/frontend/shell/porpoise_rows.cpp:242
 msgid "PlayStation: Cross is A and Circle is B. GameCube: Circle is A and Cross is B. My layouts are the ones you make on the Buttons page. For GameCube games and Wii games played with a GameCube controller."
-msgstr ""
+msgstr "PlayStation: Chữ thập là A và Tròn là B. GameCube: Tròn là A và Chữ thập là B. Bố cục của tôi là bố cục bạn tạo trên trang Nút. Dành cho các trò chơi GameCube và các trò chơi Wii được chơi bằng bộ điều khiển GameCube."
 
 #: port/frontend/shell/porpoise_rows.cpp:244
 msgid "Controller rumble."
@@ -6138,95 +6140,95 @@ msgstr "Cần phải"
 
 #: port/frontend/shell/porpoise_rows.cpp:255
 msgid "Player 1's port"
-msgstr ""
+msgstr "Cổng của người chơi 1"
 
 #: port/frontend/shell/porpoise_rows.cpp:255
 msgid "The GameCube port your controller is in, for the few games that want another."
-msgstr ""
+msgstr "Cổng GameCube dành cho bộ điều khiển của bạn dành cho một số trò chơi muốn có cổng khác."
 
 #: port/frontend/shell/porpoise_rows.cpp:256
 msgid "The GameCube port your controller is in. A few games briefly need it in another port."
-msgstr ""
+msgstr "Bộ điều khiển của bạn đang sử dụng cổng GameCube. Một số trò chơi trong thời gian ngắn cần cổng này ở một cổng khác."
 
 #: port/frontend/shell/porpoise_rows.cpp:258
 msgid "Invert the control stick"
-msgstr ""
+msgstr "Invert the control stick"
 
 #: port/frontend/shell/porpoise_rows.cpp:258
 msgid "For a game whose controls feel reversed. Best set per game."
-msgstr ""
+msgstr "Đối với một trò chơi có cảm giác điều khiển bị đảo ngược. Bộ tốt nhất cho mỗi trò chơi."
 
 #: port/frontend/shell/porpoise_rows.cpp:259 port/frontend/shell/porpoise_rows.cpp:261
 msgid "Up and down"
-msgstr ""
+msgstr "Lên và xuống"
 
 #: port/frontend/shell/porpoise_rows.cpp:259 port/frontend/shell/porpoise_rows.cpp:261
 msgid "Left and right"
-msgstr ""
+msgstr "Left and right"
 
 #: port/frontend/shell/porpoise_rows.cpp:259 port/frontend/shell/porpoise_rows.cpp:261
 msgid "Both"
-msgstr ""
+msgstr "Cả hai"
 
 #: port/frontend/shell/porpoise_rows.cpp:260
 msgid "Invert the C-stick"
-msgstr ""
+msgstr "Đảo ngược C-stick"
 
 #: port/frontend/shell/porpoise_rows.cpp:260
 msgid "For a game whose camera feels reversed. Best set per game."
-msgstr ""
+msgstr "Đối với một trò chơi có camera có cảm giác bị đảo ngược. Bộ tốt nhất cho mỗi trò chơi."
 
 #: port/frontend/shell/porpoise_rows.cpp:262
 msgid "Stick sensitivity"
-msgstr ""
+msgstr "Stick sensitivity"
 
 #: port/frontend/shell/porpoise_rows.cpp:262
 msgid "Lower makes small pushes gentler. A full push still turns fully."
-msgstr ""
+msgstr "Thấp hơn làm cho những cú đẩy nhỏ nhẹ nhàng hơn. Đẩy mạnh vẫn quay hoàn toàn."
 
 #: port/frontend/shell/porpoise_rows.cpp:263 port/frontend/shell/porpoise_rows.cpp:313
 msgid "Normal"
-msgstr ""
+msgstr "Bình thường"
 
 #: port/frontend/shell/porpoise_rows.cpp:263
 msgid "Lower"
-msgstr ""
+msgstr "Lower"
 
 #: port/frontend/shell/porpoise_rows.cpp:263
 msgid "Lowest"
-msgstr ""
+msgstr "Thấp nhất"
 
 #: port/frontend/shell/porpoise_rows.cpp:264
 msgid "Stick dead zone"
-msgstr ""
+msgstr "Stick dead zone"
 
 #: port/frontend/shell/porpoise_rows.cpp:264
 msgid "How far the stick moves before the game sees it, for a stick that drifts."
-msgstr ""
+msgstr "Cây gậy di chuyển được bao xa trước khi trò chơi nhìn thấy nó, đối với một cây gậy trôi đi."
 
 #: port/frontend/shell/porpoise_rows.cpp:265
 msgid "Small"
-msgstr ""
+msgstr "nhỏ"
 
 #: port/frontend/shell/porpoise_rows.cpp:265
 msgid "Large"
-msgstr ""
+msgstr "Large"
 
 #: port/frontend/shell/porpoise_rows.cpp:266
 msgid "Fast forward buttons"
-msgstr ""
+msgstr "Các nút chuyển tiếp nhanh"
 
 #: port/frontend/shell/porpoise_rows.cpp:266
 msgid "Touchpad + R1 steps fast forward; touchpad + R2 fast-forwards while held."
-msgstr ""
+msgstr "Touchpad + R1 steps fast forward; bàn di chuột + R2 tua đi nhanh khi được giữ."
 
 #: port/frontend/shell/porpoise_rows.cpp:268
 msgid "Quick save buttons"
-msgstr ""
+msgstr "Nút lưu nhanh"
 
 #: port/frontend/shell/porpoise_rows.cpp:268
 msgid "Touchpad + L1 saves to this slot and touchpad + L2 loads it."
-msgstr ""
+msgstr "Bàn di chuột + L1 lưu vào khe này và bàn di chuột + L2 tải nó."
 
 #: port/frontend/shell/porpoise_rows.cpp:270 port/frontend/shell/settings.cpp:921
 msgid "Turbo button"
@@ -6234,39 +6236,39 @@ msgstr "Nút turbo"
 
 #: port/frontend/shell/porpoise_rows.cpp:270
 msgid "Holding this button presses it repeatedly."
-msgstr ""
+msgstr "Giữ nút này sẽ nhấn nó liên tục."
 
 #: port/frontend/shell/porpoise_rows.cpp:271
 msgid "Cross"
-msgstr ""
+msgstr "chéo"
 
 #: port/frontend/shell/porpoise_rows.cpp:271
 msgid "Circle"
-msgstr ""
+msgstr "vòng tròn"
 
 #: port/frontend/shell/porpoise_rows.cpp:271
 msgid "Square"
-msgstr ""
+msgstr "Vuông"
 
 #: port/frontend/shell/porpoise_rows.cpp:271
 msgid "Triangle"
-msgstr ""
+msgstr "Tam giác"
 
 #: port/frontend/shell/porpoise_rows.cpp:272
 msgid "Screenshot buttons"
-msgstr ""
+msgstr "Screenshot buttons"
 
 #: port/frontend/shell/porpoise_rows.cpp:272
 msgid "In a game, touchpad + Square takes a screenshot."
-msgstr ""
+msgstr "Trong trò chơi, bàn di chuột + Vuông sẽ chụp ảnh màn hình."
 
 #: port/frontend/shell/porpoise_rows.cpp:274
 msgid "Trigger click"
-msgstr ""
+msgstr "Trigger click"
 
 #: port/frontend/shell/porpoise_rows.cpp:274
 msgid "L2 and R2 click near the bottom, like the GameCube's triggers."
-msgstr ""
+msgstr "L2 và R2 nhấp chuột ở gần cuối, giống như trình kích hoạt của GameCube."
 
 #: port/frontend/shell/porpoise_rows.cpp:275 port/frontend/shell/settings.cpp:169
 msgid "Light"
@@ -6274,171 +6276,171 @@ msgstr "Sáng"
 
 #: port/frontend/shell/porpoise_rows.cpp:275
 msgid "Firm"
-msgstr ""
+msgstr "công ty"
 
 #: port/frontend/shell/porpoise_rows.cpp:275
 msgid "Extra firm"
-msgstr ""
+msgstr "Thêm chắc chắn"
 
 #: port/frontend/shell/porpoise_rows.cpp:276 port/frontend/shell/porpoise_rows.cpp:278 port/frontend/shell/porpoise_rows.cpp:280 port/frontend/shell/porpoise_rows.cpp:282
 msgid "Light bar"
-msgstr ""
+msgstr "Thanh ánh sáng"
 
 #: port/frontend/shell/porpoise_rows.cpp:276 port/frontend/shell/porpoise_rows.cpp:278 port/frontend/shell/porpoise_rows.cpp:280 port/frontend/shell/porpoise_rows.cpp:282
 msgid "The colour of this player's light bar."
-msgstr ""
+msgstr "Màu sắc của thanh ánh sáng của người chơi này."
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Blue"
-msgstr ""
+msgstr "Màu xanh"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Red"
-msgstr ""
+msgstr "màu đỏ"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Green"
-msgstr ""
+msgstr "màu xanh lá cây"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Pink"
-msgstr ""
+msgstr "Hồng"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Purple"
-msgstr ""
+msgstr "Purple"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Orange"
-msgstr ""
+msgstr "trái cam"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Yellow"
-msgstr ""
+msgstr "Yellow"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Cyan"
-msgstr ""
+msgstr "lục lam"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "White"
-msgstr ""
+msgstr "trắng"
 
 #: port/frontend/shell/porpoise_rows.cpp:284
 msgid "Wii Remotes"
-msgstr ""
+msgstr "Điều khiển từ xa Wii"
 
 #: port/frontend/shell/porpoise_rows.cpp:284
 msgid "Use your DualSense, or real Remotes through a Mayflash DolphinBar."
-msgstr ""
+msgstr "Sử dụng DualSense của bạn hoặc Điều khiển từ xa thực sự thông qua Mayflash DolphinBar."
 
 #: port/frontend/shell/porpoise_rows.cpp:285
 msgid "DualSense: your controller is the Wii Remote. Real Wii Remotes: up to four through a Mayflash DolphinBar (mode 4) in a USB port, with their own attachments, pointer and motion. Applies when the game starts."
-msgstr ""
+msgstr "DualSense: bộ điều khiển của bạn là Wii Remote. Điều khiển từ xa Wii thực: tối đa bốn điều khiển thông qua Mayflash DolphinBar (chế độ 4) trong cổng USB, với các tệp đính kèm, con trỏ và chuyển động riêng. Áp dụng khi trò chơi bắt đầu."
 
 #: port/frontend/shell/porpoise_rows.cpp:286
 msgid "Real Wii Remotes (DolphinBar)"
-msgstr ""
+msgstr "Điều khiển từ xa Wii thực sự (DolphinBar)"
 
 #: port/frontend/shell/porpoise_rows.cpp:287
 msgid "Wii buttons"
-msgstr ""
+msgstr "Nút Wii"
 
 #: port/frontend/shell/porpoise_rows.cpp:287
 msgid "Which buttons the Wii controllers use."
-msgstr ""
+msgstr "Những nút nào bộ điều khiển Wii sử dụng."
 
 #: port/frontend/shell/porpoise_rows.cpp:288 port/frontend/shell/porpoise_rows.cpp:363 port/frontend/shell/porpoise_rows.cpp:674
 msgid "Default set"
-msgstr ""
+msgstr "Đặt mặc định"
 
 #: port/frontend/shell/porpoise_rows.cpp:288 port/frontend/shell/porpoise_rows.cpp:363 port/frontend/shell/porpoise_rows.cpp:674
 msgid "Mine 1"
-msgstr ""
+msgstr "Mỏ 1"
 
 #: port/frontend/shell/porpoise_rows.cpp:288 port/frontend/shell/porpoise_rows.cpp:363 port/frontend/shell/porpoise_rows.cpp:674
 msgid "Mine 2"
-msgstr ""
+msgstr "Mỏ 2"
 
 #: port/frontend/shell/porpoise_rows.cpp:289
 msgid "Pointer speed"
-msgstr ""
+msgstr "Tốc độ con trỏ"
 
 #: port/frontend/shell/porpoise_rows.cpp:289
 msgid "How far you turn the controller to reach the screen's edge."
-msgstr ""
+msgstr "Bạn xoay bộ điều khiển bao xa để chạm tới mép màn hình."
 
 #: port/frontend/shell/porpoise_rows.cpp:290
 msgid "Your screen"
-msgstr ""
+msgstr "Màn hình của bạn"
 
 #: port/frontend/shell/porpoise_rows.cpp:291
 msgid "Pointer range"
-msgstr ""
+msgstr "Phạm vi con trỏ"
 
 #: port/frontend/shell/porpoise_rows.cpp:291
 msgid "Widen it if the pointer can't reach the screen's edge."
-msgstr ""
+msgstr "Hãy mở rộng nó nếu con trỏ không thể chạm tới mép màn hình."
 
 #: port/frontend/shell/porpoise_rows.cpp:292
 msgid "Wide"
-msgstr ""
+msgstr "rộng"
 
 #: port/frontend/shell/porpoise_rows.cpp:292
 msgid "Extra wide"
-msgstr ""
+msgstr "Cực rộng"
 
 #: port/frontend/shell/porpoise_rows.cpp:293
 msgid "Grip"
-msgstr ""
+msgstr "Tay cầm"
 
 #: port/frontend/shell/porpoise_rows.cpp:293
 msgid "How you hold the DualSense. Automatic detects it."
-msgstr ""
+msgstr "Cách bạn cầm DualSense. Tự động phát hiện nó."
 
 #: port/frontend/shell/porpoise_rows.cpp:294
 msgid "Both hands"
-msgstr ""
+msgstr "Cả hai tay"
 
 #: port/frontend/shell/porpoise_rows.cpp:294
 msgid "Upright, trigger to the TV"
-msgstr ""
+msgstr "Thẳng đứng, kích hoạt TV"
 
 #: port/frontend/shell/porpoise_rows.cpp:294
 msgid "Upright, facing you"
-msgstr ""
+msgstr "Đứng thẳng, đối diện với bạn"
 
 #: port/frontend/shell/porpoise_rows.cpp:295 port/frontend/shell/timeline.cpp:142
 msgid "Motion"
-msgstr ""
+msgstr "chuyển động"
 
 #: port/frontend/shell/porpoise_rows.cpp:295
 msgid "Tilt, swing and point with the DualSense."
-msgstr ""
+msgstr "Nghiêng, xoay và trỏ bằng DualSense."
 
 #: port/frontend/shell/porpoise_rows.cpp:297
 msgid "Flick to shake"
-msgstr ""
+msgstr "Vuốt để lắc"
 
 #: port/frontend/shell/porpoise_rows.cpp:297
 msgid "A quick flick of the controller shakes the Remote."
-msgstr ""
+msgstr "Một cái búng nhanh của bộ điều khiển sẽ làm rung Điều khiển từ xa."
 
 #: port/frontend/shell/porpoise_rows.cpp:299
 msgid "Wii MotionPlus"
-msgstr ""
+msgstr "Wii MotionPlus"
 
 #: port/frontend/shell/porpoise_rows.cpp:299
 msgid "Adds MotionPlus using the gyroscope. Automatic: for games that need it."
-msgstr ""
+msgstr "Thêm MotionPlus bằng con quay hồi chuyển. Tự động: dành cho các trò chơi cần nó."
 
 #: port/frontend/shell/porpoise_rows.cpp:301
 msgid "Setup before each game"
-msgstr ""
+msgstr "Thiết lập trước mỗi trận đấu"
 
 #: port/frontend/shell/porpoise_rows.cpp:301
 msgid "Shows the Wii Remote's setup when a game starts."
-msgstr ""
+msgstr "Hiển thị thiết lập của Điều khiển từ xa Wii khi trò chơi bắt đầu."
 
 #: port/frontend/shell/porpoise_rows.cpp:303
 msgid "The game's sound."
@@ -6446,71 +6448,71 @@ msgstr "Âm thanh của trò chơi."
 
 #: port/frontend/shell/porpoise_rows.cpp:304
 msgid "Mute the game"
-msgstr ""
+msgstr "Tắt tiếng trò chơi"
 
 #: port/frontend/shell/porpoise_rows.cpp:304
 msgid "Silences the game."
-msgstr ""
+msgstr "Trò chơi im lặng."
 
 #: port/frontend/shell/porpoise_rows.cpp:305
 msgid "Accurate sound"
-msgstr ""
+msgstr "Âm thanh chính xác"
 
 #: port/frontend/shell/porpoise_rows.cpp:305
 msgid "Exact sound emulation. Fixes a few games but is much slower."
-msgstr ""
+msgstr "Mô phỏng âm thanh chính xác. Sửa một số game nhưng chậm hơn nhiều."
 
 #: port/frontend/shell/porpoise_rows.cpp:307
 msgid "Wii Remote speaker"
-msgstr ""
+msgstr "Loa điều khiển từ xa Wii"
 
 #: port/frontend/shell/porpoise_rows.cpp:307
 msgid "The Remote's sounds: from the TV, or from each player's controller."
-msgstr ""
+msgstr "Âm thanh của Điều khiển từ xa: từ TV hoặc từ bộ điều khiển của mỗi người chơi."
 
 #: port/frontend/shell/porpoise_rows.cpp:309
 msgid "Sound preset"
-msgstr ""
+msgstr "cài sẵn âm thanh"
 
 #: port/frontend/shell/porpoise_rows.cpp:309
 msgid "How sound handles a game running slow."
-msgstr ""
+msgstr "Cách âm thanh xử lý trò chơi chạy chậm."
 
 #: port/frontend/shell/porpoise_rows.cpp:310
 msgid "Smooth fills gaps when a game runs slow instead of crackling. Responsive has a little less delay. Extra smooth suits games that slow down often. Classic is the older sound; changing to or from it applies next time a game starts."
-msgstr ""
+msgstr "Mượt mà lấp đầy những khoảng trống khi trò chơi chạy chậm thay vì rè rè. Responsive có độ trễ ít hơn một chút. Cực kỳ mượt mà phù hợp với các trò chơi thường xuyên bị chậm. Cổ điển là âm thanh cũ hơn; việc thay đổi sang hoặc từ đó sẽ được áp dụng vào lần tiếp theo trò chơi bắt đầu."
 
 #: port/frontend/shell/porpoise_rows.cpp:311
 msgid "Responsive"
-msgstr ""
+msgstr "đáp ứng"
 
 #: port/frontend/shell/porpoise_rows.cpp:311
 msgid "Extra smooth"
-msgstr ""
+msgstr "Thêm mịn màng"
 
 #: port/frontend/shell/porpoise_rows.cpp:312
 msgid "Audio buffer"
-msgstr ""
+msgstr "Bộ đệm âm thanh"
 
 #: port/frontend/shell/porpoise_rows.cpp:312
 msgid "More prevents crackling but adds a little delay."
-msgstr ""
+msgstr "Nhiều hơn ngăn chặn tiếng nổ nhưng thêm một chút độ trễ."
 
 #: port/frontend/shell/porpoise_rows.cpp:314
 msgid "Fill audio gaps"
-msgstr ""
+msgstr "Lấp đầy khoảng trống âm thanh"
 
 #: port/frontend/shell/porpoise_rows.cpp:314
 msgid "Fills gaps with a faded repeat when a game runs slow."
-msgstr ""
+msgstr "Lấp đầy khoảng trống bằng cách lặp lại mờ dần khi trò chơi chạy chậm."
 
 #: port/frontend/shell/porpoise_rows.cpp:315
 msgid "Audio stretching"
-msgstr ""
+msgstr "Kéo dài âm thanh"
 
 #: port/frontend/shell/porpoise_rows.cpp:315
 msgid "When a game slows down, its sound slows with it, instead of crackling."
-msgstr ""
+msgstr "Khi trò chơi chậm lại, âm thanh của trò chơi sẽ chậm lại theo, thay vì rè rè."
 
 #: port/frontend/shell/porpoise_rows.cpp:316 port/frontend/shell/settings.cpp:1104
 msgid "Microphone"
@@ -6518,7 +6520,7 @@ msgstr "Micrô"
 
 #: port/frontend/shell/porpoise_rows.cpp:316
 msgid "Use the DualSense mic as the GameCube Microphone and Wii Speak."
-msgstr ""
+msgstr "Sử dụng mic DualSense làm Micrô GameCube và Wii Speak."
 
 #: port/frontend/shell/porpoise_rows.cpp:318 port/frontend/shell/shell.cpp:2235
 msgid "Resume where you left off"
@@ -6586,315 +6588,315 @@ msgstr "Tiếng Hàn"
 
 #: port/frontend/shell/porpoise_rows.cpp:327
 msgid "Fast save states"
-msgstr ""
+msgstr "Trạng thái lưu nhanh"
 
 #: port/frontend/shell/porpoise_rows.cpp:327
 msgid "Quicker and smaller states. Turn it off if a game looks wrong after loading one."
-msgstr ""
+msgstr "Trạng thái nhanh hơn và nhỏ hơn. Tắt nó đi nếu trò chơi có vẻ không ổn sau khi tải."
 
 #: port/frontend/shell/porpoise_rows.cpp:329
 msgid "Progressive scan"
-msgstr ""
+msgstr "Quét liên tục"
 
 #: port/frontend/shell/porpoise_rows.cpp:329
 msgid "480p output, as on a component cable."
-msgstr ""
+msgstr "Đầu ra 480p, như trên cáp thành phần."
 
 #: port/frontend/shell/porpoise_rows.cpp:331
 msgid "Wii widescreen"
-msgstr ""
+msgstr "Màn hình rộng Wii"
 
 #: port/frontend/shell/porpoise_rows.cpp:331
 msgid "The Wii's 16:9 setting, used by Wii games."
-msgstr ""
+msgstr "Cài đặt 16:9 của Wii, được sử dụng bởi các trò chơi Wii."
 
 #: port/frontend/shell/porpoise_rows.cpp:333
 msgid "PAL games at 60 Hz"
-msgstr ""
+msgstr "Trò chơi PAL ở tần số 60 Hz"
 
 #: port/frontend/shell/porpoise_rows.cpp:333
 msgid "European Wii games at 60 Hz, as a Wii set to EURGB60. Off: 50 Hz."
-msgstr ""
+msgstr "Trò chơi Wii Châu Âu ở tần số 60 Hz, khi Wii được đặt thành EURGB60. Tắt: 50 Hz."
 
 #: port/frontend/shell/porpoise_rows.cpp:335
 msgid "Sensor bar"
-msgstr ""
+msgstr "Thanh cảm biến"
 
 #: port/frontend/shell/porpoise_rows.cpp:335
 msgid "Where the sensor bar is."
-msgstr ""
+msgstr "Thanh cảm biến ở đâu."
 
 #: port/frontend/shell/porpoise_rows.cpp:336
 msgid "Below the TV"
-msgstr ""
+msgstr "Bên dưới tivi"
 
 #: port/frontend/shell/porpoise_rows.cpp:336
 msgid "Above the TV"
-msgstr ""
+msgstr "Phía trên tivi"
 
 #: port/frontend/shell/porpoise_rows.cpp:337
 msgid "GameCube boot animation"
-msgstr ""
+msgstr "Hoạt hình khởi động GameCube"
 
 #: port/frontend/shell/porpoise_rows.cpp:337
 msgid "Shows the GameCube start-up before games. Needs your own IPL.bin."
-msgstr ""
+msgstr "Hiển thị quá trình khởi động GameCube trước khi chơi game. Cần IPL.bin của riêng bạn."
 
 #: port/frontend/shell/porpoise_rows.cpp:339
 msgid "WiiConnect24 channels"
-msgstr ""
+msgstr "WiiConnect24 kênh"
 
 #: port/frontend/shell/porpoise_rows.cpp:339
 msgid "Forecast, News, Check Mii Out and more through WiiLink. Needs the PS5 online."
-msgstr ""
+msgstr "Dự báo, Tin tức, Kiểm tra Mii Out và hơn thế nữa thông qua WiiLink. Cần PS5 trực tuyến."
 
 #: port/frontend/shell/porpoise_rows.cpp:341
 msgid "Overclocking can smooth a game that slows down. 100% is the real console."
-msgstr ""
+msgstr "Ép xung có thể làm mượt một trò chơi bị chậm. 100% là bảng điều khiển thực sự."
 
 #: port/frontend/shell/porpoise_rows.cpp:343 port/frontend/shell/porpoise_rows.cpp:1761 port/frontend/shell/settings.cpp:329
 msgid "Auto Boost"
-msgstr ""
+msgstr "Tự động tăng cường"
 
 #: port/frontend/shell/porpoise_rows.cpp:343
 msgid "New games start with the settings that run them best on PS5. Turn it off for a game in its own settings."
-msgstr ""
+msgstr "Trò chơi mới bắt đầu với cài đặt chạy tốt nhất trên PS5. Tắt nó cho một trò chơi trong cài đặt riêng của nó."
 
 #: port/frontend/shell/porpoise_rows.cpp:346 port/frontend/shell/porpoise_rows.cpp:1771
 msgid "Riptide Boost"
-msgstr ""
+msgstr "tăng cường thủy triều"
 
 #: port/frontend/shell/porpoise_rows.cpp:346 port/frontend/shell/porpoise_rows.cpp:1771
 msgid "Speeds up the emulated processor's 3D math. Turn it off if a game misbehaves."
-msgstr ""
+msgstr "Tăng tốc độ tính toán 3D của bộ xử lý mô phỏng. Tắt nó đi nếu trò chơi hoạt động sai."
 
 #: port/frontend/shell/porpoise_rows.cpp:348
 msgid "Performance profiler"
-msgstr ""
+msgstr "Trình phân tích hiệu suất"
 
 #: port/frontend/shell/porpoise_rows.cpp:348
 msgid "For reporting a slow game: logs where the CPU spends its time. Costs a little speed; turn it off after."
-msgstr ""
+msgstr "Để báo cáo trò chơi chậm: ghi nhật ký nơi CPU sử dụng thời gian. Tốn một chút tốc độ; tắt nó đi sau."
 
 #: port/frontend/shell/porpoise_rows.cpp:350
 msgid "Debug logs"
-msgstr ""
+msgstr "Nhật ký gỡ lỗi"
 
 #: port/frontend/shell/porpoise_rows.cpp:350
 msgid "Keeps detailed logs for reporting a problem. Can slow games a little."
-msgstr ""
+msgstr "Giữ nhật ký chi tiết để báo cáo sự cố. Có thể làm chậm trò chơi một chút."
 
 #: port/frontend/shell/porpoise_rows.cpp:352
 msgid "Dual core"
-msgstr ""
+msgstr "Lõi kép"
 
 #: port/frontend/shell/porpoise_rows.cpp:352
 msgid "Faster. Turn it off for a game that freezes or glitches."
-msgstr ""
+msgstr "Nhanh hơn. Tắt nó đi nếu trò chơi bị treo hoặc trục trặc."
 
 #: port/frontend/shell/porpoise_rows.cpp:354
 msgid "Emulator on its own cores"
-msgstr ""
+msgstr "Trình giả lập trên lõi của chính nó"
 
 #: port/frontend/shell/porpoise_rows.cpp:354
 msgid "A PS5 core each for the emulated processor and graphics. Usually faster."
-msgstr ""
+msgstr "Mỗi lõi PS5 dành cho bộ xử lý và đồ họa mô phỏng. Thường nhanh hơn."
 
 #: port/frontend/shell/porpoise_rows.cpp:356
 msgid "Exact multiply-add"
-msgstr ""
+msgstr "Chính xác nhân-cộng"
 
 #: port/frontend/shell/porpoise_rows.cpp:356
 msgid "Exact floating-point rounding. Much slower, and very few games need it."
-msgstr ""
+msgstr "Làm tròn dấu phẩy động chính xác. Chậm hơn nhiều và rất ít game cần đến nó."
 
 #: port/frontend/shell/porpoise_rows.cpp:358
 msgid "Fast disc loading"
-msgstr ""
+msgstr "Tải đĩa nhanh"
 
 #: port/frontend/shell/porpoise_rows.cpp:358
 msgid "Shorter loading screens. A few games need real disc speed."
-msgstr ""
+msgstr "Màn hình tải ngắn hơn. Một số trò chơi cần tốc độ đĩa thực sự."
 
 #: port/frontend/shell/porpoise_rows.cpp:360
 msgid "Cheat codes, for games that have them."
-msgstr ""
+msgstr "Mã gian lận dành cho các trò chơi có chúng."
 
 #: port/frontend/shell/porpoise_rows.cpp:362
 msgid "GBA buttons in use"
-msgstr ""
+msgstr "Nút GBA đang được sử dụng"
 
 #: port/frontend/shell/porpoise_rows.cpp:362
 msgid "The default set, or one of your own."
-msgstr ""
+msgstr "Bộ mặc định hoặc một trong những bộ của riêng bạn."
 
 #: port/frontend/shell/porpoise_rows.cpp:364
 msgid "GBA web page"
-msgstr ""
+msgstr "trang web GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:364
 msgid "Play the GBA in a browser on the same network, on port 6771."
-msgstr ""
+msgstr "Chơi GBA trong trình duyệt trên cùng mạng, trên cổng 6771."
 
 #: port/frontend/shell/porpoise_rows.cpp:366 port/frontend/shell/porpoise_rows.cpp:378 port/frontend/shell/porpoise_rows.cpp:390 port/frontend/shell/porpoise_rows.cpp:402
 msgid "Position"
-msgstr ""
+msgstr "Vị trí"
 
 #: port/frontend/shell/porpoise_rows.cpp:366 port/frontend/shell/porpoise_rows.cpp:378 port/frontend/shell/porpoise_rows.cpp:390 port/frontend/shell/porpoise_rows.cpp:402
 msgid "Where its screen sits on the TV. Moving it in a game makes it Manual."
-msgstr ""
+msgstr "Màn hình của nó nằm ở đâu trên TV. Di chuyển nó trong trò chơi sẽ khiến nó trở thành Thủ công."
 
 #: port/frontend/shell/porpoise_rows.cpp:367 port/frontend/shell/porpoise_rows.cpp:379 port/frontend/shell/porpoise_rows.cpp:391 port/frontend/shell/porpoise_rows.cpp:403
 msgid "Top left"
-msgstr ""
+msgstr "Trên cùng bên trái"
 
 #: port/frontend/shell/porpoise_rows.cpp:367 port/frontend/shell/porpoise_rows.cpp:379 port/frontend/shell/porpoise_rows.cpp:391 port/frontend/shell/porpoise_rows.cpp:403
 msgid "Top right"
-msgstr ""
+msgstr "Trên cùng bên phải"
 
 #: port/frontend/shell/porpoise_rows.cpp:367 port/frontend/shell/porpoise_rows.cpp:379 port/frontend/shell/porpoise_rows.cpp:391 port/frontend/shell/porpoise_rows.cpp:403
 msgid "Bottom left"
-msgstr ""
+msgstr "Dưới cùng bên trái"
 
 #: port/frontend/shell/porpoise_rows.cpp:367 port/frontend/shell/porpoise_rows.cpp:379 port/frontend/shell/porpoise_rows.cpp:391 port/frontend/shell/porpoise_rows.cpp:403
 msgid "Bottom right"
-msgstr ""
+msgstr "Dưới cùng bên phải"
 
 #: port/frontend/shell/porpoise_rows.cpp:368 port/frontend/shell/porpoise_rows.cpp:380 port/frontend/shell/porpoise_rows.cpp:392 port/frontend/shell/porpoise_rows.cpp:404 port/frontend/shell/porpoise_rows.cpp:617
 msgid "Show the GBA's screen"
-msgstr ""
+msgstr "Hiển thị màn hình của GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:368 port/frontend/shell/porpoise_rows.cpp:380 port/frontend/shell/porpoise_rows.cpp:392 port/frontend/shell/porpoise_rows.cpp:404
 msgid "Shows it over the game while held, toggled with each press, or always on or off."
-msgstr ""
+msgstr "Hiển thị nó trong trò chơi khi được giữ, bật/tắt sau mỗi lần nhấn hoặc luôn bật hoặc tắt."
 
 #: port/frontend/shell/porpoise_rows.cpp:369 port/frontend/shell/porpoise_rows.cpp:381 port/frontend/shell/porpoise_rows.cpp:393 port/frontend/shell/porpoise_rows.cpp:405
 msgid "While held"
-msgstr ""
+msgstr "Trong khi giữ"
 
 #: port/frontend/shell/porpoise_rows.cpp:370 port/frontend/shell/porpoise_rows.cpp:382 port/frontend/shell/porpoise_rows.cpp:394 port/frontend/shell/porpoise_rows.cpp:406
 msgid "Position across"
-msgstr ""
+msgstr "Vị trí trên"
 
 #: port/frontend/shell/porpoise_rows.cpp:370 port/frontend/shell/porpoise_rows.cpp:372 port/frontend/shell/porpoise_rows.cpp:382 port/frontend/shell/porpoise_rows.cpp:384 port/frontend/shell/porpoise_rows.cpp:394 port/frontend/shell/porpoise_rows.cpp:396 port/frontend/shell/porpoise_rows.cpp:406 port/frontend/shell/porpoise_rows.cpp:408
 msgid "Where its screen sits on the TV. Automatic picks a corner."
-msgstr ""
+msgstr "Màn hình của nó nằm ở đâu trên TV. Tự động chọn một góc."
 
 #: port/frontend/shell/porpoise_rows.cpp:372 port/frontend/shell/porpoise_rows.cpp:384 port/frontend/shell/porpoise_rows.cpp:396 port/frontend/shell/porpoise_rows.cpp:408
 msgid "Position down"
-msgstr ""
+msgstr "Vị trí xuống"
 
 #: port/frontend/shell/porpoise_rows.cpp:374 port/frontend/shell/porpoise_rows.cpp:386 port/frontend/shell/porpoise_rows.cpp:398 port/frontend/shell/porpoise_rows.cpp:410
 msgid "Screen size"
-msgstr ""
+msgstr "Kích thước màn hình"
 
 #: port/frontend/shell/porpoise_rows.cpp:374 port/frontend/shell/porpoise_rows.cpp:386 port/frontend/shell/porpoise_rows.cpp:398 port/frontend/shell/porpoise_rows.cpp:410
 msgid "How big its screen is: 1 to 4 times the GBA's size."
-msgstr ""
+msgstr "Màn hình của nó lớn đến mức nào: gấp 1 đến 4 lần kích thước của GBA."
 
 #: port/frontend/shell/porpoise_rows.cpp:375 port/frontend/shell/porpoise_rows.cpp:387 port/frontend/shell/porpoise_rows.cpp:399 port/frontend/shell/porpoise_rows.cpp:411
 msgid "Opacity"
-msgstr ""
+msgstr "Độ mờ"
 
 #: port/frontend/shell/porpoise_rows.cpp:375 port/frontend/shell/porpoise_rows.cpp:387 port/frontend/shell/porpoise_rows.cpp:399 port/frontend/shell/porpoise_rows.cpp:411
 msgid "How much of the game shows through its screen on the TV."
-msgstr ""
+msgstr "Bao nhiêu phần của trò chơi hiển thị qua màn hình của nó trên TV."
 
 #: port/frontend/shell/porpoise_rows.cpp:376 port/frontend/shell/porpoise_rows.cpp:388 port/frontend/shell/porpoise_rows.cpp:400 port/frontend/shell/porpoise_rows.cpp:412
 msgid "Sharp or soft pixels. The web page has its own setting."
-msgstr ""
+msgstr "Pixel sắc nét hoặc mềm. Trang web có cài đặt riêng."
 
 #: port/frontend/shell/porpoise_rows.cpp:376 port/frontend/shell/porpoise_rows.cpp:388 port/frontend/shell/porpoise_rows.cpp:400 port/frontend/shell/porpoise_rows.cpp:412
 msgid "Soft pixels"
-msgstr ""
+msgstr "Pixel mềm"
 
 #: port/frontend/shell/porpoise_rows.cpp:377 port/frontend/shell/porpoise_rows.cpp:389 port/frontend/shell/porpoise_rows.cpp:401 port/frontend/shell/porpoise_rows.cpp:413
 msgid "Interframe blending"
-msgstr ""
+msgstr "Pha trộn giữa các khung"
 
 #: port/frontend/shell/porpoise_rows.cpp:377 port/frontend/shell/porpoise_rows.cpp:389 port/frontend/shell/porpoise_rows.cpp:401 port/frontend/shell/porpoise_rows.cpp:413
 msgid "Blends each frame with the last, for games that flicker sprites. TV only."
-msgstr ""
+msgstr "Hòa trộn từng khung hình với khung hình cuối cùng, dành cho những trò chơi có hình ảnh nhấp nháy. Chỉ TV."
 
 #: port/frontend/shell/porpoise_rows.cpp:414 port/frontend/shell/porpoise_rows.cpp:418 port/frontend/shell/porpoise_rows.cpp:422 port/frontend/shell/porpoise_rows.cpp:426
 msgid "Its sound, on the TV or its player's controller."
-msgstr ""
+msgstr "Âm thanh của nó, trên TV hoặc bộ điều khiển của đầu phát."
 
 #: port/frontend/shell/porpoise_rows.cpp:415 port/frontend/shell/porpoise_rows.cpp:419 port/frontend/shell/porpoise_rows.cpp:423 port/frontend/shell/porpoise_rows.cpp:427
 msgid "Mute"
-msgstr ""
+msgstr "Tắt tiếng"
 
 #: port/frontend/shell/porpoise_rows.cpp:415 port/frontend/shell/porpoise_rows.cpp:419 port/frontend/shell/porpoise_rows.cpp:423 port/frontend/shell/porpoise_rows.cpp:427
 msgid "Turns its sound off."
-msgstr ""
+msgstr "Tắt âm thanh của nó."
 
 #: port/frontend/shell/porpoise_rows.cpp:416 port/frontend/shell/porpoise_rows.cpp:420 port/frontend/shell/porpoise_rows.cpp:424 port/frontend/shell/porpoise_rows.cpp:428
 msgid "Sound on the controller"
-msgstr ""
+msgstr "Âm thanh trên bộ điều khiển"
 
 #: port/frontend/shell/porpoise_rows.cpp:416 port/frontend/shell/porpoise_rows.cpp:420 port/frontend/shell/porpoise_rows.cpp:424 port/frontend/shell/porpoise_rows.cpp:428
 msgid "From its player's controller speaker instead of the TV."
-msgstr ""
+msgstr "Từ loa điều khiển của đầu phát thay vì TV."
 
 #: port/frontend/shell/porpoise_rows.cpp:417 port/frontend/shell/porpoise_rows.cpp:421 port/frontend/shell/porpoise_rows.cpp:425 port/frontend/shell/porpoise_rows.cpp:429
 msgid "Speaker resampling"
-msgstr ""
+msgstr "Lấy mẫu lại loa"
 
 #: port/frontend/shell/porpoise_rows.cpp:417 port/frontend/shell/porpoise_rows.cpp:421 port/frontend/shell/porpoise_rows.cpp:425 port/frontend/shell/porpoise_rows.cpp:429
 msgid "Simple is sharper; Smooth is a little softer."
-msgstr ""
+msgstr "Đơn giản thì sắc nét hơn; Mịn thì mềm hơn một chút."
 
 #: port/frontend/shell/porpoise_rows.cpp:417 port/frontend/shell/porpoise_rows.cpp:421 port/frontend/shell/porpoise_rows.cpp:425 port/frontend/shell/porpoise_rows.cpp:429
 msgid "Simple"
-msgstr ""
+msgstr "Đơn giản"
 
 #: port/frontend/shell/porpoise_rows.cpp:453
 msgid "Arcade Cabinet"
-msgstr ""
+msgstr "Tủ trò chơi"
 
 #: port/frontend/shell/porpoise_rows.cpp:453
 msgid "Retro Cabinet"
-msgstr ""
+msgstr "Tủ cổ điển"
 
 #: port/frontend/shell/porpoise_rows.cpp:453
 msgid "Synthwave Cabinet"
-msgstr ""
+msgstr "Tủ tổng hợp"
 
 #: port/frontend/shell/porpoise_rows.cpp:453
 msgid "80s TV"
-msgstr ""
+msgstr "Truyền hình thập niên 80"
 
 #: port/frontend/shell/porpoise_rows.cpp:454
 msgid "Wood-Grain TV"
-msgstr ""
+msgstr "Tivi vân gỗ"
 
 #: port/frontend/shell/porpoise_rows.cpp:454
 msgid "90s TV"
-msgstr ""
+msgstr "Truyền hình thập niên 90"
 
 #: port/frontend/shell/porpoise_rows.cpp:454
 msgid "Black TV"
-msgstr ""
+msgstr "tivi đen"
 
 #: port/frontend/shell/porpoise_rows.cpp:454
 msgid "Beige Monitor"
-msgstr ""
+msgstr "Màn hình màu be"
 
 #: port/frontend/shell/porpoise_rows.cpp:613 port/frontend/shell/porpoise_rows.cpp:616
 msgid "D-pad up"
-msgstr ""
+msgstr "D-pad lên"
 
 #: port/frontend/shell/porpoise_rows.cpp:613 port/frontend/shell/porpoise_rows.cpp:616
 msgid "D-pad down"
-msgstr ""
+msgstr "D-pad xuống"
 
 #: port/frontend/shell/porpoise_rows.cpp:613 port/frontend/shell/porpoise_rows.cpp:616
 msgid "D-pad left"
-msgstr ""
+msgstr "D-pad bên trái"
 
 #: port/frontend/shell/porpoise_rows.cpp:613 port/frontend/shell/porpoise_rows.cpp:616
 msgid "D-pad right"
-msgstr ""
+msgstr "D-pad bên phải"
 
 #: port/frontend/shell/porpoise_rows.cpp:616 port/frontend/shell/shell.cpp:3044 port/frontend/shell/shell.cpp:3082
 msgid "Select"
@@ -6902,35 +6904,35 @@ msgstr "Xác nhận"
 
 #: port/frontend/shell/porpoise_rows.cpp:617
 msgid "Move the GBA's screen"
-msgstr ""
+msgstr "Di chuyển màn hình của GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:617
 msgid "Adjust the GBA's opacity"
-msgstr ""
+msgstr "Điều chỉnh độ mờ của GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:617
 msgid "Reset the GBA"
-msgstr ""
+msgstr "Đặt lại GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:617
 msgid "Mute the GBA"
-msgstr ""
+msgstr "Tắt tiếng GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:618
 msgid "GBA volume"
-msgstr ""
+msgstr "Khối lượng GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:618
 msgid "GBA link cable"
-msgstr ""
+msgstr "Cáp liên kết GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:618
 msgid "Quick save the GBA"
-msgstr ""
+msgstr "Lưu nhanh GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:618
 msgid "Quick load the GBA"
-msgstr ""
+msgstr "Tải nhanh GBA"
 
 #. a button layout of the player's own, made in Porpoise's Customize Buttons: {0} is its number
 #: port/frontend/shell/porpoise_rows.cpp:677 port/frontend/shell/porpoise_rows.cpp:1267
@@ -6939,11 +6941,11 @@ msgstr "Bố cục của tôi {0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:713
 msgid "Left stick as the D-pad"
-msgstr ""
+msgstr "Cần trái làm D-pad"
 
 #: port/frontend/shell/porpoise_rows.cpp:733
 msgid "GBA Buttons"
-msgstr ""
+msgstr "Nút GBA"
 
 #. {0} is why, in the system's words
 #: port/frontend/shell/porpoise_rows.cpp:778 port/frontend/shell/porpoise_rows.cpp:841 port/frontend/shell/porpoise_rows.cpp:1404 port/frontend/shell/porpoise_rows.cpp:1475 port/frontend/shell/porpoise_rows.cpp:1498 port/frontend/shell/porpoise_rows.cpp:1824
@@ -6952,31 +6954,31 @@ msgstr "Không thể lưu cài đặt của Porpoise: {0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:810
 msgid "Nothing"
-msgstr ""
+msgstr "không có gì"
 
 #: port/frontend/shell/porpoise_rows.cpp:950
 msgid "This DualSense's input, live. Hold Circle to leave."
-msgstr ""
+msgstr "Đầu vào của DualSense này, trực tiếp. Giữ Tròn để rời đi."
 
 #: port/frontend/shell/porpoise_rows.cpp:950
 msgid "No DualSense for this player: turn it on and sign in. Hold Circle on yours to leave."
-msgstr ""
+msgstr "Không có DualSense cho trình phát này: hãy bật nó lên và đăng nhập. Giữ Vòng tròn trên tay bạn để rời đi."
 
 #: port/frontend/shell/porpoise_rows.cpp:978
 msgid "Left stick"
-msgstr ""
+msgstr "Thanh trái"
 
 #: port/frontend/shell/porpoise_rows.cpp:990
 msgid "Motion (g):"
-msgstr ""
+msgstr "Chuyển động (g):"
 
 #: port/frontend/shell/porpoise_rows.cpp:991
 msgid "Fingers on the touchpad: {0}"
-msgstr ""
+msgstr "Ngón tay trên bàn di chuột: {0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:1005
 msgid "This player's DualSense."
-msgstr ""
+msgstr "DualSense của người chơi này."
 
 #: port/frontend/shell/porpoise_rows.cpp:1005 port/frontend/shell/settings.cpp:946
 msgid "No DualSense for this player yet."
@@ -6984,86 +6986,86 @@ msgstr "Người chơi này chưa có DualSense."
 
 #: port/frontend/shell/porpoise_rows.cpp:1028
 msgid "P{0}"
-msgstr ""
+msgstr "P{0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:1132
 msgid "Ports"
-msgstr ""
+msgstr "Cổng"
 
 #: port/frontend/shell/porpoise_rows.cpp:1133
 msgid "What's plugged into each controller port, and who plays it."
-msgstr ""
+msgstr "Cái gì được cắm vào mỗi cổng bộ điều khiển và ai chơi nó."
 
 #: port/frontend/shell/porpoise_rows.cpp:1229
 msgid "None (BIOS)"
-msgstr ""
+msgstr "Không có (BIOS)"
 
 #. {0} is a file kept in the settings, not in its folder now
 #: port/frontend/shell/porpoise_rows.cpp:1240
 msgid "{0} (missing)"
-msgstr ""
+msgstr "{0} (thiếu)"
 
 #: port/frontend/shell/porpoise_rows.cpp:1264
 msgid "Custom"
-msgstr ""
+msgstr "tùy chỉnh"
 
 #: port/frontend/shell/porpoise_rows.cpp:1286
 msgid "Pack folder"
-msgstr ""
+msgstr "Gói thư mục"
 
 #: port/frontend/shell/porpoise_rows.cpp:1288
 msgid "Each pack goes in /data/porpoise/saves/User/Load/Textures, in a folder named with the game's ID, like GALE01."
-msgstr ""
+msgstr "Mỗi gói nằm trong /data/porpoise/saves/User/Load/Textures, trong một thư mục có tên bằng ID của trò chơi, chẳng hạn như GALE01."
 
 #: port/frontend/shell/porpoise_rows.cpp:1309
 msgid "A texture pack. Custom textures turns packs on or off."
-msgstr ""
+msgstr "Một gói kết cấu. Kết cấu tùy chỉnh bật hoặc tắt gói."
 
 #: port/frontend/shell/porpoise_rows.cpp:1320
 msgid "No packs found"
-msgstr ""
+msgstr "Không tìm thấy gói nào"
 
 #: port/frontend/shell/porpoise_rows.cpp:1334
 msgid "Which layout, and what each DualSense button does."
-msgstr ""
+msgstr "Bố cục nào và chức năng của mỗi nút DualSense."
 
 #: port/frontend/shell/porpoise_rows.cpp:1531
 msgid "No saves on a USB drive."
-msgstr ""
+msgstr "Không lưu trên ổ USB."
 
 #: port/frontend/shell/porpoise_rows.cpp:1537 port/frontend/shell/porpoise_rows.cpp:2014 port/frontend/shell/porpoise_rows.cpp:2033
 msgid "Copy a save from USB"
-msgstr ""
+msgstr "Sao chép lưu từ USB"
 
 #. {0} is why, in the system's words
 #: port/frontend/shell/porpoise_rows.cpp:1542 port/frontend/shell/porpoise_rows.cpp:1589 port/frontend/shell/porpoise_rows.cpp:2066
 msgid "The save could not be copied: {0}"
-msgstr ""
+msgstr "Không thể sao chép bản lưu: {0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:1551
 msgid "No cards on a USB drive."
-msgstr ""
+msgstr "Không có thẻ trên ổ USB."
 
 #: port/frontend/shell/porpoise_rows.cpp:1557 port/frontend/shell/porpoise_rows.cpp:2015
 msgid "Copy a card from USB"
-msgstr ""
+msgstr "Sao chép thẻ từ USB"
 
 #. {0} is how many saves came in, {1} how many were already here
 #: port/frontend/shell/porpoise_rows.cpp:1561 port/frontend/shell/porpoise_rows.cpp:2094
 msgid "{0} saves copied, {1} already here"
-msgstr ""
+msgstr "{0} đã sao chép lưu, {1} đã ở đây"
 
 #: port/frontend/shell/porpoise_rows.cpp:1563 port/frontend/shell/porpoise_rows.cpp:2090
 msgid "The saves could not be copied: {0}"
-msgstr ""
+msgstr "Không thể sao chép các bản lưu: {0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:1568 port/frontend/shell/porpoise_rows.cpp:2016
 msgid "Delete every save on this card"
-msgstr ""
+msgstr "Xóa mọi lưu trên thẻ này"
 
 #: port/frontend/shell/porpoise_rows.cpp:1587 port/frontend/shell/porpoise_rows.cpp:2063
 msgid "Copied to {0}"
-msgstr ""
+msgstr "Đã sao chép vào {0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:1612 port/frontend/shell/settings.cpp:1368
 msgid "Downloading: {0} left"
@@ -7110,192 +7112,192 @@ msgstr "Thay mọi ảnh bìa ở bên này bằng bản mới tải xuống."
 #. a saved set of Graphics settings: {0} is its number
 #: port/frontend/shell/porpoise_rows.cpp:1688
 msgid "Use setup {0}"
-msgstr ""
+msgstr "Sử dụng thiết lập {0}"
 
 #. a saved set of Graphics settings: {0} is its number
 #: port/frontend/shell/porpoise_rows.cpp:1688
 msgid "Applies this setup's Graphics settings to this game."
-msgstr ""
+msgstr "Áp dụng cài đặt Đồ họa của thiết lập này cho trò chơi này."
 
 #: port/frontend/shell/porpoise_rows.cpp:1692 port/frontend/shell/porpoise_rows.cpp:1902
 msgid "Save as a setup"
-msgstr ""
+msgstr "Lưu dưới dạng thiết lập"
 
 #: port/frontend/shell/porpoise_rows.cpp:1692
 msgid "Saves this game's Graphics settings to use on other games."
-msgstr ""
+msgstr "Lưu cài đặt Đồ họa của trò chơi này để sử dụng trên các trò chơi khác."
 
 #: port/frontend/shell/porpoise_rows.cpp:1706
 msgid "Wii games are 16:9 when Wii widescreen is on in Settings."
-msgstr ""
+msgstr "Trò chơi Wii là 16:9 khi màn hình rộng Wii được bật trong Cài đặt."
 
 #: port/frontend/shell/porpoise_rows.cpp:1707
 msgid "This game has a widescreen code: Automatic and On show it in 16:9."
-msgstr ""
+msgstr "Trò chơi này có mã màn hình rộng: Tự động và Bật hiển thị trong 16:9."
 
 #: port/frontend/shell/porpoise_rows.cpp:1708
 msgid "This game has its own 16:9 option. Turn it on in the game's options."
-msgstr ""
+msgstr "Trò chơi này có tùy chọn 16:9 riêng. Hãy bật nó trong tùy chọn của trò chơi."
 
 #: port/frontend/shell/porpoise_rows.cpp:1709
 msgid "This game has no widescreen code. On uses a widescreen hack, which can glitch at the edges."
-msgstr ""
+msgstr "Trò chơi này không có mã màn hình rộng. On sử dụng hack màn hình rộng, có thể bị trục trặc ở các cạnh."
 
 #: port/frontend/shell/porpoise_rows.cpp:1710
 msgid "The Wii's setting"
-msgstr ""
+msgstr "Cài đặt của Wii"
 
 #: port/frontend/shell/porpoise_rows.cpp:1710
 msgid "16:9 code"
-msgstr ""
+msgstr "mã 16:9"
 
 #: port/frontend/shell/porpoise_rows.cpp:1710
 msgid "In the game's options"
-msgstr ""
+msgstr "Trong các tùy chọn của trò chơi"
 
 #: port/frontend/shell/porpoise_rows.cpp:1710
 msgid "4:3 only"
-msgstr ""
+msgstr "chỉ 4:3"
 
 #: port/frontend/shell/porpoise_rows.cpp:1716
 msgid "Your own code"
-msgstr ""
+msgstr "Mã của riêng bạn"
 
 #: port/frontend/shell/porpoise_rows.cpp:1716
 msgid "Type a Gecko code and a name. It's saved in /data/porpoise/cheats and turned on."
-msgstr ""
+msgstr "Nhập mã Gecko và tên. Nó được lưu trong /data/porpoise/cheats và được bật."
 
 #: port/frontend/shell/porpoise_rows.cpp:1717
 msgid "Add a code"
-msgstr ""
+msgstr "Thêm mã"
 
 #: port/frontend/shell/porpoise_rows.cpp:1727
 msgid "Your code, from /data/porpoise/cheats."
-msgstr ""
+msgstr "Mã của bạn, từ /data/porpoise/cheats."
 
 #: port/frontend/shell/porpoise_rows.cpp:1728
 msgid "From the widescreen collection for this game."
-msgstr ""
+msgstr "Từ bộ sưu tập màn hình rộng cho trò chơi này."
 
 #: port/frontend/shell/porpoise_rows.cpp:1729
 msgid "A patch for this game."
-msgstr ""
+msgstr "Một bản vá cho trò chơi này."
 
 #: port/frontend/shell/porpoise_rows.cpp:1729
 msgid "A cheat for this game."
-msgstr ""
+msgstr "Một trò gian lận cho trò chơi này."
 
 #: port/frontend/shell/porpoise_rows.cpp:1736
 msgid "No codes for this game"
-msgstr ""
+msgstr "Không có mã cho trò chơi này"
 
 #: port/frontend/shell/porpoise_rows.cpp:1736
 msgid "Put your own in /data/porpoise/cheats, named with the game's ID."
-msgstr ""
+msgstr "Đặt cái của riêng bạn vào /data/porpoise/cheats, được đặt tên theo ID của trò chơi."
 
 #: port/frontend/shell/porpoise_rows.cpp:1753
 msgid "Your own settings file"
-msgstr ""
+msgstr "Tập tin cài đặt của riêng bạn"
 
 #: port/frontend/shell/porpoise_rows.cpp:1753
 msgid "This game uses your own settings file, so the options below have no effect. Remove it to use them."
-msgstr ""
+msgstr "Trò chơi này sử dụng tệp cài đặt của riêng bạn nên các tùy chọn bên dưới không có hiệu lực. Hãy loại bỏ nó để sử dụng chúng."
 
 #: port/frontend/shell/porpoise_rows.cpp:1761
 msgid "Settings that run this game best on PS5."
-msgstr ""
+msgstr "Cài đặt chạy trò chơi này tốt nhất trên PS5."
 
 #: port/frontend/shell/porpoise_rows.cpp:1785
 msgid "Recommended for this game."
-msgstr ""
+msgstr "Được đề xuất cho trò chơi này."
 
 #: port/frontend/shell/porpoise_rows.cpp:1794
 msgid "A known fix for this game."
-msgstr ""
+msgstr "Một bản sửa lỗi đã biết cho trò chơi này."
 
 #: port/frontend/shell/porpoise_rows.cpp:1798
 msgid "Applied"
-msgstr ""
+msgstr "Đã áp dụng"
 
 #: port/frontend/shell/porpoise_rows.cpp:1810
 msgid "No changes needed"
-msgstr ""
+msgstr "Không cần thay đổi"
 
 #: port/frontend/shell/porpoise_rows.cpp:1810
 msgid "This game runs well with the default settings."
-msgstr ""
+msgstr "Trò chơi này chạy tốt với các cài đặt mặc định."
 
 #: port/frontend/shell/porpoise_rows.cpp:1870
 msgid "A name for your code"
-msgstr ""
+msgstr "Tên cho mã của bạn"
 
 #: port/frontend/shell/porpoise_rows.cpp:1873
 msgid "{0}: the code's digits"
-msgstr ""
+msgstr "{0}: chữ số của mã"
 
 #: port/frontend/shell/porpoise_rows.cpp:1886
 msgid "The code could not be saved."
-msgstr ""
+msgstr "Không thể lưu mã."
 
 #: port/frontend/shell/porpoise_rows.cpp:1886
 msgid "A Gecko code is digits 0-9 and A-F, sixteen to a line."
-msgstr ""
+msgstr "Mã Gecko là các chữ số từ 0-9 và A-F, mười sáu trên một dòng."
 
 #: port/frontend/shell/porpoise_rows.cpp:1901
 msgid "Setup {0}"
-msgstr ""
+msgstr "Thiết lập {0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:1907
 msgid "The setup could not be saved."
-msgstr ""
+msgstr "Không thể lưu thiết lập."
 
 #. a GameCube memory card: {0} its slot, A or B, {1} its region, USA, EUR or JAP
 #: port/frontend/shell/porpoise_rows.cpp:1932
 msgid "Memory card {0} ({1})"
-msgstr ""
+msgstr "Thẻ nhớ {0} ({1})"
 
 #. {0} and {1} are counts of a memory card's blocks
 #: port/frontend/shell/porpoise_rows.cpp:1942 port/frontend/shell/porpoise_rows.cpp:1956
 msgid "{0} of {1} blocks free"
-msgstr ""
+msgstr "{0} trong số {1} khối miễn phí"
 
 #: port/frontend/shell/porpoise_rows.cpp:1954
 msgid "{0} save"
 msgid_plural "{0} saves"
-msgstr[0] ""
+msgstr[0] "{0} bản lưu"
 
 #: port/frontend/shell/porpoise_rows.cpp:1984
 msgid "{0} block"
 msgid_plural "{0} blocks"
-msgstr[0] ""
+msgstr[0] "{0} khối"
 
 #: port/frontend/shell/porpoise_rows.cpp:1984
 msgid "{0} KB"
-msgstr ""
+msgstr "{0} KB"
 
 #: port/frontend/shell/porpoise_rows.cpp:1989
 msgid "This card is a single image file, so saves can't be copied one by one. Use Copy the whole card to USB instead."
-msgstr ""
+msgstr "Thẻ này là một tệp hình ảnh duy nhất nên không thể sao chép từng tệp một. Thay vào đó hãy sử dụng Sao chép toàn bộ thẻ vào USB."
 
 #: port/frontend/shell/porpoise_rows.cpp:2000
 msgid "Copy the whole card to USB"
-msgstr ""
+msgstr "Copy toàn bộ thẻ vào USB"
 
 #: port/frontend/shell/porpoise_rows.cpp:2001
 msgid "Backs up every save on this card at once."
-msgstr ""
+msgstr "Sao lưu mọi lần lưu trên thẻ này cùng một lúc."
 
 #: port/frontend/shell/porpoise_rows.cpp:2014
 msgid "Copy one save from the drive to this card."
-msgstr ""
+msgstr "Sao chép một bản lưu từ ổ đĩa vào thẻ này."
 
 #: port/frontend/shell/porpoise_rows.cpp:2015
 msgid "Copy every save from a card on the drive to this card. Saves already here are kept."
-msgstr ""
+msgstr "Sao chép mọi lưu từ thẻ trên ổ sang thẻ này. Các nội dung đã lưu ở đây sẽ được lưu giữ."
 
 #: port/frontend/shell/porpoise_rows.cpp:2016
 msgid "A copy is kept in saves/before."
-msgstr ""
+msgstr "Một bản sao được lưu giữ trong saves/before."
 
 #: port/frontend/shell/porpoise_rows.cpp:2025 port/frontend/shell/settings.cpp:2050
 msgid "No saves yet"
@@ -7303,71 +7305,71 @@ msgstr "Chưa có bản lưu"
 
 #: port/frontend/shell/porpoise_rows.cpp:2034
 msgid "Copy one save from the drive."
-msgstr ""
+msgstr "Sao chép một bản lưu từ ổ đĩa."
 
 #: port/frontend/shell/porpoise_rows.cpp:2041
 msgid "Copy every save from USB"
-msgstr ""
+msgstr "Sao chép mọi lưu từ USB"
 
 #: port/frontend/shell/porpoise_rows.cpp:2042
 msgid "From a USB drive's backups and Porpoise Saves folder. Saves already here are kept."
-msgstr ""
+msgstr "Từ bản sao lưu của ổ USB và thư mục Lưu Porpoise. Các nội dung đã lưu ở đây sẽ được lưu giữ."
 
 #: port/frontend/shell/porpoise_rows.cpp:2057
 msgid "Copy to USB"
-msgstr ""
+msgstr "Sao chép vào USB"
 
 #: port/frontend/shell/porpoise_rows.cpp:2071
 msgid "The save could not be moved: {0}"
-msgstr ""
+msgstr "Không thể di chuyển bản lưu: {0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:2073
 msgid "Moved to {0}"
-msgstr ""
+msgstr "Đã chuyển đến {0}"
 
 #: port/frontend/shell/reports.cpp:77
 msgid "When a game ends, Playtendoh can send a short report on how it ran, to help fix problems and grow the list of working games. It has nothing about you, and nothing is sent while you play."
-msgstr ""
+msgstr "Khi trò chơi kết thúc, Playtendoh có thể gửi một báo cáo ngắn về cách trò chơi chạy để giúp khắc phục sự cố và phát triển danh sách các trò chơi đang hoạt động. Nó không có gì về bạn và không có gì được gửi đi khi bạn chơi."
 
 #: port/frontend/shell/reports.cpp:88
 msgid "What a report has"
-msgstr ""
+msgstr "Báo cáo có gì"
 
 #: port/frontend/shell/reports.cpp:89
 msgid "The game and its console, how it ended, and for how long"
-msgstr ""
+msgstr "Trò chơi và bảng điều khiển của nó, nó kết thúc như thế nào và kéo dài bao lâu"
 
 #: port/frontend/shell/reports.cpp:89
 msgid "The settings it ran with, and the PS5's firmware and model"
-msgstr ""
+msgstr "Các cài đặt mà nó chạy cùng với chương trình cơ sở và kiểu máy của PS5"
 
 #: port/frontend/shell/reports.cpp:90
 msgid "The last lines of Playtendoh's log, with addresses and folder names removed"
-msgstr ""
+msgstr "Những dòng cuối cùng trong nhật ký của Playtendoh, đã xóa địa chỉ và tên thư mục"
 
 #: port/frontend/shell/reports.cpp:91
 msgid "What it never has"
-msgstr ""
+msgstr "Những gì nó không bao giờ có"
 
 #: port/frontend/shell/reports.cpp:92
 msgid "Your PSN name or ID, your console's serial, its IP or MAC address"
-msgstr ""
+msgstr "Tên hoặc ID PSN của bạn, số sê-ri của bảng điều khiển, địa chỉ IP hoặc MAC của bảng điều khiển của bạn"
 
 #: port/frontend/shell/reports.cpp:93
 msgid "Your RetroAchievements and SteamGridDB accounts, room names, nicknames and Wi-Fi names"
-msgstr ""
+msgstr "Tài khoản RetroAchievements và SteamGridDB, tên phòng, biệt hiệu và tên Wi-Fi của bạn"
 
 #: port/frontend/shell/reports.cpp:93
 msgid "Your folders, your saves and your game list"
-msgstr ""
+msgstr "Thư mục, bản lưu và danh sách trò chơi của bạn"
 
 #: port/frontend/shell/reports.cpp:123
 msgid "Every field a report has"
-msgstr ""
+msgstr "Mỗi lĩnh vực một báo cáo có"
 
 #: port/frontend/shell/reports.cpp:130
 msgid "You can change this any time in Settings > Online. Turning it off deletes the reports waiting to be sent."
-msgstr ""
+msgstr "Bạn có thể thay đổi điều này bất kỳ lúc nào trong Cài đặt > Trực tuyến. Việc tắt tính năng này sẽ xóa các báo cáo đang chờ gửi."
 
 #: port/frontend/shell/settings.cpp:55
 msgid "Japan"
@@ -7466,23 +7468,23 @@ msgstr "Trình khởi chạy"
 
 #: port/frontend/shell/settings.cpp:215
 msgid "Theme, layout, systems, music and text."
-msgstr ""
+msgstr "Chủ đề, bố cục, hệ thống, âm nhạc và văn bản."
 
 #: port/frontend/shell/settings.cpp:218
 msgid "Accounts and updates"
-msgstr ""
+msgstr "Tài khoản và cập nhật"
 
 #: port/frontend/shell/settings.cpp:218
 msgid "RetroAchievements, reports and Playtendoh's updates."
-msgstr ""
+msgstr "RetroAchievements, báo cáo và cập nhật của Playtendoh."
 
 #: port/frontend/shell/settings.cpp:219
 msgid "Backups"
-msgstr ""
+msgstr "Sao lưu"
 
 #: port/frontend/shell/settings.cpp:219
 msgid "Every system's saves, to a USB drive and back."
-msgstr ""
+msgstr "Mọi hệ thống đều lưu vào ổ USB và ngược lại."
 
 #: port/frontend/shell/settings.cpp:220
 msgid "Play time"
@@ -7524,7 +7526,7 @@ msgstr "Cho mọi trò chơi DS."
 #. a libretro system's Settings page's line: {0} is the system (NES, Game Boy...)
 #: port/frontend/shell/settings.cpp:236
 msgid "For every {0} game."
-msgstr ""
+msgstr "Dành cho mọi trò chơi {0}."
 
 #: port/frontend/shell/settings.cpp:241
 msgid "For every GameCube and Wii game."
@@ -7540,19 +7542,19 @@ msgstr "DualSense làm tay cầm GameCube."
 
 #: port/frontend/shell/settings.cpp:244 port/frontend/shell/settings.cpp:323
 msgid "Sound"
-msgstr ""
+msgstr "Âm thanh"
 
 #: port/frontend/shell/settings.cpp:244
 msgid "Game sound, and how it handles slowdowns."
-msgstr ""
+msgstr "Âm thanh trò chơi và cách xử lý hiện tượng chậm."
 
 #: port/frontend/shell/settings.cpp:246 port/frontend/shell/settings.cpp:325
 msgid "GBA"
-msgstr ""
+msgstr "GBA"
 
 #: port/frontend/shell/settings.cpp:246
 msgid "A Game Boy Advance on a GameCube port: set one in Controls, under Ports."
-msgstr ""
+msgstr "Một Game Boy Advance trên cổng GameCube: đặt một cái trong Điều khiển, bên dưới Cổng."
 
 #: port/frontend/shell/settings.cpp:247 port/frontend/shell/settings.cpp:281 port/frontend/shell/settings.cpp:326
 msgid "System"
@@ -7560,11 +7562,11 @@ msgstr "Hệ thống"
 
 #: port/frontend/shell/settings.cpp:247
 msgid "The emulated console, and how it runs."
-msgstr ""
+msgstr "Bảng điều khiển mô phỏng và cách nó chạy."
 
 #: port/frontend/shell/settings.cpp:248 port/frontend/shell/settings.cpp:265
 msgid "Where this system's games are."
-msgstr ""
+msgstr "Trò chơi của hệ thống này ở đâu."
 
 #: port/frontend/shell/settings.cpp:249 port/frontend/shell/settings.cpp:350 port/frontend/shell/shell.cpp:2246
 msgid "Saves"
@@ -7572,15 +7574,15 @@ msgstr "Bản lưu"
 
 #: port/frontend/shell/settings.cpp:249
 msgid "Memory cards and saves"
-msgstr ""
+msgstr "Thẻ nhớ và tiết kiệm"
 
 #: port/frontend/shell/settings.cpp:250
 msgid "Copy each game's save to a USB drive, or move it aside."
-msgstr ""
+msgstr "Sao chép phần lưu của mỗi trò chơi vào ổ USB hoặc di chuyển nó sang một bên."
 
 #: port/frontend/shell/settings.cpp:250
 msgid "Copy saves on your cards to a USB drive, or move them aside."
-msgstr ""
+msgstr "Sao chép các bản lưu trên thẻ của bạn vào ổ USB hoặc di chuyển chúng sang một bên."
 
 #: port/frontend/shell/settings.cpp:251 port/frontend/shell/settings.cpp:266 port/frontend/shell/settings.cpp:305
 msgid "Online"
@@ -7588,19 +7590,19 @@ msgstr "Trực tuyến"
 
 #: port/frontend/shell/settings.cpp:251 port/frontend/shell/settings.cpp:266 port/frontend/shell/settings.cpp:308
 msgid "Box art for the library."
-msgstr ""
+msgstr "Hộp nghệ thuật cho thư viện."
 
 #: port/frontend/shell/settings.cpp:259
 msgid "All of {0}'s options, for every game on this system."
-msgstr ""
+msgstr "Tất cả các tùy chọn của {0}, dành cho mọi trò chơi trên hệ thống này."
 
 #: port/frontend/shell/settings.cpp:260
 msgid "Which emulator plays this system's games."
-msgstr ""
+msgstr "Trình giả lập nào chơi trò chơi của hệ thống này."
 
 #: port/frontend/shell/settings.cpp:264 port/frontend/shell/settings.cpp:338
 msgid "Picture and sound"
-msgstr ""
+msgstr "Hình ảnh và âm thanh"
 
 #: port/frontend/shell/settings.cpp:274
 msgid "Each player's controller for the Wii U."
@@ -7652,7 +7654,7 @@ msgstr "Nơi chứa trò chơi 3DS, và nội dung cài vào bộ lưu trữ c�
 
 #: port/frontend/shell/settings.cpp:291
 msgid "Where your Switch 2 games are, with their keys and firmware."
-msgstr ""
+msgstr "Trò chơi Switch 2 của bạn ở đâu, cùng với khóa và chương trình cơ sở của chúng."
 
 #: port/frontend/shell/settings.cpp:292
 msgid "Where your Switch games are, with its keys and firmware."
@@ -7661,7 +7663,7 @@ msgstr "Nơi đặt trò chơi Switch, cùng khóa và firmware."
 #. {0} is a system (Game Boy Advance)
 #: port/frontend/shell/settings.cpp:294
 msgid "Where your {0} games are."
-msgstr ""
+msgstr "Trò chơi {0} của bạn ở đâu."
 
 #: port/frontend/shell/settings.cpp:295
 msgid "Where your DS games are, and where their saves go."
@@ -7669,11 +7671,11 @@ msgstr "Nơi chứa trò chơi DS, và nơi lưu bản lưu của chúng."
 
 #: port/frontend/shell/settings.cpp:300
 msgid "Wii U accounts"
-msgstr ""
+msgstr "Tài khoản Wii U"
 
 #: port/frontend/shell/settings.cpp:300
 msgid "Each account has its own saves."
-msgstr ""
+msgstr "Mỗi tài khoản đều có khoản tiết kiệm riêng."
 
 #. Settings' page of the Switch side's players (Eden's user profiles, the people)
 #. the Switch side's players, the people (Eden's user profiles), each with saves of their own; not a number of players
@@ -7689,15 +7691,15 @@ msgstr "Ai chơi, mỗi người có bản lưu riêng."
 
 #: port/frontend/shell/settings.cpp:305
 msgid "Box art and community graphic packs."
-msgstr ""
+msgstr "Hộp nghệ thuật và gói đồ họa cộng đồng."
 
 #: port/frontend/shell/settings.cpp:306
 msgid "Box art and Artic Base."
-msgstr ""
+msgstr "Hộp nghệ thuật và cơ sở Artic."
 
 #: port/frontend/shell/settings.cpp:307
 msgid "Box art and multiplayer rooms."
-msgstr ""
+msgstr "Hộp nghệ thuật và phòng nhiều người chơi."
 
 #: port/frontend/shell/settings.cpp:315
 msgid "For {0} only. Other settings follow the system's."
@@ -7705,15 +7707,15 @@ msgstr "Chỉ cho {0}. Các mục cài đặt khác theo bên của nó."
 
 #: port/frontend/shell/settings.cpp:327
 msgid "Setups"
-msgstr ""
+msgstr "Cài đặt"
 
 #: port/frontend/shell/settings.cpp:328
 msgid "Cheats and patches"
-msgstr ""
+msgstr "Cheat và bản vá"
 
 #: port/frontend/shell/settings.cpp:341 port/frontend/shell/settings.cpp:352
 msgid "Get this game's cheats, and turn each on or off."
-msgstr ""
+msgstr "Nhận các mánh gian lận của trò chơi này và bật hoặc tắt từng mánh gian lận."
 
 #: port/frontend/shell/settings.cpp:350
 msgid "{0}'s saves only. Settings has every system's."
@@ -7839,11 +7841,11 @@ msgstr[0] "Đã thêm {0} mod: bật chúng trong Gói đồ họa của trò ch
 
 #: port/frontend/shell/settings.cpp:518
 msgid "Reset all settings"
-msgstr ""
+msgstr "Đặt lại tất cả cài đặt"
 
 #: port/frontend/shell/settings.cpp:520
 msgid "Puts every setting back to default. Games, folders and saves are kept."
-msgstr ""
+msgstr "Đưa mọi cài đặt về mặc định. Trò chơi, thư mục và bản lưu được lưu giữ."
 
 #: port/frontend/shell/settings.cpp:550 port/frontend/shell/settings.cpp:1825
 msgid "Which emulator plays this system's games, from the next game. Each keeps its own settings and saves."
@@ -7871,7 +7873,7 @@ msgstr "Trình giả lập của bên này giữ cài đặt, điều khiển v�
 
 #: port/frontend/shell/settings.cpp:564
 msgid "Porpoise's other settings, your button layouts and Wii Remote setup. Circle at the top comes back here."
-msgstr ""
+msgstr "Các cài đặt khác của Porpoise, bố cục nút của bạn và thiết lập Wii Remote. Tròn ở trên cùng quay lại đây."
 
 #: port/frontend/shell/settings.cpp:567 port/frontend/shell/settings.cpp:1338 port/frontend/shell/settings.cpp:2058
 msgid "Back up to USB"
@@ -7895,15 +7897,15 @@ msgstr "Cemu không khởi động được, nên không thể đổi mục này
 
 #: port/frontend/shell/settings.cpp:655
 msgid "Sharp, smooth, or a tube TV's lines."
-msgstr ""
+msgstr "Đường nét sắc nét, mịn màng hoặc dạng ống của TV."
 
 #: port/frontend/shell/settings.cpp:658
 msgid "How big the picture is on the TV."
-msgstr ""
+msgstr "Hình ảnh trên TV có kích thước lớn như thế nào."
 
 #: port/frontend/shell/settings.cpp:661
 msgid "The picture's shape."
-msgstr ""
+msgstr "Hình dạng của bức tranh."
 
 #: port/frontend/shell/settings.cpp:667 port/frontend/shell/settings.cpp:1662
 msgid "The games' sound."
@@ -8386,7 +8388,7 @@ msgstr "Chữ thập: tay cầm, chuyển động và nút của người chơi 
 
 #: port/frontend/shell/settings.cpp:946
 msgid "Set to a real Wii Remote, but none found. Cross to change it."
-msgstr ""
+msgstr "Đặt thành Wii Remote thực nhưng không tìm thấy. Chữ thập để thay đổi nó."
 
 #: port/frontend/shell/settings.cpp:947
 msgid "This player's controller, motion, vibration, deadzones and buttons. Player 1 is the user who started Playtendoh; other signed-in users are players 2 to 4."
@@ -8832,36 +8834,36 @@ msgstr "Một thư mục cho mỗi hệ máy"
 #. Settings > Game files: a row opening the list of every system's folder; {0} how many have a folder of their own, {1} how many systems
 #: port/frontend/shell/settings.cpp:1216
 msgid "{0} of {1} on their own"
-msgstr ""
+msgstr "{0} của {1} riêng"
 
 #: port/frontend/shell/settings.cpp:1217
 msgid "Keep a system's files together with the rest, or in a folder of its own."
-msgstr ""
+msgstr "Giữ các tệp của hệ thống cùng với phần còn lại hoặc trong một thư mục riêng."
 
 #: port/frontend/shell/settings.cpp:1218
 msgid "Saves, BIOS files and settings for every system are kept together in {0}, unless you give a system its own folder. Moving is quick and nothing is deleted. Playtendoh restarts to do it. Some emulators always use their own folder."
-msgstr ""
+msgstr "Các tệp lưu, BIOS và cài đặt cho mọi hệ thống được lưu giữ cùng nhau trong {0}, trừ khi bạn cung cấp cho hệ thống một thư mục riêng. Di chuyển nhanh chóng và không có gì bị xóa. Playtendoh khởi động lại để thực hiện. Một số trình giả lập luôn sử dụng thư mục riêng."
 
 #. Settings > Game files: a system whose emulator always keeps a folder of its own
 #: port/frontend/shell/settings.cpp:1225
 msgid "Its emulator always keeps its own folder."
-msgstr ""
+msgstr "Trình giả lập của nó luôn giữ thư mục riêng."
 
 #: port/frontend/shell/settings.cpp:1232
 msgid "Moves the next time Playtendoh starts."
-msgstr ""
+msgstr "Di chuyển vào lần tiếp theo Playtendoh bắt đầu."
 
 #: port/frontend/shell/settings.cpp:1233
 msgid "On: this system's files get their own folder. Off: kept with the rest."
-msgstr ""
+msgstr "Bật: các tập tin của hệ thống này có thư mục riêng. Tắt: giữ nguyên với phần còn lại."
 
 #: port/frontend/shell/settings.cpp:1234
 msgid "Own folder"
-msgstr ""
+msgstr "Thư mục riêng"
 
 #: port/frontend/shell/settings.cpp:1234
 msgid "Together"
-msgstr ""
+msgstr "Cùng nhau"
 
 #. {0} is a file or folder already where one would be moved to
 #: port/frontend/shell/settings.cpp:1239
@@ -9018,7 +9020,7 @@ msgstr "Ảnh bìa"
 
 #: port/frontend/shell/settings.cpp:1376
 msgid "Covers for the library, from libretro's thumbnails."
-msgstr ""
+msgstr "Bìa thư viện, từ hình thu nhỏ của libretro."
 
 #: port/frontend/shell/settings.cpp:1376
 msgid "Covers for the library, from GameTDB."
@@ -9174,7 +9176,7 @@ msgstr "Gói đồ họa cộng đồng của Cemu, từ bản phát hành mới
 
 #: port/frontend/shell/settings.cpp:1456
 msgid "Earn achievements in DS, GameCube, Wii, N64, SNES, NES, Game Boy, Virtual Boy and Pokémon mini games. Only a sign-in token is kept on the PS5, never your password. Save states, cheats and speed still work."
-msgstr ""
+msgstr "Kiếm thành tích trong trò chơi với DS, GameCube, Wii, N64, SNES, NES, Game Boy, Virtual Boy, Pokémon mini. Chỉ có mã thông báo đăng nhập được lưu giữ trên PS5, không bao giờ có mật khẩu của bạn. Lưu trạng thái, gian lận và tốc độ vẫn hoạt động."
 
 #. the RetroAchievements account signed in: its name ({1}) and softcore points ({0})
 #: port/frontend/shell/settings.cpp:1460 port/frontend/shell/settings.cpp:1464
@@ -9192,7 +9194,7 @@ msgstr "Giữ nút Chữ thập để đăng xuất"
 
 #: port/frontend/shell/settings.cpp:1462
 msgid "Signed in on every console that has achievements."
-msgstr ""
+msgstr "Đăng nhập trên mọi bảng điều khiển có thành tích."
 
 #: port/frontend/shell/settings.cpp:1465
 msgid "Signing in…"
@@ -9204,7 +9206,7 @@ msgstr "Nhấn Chữ thập để đăng nhập"
 
 #: port/frontend/shell/settings.cpp:1466
 msgid "Sign in once for every console that has achievements."
-msgstr ""
+msgstr "Đăng nhập một lần cho mỗi bảng điều khiển có thành tích."
 
 #: port/frontend/shell/settings.cpp:1467
 msgid "Unlock notices"
@@ -9220,32 +9222,32 @@ msgstr "Thành tựu vừa đạt, và số thành tựu khi trò chơi khởi �
 
 #: port/frontend/shell/settings.cpp:1473
 msgid "Send reports"
-msgstr ""
+msgstr "Gửi báo cáo"
 
 #: port/frontend/shell/settings.cpp:1473
 msgid "How games run, with nothing about you."
-msgstr ""
+msgstr "Trò chơi chạy như thế nào, không có thông tin gì về bạn."
 
 #. {0} is the address of the page that lists every field a report has
 #: port/frontend/shell/settings.cpp:1475
 msgid "When a game ends, a short report is sent: the game, how it ended, its settings, the PS5's firmware and model, and the end of the log with addresses and folder names removed. Never your PSN name, serial, addresses, accounts or saves. Nothing is sent while you play. Off deletes reports waiting to be sent. Every field: {0}"
-msgstr ""
+msgstr "Khi trò chơi kết thúc, một báo cáo ngắn sẽ được gửi: trò chơi, cách trò chơi kết thúc, cài đặt của trò chơi, chương trình cơ sở và kiểu máy của PS5 cũng như phần cuối của nhật ký với địa chỉ và tên thư mục đã bị xóa. Không bao giờ tên, số sê-ri, địa chỉ, tài khoản hoặc bản lưu PSN của bạn. Không có gì được gửi trong khi bạn chơi. Tắt xóa các báo cáo đang chờ gửi. Mọi trường: {0}"
 
 #: port/frontend/shell/settings.cpp:1478
 msgid "SteamGridDB key"
-msgstr ""
+msgstr "Khóa SteamGridDB"
 
 #: port/frontend/shell/settings.cpp:1479
 msgid "Yours"
-msgstr ""
+msgstr "của bạn"
 
 #: port/frontend/shell/settings.cpp:1479 port/frontend/shell/timeline.cpp:52
 msgid "Built in"
-msgstr ""
+msgstr "Được xây dựng trong"
 
 #: port/frontend/shell/settings.cpp:1480 port/frontend/shell/settings.cpp:1481
 msgid "Wide art shown as a game starts. Your own key from steamgriddb.com is used first; leave it empty to remove it."
-msgstr ""
+msgstr "Nghệ thuật rộng được hiển thị khi trò chơi bắt đầu. Khóa riêng của bạn từ steamgriddb.com sẽ được sử dụng trước tiên; để trống để loại bỏ nó."
 
 #: port/frontend/shell/settings.cpp:1483
 msgid "Playtendoh updates"
@@ -9290,35 +9292,35 @@ msgstr "Cách sắp xếp Thư viện."
 
 #: port/frontend/shell/settings.cpp:1528
 msgid "Classic shows one console at a time, with Recently played on top. Orbit is a dial for picking a console, with recent games in the centre. EmulationStation (ES-DE) is a separate launcher: download it on the row below to choose it here. Your games, settings and saves stay the same."
-msgstr ""
+msgstr "Cổ điển hiển thị mỗi lần một bảng điều khiển với phần Được phát gần đây ở trên cùng. Orbit là một nút xoay để chọn một bảng điều khiển, với các trò chơi gần đây ở trung tâm. EmulationStation (ES-DE) là một trình khởi chạy riêng: tải xuống ở hàng bên dưới để chọn tại đây. Trò chơi, cài đặt và nội dung lưu của bạn vẫn giữ nguyên."
 
 #: port/frontend/shell/settings.cpp:1533
 msgid "EmulationStation (ES-DE) shows the same games with its own themes. It's a separate download of about {0} MB and stays through updates. Games still play here with the same settings, saves and in-game menu. Hold L1 while Playtendoh starts to use this launcher instead."
-msgstr ""
+msgstr "EmulationStation (ES-DE) hiển thị các trò chơi tương tự với chủ đề riêng. Đây là bản tải xuống riêng biệt khoảng {0} MB và luôn cập nhật. Các trò chơi vẫn chơi ở đây với cùng cài đặt, lưu và menu trong trò chơi. Giữ L1 trong khi Playtendoh bắt đầu sử dụng trình khởi chạy này."
 
 #: port/frontend/shell/settings.cpp:1537
 msgid "Asking GitHub…"
-msgstr ""
+msgstr "Đang hỏi GitHub…"
 
 #: port/frontend/shell/settings.cpp:1544 port/frontend/shell/settings.cpp:1547
 msgid "Hold Cross to remove"
-msgstr ""
+msgstr "Giữ Chữ thập để xóa"
 
 #: port/frontend/shell/settings.cpp:1544
 msgid "Hold Cross to download · {0} MB"
-msgstr ""
+msgstr "Giữ Chữ thập để tải xuống · {0} MB"
 
 #: port/frontend/shell/settings.cpp:1547
 msgid "Hold Cross to try again"
-msgstr ""
+msgstr "Giữ Chữ thập để thử lại"
 
 #: port/frontend/shell/settings.cpp:1550
 msgid "Installed. Choose it as the Layout above."
-msgstr ""
+msgstr "Đã cài đặt. Chọn nó làm Bố cục ở trên."
 
 #: port/frontend/shell/settings.cpp:1550
 msgid "A separate launcher, as a download."
-msgstr ""
+msgstr "Một trình khởi chạy riêng biệt, dưới dạng tải xuống."
 
 #. Settings > Launcher: a row that opens which sides the bar shows (Wii U, Switch, DS, 3DS)
 #: port/frontend/shell/settings.cpp:1558
@@ -9429,16 +9431,16 @@ msgstr "Một hàng bộ lọc phía trên danh sách thư viện: Tất cả, M
 #. Settings > Launcher: a game's badge, Playable, Issues or Not playable, from players' reports
 #: port/frontend/shell/settings.cpp:1582
 msgid "How games run"
-msgstr ""
+msgstr "Trò chơi chạy như thế nào"
 
 #. Settings > Launcher: a game's badge, Playable, Issues or Not playable, from players' reports
 #: port/frontend/shell/settings.cpp:1582
 msgid "Playable, Issues or Not playable on each game."
-msgstr ""
+msgstr "Có thể chơi được, Có vấn đề hoặc Không thể chơi được trên mỗi trò chơi."
 
 #: port/frontend/shell/settings.cpp:1583
 msgid "A badge on each game that has been reported: Playable, Issues or Not playable, from the compatibility list and players' reports, updated when the app starts. Off: no badges."
-msgstr ""
+msgstr "Huy hiệu trên mỗi trò chơi đã được báo cáo: Có thể chơi được, Sự cố hoặc Không thể chơi được, từ danh sách tương thích và báo cáo của người chơi, được cập nhật khi ứng dụng khởi động. Tắt: không có huy hiệu."
 
 #: port/frontend/shell/settings.cpp:1591 port/frontend/shell/settings.cpp:1601
 msgid "Larger text"
@@ -9695,15 +9697,15 @@ msgstr "Xóa các mục cài đặt riêng của trò chơi này, để nó lạ
 
 #: port/frontend/shell/settings.cpp:1894
 msgid "Back to the emulator's own values"
-msgstr ""
+msgstr "Quay lại giá trị riêng của trình mô phỏng"
 
 #: port/frontend/shell/settings.cpp:1895
 msgid "Nothing changed"
-msgstr ""
+msgstr "Không có gì thay đổi"
 
 #: port/frontend/shell/settings.cpp:1897
 msgid "Resets every option above to {0}'s default, for every game on this system."
-msgstr ""
+msgstr "Đặt lại mọi tùy chọn ở trên về mặc định của {0} cho mọi trò chơi trên hệ thống này."
 
 #. a Wii U account by its number, when its name cannot be read
 #: port/frontend/shell/settings.cpp:1972
@@ -9899,11 +9901,11 @@ msgstr "Ngôn ngữ: {0}"
 
 #: port/frontend/shell/settings.cpp:2402
 msgid "Playtendoh cannot write to {0}"
-msgstr ""
+msgstr "Playtendoh không thể ghi vào {0}"
 
 #: port/frontend/shell/settings.cpp:2406
 msgid "Playtendoh restarts to move the files"
-msgstr ""
+msgstr "Playtendoh khởi động lại để di chuyển các tập tin"
 
 #: port/frontend/shell/settings.cpp:2417
 msgid "At least one system must stay on"
@@ -9948,7 +9950,7 @@ msgstr "Đang sao lưu bản lưu của mọi bên…"
 
 #: port/frontend/shell/settings.cpp:2984
 msgid "EmulationStation's download stopped"
-msgstr ""
+msgstr "Quá trình tải xuống của EmulationStation đã dừng"
 
 #. the loading screen's name for a retro side's own emulator menus: {0} is the side (Nintendo 64)
 #: port/frontend/shell/settings.cpp:2993
@@ -9961,12 +9963,12 @@ msgstr "Đang mở cài đặt trình giả lập"
 
 #: port/frontend/shell/settings.cpp:3020
 msgid "Every game has its cover"
-msgstr ""
+msgstr "Trò chơi nào cũng có vỏ bọc của nó"
 
 #: port/frontend/shell/settings.cpp:3020
 msgid "Looking for {0} cover"
 msgid_plural "Looking for {0} covers"
-msgstr[0] ""
+msgstr[0] "Đang tìm {0} ảnh bìa"
 
 #: port/frontend/shell/settings.cpp:3085
 msgid "Switch games play offline"
@@ -10037,27 +10039,27 @@ msgstr "Đang đăng nhập RetroAchievements…"
 
 #: port/frontend/shell/settings.cpp:3191
 msgid "Your SteamGridDB key"
-msgstr ""
+msgstr "Khóa SteamGridDB của bạn"
 
 #: port/frontend/shell/settings.cpp:3194
 msgid "Your SteamGridDB key is removed"
-msgstr ""
+msgstr "Khóa SteamGridDB của bạn đã bị xóa"
 
 #: port/frontend/shell/settings.cpp:3194
 msgid "Used next time Playtendoh starts"
-msgstr ""
+msgstr "Được sử dụng vào lần tiếp theo Playtendoh khởi động"
 
 #: port/frontend/shell/settings.cpp:3210
 msgid "Downloading EmulationStation. Choose it as the Layout once it's in."
-msgstr ""
+msgstr "Đang tải xuống EmulationStation. Chọn nó làm Bố cục khi nó được đưa vào."
 
 #: port/frontend/shell/settings.cpp:3221
 msgid "EmulationStation removed. Its scraped data is kept."
-msgstr ""
+msgstr "EmulationStation đã bị xóa. Siêu dữ liệu trò chơi đã tải xuống của nó được lưu giữ."
 
 #: port/frontend/shell/settings.cpp:3231
 msgid "{0} reset to defaults"
-msgstr ""
+msgstr "Đặt lại {0} về mặc định"
 
 #: port/frontend/shell/settings.cpp:3242
 msgid "Player removed: their saves and settings are kept"
@@ -10404,25 +10406,25 @@ msgstr "Bật: ảnh bìa đến khi trò chơi xuất hiện"
 
 #: port/frontend/shell/setup.cpp:377
 msgid "System folders"
-msgstr ""
+msgstr "Thư mục hệ thống"
 
 #: port/frontend/shell/setup.cpp:380
 msgid "Together in {0}"
-msgstr ""
+msgstr "Cùng nhau trong {0}"
 
 #. the Setup check: how many of the systems that can move have a folder of their own
 #: port/frontend/shell/setup.cpp:382
 msgid "{0} system in its own folder"
 msgid_plural "{0} systems in their own folders"
-msgstr[0] ""
+msgstr[0] "{0} hệ thống trong thư mục riêng"
 
 #: port/frontend/shell/setup.cpp:384
 msgid "Where each system's files go"
-msgstr ""
+msgstr "Nơi tập tin của mỗi hệ thống đi"
 
 #: port/frontend/shell/setup.cpp:385
 msgid "Saves, BIOS files and settings for every system are kept together in {0}. You can give the Wii U, 3DS, DS or Switch a folder of its own instead. Cross shows them, each with its own switch."
-msgstr ""
+msgstr "Các bản lưu, tệp BIOS và cài đặt cho mọi hệ thống được lưu giữ cùng nhau trong {0}. Thay vào đó, bạn có thể cung cấp cho Wii U, 3DS, DS hoặc Switch một thư mục riêng. Chữ thập hiển thị chúng, mỗi cái có một công tắc riêng."
 
 #: port/frontend/shell/setup.cpp:482
 msgid "Checked again"
@@ -10444,17 +10446,17 @@ msgstr "Cùng kiểm tra thiết lập"
 #: port/frontend/shell/setup.cpp:518
 msgid "{0} thing needs you"
 msgid_plural "{0} things need you"
-msgstr[0] ""
+msgstr[0] "{0} mục cần bạn xử lý"
 
 #. the Setup check's summary: how many checks need the player, or that every one is ready
 #: port/frontend/shell/setup.cpp:518
 msgid "Everything is ready"
-msgstr ""
+msgstr "Mọi thứ đã sẵn sàng"
 
 #. the Setup check's summary: {0} checks ready of {1}
 #: port/frontend/shell/setup.cpp:521
 msgid "{0} of {1} ready"
-msgstr ""
+msgstr "{0} của {1} đã sẵn sàng"
 
 #: port/frontend/shell/setup.cpp:535
 msgid "{0} · same as the PS5"
@@ -10463,17 +10465,17 @@ msgstr "{0} · như PS5"
 #. the Setup check's groups: what needs the player, what is optional, what is ready; {0} how many
 #: port/frontend/shell/setup.cpp:590
 msgid "Needs you · {0}"
-msgstr ""
+msgstr "Cần bạn · {0}"
 
 #. the Setup check's groups: what needs the player, what is optional, what is ready; {0} how many
 #: port/frontend/shell/setup.cpp:590
 msgid "Optional · {0}"
-msgstr ""
+msgstr "Tùy chọn · {0}"
 
 #. the Setup check's groups: what needs the player, what is optional, what is ready; {0} how many
 #: port/frontend/shell/setup.cpp:590
 msgid "Ready · {0}"
-msgstr ""
+msgstr "Sẵn sàng · {0}"
 
 #: port/frontend/shell/setup.cpp:643
 msgid "The menus' language"
@@ -10750,11 +10752,11 @@ msgstr "Đã chuyển các thư mục"
 
 #: port/frontend/shell/shell.cpp:543
 msgid "EmulationStation is in. It opens next time Playtendoh starts."
-msgstr ""
+msgstr "Đã có EmulationStation. Nó sẽ mở vào lần tiếp theo Playtendoh khởi động."
 
 #: port/frontend/shell/shell.cpp:544
 msgid "EmulationStation is in. Choose it in Settings > Launcher > Layout."
-msgstr ""
+msgstr "Đã có EmulationStation. Chọn nó trong Cài đặt > Trình khởi chạy > Bố cục."
 
 #: port/frontend/shell/shell.cpp:949
 msgid "The Wii U emulator did not start: {0}"
@@ -10868,11 +10870,11 @@ msgstr "Dòng thời gian"
 
 #: port/frontend/shell/shell.cpp:1851
 msgid "Hide"
-msgstr ""
+msgstr "Ẩn"
 
 #: port/frontend/shell/shell.cpp:1851
 msgid "Show"
-msgstr ""
+msgstr "Hiển thị"
 
 #: port/frontend/shell/shell.cpp:1851 port/frontend/shell/shell.cpp:1853 port/frontend/shell/shell.cpp:1909 port/frontend/shell/shell.cpp:2957
 msgid "Done"
@@ -11241,205 +11243,205 @@ msgstr "Đã đổi tên người chơi"
 
 #: port/frontend/shell/timeline.cpp:53 port/frontend/shell/timeline.cpp:58 port/frontend/shell/timeline.cpp:61 port/frontend/shell/timeline.cpp:64
 msgid "Cartridge"
-msgstr ""
+msgstr "Hộp mực"
 
 #: port/frontend/shell/timeline.cpp:54
 msgid "Arcade board"
-msgstr ""
+msgstr "Bảng trò chơi điện tử"
 
 #: port/frontend/shell/timeline.cpp:55
 msgid "Disk Card"
-msgstr ""
+msgstr "Thẻ đĩa"
 
 #: port/frontend/shell/timeline.cpp:56 port/frontend/shell/timeline.cpp:57 port/frontend/shell/timeline.cpp:60 port/frontend/shell/timeline.cpp:62
 msgid "Game Pak"
-msgstr ""
+msgstr "trò chơi Pak"
 
 #: port/frontend/shell/timeline.cpp:59
 msgid "Memory Pak"
-msgstr ""
+msgstr "Bộ nhớ Pak"
 
 #: port/frontend/shell/timeline.cpp:63
 msgid "8 cm disc"
-msgstr ""
+msgstr "đĩa 8cm"
 
 #: port/frontend/shell/timeline.cpp:65
 msgid "iQue Card"
-msgstr ""
+msgstr "Thẻ iQue"
 
 #: port/frontend/shell/timeline.cpp:66 port/frontend/shell/timeline.cpp:68 port/frontend/shell/timeline.cpp:70 port/frontend/shell/timeline.cpp:71
 msgid "Game Card"
-msgstr ""
+msgstr "Thẻ trò chơi"
 
 #: port/frontend/shell/timeline.cpp:67 port/frontend/shell/timeline.cpp:69
 msgid "12 cm disc"
-msgstr ""
+msgstr "đĩa 12 cm"
 
 #: port/frontend/shell/timeline.cpp:106
 msgid "One game in each, and a clock. The cross pad began here."
-msgstr ""
+msgstr "Mỗi trò chơi có một trò chơi và một chiếc đồng hồ. Tấm đệm chéo bắt đầu từ đây."
 
 #: port/frontend/shell/timeline.cpp:107
 msgid "The Famicom, then the NES: it brought games back to living rooms."
-msgstr ""
+msgstr "Famicom, sau đó là NES: nó đưa trò chơi trở lại phòng khách."
 
 #: port/frontend/shell/timeline.cpp:108
 msgid "Arcade cabinets that ran NES games, some with two screens."
-msgstr ""
+msgstr "Tủ trò chơi điện tử chạy trò chơi NES, một số có hai màn hình."
 
 #: port/frontend/shell/timeline.cpp:109
 msgid "Games on disks, written again at shop kiosks in Japan."
-msgstr ""
+msgstr "Trò chơi trên đĩa, được viết lại tại các ki-ốt cửa hàng ở Nhật Bản."
 
 #: port/frontend/shell/timeline.cpp:110
 msgid "Four shades of green on AA batteries, and Tetris for two by cable."
-msgstr ""
+msgstr "Bốn sắc thái xanh lục trên pin AA và Tetris cho hai pin bằng cáp."
 
 #: port/frontend/shell/timeline.cpp:111
 msgid "Mode 7, and chips in the cartridges that drew in 3D."
-msgstr ""
+msgstr "Chế độ 7 và các chip trong hộp mực có 3D."
 
 #: port/frontend/shell/timeline.cpp:112
 msgid "Game Boy games on the TV, with colours and borders."
-msgstr ""
+msgstr "Trò chơi Game Boy trên TV, có màu sắc và viền."
 
 #: port/frontend/shell/timeline.cpp:113
 msgid "Games sent by satellite to Super Famicoms in Japan."
-msgstr ""
+msgstr "Trò chơi được gửi qua vệ tinh tới Super Famicoms ở Nhật Bản."
 
 #: port/frontend/shell/timeline.cpp:114
 msgid "3D in red and black, in a visor on a stand."
-msgstr ""
+msgstr "3D có màu đỏ và đen, trong tấm che trên giá đỡ."
 
 #: port/frontend/shell/timeline.cpp:115
 msgid "The analog stick, the Rumble Pak and four controller ports."
-msgstr ""
+msgstr "Thanh analog, Rumble Pak và bốn cổng điều khiển."
 
 #: port/frontend/shell/timeline.cpp:116
 msgid "The Game Boy in colour, and it still plays the old games."
-msgstr ""
+msgstr "Game Boy có màu và vẫn chơi được các game cũ."
 
 #: port/frontend/shell/timeline.cpp:117
 msgid "A 32-bit Game Boy, with shoulder buttons."
-msgstr ""
+msgstr "Game Boy 32 bit, có nút vai."
 
 #: port/frontend/shell/timeline.cpp:118
 msgid "8 cm discs, and a handle on the back."
-msgstr ""
+msgstr "Đĩa 8 cm, có tay cầm phía sau."
 
 #: port/frontend/shell/timeline.cpp:119
 msgid "The smallest cartridges, with rumble and a shake sensor."
-msgstr ""
+msgstr "Các hộp mực nhỏ nhất, có tiếng ồn và cảm biến rung."
 
 #: port/frontend/shell/timeline.cpp:120
 msgid "The N64 inside a controller, for China, its games on a card."
-msgstr ""
+msgstr "N64 bên trong bộ điều khiển dành cho Trung Quốc, các trò chơi trên thẻ."
 
 #: port/frontend/shell/timeline.cpp:121
 msgid "Two screens, the lower one touched with a stylus."
-msgstr ""
+msgstr "Hai màn hình, màn hình phía dưới chạm vào bằng bút cảm ứng."
 
 #: port/frontend/shell/timeline.cpp:122
 msgid "A remote to point and swing, in every hand."
-msgstr ""
+msgstr "Một điều khiển từ xa để chỉ và vung, trong mọi bàn tay."
 
 #: port/frontend/shell/timeline.cpp:123
 msgid "3D without glasses, and a camera that sees in 3D too."
-msgstr ""
+msgstr "3D không có kính và camera cũng có thể nhìn thấy trong 3D."
 
 #: port/frontend/shell/timeline.cpp:124
 msgid "A second screen in the controller."
-msgstr ""
+msgstr "Một màn hình thứ hai trong bộ điều khiển."
 
 #: port/frontend/shell/timeline.cpp:125
 msgid "On the TV or in your hands: the same console."
-msgstr ""
+msgstr "Trên TV hoặc trên tay bạn: cùng một bảng điều khiển."
 
 #: port/frontend/shell/timeline.cpp:126
 msgid "A bigger Switch, with Joy-Con that work as a mouse."
-msgstr ""
+msgstr "Switch lớn hơn, với Joy-Con hoạt động như một con chuột."
 
 #. an era on the Timeline's ruler (the years its consoles came out in), and its one line over the shelves
 #: port/frontend/shell/timeline.cpp:137
 msgid "Pocket games"
-msgstr ""
+msgstr "Trò chơi bỏ túi"
 
 #. an era on the Timeline's ruler (the years its consoles came out in), and its one line over the shelves
 #: port/frontend/shell/timeline.cpp:137
 msgid "Games on LCD screens, small enough for a pocket."
-msgstr ""
+msgstr "Trò chơi trên màn hình LCD, đủ nhỏ để bỏ túi."
 
 #: port/frontend/shell/timeline.cpp:138
 msgid "Cartridges brought games home, and the screens began to scroll."
-msgstr ""
+msgstr "Hộp mực mang trò chơi về nhà và màn hình bắt đầu cuộn."
 
 #: port/frontend/shell/timeline.cpp:139
 msgid "More colours, richer sound, and Mode 7."
-msgstr ""
+msgstr "Nhiều màu sắc hơn, âm thanh phong phú hơn và Chế độ 7."
 
 #: port/frontend/shell/timeline.cpp:140
 msgid "3D"
-msgstr ""
+msgstr "3D"
 
 #: port/frontend/shell/timeline.cpp:140
 msgid "Worlds in polygons, the analog stick and rumble."
-msgstr ""
+msgstr "Thế giới đa giác, cần analog và tiếng ầm ầm."
 
 #: port/frontend/shell/timeline.cpp:141
 msgid "Discs and pockets"
-msgstr ""
+msgstr "Đĩa và túi"
 
 #: port/frontend/shell/timeline.cpp:141
 msgid "Small discs at home, a 32-bit Game Boy on the go."
-msgstr ""
+msgstr "Đĩa nhỏ ở nhà, Game Boy 32-bit khi đang di chuyển."
 
 #: port/frontend/shell/timeline.cpp:142
 msgid "Games played by pointing, swinging and touching."
-msgstr ""
+msgstr "Trò chơi được chơi bằng cách chỉ, đu và chạm."
 
 #: port/frontend/shell/timeline.cpp:143
 msgid "HD"
-msgstr ""
+msgstr "HD"
 
 #: port/frontend/shell/timeline.cpp:143
 msgid "High definition, and a screen in the controller."
-msgstr ""
+msgstr "Độ phân giải cao và màn hình trong bộ điều khiển."
 
 #: port/frontend/shell/timeline.cpp:144
 msgid "Hybrid"
-msgstr ""
+msgstr "lai"
 
 #: port/frontend/shell/timeline.cpp:144
 msgid "One console, on the TV or in your hands."
-msgstr ""
+msgstr "Một bảng điều khiển, trên TV hoặc trên tay bạn."
 
 #. the overline of the Timeline's card in the console lists: it is the library's museum
 #: port/frontend/shell/timeline.cpp:470
 msgid "Museum"
-msgstr ""
+msgstr "Bảo tàng"
 
 #: port/frontend/shell/timeline.cpp:476
 msgid "{0} console"
 msgid_plural "{0} consoles"
-msgstr[0] ""
+msgstr[0] "{0} bảng điều khiển"
 
 #: port/frontend/shell/timeline.cpp:480
 msgid "Every console's games on one shelf, oldest to newest, each as the disc, card or cartridge it came on."
-msgstr ""
+msgstr "Mọi trò chơi của bảng điều khiển đều nằm trên một giá, từ cũ nhất đến mới nhất, mỗi trò chơi dưới dạng đĩa, thẻ hoặc hộp mực."
 
 #: port/frontend/shell/timeline.cpp:894
 msgid "{0} of your games"
 msgid_plural "{0} of your games"
-msgstr[0] ""
+msgstr[0] "{0} trò chơi của bạn"
 
 #. on a game's museum label in the Timeline: {0} is the day it came out
 #: port/frontend/shell/timeline.cpp:1129
 msgid "Released {0}"
-msgstr ""
+msgstr "Đã phát hành {0}"
 
 #: port/frontend/shell/timeline.cpp:1139
 msgid "Not played yet"
-msgstr ""
+msgstr "Chưa chơi"
 
 #: port/frontend/shell/timeline.cpp:1186
 msgid "An empty shelf"
@@ -11457,7 +11459,7 @@ msgstr "Máy trước hoặc máy tiếp theo"
 #. the Timeline's hint for Up and Down, which go to the era before or after
 #: port/frontend/shell/timeline.cpp:1230
 msgid "Previous or next era"
-msgstr ""
+msgstr "Thời đại trước hoặc thời đại tiếp theo"
 
 #: port/frontend/shell/welcome.cpp:75
 msgid "For every system: A on Circle as on Nintendo consoles, or on Cross."
@@ -11502,82 +11504,82 @@ msgstr "Mục này"
 #. What's new in 6.0: the Library's two new ways to browse
 #: port/frontend/shell/whatsnew.cpp:28
 msgid "Orbit and the Timeline"
-msgstr ""
+msgstr "Quỹ đạo và dòng thời gian"
 
 #. What's new in 6.0: the Library's two new ways to browse
 #: port/frontend/shell/whatsnew.cpp:28
 msgid "Turn a dial to pick a console, or see every console's games on one shelf."
-msgstr ""
+msgstr "Xoay nút xoay để chọn bảng điều khiển hoặc xem mọi trò chơi của bảng điều khiển trên một giá."
 
 #. What's new in 6.0: how many consoles the app plays now
 #: port/frontend/shell/whatsnew.cpp:30
 msgid "21 consoles"
-msgstr ""
+msgstr "21 bảng điều khiển"
 
 #. What's new in 6.0: how many consoles the app plays now
 #: port/frontend/shell/whatsnew.cpp:30
 msgid "From the Game & Watch to the Switch 2, each with its own settings and saves."
-msgstr ""
+msgstr "Từ Game & Watch đến Switch 2, mỗi loại đều có cài đặt và lưu riêng."
 
 #. What's new in 6.0: Switch 2 games; Lichii is the emulator's name, left as it is
 #: port/frontend/shell/whatsnew.cpp:32
 msgid "Switch 2"
-msgstr ""
+msgstr "Switch 2"
 
 #. What's new in 6.0: Switch 2 games; Lichii is the emulator's name, left as it is
 #: port/frontend/shell/whatsnew.cpp:32
 msgid "Switch 2 games on Lichii, with your own keys and firmware."
-msgstr ""
+msgstr "Trò chơi Switch 2 trên Lichii, có khóa và chương trình cơ sở của riêng bạn."
 
 #. What's new in 6.0: GameCube and Wii games; Porpoise X is the emulator's name, left as it is
 #: port/frontend/shell/whatsnew.cpp:34
 msgid "GameCube and Wii"
-msgstr ""
+msgstr "GameCube và Wii"
 
 #. What's new in 6.0: GameCube and Wii games; Porpoise X is the emulator's name, left as it is
 #: port/frontend/shell/whatsnew.cpp:34
 msgid "Played by Porpoise X, with menus in Playtendoh's style."
-msgstr ""
+msgstr "Được chơi bởi Porpoise X, với các menu theo phong cách của Playtendoh."
 
 #. What's new in 6.0: Settings > Emulator lists every option of a console's emulator
 #: port/frontend/shell/whatsnew.cpp:36
 msgid "Every emulator option"
-msgstr ""
+msgstr "Mọi tùy chọn giả lập"
 
 #. What's new in 6.0: Settings > Emulator lists every option of a console's emulator
 #: port/frontend/shell/whatsnew.cpp:36
 msgid "Settings > Emulator has every option for each console's emulator."
-msgstr ""
+msgstr "Cài đặt > Trình mô phỏng có mọi tùy chọn cho trình mô phỏng của mỗi bảng điều khiển."
 
 #. What's new in 6.0: EmulationStation (ES-DE) as a launcher, downloaded when chosen
 #: port/frontend/shell/whatsnew.cpp:38
 msgid "Choose ES-DE as your launcher: it downloads when you pick it."
-msgstr ""
+msgstr "Chọn ES-DE làm trình khởi chạy của bạn: nó sẽ tải xuống khi bạn chọn."
 
 #. What's new in 6.0: collections, groups of games the player makes
 #: port/frontend/shell/whatsnew.cpp:40
 msgid "Group your games your way, and find them from the Library's filters."
-msgstr ""
+msgstr "Nhóm các trò chơi của bạn theo cách của bạn và tìm chúng từ các bộ lọc của Thư viện."
 
 #. What's new in 6.0: the menu over a game, redesigned, with button mapping in every emulator
 #: port/frontend/shell/whatsnew.cpp:42
 msgid "A new in-game menu"
-msgstr ""
+msgstr "Menu trong trò chơi mới"
 
 #. What's new in 6.0: the menu over a game, redesigned, with button mapping in every emulator
 #: port/frontend/shell/whatsnew.cpp:42
 msgid "One menu for every game, with your own button layout in each emulator."
-msgstr ""
+msgstr "Một menu cho mỗi trò chơi, có bố cục nút riêng trong mỗi trình mô phỏng."
 
 #. What's new in 6.0: the launcher's music and sounds, quieter
 #: port/frontend/shell/whatsnew.cpp:44
 msgid "Calmer sound"
-msgstr ""
+msgstr "Âm thanh êm dịu hơn"
 
 #. What's new in 6.0: the launcher's music and sounds, quieter
 #: port/frontend/shell/whatsnew.cpp:44
 msgid "New, quieter music and soft menu sounds."
-msgstr ""
+msgstr "Âm nhạc mới, yên tĩnh hơn và âm thanh menu nhẹ nhàng."
 
 #. the heading of the screen a new version opens on, once: what it brings
 #: port/frontend/shell/whatsnew.cpp:85

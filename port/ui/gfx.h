@@ -67,6 +67,8 @@ namespace ui
 		kTriangle = 7,
 		kWave = 8,
 		kFrost = 9, // liquid glass: a backdrop, blurred (DrawList::backdrops)
+		kImageQuad = 10, // a picture on a projected case face
+		kEllipse = 11, // the disc's projected ellipse
 	};
 
 	using TextureId = uint32_t; // 0: none (a white pixel)

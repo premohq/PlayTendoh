@@ -120,7 +120,7 @@ msgstr "Επιφάνεια αφής"
 #, menu
 msgctxt "button"
 msgid "Touchpad click"
-msgstr ""
+msgstr "Κάντε κλικ στην επιφάνεια αφής"
 
 #: port/app/buttons_menu.h:90 port/frontend/actions.cpp:508
 #, menu
@@ -387,12 +387,12 @@ msgstr "Ποιο κουμπί του DualSense πατά κάθε κουμπί."
 #: port/app/buttons_menu.h:153 port/frontend/shell/porpoise_rows.cpp:870 port/frontend/shell/porpoise_rows.cpp:949
 #, menu
 msgid "Controller test"
-msgstr ""
+msgstr "Δοκιμή ελεγκτή"
 
 #: port/app/buttons_menu.h:155 port/frontend/shell/porpoise_rows.cpp:871
 #, menu
 msgid "This player's DualSense input, live."
-msgstr ""
+msgstr "Η είσοδος DualSense αυτού του παίκτη, ζωντανά."
 
 #: port/app/buttons_menu.h:160 port/app/side_menu.h:522 port/frontend/shell/pages.cpp:966
 #, menu
@@ -408,7 +408,7 @@ msgstr "Δεν ορίστηκε"
 #: port/app/buttons_menu.h:162
 #, menu
 msgid "Press Cross, then the DualSense button to use. If another button already uses it, the two swap."
-msgstr ""
+msgstr "Πατήστε Σταυρός και μετά το κουμπί DualSense για χρήση. Εάν ένα άλλο κουμπί το χρησιμοποιεί ήδη, τα δύο ανταλλάσσονται."
 
 #. {0} is a button of the console's controller
 #. {0} is a button of the Wii U's or the 3DS's controller
@@ -466,7 +466,7 @@ msgstr "Προβλήματα"
 #: port/app/compatibility.cpp:71
 msgctxt "status"
 msgid "Not playable"
-msgstr ""
+msgstr "Δεν παίζεται"
 
 #: port/app/emulator.cpp:373
 msgid "the PS5 Vulkan driver did not start"
@@ -530,19 +530,19 @@ msgstr "Σταμάτησε για ένα παιχνίδι"
 
 #: port/app/esde_get.cpp:190
 msgid "EmulationStation isn't on GitHub for this version yet. Try again after an update."
-msgstr ""
+msgstr "Το EmulationStation δεν είναι ακόμα στο GitHub για αυτήν την έκδοση. Δοκιμάστε ξανά μετά από ενημέρωση."
 
 #: port/app/esde_get.cpp:191
 msgid "EmulationStation could not be downloaded. Is the PS5 online?"
-msgstr ""
+msgstr "Δεν ήταν δυνατή η λήψη του EmulationStation. Είναι το PS5 online;"
 
 #: port/app/esde_get.cpp:197
 msgid "Playtendoh runs from an image that can't be changed. Copy the es-de folder into it yourself."
-msgstr ""
+msgstr "Το Playtendoh εκτελείται από μια εικόνα που δεν μπορεί να αλλάξει. Αντιγράψτε τον φάκελο es-de σε αυτόν μόνοι σας."
 
 #: port/app/esde_get.cpp:203
 msgid "EmulationStation needs {0} MB free on the drive Playtendoh is on"
-msgstr ""
+msgstr "Το EmulationStation χρειάζεται το {0} Το MB δωρεάν στη μονάδα δίσκου Playtendoh είναι ενεργοποιημένο"
 
 #: port/app/esde_get.cpp:222 port/app/updates.cpp:505
 msgid "The download could not start"
@@ -550,7 +550,7 @@ msgstr "Η λήψη δεν μπόρεσε να ξεκινήσει"
 
 #: port/app/esde_get.cpp:239
 msgid "Stopped"
-msgstr ""
+msgstr "Σταμάτησε"
 
 #: port/app/esde_get.cpp:239 port/app/updates.cpp:524
 msgid "The download did not finish: is the PS5 online?"
@@ -566,7 +566,7 @@ msgstr "Δεν ήταν δυνατή η αποσυμπίεση: {0}"
 
 #: port/app/esde_get.cpp:270
 msgid "EmulationStation could not be installed ({0})"
-msgstr ""
+msgstr "Δεν ήταν δυνατή η εγκατάσταση του EmulationStation ({0})"
 
 #: port/app/esde_get.cpp:291 port/app/pack_updates.cpp:194 port/app/updates.cpp:621
 msgid "GitHub could not be found: is the PS5 online?"
@@ -574,15 +574,15 @@ msgstr "Το GitHub δεν βρέθηκε: είναι το PS5 συνδεδεμ�
 
 #: port/app/esde_get.cpp:348
 msgid "EmulationStation is downloading"
-msgstr ""
+msgstr "Γίνεται λήψη του EmulationStation"
 
 #: port/app/esde_get.cpp:354
 msgid "Playtendoh runs from an image that can't be changed"
-msgstr ""
+msgstr "Το Playtendoh εκτελείται από μια εικόνα που δεν μπορεί να αλλάξει"
 
 #: port/app/esde_get.cpp:360
 msgid "Its folder could not be removed"
-msgstr ""
+msgstr "Δεν ήταν δυνατή η αφαίρεση του φακέλου του"
 
 #: port/app/forwarders.cpp:151
 msgid "Home screen tiles need elfldr, which is not answering on port 9021. Load elfldr, then try again."
@@ -1767,59 +1767,59 @@ msgstr "Αποθηκεύσεις του {0}"
 #: port/app/ingame3ds.cpp:204
 #, menu
 msgid "Auto"
-msgstr ""
+msgstr "Αυτόματο"
 
 #. the Buttons page's Controller row: the game's own choice, the console's pad, a special controller
 #: port/app/ingame3ds.cpp:204 port/frontend/shell/porpoise_rows.cpp:292
 #, menu
 msgid "Standard"
-msgstr ""
+msgstr "Τυπικό"
 
 #. the Buttons page's Controller row: the game's own choice, the console's pad, a special controller
 #: port/app/ingame3ds.cpp:204
 #, menu
 msgid "Arkanoid paddle"
-msgstr ""
+msgstr "Αρκανοειδές κουπί"
 
 #: port/app/ingame3ds.cpp:207
 #, menu
 msgid "Turn the knob"
-msgstr ""
+msgstr "Γυρίστε το πόμολο"
 
 #: port/app/ingame3ds.cpp:207
 #, menu
 msgid "Fire"
-msgstr ""
+msgstr "Φωτιά"
 
 #: port/app/ingame3ds.cpp:207
 #, menu
 msgid "Aim"
-msgstr ""
+msgstr "Στόχος"
 
 #: port/app/ingame3ds.cpp:207
 #, menu
 msgid "Aim at the middle"
-msgstr ""
+msgstr "Στοχεύστε στη μέση"
 
 #: port/app/ingame3ds.cpp:207
 #, menu
 msgid "Shoot away from the screen"
-msgstr ""
+msgstr "Τραβήξτε μακριά από την οθόνη"
 
 #: port/app/ingame3ds.cpp:208
 #, menu
 msgid "Cursor"
-msgstr ""
+msgstr "Δρομέας"
 
 #: port/app/ingame3ds.cpp:208
 #, menu
 msgid "Turbo"
-msgstr ""
+msgstr "Turbo"
 
 #: port/app/ingame3ds.cpp:208
 #, menu
 msgid "Pause"
-msgstr ""
+msgstr "Παύση"
 
 #: port/app/ingame3ds.cpp:208 port/frontend/shell/firststart.cpp:260 port/frontend/shell/firststart.cpp:262 port/frontend/shell/shell.cpp:1861 port/frontend/shell/shell.cpp:1900
 #, menu
@@ -1829,57 +1829,57 @@ msgstr "Μετακίνηση"
 #: port/app/ingame3ds.cpp:208
 #, menu
 msgid "Left button"
-msgstr ""
+msgstr "Αριστερό κουμπί"
 
 #: port/app/ingame3ds.cpp:208
 #, menu
 msgid "Right button"
-msgstr ""
+msgstr "Δεξί κουμπί"
 
 #. {0} is a number on the Power Pad's mat
 #: port/app/ingame3ds.cpp:210 port/app/ingame3ds.cpp:217
 #, menu
 msgid "Mat {0}"
-msgstr ""
+msgstr "Ματ {0}"
 
 #. {0} is a number on the Power Pad's mat
 #: port/app/ingame3ds.cpp:210
 #, menu
 msgid "Tilt"
-msgstr ""
+msgstr "Κλίση"
 
 #. the DualSense's inputs for a special controller
 #: port/app/ingame3ds.cpp:212
 #, menu
 msgid "Touchpad, left stick or D-pad"
-msgstr ""
+msgstr "Touchpad, αριστερό stick ή D-pad"
 
 #. the DualSense's inputs for a special controller
 #: port/app/ingame3ds.cpp:212
 #, menu
 msgid "Touchpad, motion or right stick"
-msgstr ""
+msgstr "Touchpad, κίνηση ή δεξιό μοχλό"
 
 #. the DualSense's inputs for a special controller
 #: port/app/ingame3ds.cpp:212
 #, menu
 msgid "Touchpad or left stick"
-msgstr ""
+msgstr "Touchpad ή αριστερό μοχλό"
 
 #: port/app/ingame3ds.cpp:213
 #, menu
 msgid "Cross or R2"
-msgstr ""
+msgstr "Σταυρός ή R2"
 
 #: port/app/ingame3ds.cpp:213
 #, menu
 msgid "Circle or L2"
-msgstr ""
+msgstr "Κύκλος ή L2"
 
 #: port/app/ingame3ds.cpp:213
 #, menu
 msgid "Tilt or turn the DualSense"
-msgstr ""
+msgstr "Γείρετε ή περιστρέψτε το DualSense"
 
 #. the 3DS's screen layouts
 #: port/app/ingame3ds.cpp:259 port/frontend/shell/settings.cpp:64
@@ -2014,27 +2014,27 @@ msgstr "Με μόνη την επάνω οθόνη, η επιφάνεια αφή
 #: port/app/ingame3ds.cpp:635
 #, menu
 msgid "How big the picture is on the TV, and its shape."
-msgstr ""
+msgstr "Πόσο μεγάλη είναι η εικόνα στο TV και το σχήμα του."
 
 #: port/app/ingame3ds.cpp:636 port/frontend/shell/settings.cpp:658
 #, menu
 msgid "Size"
-msgstr ""
+msgstr "Μέγεθος"
 
 #: port/app/ingame3ds.cpp:637 port/frontend/shell/settings.cpp:659
 #, menu
 msgid "Fit makes it as large as the screen allows. Whole pixels keeps every pixel the same size, with a frame around it. Fill screen stretches it edge to edge."
-msgstr ""
+msgstr "Το Fit το κάνει τόσο μεγάλο όσο επιτρέπει η οθόνη. Τα ολόκληρα pixel διατηρούν κάθε pixel στο ίδιο μέγεθος, με ένα πλαίσιο γύρω του. Η οθόνη γεμίσματος την τεντώνει από άκρη σε άκρη."
 
 #: port/app/ingame3ds.cpp:638 port/frontend/shell/settings.cpp:661
 #, menu
 msgid "Shape"
-msgstr ""
+msgstr "Σχήμα"
 
 #: port/app/ingame3ds.cpp:639 port/frontend/shell/settings.cpp:662
 #, menu
 msgid "Original is the console's own. 4:3 is an old TV's. Square pixels shows them as the game draws them."
-msgstr ""
+msgstr "Το πρωτότυπο είναι δικό της κονσόλας. Το 4:3 είναι ένα παλιό TV. Τα τετράγωνα εικονοστοιχεία τα δείχνουν καθώς τα σχεδιάζει το παιχνίδι."
 
 #: port/app/ingame3ds.cpp:649 port/frontend/shell/settings.cpp:258 port/frontend/shell/settings.cpp:336 port/frontend/shell/settings.cpp:545 port/frontend/shell/settings.cpp:1822
 #, menu
@@ -2046,13 +2046,13 @@ msgstr "Εξομοιωτής"
 #, menu
 msgid "{0} option"
 msgid_plural "{0} options"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} επιλογή"
+msgstr[1] "{0} επιλογές"
 
 #: port/app/ingame3ds.cpp:650
 #, menu
 msgid "Every option of this console's emulator. Changes apply now and are kept for every game on it."
-msgstr ""
+msgstr "Κάθε επιλογή του εξομοιωτή αυτής της κονσόλας. Οι αλλαγές ισχύουν τώρα και διατηρούνται για κάθε παιχνίδι σε αυτό."
 
 #: port/app/ingame3ds.cpp:658 port/app/ingame3ds.cpp:665
 #, menu
@@ -2197,7 +2197,7 @@ msgstr "Κωδικοί"
 #: port/app/ingame3ds.cpp:711
 #, menu
 msgid "The game's cheats, from cheats/<game file>.cht in its system's folder (RetroArch's format)."
-msgstr ""
+msgstr "Τα cheat του παιχνιδιού, από το cheats/<game file>.cht στον φάκελο του συστήματός του (μορφή RetroArch)."
 
 #: port/app/ingame3ds.cpp:712
 #, menu
@@ -2223,18 +2223,18 @@ msgstr "Κανένας κωδικός για αυτό το παιχνίδι"
 #: port/app/ingame3ds.cpp:720
 #, menu
 msgid "Get cheats in the game's settings in the library, or put a .cht file in the system's cheats folder, then restart the game."
-msgstr ""
+msgstr "Λάβετε cheats στις ρυθμίσεις του παιχνιδιού στη βιβλιοθήκη ή τοποθετήστε ένα αρχείο .cht στο φάκελο cheats του συστήματος και, στη συνέχεια, επανεκκινήστε το παιχνίδι."
 
 #: port/app/ingame3ds.cpp:721
 #, menu
 msgid "Get cheats in the game's settings in the library, or put them in {0}/melonds/cheats/<game file>.mch, then restart the game."
-msgstr ""
+msgstr "Λάβετε cheats στις ρυθμίσεις του παιχνιδιού στη βιβλιοθήκη ή βάλτε τα στο {0}/melonds/cheats/<game file>.mch και μετά επανεκκινήστε το παιχνίδι."
 
 #. {0} is the app's data folder: /data/ps5cemu, or the PS5CEMU-HAR-data folder on the drive the app is installed on
 #: port/app/ingame3ds.cpp:723
 #, menu
 msgid "Get cheats in the game's settings in the library, or put them in {0}/azahar/cheats/<title ID>.txt, then restart the game."
-msgstr ""
+msgstr "Λάβετε cheats στις ρυθμίσεις του παιχνιδιού στη βιβλιοθήκη ή βάλτε τα στο {0}/azahar/cheats/<title ID>.txt και μετά επανεκκινήστε το παιχνίδι."
 
 #. how many of the game's cheats are on: {0} of {1}
 #: port/app/ingame3ds.cpp:726
@@ -2378,39 +2378,39 @@ msgstr "A στον Κύκλο και B στον Σταυρό, όπου τα έχ
 #: port/app/ingame3ds.cpp:792 port/eden/ingame.cpp:601
 #, menu
 msgid "Puts every button back to default. Hold Cross to confirm."
-msgstr ""
+msgstr "Επαναφέρει κάθε κουμπί στην προεπιλογή. Κρατήστε πατημένο το Σταυρός για επιβεβαίωση."
 
 #: port/app/ingame3ds.cpp:808
 #, menu
 msgid "Auto: {0}"
-msgstr ""
+msgstr "Αυτόματο: {0}"
 
 #. the Buttons page's row that plugs a special controller in, for this game: Auto, Standard, the Zapper...
 #: port/app/ingame3ds.cpp:810 port/frontend/shell/porpoise_rows.cpp:308
 #, menu
 msgid "Controller"
-msgstr ""
+msgstr "Ελεγκτής"
 
 #: port/app/ingame3ds.cpp:811
 #, menu
 msgid "The controller plugged into the console for this game. Auto picks the one the game was made for, such as the Zapper for Duck Hunt."
-msgstr ""
+msgstr "Το χειριστήριο συνδέθηκε στην κονσόλα για αυτό το παιχνίδι. Αυτόματα επιλέγει αυτό για το οποίο δημιουργήθηκε το παιχνίδι, όπως το Zapper για το Duck Hunt."
 
 #: port/app/ingame3ds.cpp:815
 #, menu
 msgid "What the DualSense does for the controller plugged in."
-msgstr ""
+msgstr "Τι κάνει το DualSense για τον ελεγκτή που είναι συνδεδεμένος."
 
 #. a row that takes how the DualSense is held now as level, for a game played by tilting it
 #: port/app/ingame3ds.cpp:818
 #, menu
 msgid "Level the motion"
-msgstr ""
+msgstr "Ισοπεδώστε την κίνηση"
 
 #: port/app/ingame3ds.cpp:819
 #, menu
 msgid "Hold the DualSense as you like to play, then press Cross. The game sees it as held level from there."
-msgstr ""
+msgstr "Κρατήστε το DualSense όπως θέλετε να παίξετε και μετά πατήστε Σταυρός. Το παιχνίδι το βλέπει ως κρατημένο επίπεδο από εκεί."
 
 #: port/app/ingame3ds.cpp:832
 #, menu
@@ -2445,12 +2445,12 @@ msgstr "Η κάτω οθόνη"
 #: port/app/ingame3ds.cpp:850
 #, menu
 msgid "Settings for this game only"
-msgstr ""
+msgstr "Ρυθμίσεις μόνο για αυτό το παιχνίδι"
 
 #: port/app/ingame3ds.cpp:851
 #, menu
 msgid "On: this game keeps its own settings, and what you change here stays with it. Off: it uses the system's settings from its next start."
-msgstr ""
+msgstr "Ενεργό: αυτό το παιχνίδι διατηρεί τις δικές του ρυθμίσεις και ό,τι αλλάζετε εδώ μένει με αυτό. Off: χρησιμοποιεί τις ρυθμίσεις του συστήματος από την επόμενη εκκίνηση."
 
 #: port/app/ingame3ds.cpp:869
 #, menu
@@ -2470,7 +2470,7 @@ msgstr "Θέση {0} κενή"
 #: port/app/ingame3ds.cpp:878
 #, menu
 msgid "Reset"
-msgstr ""
+msgstr "Επαναφορά"
 
 #. {0} is the version the last update replaced, as in 5.0.0
 #. no save of this Switch game in standalone ProsperoEden or on a USB drive
@@ -2482,7 +2482,7 @@ msgstr "Κρατήστε τον Σταυρό"
 #: port/app/ingame3ds.cpp:879
 #, menu
 msgid "Restarts the game, as the console's reset button does. What isn't saved is lost."
-msgstr ""
+msgstr "Επανεκκινεί το παιχνίδι, όπως κάνει το κουμπί επαναφοράς της κονσόλας. Ό,τι δεν σώζεται χάνεται."
 
 #: port/app/ingame3ds.cpp:885
 #, menu
@@ -2562,17 +2562,17 @@ msgstr "90° αριστερά"
 #: port/app/ingame3ds.h:84
 #, menu
 msgid "Fit"
-msgstr ""
+msgstr "Fit"
 
 #: port/app/ingame3ds.h:84
 #, menu
 msgid "Whole pixels"
-msgstr ""
+msgstr "Ολόκληρα pixel"
 
 #: port/app/ingame3ds.h:84
 #, menu
 msgid "Fill screen"
-msgstr ""
+msgstr "Γέμισμα οθόνης"
 
 #. the 3DS borders' names (artwork around the screens)
 #: port/app/ingame3ds.h:182 port/frontend/shell/settings.cpp:53
@@ -2970,7 +2970,7 @@ msgstr "Shader: {0} από {1}"
 #: port/app/loading_screen.h:67
 #, menu
 msgid "Pipelines: {0} of {1}"
-msgstr ""
+msgstr "Αγωγοί: {0} του {1}"
 
 #: port/app/loading_screen.h:75
 #, menu
@@ -3094,12 +3094,12 @@ msgstr "Κρατήστε τον Σταυρό μέχρι να γεμίσει ο �
 #: port/app/side_menu.h:503
 #, menu
 msgid "Your controller"
-msgstr ""
+msgstr "Ο ελεγκτής σας"
 
 #: port/app/side_menu.h:505
 #, menu
 msgid "Each button shows the console's button it presses."
-msgstr ""
+msgstr "Κάθε κουμπί δείχνει το κουμπί της κονσόλας που πατάει."
 
 #: port/app/update_files.cpp:93
 msgid "the download has no eboot.bin"
@@ -3107,7 +3107,7 @@ msgstr "η λήψη δεν περιέχει eboot.bin"
 
 #: port/app/update_files.cpp:93
 msgid "the download has no {0}"
-msgstr ""
+msgstr "η λήψη δεν έχει {0}"
 
 #: port/app/update_files.cpp:118
 msgid "{0} could not be written (is /data full?)"
@@ -3892,41 +3892,41 @@ msgstr "Τίτλος"
 
 #: port/frontend/shell/cheat_rows.cpp:22
 msgid "From libretro-database, by the game file's name."
-msgstr ""
+msgstr "Από το libretro-database, με το όνομα του αρχείου του παιχνιδιού."
 
 #: port/frontend/shell/cheat_rows.cpp:23
 msgid "From Sharkive, by the game's title ID."
-msgstr ""
+msgstr "Από το Sharkive, από τον τίτλο του παιχνιδιού ID."
 
 #: port/frontend/shell/cheat_rows.cpp:24
 msgid "From switch-cheats-db, for every version of the game."
-msgstr ""
+msgstr "Από το switch-cheats-db, για κάθε έκδοση του παιχνιδιού."
 
 #: port/frontend/shell/cheat_rows.cpp:25
 msgid "From codes.rc24.xyz, by the disc's ID."
-msgstr ""
+msgstr "Από το codes.rc24.xyz, από το ID του δίσκου."
 
 #: port/frontend/shell/cheat_rows.cpp:37
 msgid "Fetch cheats automatically"
-msgstr ""
+msgstr "Λήψη απατεώνων αυτόματα"
 
 #: port/frontend/shell/cheat_rows.cpp:40
 msgid "Cheats for every game in your library, each off until you turn it on."
-msgstr ""
+msgstr "Απατεώνες για κάθε παιχνίδι στη βιβλιοθήκη σας, το καθένα απενεργοποιημένο μέχρι να το ενεργοποιήσετε."
 
 #: port/frontend/shell/cheat_rows.cpp:41
 msgid "Downloads cheats for every game on the systems that have them: NES, SNES, the Game Boys, N64, DS, 3DS, Switch, GameCube and Wii. Each cheat is off until you turn it on in the game's settings or the in-game menu. Cheats can crash a game or spoil a save: save first."
-msgstr ""
+msgstr "Λήψη cheat για κάθε παιχνίδι στα συστήματα που τα διαθέτουν: NES, SNES, οι Game Boys, N64, DS, 3DS, Switch, GameCube και Wii. Κάθε cheat είναι απενεργοποιημένο μέχρι να το ενεργοποιήσετε στις ρυθμίσεις του παιχνιδιού ή στο μενού του παιχνιδιού. Τα cheat μπορεί να καταστρέψουν ένα παιχνίδι ή να χαλάσουν μια αποθήκευση: αποθηκεύστε πρώτα."
 
 #: port/frontend/shell/cheat_rows.cpp:83
 msgid "Get cheats"
-msgstr ""
+msgstr "Λάβετε απατεώνες"
 
 #: port/frontend/shell/cheat_rows.cpp:84
 msgid "{0} cheat"
 msgid_plural "{0} cheats"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} απατεώνες"
+msgstr[1] "{0} απατεώνες"
 
 #: port/frontend/shell/cheat_rows.cpp:85 port/frontend/shell/settings.cpp:1125 port/frontend/shell/shares.cpp:292
 msgid "Looking…"
@@ -3934,11 +3934,11 @@ msgstr "Αναζήτηση…"
 
 #: port/frontend/shell/cheat_rows.cpp:86
 msgid "None found"
-msgstr ""
+msgstr "Δεν βρέθηκε κανένα"
 
 #: port/frontend/shell/cheat_rows.cpp:87
 msgid "Not reached: is the PS5 online?"
-msgstr ""
+msgstr "Δεν επιτεύχθηκε: είναι το PS5 online;"
 
 #: port/frontend/shell/cheat_rows.cpp:88 port/frontend/shell/settings.cpp:397
 msgid "Cross to download"
@@ -3946,50 +3946,50 @@ msgstr "Σταυρός για λήψη"
 
 #: port/frontend/shell/cheat_rows.cpp:90
 msgid "Downloads this game's cheats, adding any new ones to what is here. Each is off until you turn it on. Cheats can crash a game or spoil a save: save first."
-msgstr ""
+msgstr "Κατεβάζει τα cheat αυτού του παιχνιδιού, προσθέτοντας τυχόν νέα σε αυτό που υπάρχει εδώ. Καθένα είναι απενεργοποιημένο μέχρι να το ενεργοποιήσετε. Τα cheat μπορεί να καταστρέψουν ένα παιχνίδι ή να χαλάσουν μια αποθήκευση: αποθηκεύστε πρώτα."
 
 #: port/frontend/shell/cheat_rows.cpp:107
 msgid "Cheat"
-msgstr ""
+msgstr "Απάτη"
 
 #: port/frontend/shell/cheat_rows.cpp:110
 msgid "Applies when the game starts. Turn it on or off while playing in the in-game menu's Cheats."
-msgstr ""
+msgstr "Ισχύει όταν ξεκινά το παιχνίδι. Ενεργοποιήστε ή απενεργοποιήστε το ενώ παίζετε στα Cheats του μενού του παιχνιδιού."
 
 #: port/frontend/shell/cheat_rows.cpp:118
 msgid "{0} more in the in-game menu"
 msgid_plural "{0} more in the in-game menu"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} ακόμη στο μενού του παιχνιδιού"
+msgstr[1] "{0} ακόμη στο μενού του παιχνιδιού"
 
 #: port/frontend/shell/cheat_rows.cpp:119
 msgid "Every cheat is listed in the in-game menu's Cheats."
-msgstr ""
+msgstr "Κάθε απάτη παρατίθεται στα Cheats του μενού του παιχνιδιού."
 
 #: port/frontend/shell/cheat_rows.cpp:128
 msgid "No cheats yet"
-msgstr ""
+msgstr "Δεν υπάρχουν ακόμα απατεώνες"
 
 #: port/frontend/shell/cheat_rows.cpp:129
 msgid "Get cheats downloads them. Your own files work too."
-msgstr ""
+msgstr "Λήψη απατεώνων τα κατεβάζει. Τα δικά σας αρχεία λειτουργούν επίσης."
 
 #. {0} is where the game's cheats file goes
 #: port/frontend/shell/cheat_rows.cpp:131
 msgid "Get cheats downloads them. Or put your own file at {0}."
-msgstr ""
+msgstr "Λήψη απατεώνων τα κατεβάζει. Ή βάλτε το δικό σας αρχείο στο {0}."
 
 #: port/frontend/shell/cheat_rows.cpp:149
 msgid "This game has no ID to look its cheats up by"
-msgstr ""
+msgstr "Αυτό το παιχνίδι δεν έχει ID για να ψάξει τους απατεώνες του"
 
 #: port/frontend/shell/cheat_rows.cpp:154
 msgid "Looking for cheats…"
-msgstr ""
+msgstr "Ψάχνετε για απατεώνες…"
 
 #: port/frontend/shell/cheat_rows.cpp:172
 msgid "The cheat could not be saved: {0}"
-msgstr ""
+msgstr "Δεν ήταν δυνατή η αποθήκευση του cheat: {0}"
 
 #. the first start's steps, as the bar at the top right names them
 #: port/frontend/shell/firststart.cpp:27 port/frontend/shell/settings.cpp:214 port/frontend/shell/settings.cpp:674 port/frontend/shell/settings.cpp:997 port/frontend/shell/settings.cpp:1037 port/frontend/shell/settings.cpp:1095 port/frontend/shell/settings.cpp:2234 port/frontend/shell/setup.cpp:642
@@ -3999,17 +3999,17 @@ msgstr "Γλώσσα"
 #. the first start's steps, as the bar at the top right names them
 #: port/frontend/shell/firststart.cpp:27
 msgid "Covers"
-msgstr ""
+msgstr "Εξώφυλλα"
 
 #. the first start's steps, as the bar at the top right names them
 #: port/frontend/shell/firststart.cpp:27
 msgid "Reports"
-msgstr ""
+msgstr "Αναφορές"
 
 #. the first start's steps, as the bar at the top right names them
 #: port/frontend/shell/firststart.cpp:27
 msgid "Ready"
-msgstr ""
+msgstr "Έτοιμοι"
 
 #. after EmulationStation is picked as the launcher on the first start or in Settings
 #: port/frontend/shell/firststart.cpp:117 port/frontend/shell/orbit.cpp:559 port/frontend/shell/settings.cpp:2342
@@ -4018,22 +4018,22 @@ msgstr "Το EmulationStation ανοίγει την επόμενη φορά πο
 
 #: port/frontend/shell/firststart.cpp:121 port/frontend/shell/orbit.cpp:565
 msgid "Downloading EmulationStation. It opens next time Playtendoh starts."
-msgstr ""
+msgstr "Λήψη του EmulationStation. Ανοίγει την επόμενη φορά που θα ξεκινήσει το Playtendoh."
 
 #. the first start's setup: Cross on its last step
 #: port/frontend/shell/firststart.cpp:264
 msgid "Start playing"
-msgstr ""
+msgstr "Ξεκινήστε να παίζετε"
 
 #. the first start's first question
 #: port/frontend/shell/firststart.cpp:364
 msgid "Which language?"
-msgstr ""
+msgstr "Ποια γλώσσα;"
 
 #. the first start's first question
 #: port/frontend/shell/firststart.cpp:364
 msgid "Playtendoh speaks your PS5's language. Pick another if you like."
-msgstr ""
+msgstr "Το Playtendoh μιλά τη γλώσσα του PS5. Διάλεξε άλλο αν σου αρέσει."
 
 #. the first start's languages: a tag on the PS5's own language
 #: port/frontend/shell/firststart.cpp:384 port/frontend/shell/pages.cpp:1324
@@ -4042,17 +4042,17 @@ msgstr "PS5"
 
 #: port/frontend/shell/firststart.cpp:401
 msgid "Change it later in Settings > Language."
-msgstr ""
+msgstr "Αλλάξτε το αργότερα στις Ρυθμίσεις > Γλώσσα."
 
 #. the first start's question: the Library's layouts (Classic, Orbit) or EmulationStation
 #: port/frontend/shell/firststart.cpp:407
 msgid "How do you want to browse your games?"
-msgstr ""
+msgstr "Πώς θέλετε να περιηγηθείτε στα παιχνίδια σας;"
 
 #. the first start's question: the Library's layouts (Classic, Orbit) or EmulationStation
 #: port/frontend/shell/firststart.cpp:407
 msgid "Your games, saves and settings are the same in each."
-msgstr ""
+msgstr "Τα παιχνίδια, οι αποθηκεύσεις και οι ρυθμίσεις σας είναι τα ίδια σε κάθε ένα."
 
 #: port/frontend/shell/firststart.cpp:414 port/frontend/shell/orbit.cpp:733 port/frontend/shell/porpoise_rows.cpp:311 port/frontend/shell/settings.cpp:1523
 msgid "Classic"
@@ -4080,140 +4080,140 @@ msgstr "EmulationStation"
 #. the first start's layouts: EmulationStation, downloaded when the setup is done
 #: port/frontend/shell/firststart.cpp:417
 msgid "ES-DE's menus and themes. Downloaded when you finish (about 850 MB); games still play here."
-msgstr ""
+msgstr "Τα μενού και τα θέματα του ES-DE. Έγινε λήψη όταν τελειώσετε (περίπου 850 MB). παιχνίδια παίζονται ακόμα εδώ."
 
 #: port/frontend/shell/firststart.cpp:444
 msgid "Change it later in Settings > Launcher > Layout."
-msgstr ""
+msgstr "Αλλάξτε το αργότερα στις Ρυθμίσεις > Εκκίνηση > Διάταξη."
 
 #. the first start's question: covers flat, or as 3D boxes with a spine
 #: port/frontend/shell/firststart.cpp:450
 msgid "How should covers look?"
-msgstr ""
+msgstr "Πώς πρέπει να φαίνονται τα εξώφυλλα;"
 
 #. the first start's question: covers flat, or as 3D boxes with a spine
 #: port/frontend/shell/firststart.cpp:450
 msgid "As flat pictures, or as boxes on a shelf."
-msgstr ""
+msgstr "Ως επίπεδες εικόνες ή ως κουτιά σε ένα ράφι."
 
 #. the first start's covers question: the two choices
 #: port/frontend/shell/firststart.cpp:491
 msgid "Flat"
-msgstr ""
+msgstr "Επίπεδη"
 
 #. the first start's covers question: the two choices
 #: port/frontend/shell/firststart.cpp:491
 msgid "3D boxes"
-msgstr ""
+msgstr "Κουτιά 3D"
 
 #: port/frontend/shell/firststart.cpp:493
 msgid "Each game's cover as a picture. Shows the most games at once."
-msgstr ""
+msgstr "Το εξώφυλλο κάθε παιχνιδιού ως εικόνα. Εμφανίζει τα περισσότερα παιχνίδια ταυτόχρονα."
 
 #: port/frontend/shell/firststart.cpp:494
 msgid "Each game as its box, with the spine. Covers come from GameTDB."
-msgstr ""
+msgstr "Κάθε παιχνίδι ως κουτί του, με τη σπονδυλική στήλη. Τα καλύμματα προέρχονται από το GameTDB."
 
 #: port/frontend/shell/firststart.cpp:498
 msgid "Change it later in Settings > Launcher > 3D box art."
-msgstr ""
+msgstr "Αλλάξτε το αργότερα στις Ρυθμίσεις > Εκκίνηση > κουτί 3D."
 
 #. the first start's question: which of the PS5's buttons is a Nintendo controller's A
 #: port/frontend/shell/firststart.cpp:504
 msgid "Which button is A?"
-msgstr ""
+msgstr "Ποιο κουμπί είναι το Α;"
 
 #. the first start's question: which of the PS5's buttons is a Nintendo controller's A
 #: port/frontend/shell/firststart.cpp:504
 msgid "For every game. In Playtendoh's menus, Cross always chooses."
-msgstr ""
+msgstr "Για κάθε παιχνίδι. Στα μενού του Playtendoh, το Σταυρός επιλέγει πάντα."
 
 #. the first start's buttons question: the two choices
 #: port/frontend/shell/firststart.cpp:538
 msgid "Circle is A"
-msgstr ""
+msgstr "Το Κύκλος είναι Α"
 
 #. the first start's buttons question: the two choices
 #: port/frontend/shell/firststart.cpp:538
 msgid "Cross is A"
-msgstr ""
+msgstr "Το Σταυρός είναι Α"
 
 #: port/frontend/shell/firststart.cpp:540
 msgid "Where A is on a Nintendo controller: on the right."
-msgstr ""
+msgstr "Όπου το A βρίσκεται σε έναν ελεγκτή Nintendo: στα δεξιά."
 
 #: port/frontend/shell/firststart.cpp:540
 msgid "Where most PlayStation games confirm: at the bottom."
-msgstr ""
+msgstr "Εκεί που επιβεβαιώνουν τα περισσότερα παιχνίδια PlayStation: στο κάτω μέρος."
 
 #: port/frontend/shell/firststart.cpp:544
 msgid "Change it later in each system's Controls."
-msgstr ""
+msgstr "Αλλάξτε το αργότερα στα Στοιχεία ελέγχου κάθε συστήματος."
 
 #. the first start's question: whether the app may send reports of how games run to the project
 #: port/frontend/shell/firststart.cpp:549 port/frontend/shell/reports.cpp:75
 msgid "Help Playtendoh get better?"
-msgstr ""
+msgstr "Θέλετε να βοηθήσετε στη βελτίωση του Playtendoh;"
 
 #: port/frontend/shell/firststart.cpp:550
 msgid "When a game ends, Playtendoh can send a short report on how it ran. Nothing is sent while you play."
-msgstr ""
+msgstr "Όταν τελειώνει ένα παιχνίδι, το Playtendoh μπορεί να στείλει μια σύντομη αναφορά για τον τρόπο λειτουργίας του. Δεν αποστέλλεται τίποτα ενώ παίζετε."
 
 #: port/frontend/shell/firststart.cpp:561 port/frontend/shell/reports.cpp:131
 msgid "Yes, send reports"
-msgstr ""
+msgstr "Ναι, αποστολή αναφορών"
 
 #: port/frontend/shell/firststart.cpp:561 port/frontend/shell/reports.cpp:131
 msgid "Not now"
-msgstr ""
+msgstr "Όχι τώρα"
 
 #: port/frontend/shell/firststart.cpp:563
 msgid "The game, how it ran and its settings, to fix problems and grow the list of working games."
-msgstr ""
+msgstr "Το παιχνίδι, πώς έτρεξε και οι ρυθμίσεις του, για να διορθώσετε προβλήματα και να αυξήσετε τη λίστα των παιχνιδιών που λειτουργούν."
 
 #: port/frontend/shell/firststart.cpp:564
 msgid "Nothing is sent. You can turn it on any time."
-msgstr ""
+msgstr "Δεν αποστέλλεται τίποτα. Μπορείτε να το ενεργοποιήσετε ανά πάσα στιγμή."
 
 #: port/frontend/shell/firststart.cpp:579
 msgid "What a report never has"
-msgstr ""
+msgstr "Τι δεν έχει ποτέ μια αναφορά"
 
 #: port/frontend/shell/firststart.cpp:581
 msgid "Your PSN name or ID, your console's serial or addresses, your accounts, folders, saves or game list."
-msgstr ""
+msgstr "Το όνομά σας PSN ή το ID, η σειρά ή οι διευθύνσεις της κονσόλας σας, οι λογαριασμοί, οι φάκελοι, τα αποθηκευμένα ή η λίστα παιχνιδιών σας."
 
 #: port/frontend/shell/firststart.cpp:582
 msgid "Scan the code for every field a report has."
-msgstr ""
+msgstr "Σαρώστε τον κώδικα για κάθε πεδίο που έχει μια αναφορά."
 
 #: port/frontend/shell/firststart.cpp:584
 msgid "Change it later in Settings > Accounts and updates > Send reports."
-msgstr ""
+msgstr "Αλλάξτε το αργότερα στις Ρυθμίσεις > Λογαριασμοί και ενημερώσεις > Αποστολή αναφορών."
 
 #. the first start's last step: a summary, nothing to answer
 #: port/frontend/shell/firststart.cpp:591
 msgid "You're ready to play"
-msgstr ""
+msgstr "Είστε έτοιμοι να παίξετε"
 
 #. the first start's last step: a summary, nothing to answer
 #: port/frontend/shell/firststart.cpp:591
 msgid "Almost ready"
-msgstr ""
+msgstr "Σχεδόν έτοιμο"
 
 #: port/frontend/shell/firststart.cpp:592
 msgid "Everything Playtendoh needs is here."
-msgstr ""
+msgstr "Όλα όσα χρειάζεται το Playtendoh είναι εδώ."
 
 #: port/frontend/shell/firststart.cpp:593
 msgid "One thing to sort out before some games will play."
 msgid_plural "{0} things to sort out before some games will play."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} πράγματα που πρέπει να τακτοποιήσετε πριν παιχτούν κάποια παιχνίδια."
+msgstr[1] "{0} πράγματα που πρέπει να τακτοποιήσετε πριν παίξουν κάποια παιχνίδια."
 
 #: port/frontend/shell/firststart.cpp:607
 msgid "Your games"
-msgstr ""
+msgstr "Τα παιχνίδια σας"
 
 #: port/frontend/shell/firststart.cpp:613 port/frontend/shell/timeline.cpp:1062
 msgid "No games yet"
@@ -4221,7 +4221,7 @@ msgstr "Κανένα παιχνίδι ακόμη"
 
 #: port/frontend/shell/firststart.cpp:615
 msgid "Copy your games to the PS5 or a USB drive, each console's in its own folder. They show up the next time you open its library. Settings > Game files says where each one goes."
-msgstr ""
+msgstr "Αντιγράψτε τα παιχνίδια σας στη μονάδα PS5 ή σε μια μονάδα USB, κάθε κονσόλα στον δικό της φάκελο. Εμφανίζονται την επόμενη φορά που θα ανοίξετε τη βιβλιοθήκη του. Ρυθμίσεις > Αρχεία παιχνιδιών λέει πού πηγαίνει το καθένα."
 
 #. how many games the Library has
 #: port/frontend/shell/firststart.cpp:629 port/frontend/shell/library.cpp:766 port/frontend/shell/orbit.cpp:323 port/frontend/shell/pages.cpp:1401 port/frontend/shell/shell.cpp:1802 port/frontend/shell/timeline.cpp:476 port/frontend/shell/timeline.cpp:888 port/frontend/shell/timeline.cpp:1045
@@ -4233,32 +4233,32 @@ msgstr[1] "{0} παιχνίδια"
 #: port/frontend/shell/firststart.cpp:635
 msgid "{0} game found. Add more any time: each console has its own folder."
 msgid_plural "{0} games found. Add more any time: each console has its own folder."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Βρέθηκαν {0} παιχνίδια. Προσθέστε περισσότερα ανά πάσα στιγμή: κάθε κονσόλα έχει τον δικό της φάκελο."
+msgstr[1] "Βρέθηκαν {0} παιχνίδια. Προσθέστε περισσότερα ανά πάσα στιγμή: κάθε κονσόλα έχει τον δικό της φάκελο."
 
 #: port/frontend/shell/firststart.cpp:641
 msgid "Checked"
-msgstr ""
+msgstr "Ελεγμένο"
 
 #: port/frontend/shell/firststart.cpp:641
 msgid "Before you play"
-msgstr ""
+msgstr "Πριν παίξεις"
 
 #: port/frontend/shell/firststart.cpp:649
 msgid "Storage and game speed are fine"
-msgstr ""
+msgstr "Ο αποθηκευτικός χώρος και η ταχύτητα του παιχνιδιού είναι μια χαρά"
 
 #: port/frontend/shell/firststart.cpp:675
 msgid "EmulationStation downloads when you start (about 850 MB). It opens next time Playtendoh starts."
-msgstr ""
+msgstr "Το EmulationStation λήψεις όταν ξεκινάτε (περίπου 850 MB). Ανοίγει την επόμενη φορά που θα ξεκινήσει το Playtendoh."
 
 #: port/frontend/shell/firststart.cpp:689
 msgid "Scan it for how, on your phone."
-msgstr ""
+msgstr "Σαρώστε το για το πώς, στο τηλέφωνό σας."
 
 #: port/frontend/shell/firststart.cpp:695
 msgid "Settings > Setup check has the details any time."
-msgstr ""
+msgstr "Ρυθμίσεις > Έλεγχος ρύθμισης έχει τις λεπτομέρειες ανά πάσα στιγμή."
 
 #. a chip: the game's update, by its version ("Update v208")
 #. an update found to install ({0}: its version, as 208)
@@ -4350,12 +4350,12 @@ msgstr "Μορφή"
 #. under a QR code on the Timeline's museum label: it opens the game's manual on a phone
 #: port/frontend/shell/hub.cpp:310 port/frontend/shell/hub.cpp:316 port/frontend/shell/porpoise_rows.cpp:367 port/frontend/shell/porpoise_rows.cpp:379 port/frontend/shell/porpoise_rows.cpp:391 port/frontend/shell/porpoise_rows.cpp:403 port/frontend/shell/timeline.cpp:1117
 msgid "Manual"
-msgstr ""
+msgstr "Εγχειρίδιο"
 
 #. in the Game hub, beside a QR code to a game's manual on Nintendo's site
 #: port/frontend/shell/hub.cpp:318
 msgid "Scan it with your phone to read the manual on Nintendo's site."
-msgstr ""
+msgstr "Σαρώστε το με το τηλέφωνό σας για να διαβάσετε το εγχειρίδιο στον ιστότοπο του Nintendo."
 
 #: port/frontend/shell/hub.cpp:330
 msgid "Runs well on PS5"
@@ -4365,8 +4365,8 @@ msgstr "Τρέχει καλά στο PS5"
 #: port/frontend/shell/hub.cpp:339
 msgid "From reports on {0} console: {1} of {2} sessions went well."
 msgid_plural "From reports on {0} consoles: {1} of {2} sessions went well."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Από αναφορές σε {0} κονσόλες: {1} των περιόδων σύνδεσης {2} πήγε καλά."
+msgstr[1] "Από αναφορές σε {0} κονσόλες: {1} των περιόδων σύνδεσης {2} πήγε καλά."
 
 #. {0} is a status from the compatibility list, such as Playable
 #: port/frontend/shell/hub.cpp:343
@@ -4803,7 +4803,7 @@ msgstr "Περιστρέψτε τον δίσκο"
 #. the hint for L2 and R2, which go to the Library and Settings tabs
 #: port/frontend/shell/orbit.cpp:462 port/frontend/shell/shell.cpp:1845 port/frontend/shell/timeline.cpp:1231
 msgid "Library or Settings"
-msgstr ""
+msgstr "Βιβλιοθήκη ή Ρυθμίσεις"
 
 #: port/frontend/shell/orbit.cpp:718 port/frontend/shell/reports.cpp:73 port/frontend/shell/settings.cpp:1627
 msgid "Make it yours"
@@ -4845,11 +4845,11 @@ msgstr "Χρήση {0}"
 
 #: port/frontend/shell/orbit.cpp:783
 msgid "Download {0} MB"
-msgstr ""
+msgstr "Λήψη {0} MB"
 
 #: port/frontend/shell/orbit.cpp:784
 msgid "Download ES-DE"
-msgstr ""
+msgstr "Κατεβάστε το ES-DE"
 
 #. the first start's layout question: Triangle turns the covers flat or into 3D boxes
 #: port/frontend/shell/orbit.cpp:790
@@ -4863,7 +4863,7 @@ msgstr "Εξώφυλλα: επίπεδα"
 
 #: port/frontend/shell/orbit.cpp:802
 msgid "ES-DE is a separate download of about {0} MB. Cross again to download it, Circle to cancel. Playtendoh's own launcher opens until it's in."
-msgstr ""
+msgstr "Το ES-DE είναι μια ξεχωριστή λήψη του {0} MB. Σταυρός ξανά για λήψη, Κύκλος για ακύρωση. Το πρόγραμμα εκκίνησης του Playtendoh ανοίγει μέχρι να μπει."
 
 #: port/frontend/shell/orbit.cpp:803
 msgid "Hold L1 while Playtendoh starts to use its own launcher. Switch back any time in Settings > Launcher > Layout."
@@ -4871,7 +4871,7 @@ msgstr "Κρατήστε το L1 καθώς ξεκινά το Playtendoh για 
 
 #: port/frontend/shell/orbit.cpp:804
 msgid "Both have the Timeline, every console's games on one shelf, after the last console."
-msgstr ""
+msgstr "Και τα δύο έχουν το Timeline, τα παιχνίδια κάθε κονσόλας σε ένα ράφι, μετά την τελευταία κονσόλα."
 
 #: port/frontend/shell/pages.cpp:307
 msgid "Cross turns a pack on or off. Right shows its presets. Changes apply next time the game starts."
@@ -5065,15 +5065,15 @@ msgstr "Χωρίς DualSense"
 
 #: port/frontend/shell/pages.cpp:794 port/frontend/shell/pages.cpp:814
 msgid "Built-in layouts can't be changed. Choose one of your own at the top."
-msgstr ""
+msgstr "Δεν είναι δυνατή η αλλαγή των ενσωματωμένων διατάξεων. Επιλέξτε ένα δικό σας στην κορυφή."
 
 #: port/frontend/shell/pages.cpp:798 port/frontend/shell/pages.cpp:798 port/frontend/shell/porpoise_rows.cpp:734
 msgid "Clear all"
-msgstr ""
+msgstr "Καθαρίστε όλα"
 
 #: port/frontend/shell/pages.cpp:798 port/frontend/shell/porpoise_rows.cpp:1568
 msgid "Keep them"
-msgstr ""
+msgstr "Κράτα τα"
 
 #: port/frontend/shell/pages.cpp:848
 msgid "Cleared. No DualSense button is set for it."
@@ -5097,18 +5097,20 @@ msgstr "Αυτό το κουμπί"
 
 #: port/frontend/shell/pages.cpp:974
 msgid "Press the DualSense button or trigger for {0} now."
-msgstr ""
+msgstr "Πατήστε το κουμπί ή την ενεργοποίηση DualSense για το {0} τώρα."
 
 #. a GameCube or GBA button's mapping: a DualSense button, never a stick's direction or the touchpad
 #: port/frontend/shell/pages.cpp:984
 msgid "Left and Right, or Cross, choose the layout. Built-in layouts can't be changed; choose one of your own to set buttons."
-msgstr ""
+msgstr "Αριστερά και δεξιά, ή Σταυρός, επιλέξτε τη διάταξη. Οι ενσωματωμένες διατάξεις δεν μπορούν να αλλάξουν. επιλέξτε ένα από τα δικά σας για να ορίσετε κουμπιά."
 
 #: port/frontend/shell/pages.cpp:985 port/frontend/shell/pages.cpp:986
 msgid ""
 "Cross chooses what this DualSense button does. If another button already did that, the two swap.\n"
 "Square makes it do nothing."
 msgstr ""
+"Ο Cross επιλέγει τι κάνει αυτό το κουμπί DualSense. Εάν ένα άλλο κουμπί το έκανε ήδη αυτό, τα δύο ανταλλάσσονται.\n"
+"Το Square το κάνει να μην κάνει τίποτα."
 
 #. a Switch button's mapping: each is on a DualSense button (the touchpad's click too), never on none
 #: port/frontend/shell/pages.cpp:989
@@ -5305,11 +5307,11 @@ msgstr "Βρέθηκε στο {0}"
 #. {0} is the Switch 2 emulator's data folder
 #: port/frontend/shell/pages.cpp:1423
 msgid "Missing: put it in {0}"
-msgstr ""
+msgstr "Λείπει: τοποθετήστε το στο {0}"
 
 #: port/frontend/shell/pages.cpp:1430
 msgid "Saves and settings"
-msgstr ""
+msgstr "Αποθηκεύσεις και ρυθμίσεις"
 
 #: port/frontend/shell/pages.cpp:1436 port/frontend/shell/settings.cpp:1099
 msgid "Your DS's BIOS"
@@ -5346,12 +5348,12 @@ msgstr "Τα παιχνίδια είναι αρχεία .nsp και .xci, εδώ
 
 #: port/frontend/shell/pages.cpp:1453
 msgid "Games are .nup files, or folders with exefs/main and romfs/, each with its update. Network shares can't be used. Triangle uses this folder."
-msgstr ""
+msgstr "Τα παιχνίδια είναι αρχεία .nup ή φάκελοι με exefs/main and romfs/, το καθένα με την ενημέρωση του. Δεν μπορούν να χρησιμοποιηθούν κοινόχρηστα στοιχεία δικτύου. Το Τρίγωνο χρησιμοποιεί αυτόν τον φάκελο."
 
 #. {0} is a list of file types (.gb .gbc)
 #: port/frontend/shell/pages.cpp:1455
 msgid "Games are {0} files, here or in subfolders. Triangle uses this folder."
-msgstr ""
+msgstr "Τα παιχνίδια είναι αρχεία {0}, εδώ ή σε υποφακέλους. Το Τρίγωνο χρησιμοποιεί αυτόν τον φάκελο."
 
 #: port/frontend/shell/pages.cpp:1456
 msgid "Games can be .wua, .wud, .wux, folders with code, content and meta, or in .zip, .7z or .rar. Triangle uses this folder."
@@ -5434,87 +5436,87 @@ msgstr "Όπως παραπάνω, από New 3DS ή New 2DS που τρέχει
 
 #: port/frontend/shell/porpoise_rows.cpp:71
 msgid "Enhancements"
-msgstr ""
+msgstr "Βελτιώσεις"
 
 #: port/frontend/shell/porpoise_rows.cpp:71
 msgid "Bloom, colour, texture filtering, resampling, lighting and fog."
-msgstr ""
+msgstr "Άνθιση, χρώμα, φιλτράρισμα υφής, επαναδειγματοληψία, φωτισμός και ομίχλη."
 
 #: port/frontend/shell/porpoise_rows.cpp:72
 msgid "Rendering"
-msgstr ""
+msgstr "Απόδοση"
 
 #: port/frontend/shell/porpoise_rows.cpp:72
 msgid "Shaders, the texture cache and texture packs."
-msgstr ""
+msgstr "Shaders, η κρυφή μνήμη υφής και τα πακέτα υφής."
 
 #: port/frontend/shell/porpoise_rows.cpp:73
 msgid "Button layout, vibration, sticks, turbo and the triggers."
-msgstr ""
+msgstr "Διάταξη κουμπιών, δόνηση, μπαστούνια, turbo και οι σκανδάλες."
 
 #: port/frontend/shell/porpoise_rows.cpp:74 port/frontend/shell/porpoise_rows.cpp:75 port/frontend/shell/porpoise_rows.cpp:76
 msgid "This player's light bar. Buttons are the same as player 1's."
-msgstr ""
+msgstr "Η φωτεινή μπάρα αυτού του παίκτη. Τα κουμπιά είναι ίδια με του παίκτη 1."
 
 #: port/frontend/shell/porpoise_rows.cpp:75 port/frontend/shell/porpoise_rows.cpp:195 port/frontend/shell/porpoise_rows.cpp:197 port/frontend/shell/porpoise_rows.cpp:207 port/frontend/shell/porpoise_rows.cpp:209 port/frontend/shell/porpoise_rows.cpp:219 port/frontend/shell/porpoise_rows.cpp:221 port/frontend/shell/porpoise_rows.cpp:231 port/frontend/shell/porpoise_rows.cpp:233
 msgid "Player 3"
-msgstr ""
+msgstr "Παίκτης 3"
 
 #: port/frontend/shell/porpoise_rows.cpp:76 port/frontend/shell/porpoise_rows.cpp:195 port/frontend/shell/porpoise_rows.cpp:197 port/frontend/shell/porpoise_rows.cpp:207 port/frontend/shell/porpoise_rows.cpp:209 port/frontend/shell/porpoise_rows.cpp:219 port/frontend/shell/porpoise_rows.cpp:221 port/frontend/shell/porpoise_rows.cpp:231 port/frontend/shell/porpoise_rows.cpp:233
 msgid "Player 4"
-msgstr ""
+msgstr "Παίκτης 4"
 
 #: port/frontend/shell/porpoise_rows.cpp:77 port/frontend/shell/porpoise_rows.cpp:83 port/frontend/shell/porpoise_rows.cpp:87 port/frontend/shell/porpoise_rows.cpp:257
 msgid "Port 1"
-msgstr ""
+msgstr "Θύρα 1"
 
 #: port/frontend/shell/porpoise_rows.cpp:77 port/frontend/shell/porpoise_rows.cpp:78 port/frontend/shell/porpoise_rows.cpp:79 port/frontend/shell/porpoise_rows.cpp:80
 msgid "What's plugged into this port, and who plays it."
-msgstr ""
+msgstr "Τι είναι συνδεδεμένο σε αυτήν τη θύρα και ποιος την παίζει."
 
 #: port/frontend/shell/porpoise_rows.cpp:78 port/frontend/shell/porpoise_rows.cpp:84 port/frontend/shell/porpoise_rows.cpp:88 port/frontend/shell/porpoise_rows.cpp:257
 msgid "Port 2"
-msgstr ""
+msgstr "Θύρα 2"
 
 #: port/frontend/shell/porpoise_rows.cpp:79 port/frontend/shell/porpoise_rows.cpp:85 port/frontend/shell/porpoise_rows.cpp:89 port/frontend/shell/porpoise_rows.cpp:257
 msgid "Port 3"
-msgstr ""
+msgstr "Θύρα 3"
 
 #: port/frontend/shell/porpoise_rows.cpp:80 port/frontend/shell/porpoise_rows.cpp:86 port/frontend/shell/porpoise_rows.cpp:90 port/frontend/shell/porpoise_rows.cpp:257
 msgid "Port 4"
-msgstr ""
+msgstr "Θύρα 4"
 
 #: port/frontend/shell/porpoise_rows.cpp:81 port/frontend/shell/porpoise_rows.cpp:1114
 msgid "GBA video"
-msgstr ""
+msgstr "Βίντεο GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:81 port/frontend/shell/porpoise_rows.cpp:1115
 msgid "Each GBA's screen on the TV."
-msgstr ""
+msgstr "Κάθε οθόνη GBA στην τηλεόραση."
 
 #: port/frontend/shell/porpoise_rows.cpp:82 port/frontend/shell/porpoise_rows.cpp:1114
 msgid "GBA sound"
-msgstr ""
+msgstr "Ήχος GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:82 port/frontend/shell/porpoise_rows.cpp:1115
 msgid "Each GBA's sound."
-msgstr ""
+msgstr "Ο ήχος κάθε GBA."
 
 #: port/frontend/shell/porpoise_rows.cpp:83 port/frontend/shell/porpoise_rows.cpp:84 port/frontend/shell/porpoise_rows.cpp:85 port/frontend/shell/porpoise_rows.cpp:86
 msgid "This port's GBA screen."
-msgstr ""
+msgstr "Η οθόνη GBA αυτής της θύρας."
 
 #: port/frontend/shell/porpoise_rows.cpp:87 port/frontend/shell/porpoise_rows.cpp:88 port/frontend/shell/porpoise_rows.cpp:89 port/frontend/shell/porpoise_rows.cpp:90
 msgid "This port's GBA sound."
-msgstr ""
+msgstr "Ο ήχος GBA αυτής της θύρας."
 
 #: port/frontend/shell/porpoise_rows.cpp:91
 msgid "The pointer's reach, your grip, motion and real Wii Remotes."
-msgstr ""
+msgstr "Η απόσταση του δείκτη, το κράτημα, η κίνηση και τα πραγματικά τηλεχειριστήρια Wii."
 
 #: port/frontend/shell/porpoise_rows.cpp:92
 msgid "Settings that may not work on PS5 or need extra setup."
-msgstr ""
+msgstr "Ρυθμίσεις που μπορεί να μην λειτουργούν στο PS5 ή να χρειάζονται επιπλέον ρύθμιση."
 
 #: port/frontend/shell/porpoise_rows.cpp:99
 msgid "Higher is sharper but can slow games down."
@@ -5622,35 +5624,35 @@ msgstr "Με ενεργή τη δημιουργία καρέ, τα δικά κα
 
 #: port/frontend/shell/porpoise_rows.cpp:125
 msgid "Color filter"
-msgstr ""
+msgstr "Φίλτρο χρώματος"
 
 #: port/frontend/shell/porpoise_rows.cpp:125
 msgid "For color blindness: moves the colors you may not tell apart to ones you can."
-msgstr ""
+msgstr "Για αχρωματοψία: μετακινεί τα χρώματα που μπορεί να μην ξεχωρίσετε σε αυτά που μπορείτε."
 
 #: port/frontend/shell/porpoise_rows.cpp:126
 msgid "Red-weak"
-msgstr ""
+msgstr "Κόκκινο-αδύναμο"
 
 #: port/frontend/shell/porpoise_rows.cpp:126
 msgid "Green-weak"
-msgstr ""
+msgstr "Πράσινο-αδύναμο"
 
 #: port/frontend/shell/porpoise_rows.cpp:126
 msgid "Blue-weak"
-msgstr ""
+msgstr "Μπλε-αδύναμο"
 
 #: port/frontend/shell/porpoise_rows.cpp:126
 msgid "Grayscale"
-msgstr ""
+msgstr "Κλίμακα του γκρι"
 
 #: port/frontend/shell/porpoise_rows.cpp:127
 msgid "Color filter in games"
-msgstr ""
+msgstr "Φίλτρο χρώματος στα παιχνίδια"
 
 #: port/frontend/shell/porpoise_rows.cpp:127
 msgid "Applies the color filter to games too."
-msgstr ""
+msgstr "Εφαρμόζει το φίλτρο χρώματος και στα παιχνίδια."
 
 #: port/frontend/shell/porpoise_rows.cpp:128
 msgid "Frame rate counter"
@@ -5678,235 +5680,235 @@ msgstr "Όπως στο PS5"
 
 #: port/frontend/shell/porpoise_rows.cpp:134
 msgid "Aspect ratio"
-msgstr ""
+msgstr "Λόγος διαστάσεων"
 
 #: port/frontend/shell/porpoise_rows.cpp:134
 msgid "The picture's shape. Automatic follows the game."
-msgstr ""
+msgstr "Το σχήμα της εικόνας. Αυτόματα ακολουθεί το παιχνίδι."
 
 #: port/frontend/shell/porpoise_rows.cpp:135
 msgid "Force 16:9"
-msgstr ""
+msgstr "Δύναμη 16:9"
 
 #: port/frontend/shell/porpoise_rows.cpp:135
 msgid "Force 4:3"
-msgstr ""
+msgstr "Δύναμη 4:3"
 
 #: port/frontend/shell/porpoise_rows.cpp:135
 msgid "Stretch to fill"
-msgstr ""
+msgstr "Τεντώστε για να γεμίσετε"
 
 #: port/frontend/shell/porpoise_rows.cpp:136
 msgid "Fills the bars beside a 4:3 picture. Your own 1920x1080 PNGs go in /data/porpoise/borders."
-msgstr ""
+msgstr "Γεμίζει τις ράβδους δίπλα σε μια εικόνα 4:3. Τα δικά σας PNG 1920x1080 μπαίνουν στο /data/porpoise/borders."
 
 #: port/frontend/shell/porpoise_rows.cpp:137
 msgid "V-Sync"
-msgstr ""
+msgstr "V-Sync"
 
 #: port/frontend/shell/porpoise_rows.cpp:137
 msgid "Syncs frames to the TV's refresh for the smoothest motion."
-msgstr ""
+msgstr "Συγχρονίζει καρέ με την ανανέωση του TV για την πιο ομαλή κίνηση."
 
 #: port/frontend/shell/porpoise_rows.cpp:138
 msgid "Syncs frames to the TV's refresh for the smoothest motion. Off uses the emulator's own timing."
-msgstr ""
+msgstr "Συγχρονίζει καρέ με την ανανέωση του TV για την πιο ομαλή κίνηση. Το Off χρησιμοποιεί το χρονισμό του ίδιου του εξομοιωτή."
 
 #: port/frontend/shell/porpoise_rows.cpp:140
 msgid "Shader compilation"
-msgstr ""
+msgstr "Συλλογή Shader"
 
 #: port/frontend/shell/porpoise_rows.cpp:140
 msgid "Ubershaders prevent stutter when something new is drawn, but use more GPU."
-msgstr ""
+msgstr "Τα Ubershaders αποτρέπουν τον τραυλισμό όταν σχεδιάζεται κάτι νέο, αλλά χρησιμοποιούν περισσότερο GPU."
 
 #: port/frontend/shell/porpoise_rows.cpp:141
 msgid "Synchronous"
-msgstr ""
+msgstr "Σύγχρονη"
 
 #: port/frontend/shell/porpoise_rows.cpp:141
 msgid "Ubershaders"
-msgstr ""
+msgstr "Ubershaders"
 
 #: port/frontend/shell/porpoise_rows.cpp:141
 msgid "Async ubershaders"
-msgstr ""
+msgstr "Async ubershaders"
 
 #: port/frontend/shell/porpoise_rows.cpp:141
 msgid "Async, skip drawing"
-msgstr ""
+msgstr "Ασυγχρονισμός, παράλειψη σχεδίου"
 
 #: port/frontend/shell/porpoise_rows.cpp:142
 msgid "Build shaders before starting"
-msgstr ""
+msgstr "Κατασκευάστε shaders πριν ξεκινήσετε"
 
 #: port/frontend/shell/porpoise_rows.cpp:142
 msgid "Shaders the game used last time are built while it loads. It starts a moment later."
-msgstr ""
+msgstr "Οι Shaders που χρησιμοποιήθηκαν την τελευταία φορά κατασκευάζονται κατά τη φόρτωση του παιχνιδιού. Ξεκινά μια στιγμή αργότερα."
 
 #: port/frontend/shell/porpoise_rows.cpp:143
 msgid "Builds the shaders the game used last time while it loads, so effects don't stutter. The game takes a moment longer to start."
-msgstr ""
+msgstr "Δημιουργεί τα shaders που χρησιμοποίησε το παιχνίδι την τελευταία φορά κατά τη φόρτωση, ώστε τα εφέ να μην τραυλίζουν. Το παιχνίδι χρειάζεται λίγο περισσότερο για να ξεκινήσει."
 
 #: port/frontend/shell/porpoise_rows.cpp:145
 msgid "Threaded GPU recording"
-msgstr ""
+msgstr "Εγγραφή GPU με σπείρωμα"
 
 #: port/frontend/shell/porpoise_rows.cpp:145
 msgid "The driver records drawing on its own thread. Turn it off if a game crashes."
-msgstr ""
+msgstr "Το πρόγραμμα οδήγησης καταγράφει το σχέδιο στο δικό του νήμα. Απενεργοποιήστε το εάν ένα παιχνίδι κολλήσει."
 
 #: port/frontend/shell/porpoise_rows.cpp:146
 msgid "Records drawing on a separate thread. Can speed up demanding games. Turn it off if a game crashes or looks wrong. Applies next time a game starts."
-msgstr ""
+msgstr "Καταγράφει το σχέδιο σε ξεχωριστό νήμα. Μπορεί να επιταχύνει απαιτητικά παιχνίδια. Απενεργοποιήστε το εάν ένα παιχνίδι κολλήσει ή φαίνεται λάθος. Ισχύει την επόμενη φορά που θα ξεκινήσει ένα παιχνίδι."
 
 #: port/frontend/shell/porpoise_rows.cpp:148
 msgid "Texture cache accuracy"
-msgstr ""
+msgstr "Ακρίβεια κρυφής μνήμης υφής"
 
 #: port/frontend/shell/porpoise_rows.cpp:148
 msgid "Safe fixes some games' text and effects; Fast is quickest."
-msgstr ""
+msgstr "Το Safe διορθώνει το κείμενο και τα εφέ ορισμένων παιχνιδιών. Το γρήγορο είναι το πιο γρήγορο."
 
 #: port/frontend/shell/porpoise_rows.cpp:149
 msgid "Fast"
-msgstr ""
+msgstr "Γρήγορα"
 
 #: port/frontend/shell/porpoise_rows.cpp:149
 msgid "Middle"
-msgstr ""
+msgstr "Μέση"
 
 #: port/frontend/shell/porpoise_rows.cpp:149 port/frontend/shell/porpoise_rows.cpp:313
 msgid "Safe"
-msgstr ""
+msgstr "Ασφαλής"
 
 #: port/frontend/shell/porpoise_rows.cpp:150
 msgid "Crop overscan"
-msgstr ""
+msgstr "Υπερσάρωση περικοπής"
 
 #: port/frontend/shell/porpoise_rows.cpp:150
 msgid "Hides the black borders some games draw at the edges."
-msgstr ""
+msgstr "Κρύβει τα μαύρα περιγράμματα μερικά παιχνίδια σχεδιάζουν στις άκρες."
 
 #: port/frontend/shell/porpoise_rows.cpp:152
 msgid "Crop left"
-msgstr ""
+msgstr "Περικοπή αριστερά"
 
 #: port/frontend/shell/porpoise_rows.cpp:152
 msgid "Trims the left edge of the picture."
-msgstr ""
+msgstr "Κόβει το αριστερό άκρο της εικόνας."
 
 #: port/frontend/shell/porpoise_rows.cpp:154
 msgid "Crop right"
-msgstr ""
+msgstr "Περικοπή δεξιά"
 
 #: port/frontend/shell/porpoise_rows.cpp:154
 msgid "Trims the right edge of the picture."
-msgstr ""
+msgstr "Κόβει τη δεξιά άκρη της εικόνας."
 
 #: port/frontend/shell/porpoise_rows.cpp:156
 msgid "Crop top"
-msgstr ""
+msgstr "Crop top"
 
 #: port/frontend/shell/porpoise_rows.cpp:156
 msgid "Trims the top edge of the picture."
-msgstr ""
+msgstr "Κόβει το επάνω άκρο της εικόνας."
 
 #: port/frontend/shell/porpoise_rows.cpp:158
 msgid "Crop bottom"
-msgstr ""
+msgstr "Περικοπή πάτου"
 
 #: port/frontend/shell/porpoise_rows.cpp:158
 msgid "Trims the bottom edge of the picture."
-msgstr ""
+msgstr "Κόβει το κάτω άκρο της εικόνας."
 
 #: port/frontend/shell/porpoise_rows.cpp:160
 msgid "Skip duplicate frames"
-msgstr ""
+msgstr "Παράλειψη διπλότυπων καρέ"
 
 #: port/frontend/shell/porpoise_rows.cpp:160
 msgid "Saves work when a game shows the same frame twice."
-msgstr ""
+msgstr "Αποθηκεύει την εργασία όταν ένα παιχνίδι εμφανίζει το ίδιο καρέ δύο φορές."
 
 #: port/frontend/shell/porpoise_rows.cpp:162
 msgid "Anisotropic filtering"
-msgstr ""
+msgstr "Ανισότροπο φιλτράρισμα"
 
 #: port/frontend/shell/porpoise_rows.cpp:162
 msgid "Sharper textures on floors and walls seen at an angle."
-msgstr ""
+msgstr "Πιο έντονες υφές σε δάπεδα και τοίχους φαίνονται υπό γωνία."
 
 #: port/frontend/shell/porpoise_rows.cpp:164
 msgid "Extra bloom"
-msgstr ""
+msgstr "Επιπλέον άνθιση"
 
 #: port/frontend/shell/porpoise_rows.cpp:164
 msgid "Adds a soft glow around bright areas."
-msgstr ""
+msgstr "Προσθέτει απαλή λάμψη γύρω από φωτεινές περιοχές."
 
 #: port/frontend/shell/porpoise_rows.cpp:165 port/frontend/shell/porpoise_rows.cpp:263 port/frontend/shell/porpoise_rows.cpp:313
 msgid "Low"
-msgstr ""
+msgstr "Χαμηλό"
 
 #: port/frontend/shell/porpoise_rows.cpp:165 port/frontend/shell/porpoise_rows.cpp:265
 msgid "Medium"
-msgstr ""
+msgstr "Μεσαίο"
 
 #: port/frontend/shell/porpoise_rows.cpp:165
 msgid "High"
-msgstr ""
+msgstr "Ψηλά"
 
 #: port/frontend/shell/porpoise_rows.cpp:166
 msgid "Saturation"
-msgstr ""
+msgstr "Κορεσμός"
 
 #: port/frontend/shell/porpoise_rows.cpp:166
 msgid "How rich the colours are. 0 is as the game has them."
-msgstr ""
+msgstr "Πόσο πλούσια είναι τα χρώματα. Το 0 είναι όπως τα έχει το παιχνίδι."
 
 #: port/frontend/shell/porpoise_rows.cpp:168
 msgid "Contrast"
-msgstr ""
+msgstr "Αντίθεση"
 
 #: port/frontend/shell/porpoise_rows.cpp:168
 msgid "How far apart the darks and the lights are. 0 is as the game has them."
-msgstr ""
+msgstr "Πόσο μακριά είναι τα σκοτάδια και τα φώτα. Το 0 είναι όπως τα έχει το παιχνίδι."
 
 #: port/frontend/shell/porpoise_rows.cpp:170
 msgid "Warmth"
-msgstr ""
+msgstr "Ζεστασιά"
 
 #: port/frontend/shell/porpoise_rows.cpp:170
 msgid "Warmer (more red) or cooler (more blue). 0 is as the game has it."
-msgstr ""
+msgstr "Πιο ζεστό (πιο κόκκινο) ή πιο ψυχρό (πιο μπλε). Το 0 είναι όπως το έχει το παιχνίδι."
 
 #: port/frontend/shell/porpoise_rows.cpp:172
 msgid "Texture filtering"
-msgstr ""
+msgstr "Φιλτράρισμα υφής"
 
 #: port/frontend/shell/porpoise_rows.cpp:172
 msgid "Force sharp or smooth textures, or leave it to the game."
-msgstr ""
+msgstr "Επιβάλετε αιχμηρές ή λείες υφές ή αφήστε το στο παιχνίδι."
 
 #: port/frontend/shell/porpoise_rows.cpp:173 port/frontend/shell/porpoise_rows.cpp:182 port/frontend/shell/porpoise_rows.cpp:184
 msgid "The game's own"
-msgstr ""
+msgstr "Το παιχνίδι είναι δικό του"
 
 #: port/frontend/shell/porpoise_rows.cpp:173
 msgid "Nearest (sharp)"
-msgstr ""
+msgstr "Πλησιέστερο (απότομη)"
 
 #: port/frontend/shell/porpoise_rows.cpp:173
 msgid "Linear (smooth)"
-msgstr ""
+msgstr "Γραμμικό (ομαλό)"
 
 #: port/frontend/shell/porpoise_rows.cpp:174
 msgid "Output resampling"
-msgstr ""
+msgstr "Επαναδειγματοληψία εξόδου"
 
 #: port/frontend/shell/porpoise_rows.cpp:174
 msgid "How the picture is scaled. Sharp bilinear keeps pixels crisp."
-msgstr ""
+msgstr "Πώς γίνεται η κλίμακα της εικόνας. Το Sharp bilinear διατηρεί τα pixel καθαρά."
 
 #. Settings > Screens: a row that opens the touch screen's settings (where the touchpad's cursor lands, the right stick as the stylus)
 #. Settings > Performance: a row that opens Eden's accuracy shortcuts (Fast GPU, Unsafe CPU, ...); its value: how many are changed
@@ -5917,67 +5919,67 @@ msgstr "Προεπιλογή"
 
 #: port/frontend/shell/porpoise_rows.cpp:175
 msgid "Sharp bilinear"
-msgstr ""
+msgstr "Απότομη διγραμμική"
 
 #: port/frontend/shell/porpoise_rows.cpp:175
 msgid "Area sampling"
-msgstr ""
+msgstr "Δειγματοληψία περιοχής"
 
 #: port/frontend/shell/porpoise_rows.cpp:177
 msgid "Per-pixel lighting"
-msgstr ""
+msgstr "Φωτισμός ανά pixel"
 
 #: port/frontend/shell/porpoise_rows.cpp:177
 msgid "Smoother lighting on surfaces. A little heavier."
-msgstr ""
+msgstr "Ομαλός φωτισμός σε επιφάνειες. Λίγο πιο βαρύ."
 
 #: port/frontend/shell/porpoise_rows.cpp:179
 msgid "Disable fog"
-msgstr ""
+msgstr "Απενεργοποιήστε την ομίχλη"
 
 #: port/frontend/shell/porpoise_rows.cpp:179
 msgid "Removes distance fog. Some games use fog for their look."
-msgstr ""
+msgstr "Αφαιρεί την ομίχλη από απόσταση. Ορισμένα παιχνίδια χρησιμοποιούν ομίχλη για την εμφάνισή τους."
 
 #: port/frontend/shell/porpoise_rows.cpp:181
 msgid "Bloom"
-msgstr ""
+msgstr "Bloom"
 
 #: port/frontend/shell/porpoise_rows.cpp:181
 msgid "A graphics mod for this game's glow. Applies next time it starts."
-msgstr ""
+msgstr "Ένα mod γραφικών για τη λάμψη αυτού του παιχνιδιού. Ισχύει την επόμενη φορά που θα ξεκινήσει."
 
 #: port/frontend/shell/porpoise_rows.cpp:182 port/frontend/shell/porpoise_rows.cpp:184
 msgid "Blurred"
-msgstr ""
+msgstr "Θολή"
 
 #: port/frontend/shell/porpoise_rows.cpp:182 port/frontend/shell/porpoise_rows.cpp:184
 msgid "Native resolution"
-msgstr ""
+msgstr "Εγγενής ανάλυση"
 
 #: port/frontend/shell/porpoise_rows.cpp:183
 msgid "Depth of field"
-msgstr ""
+msgstr "Βάθος πεδίου"
 
 #: port/frontend/shell/porpoise_rows.cpp:183
 msgid "A graphics mod for the blur on faraway things. Applies next time it starts."
-msgstr ""
+msgstr "Ένα mod γραφικών για το θάμπωμα σε μακρινά πράγματα. Ισχύει την επόμενη φορά που θα ξεκινήσει."
 
 #: port/frontend/shell/porpoise_rows.cpp:185
 msgid "Hide the HUD"
-msgstr ""
+msgstr "Απόκρυψη του HUD"
 
 #: port/frontend/shell/porpoise_rows.cpp:185
 msgid "Hides the game's HUD, for clean screenshots. Applies the next time it starts."
-msgstr ""
+msgstr "Κρύβει το HUD του παιχνιδιού, για καθαρά στιγμιότυπα οθόνης. Εφαρμόζεται την επόμενη φορά που θα ξεκινήσει."
 
 #: port/frontend/shell/porpoise_rows.cpp:186
 msgid "Native resolution goop"
-msgstr ""
+msgstr "Εγγενής ανάλυση goop"
 
 #: port/frontend/shell/porpoise_rows.cpp:186
 msgid "Super Mario Sunshine's goop at the game's own resolution. Applies the next time it starts."
-msgstr ""
+msgstr "Το Goop του Super Mario Sunshine στην ανάλυση του ίδιου του παιχνιδιού. Εφαρμόζεται την επόμενη φορά που θα ξεκινήσει."
 
 #: port/frontend/shell/porpoise_rows.cpp:187 port/frontend/shell/settings.cpp:731 port/frontend/shell/settings.cpp:738
 msgid "Custom textures"
@@ -5985,107 +5987,107 @@ msgstr "Προσαρμοσμένες υφές"
 
 #: port/frontend/shell/porpoise_rows.cpp:187
 msgid "Loads HD texture packs."
-msgstr ""
+msgstr "Φορτώνει πακέτα υφής HD."
 
 #: port/frontend/shell/porpoise_rows.cpp:188
 msgid "Loads HD texture packs. Put each pack's folder, named with the game's ID (like GALE01), in /data/porpoise/saves/User/Load/Textures."
-msgstr ""
+msgstr "Φορτώνει πακέτα υφής HD. Βάλτε το φάκελο κάθε πακέτου, με όνομα με το αναγνωριστικό του παιχνιδιού (όπως το GALE01), στο /data/porpoise/saves/User/Load/Textures."
 
 #: port/frontend/shell/porpoise_rows.cpp:190 port/frontend/shell/porpoise_rows.cpp:202 port/frontend/shell/porpoise_rows.cpp:214 port/frontend/shell/porpoise_rows.cpp:226
 msgid "Device"
-msgstr ""
+msgstr "Συσκευή"
 
 #: port/frontend/shell/porpoise_rows.cpp:190 port/frontend/shell/porpoise_rows.cpp:202 port/frontend/shell/porpoise_rows.cpp:214 port/frontend/shell/porpoise_rows.cpp:226
 msgid "What's plugged into this controller port."
-msgstr ""
+msgstr "Τι είναι συνδεδεμένο σε αυτήν τη θύρα ελεγκτή."
 
 #: port/frontend/shell/porpoise_rows.cpp:191 port/frontend/shell/porpoise_rows.cpp:203 port/frontend/shell/porpoise_rows.cpp:215 port/frontend/shell/porpoise_rows.cpp:227
 msgid "What's plugged into this controller port. GBA (Integrated) is a Game Boy Advance on the link cable, for games like Four Swords Adventures. It needs the GBA BIOS at /data/porpoise/saves/User/GBA/gba_bios.bin. Best set per game."
-msgstr ""
+msgstr "Τι είναι συνδεδεμένο σε αυτήν τη θύρα ελεγκτή. Το GBA (Integrated) είναι ένα Game Boy Advance στο καλώδιο σύνδεσης, για παιχνίδια όπως το Four Swords Adventures. Χρειάζεται το GBA BIOS στο /data/porpoise/saves/User/GBA/gba_bios.bin. Το καλύτερο σετ ανά παιχνίδι."
 
 #: port/frontend/shell/porpoise_rows.cpp:192 port/frontend/shell/porpoise_rows.cpp:204 port/frontend/shell/porpoise_rows.cpp:216 port/frontend/shell/porpoise_rows.cpp:228 port/frontend/shell/porpoise_rows.cpp:1162
 msgid "GameCube Controller"
-msgstr ""
+msgstr "Ελεγκτής GameCube"
 
 #: port/frontend/shell/porpoise_rows.cpp:192 port/frontend/shell/porpoise_rows.cpp:204 port/frontend/shell/porpoise_rows.cpp:216 port/frontend/shell/porpoise_rows.cpp:228 port/frontend/shell/porpoise_rows.cpp:1162
 msgid "GBA (Integrated)"
-msgstr ""
+msgstr "GBA (Ενσωματωμένο)"
 
 #: port/frontend/shell/porpoise_rows.cpp:193 port/frontend/shell/porpoise_rows.cpp:196 port/frontend/shell/porpoise_rows.cpp:205 port/frontend/shell/porpoise_rows.cpp:208 port/frontend/shell/porpoise_rows.cpp:217 port/frontend/shell/porpoise_rows.cpp:220 port/frontend/shell/porpoise_rows.cpp:229 port/frontend/shell/porpoise_rows.cpp:232
 msgid "Controlled by"
-msgstr ""
+msgstr "Ελεγχόμενη από"
 
 #: port/frontend/shell/porpoise_rows.cpp:193 port/frontend/shell/porpoise_rows.cpp:205 port/frontend/shell/porpoise_rows.cpp:217 port/frontend/shell/porpoise_rows.cpp:229
 msgid "Who plays this GBA by holding their GBA button."
-msgstr ""
+msgstr "Ποιος παίζει αυτό το GBA κρατώντας το κουμπί GBA."
 
 #: port/frontend/shell/porpoise_rows.cpp:194 port/frontend/shell/porpoise_rows.cpp:206 port/frontend/shell/porpoise_rows.cpp:218 port/frontend/shell/porpoise_rows.cpp:230
 msgid "A player: they play it while holding their GBA button, with its sound on their controller. Its own controller: the controller in this port is the GBA, no button needed. Nobody: only from the web page."
-msgstr ""
+msgstr "Ένας παίκτης: το παίζουν κρατώντας το κουμπί GBA, με τον ήχο του στο χειριστήριο τους. Ο δικός του ελεγκτής: ο ελεγκτής σε αυτήν τη θύρα είναι το GBA, δεν χρειάζεται κουμπί. Κανείς: μόνο από την ιστοσελίδα."
 
 #: port/frontend/shell/porpoise_rows.cpp:195 port/frontend/shell/porpoise_rows.cpp:207 port/frontend/shell/porpoise_rows.cpp:219 port/frontend/shell/porpoise_rows.cpp:231 port/frontend/shell/porpoise_rows.cpp:1153
 msgid "Its own controller"
-msgstr ""
+msgstr "Το δικό του χειριστήριο"
 
 #: port/frontend/shell/porpoise_rows.cpp:196 port/frontend/shell/porpoise_rows.cpp:208 port/frontend/shell/porpoise_rows.cpp:220 port/frontend/shell/porpoise_rows.cpp:232
 msgid "Whose controller is in this port."
-msgstr ""
+msgstr "Ποιανού ο ελεγκτής βρίσκεται σε αυτήν τη θύρα."
 
 #: port/frontend/shell/porpoise_rows.cpp:198 port/frontend/shell/porpoise_rows.cpp:210 port/frontend/shell/porpoise_rows.cpp:222 port/frontend/shell/porpoise_rows.cpp:234 port/frontend/shell/porpoise_rows.cpp:621
 msgid "GBA button"
-msgstr ""
+msgstr "Κουμπί GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:198 port/frontend/shell/porpoise_rows.cpp:210 port/frontend/shell/porpoise_rows.cpp:222 port/frontend/shell/porpoise_rows.cpp:234
 msgid "Hold the GBA button, press it to toggle, or keep it always on or off."
-msgstr ""
+msgstr "Κρατήστε πατημένο το κουμπί GBA, πατήστε το για εναλλαγή ή κρατήστε το πάντα ενεργοποιημένο ή απενεργοποιημένο."
 
 #: port/frontend/shell/porpoise_rows.cpp:199 port/frontend/shell/porpoise_rows.cpp:211 port/frontend/shell/porpoise_rows.cpp:223 port/frontend/shell/porpoise_rows.cpp:235 port/frontend/shell/porpoise_rows.cpp:369 port/frontend/shell/porpoise_rows.cpp:381 port/frontend/shell/porpoise_rows.cpp:393 port/frontend/shell/porpoise_rows.cpp:405
 msgid "Toggle"
-msgstr ""
+msgstr "Εναλλαγή"
 
 #: port/frontend/shell/porpoise_rows.cpp:199 port/frontend/shell/porpoise_rows.cpp:211 port/frontend/shell/porpoise_rows.cpp:223 port/frontend/shell/porpoise_rows.cpp:235 port/frontend/shell/porpoise_rows.cpp:369 port/frontend/shell/porpoise_rows.cpp:381 port/frontend/shell/porpoise_rows.cpp:393 port/frontend/shell/porpoise_rows.cpp:405
 msgid "Always on"
-msgstr ""
+msgstr "Πάντα αναμμένο"
 
 #: port/frontend/shell/porpoise_rows.cpp:199 port/frontend/shell/porpoise_rows.cpp:211 port/frontend/shell/porpoise_rows.cpp:223 port/frontend/shell/porpoise_rows.cpp:235 port/frontend/shell/porpoise_rows.cpp:369 port/frontend/shell/porpoise_rows.cpp:381 port/frontend/shell/porpoise_rows.cpp:393 port/frontend/shell/porpoise_rows.cpp:405
 msgid "Always off"
-msgstr ""
+msgstr "Πάντα σβηστό"
 
 #: port/frontend/shell/porpoise_rows.cpp:200 port/frontend/shell/porpoise_rows.cpp:212 port/frontend/shell/porpoise_rows.cpp:224 port/frontend/shell/porpoise_rows.cpp:236
 msgid "GBA game"
-msgstr ""
+msgstr "Παιχνίδι GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:200
 msgid "The GBA game loaded at start, from games/gba/port1. None: BIOS only."
-msgstr ""
+msgstr "Το παιχνίδι GBA φορτώθηκε στην αρχή, από το games/gba/port1. Κανένα: BIOS μόνο."
 
 #: port/frontend/shell/porpoise_rows.cpp:201 port/frontend/shell/porpoise_rows.cpp:213 port/frontend/shell/porpoise_rows.cpp:225 port/frontend/shell/porpoise_rows.cpp:237
 msgid "Save beside the game"
-msgstr ""
+msgstr "Αποθήκευση δίπλα στο παιχνίδι"
 
 #: port/frontend/shell/porpoise_rows.cpp:201 port/frontend/shell/porpoise_rows.cpp:213 port/frontend/shell/porpoise_rows.cpp:225 port/frontend/shell/porpoise_rows.cpp:237
 msgid "Keeps this GBA's save next to its game instead of with the other saves."
-msgstr ""
+msgstr "Διατηρεί την αποθήκευση αυτού του GBA δίπλα στο παιχνίδι του αντί για τις άλλες αποθηκεύσεις."
 
 #: port/frontend/shell/porpoise_rows.cpp:212
 msgid "The GBA game loaded at start, from games/gba/port2. None: BIOS only."
-msgstr ""
+msgstr "Το παιχνίδι GBA φορτώθηκε στην αρχή, από το games/gba/port2. Κανένα: BIOS μόνο."
 
 #: port/frontend/shell/porpoise_rows.cpp:224
 msgid "The GBA game loaded at start, from games/gba/port3. None: BIOS only."
-msgstr ""
+msgstr "Το παιχνίδι GBA φορτώθηκε στην αρχή, από το games/gba/port3. Κανένα: BIOS μόνο."
 
 #: port/frontend/shell/porpoise_rows.cpp:236
 msgid "The GBA game loaded at start, from games/gba/port4. None: BIOS only."
-msgstr ""
+msgstr "Το παιχνίδι GBA φορτώθηκε στην αρχή, από το games/gba/port4. Κανένα: BIOS μόνο."
 
 #: port/frontend/shell/porpoise_rows.cpp:238
 msgid "Console"
-msgstr ""
+msgstr "Κονσόλα"
 
 #: port/frontend/shell/porpoise_rows.cpp:238
 msgid "Which console's controls to use, if a game is detected wrongly."
-msgstr ""
+msgstr "Ποια στοιχεία ελέγχου της κονσόλας να χρησιμοποιήσετε, εάν ένα παιχνίδι εντοπιστεί εσφαλμένα."
 
 #: port/frontend/shell/porpoise_rows.cpp:240
 msgid "Button layout"
@@ -6097,7 +6099,7 @@ msgstr "PlayStation: ο Σταυρός είναι το A και ο Κύκλος 
 
 #: port/frontend/shell/porpoise_rows.cpp:242
 msgid "PlayStation: Cross is A and Circle is B. GameCube: Circle is A and Cross is B. My layouts are the ones you make on the Buttons page. For GameCube games and Wii games played with a GameCube controller."
-msgstr ""
+msgstr "PlayStation: Το Σταυρός είναι το A και το Κύκλος είναι το B. GameCube: Το Κύκλος είναι το A και το Σταυρός είναι το B. Οι διατάξεις μου είναι αυτές που δημιουργείτε στη σελίδα Κουμπιά. Για παιχνίδια GameCube και παιχνίδια Wii που παίζονται με χειριστήριο GameCube."
 
 #: port/frontend/shell/porpoise_rows.cpp:244
 msgid "Controller rumble."
@@ -6161,95 +6163,95 @@ msgstr "Δεξής μοχλός"
 
 #: port/frontend/shell/porpoise_rows.cpp:255
 msgid "Player 1's port"
-msgstr ""
+msgstr "Θύρα του παίκτη 1"
 
 #: port/frontend/shell/porpoise_rows.cpp:255
 msgid "The GameCube port your controller is in, for the few games that want another."
-msgstr ""
+msgstr "Η θύρα GameCube στην οποία βρίσκεται το χειριστήριό σας, για τα λίγα παιχνίδια που θέλουν άλλο."
 
 #: port/frontend/shell/porpoise_rows.cpp:256
 msgid "The GameCube port your controller is in. A few games briefly need it in another port."
-msgstr ""
+msgstr "Η θύρα GameCube στην οποία βρίσκεται το χειριστήριό σας. Μερικά παιχνίδια τη χρειάζονται για λίγο σε άλλη θύρα."
 
 #: port/frontend/shell/porpoise_rows.cpp:258
 msgid "Invert the control stick"
-msgstr ""
+msgstr "Αναποδογυρίστε το μοχλό ελέγχου"
 
 #: port/frontend/shell/porpoise_rows.cpp:258
 msgid "For a game whose controls feel reversed. Best set per game."
-msgstr ""
+msgstr "Για ένα παιχνίδι του οποίου τα χειριστήρια αισθάνονται αντίστροφα. Το καλύτερο σετ ανά παιχνίδι."
 
 #: port/frontend/shell/porpoise_rows.cpp:259 port/frontend/shell/porpoise_rows.cpp:261
 msgid "Up and down"
-msgstr ""
+msgstr "Πάνω κάτω"
 
 #: port/frontend/shell/porpoise_rows.cpp:259 port/frontend/shell/porpoise_rows.cpp:261
 msgid "Left and right"
-msgstr ""
+msgstr "Αριστερά και δεξιά"
 
 #: port/frontend/shell/porpoise_rows.cpp:259 port/frontend/shell/porpoise_rows.cpp:261
 msgid "Both"
-msgstr ""
+msgstr "Και τα δύο"
 
 #: port/frontend/shell/porpoise_rows.cpp:260
 msgid "Invert the C-stick"
-msgstr ""
+msgstr "Αναστρέψτε το ραβδί C"
 
 #: port/frontend/shell/porpoise_rows.cpp:260
 msgid "For a game whose camera feels reversed. Best set per game."
-msgstr ""
+msgstr "Για ένα παιχνίδι του οποίου η κάμερα έχει αντίστροφη αίσθηση. Το καλύτερο σετ ανά παιχνίδι."
 
 #: port/frontend/shell/porpoise_rows.cpp:262
 msgid "Stick sensitivity"
-msgstr ""
+msgstr "Ευαισθησία ραβδιού"
 
 #: port/frontend/shell/porpoise_rows.cpp:262
 msgid "Lower makes small pushes gentler. A full push still turns fully."
-msgstr ""
+msgstr "Το Lower κάνει τις μικρές πιέσεις πιο απαλές. Μια πλήρης ώθηση εξακολουθεί να στρίβει πλήρως."
 
 #: port/frontend/shell/porpoise_rows.cpp:263 port/frontend/shell/porpoise_rows.cpp:313
 msgid "Normal"
-msgstr ""
+msgstr "Κανονικό"
 
 #: port/frontend/shell/porpoise_rows.cpp:263
 msgid "Lower"
-msgstr ""
+msgstr "Χαμηλότερα"
 
 #: port/frontend/shell/porpoise_rows.cpp:263
 msgid "Lowest"
-msgstr ""
+msgstr "Χαμηλότερο"
 
 #: port/frontend/shell/porpoise_rows.cpp:264
 msgid "Stick dead zone"
-msgstr ""
+msgstr "Κολλήστε νεκρή ζώνη"
 
 #: port/frontend/shell/porpoise_rows.cpp:264
 msgid "How far the stick moves before the game sees it, for a stick that drifts."
-msgstr ""
+msgstr "Πόσο μακριά κινείται το ραβδί πριν το δει το παιχνίδι, για ένα ραβδί που παρασύρεται."
 
 #: port/frontend/shell/porpoise_rows.cpp:265
 msgid "Small"
-msgstr ""
+msgstr "Μικρό"
 
 #: port/frontend/shell/porpoise_rows.cpp:265
 msgid "Large"
-msgstr ""
+msgstr "Μεγάλο"
 
 #: port/frontend/shell/porpoise_rows.cpp:266
 msgid "Fast forward buttons"
-msgstr ""
+msgstr "Κουμπιά γρήγορης προώθησης"
 
 #: port/frontend/shell/porpoise_rows.cpp:266
 msgid "Touchpad + R1 steps fast forward; touchpad + R2 fast-forwards while held."
-msgstr ""
+msgstr "Touchpad + R1 κάνει βήματα προς τα εμπρός. touchpad + R2 γρήγορη κίνηση προς τα εμπρός ενώ κρατιέται."
 
 #: port/frontend/shell/porpoise_rows.cpp:268
 msgid "Quick save buttons"
-msgstr ""
+msgstr "Κουμπιά γρήγορης αποθήκευσης"
 
 #: port/frontend/shell/porpoise_rows.cpp:268
 msgid "Touchpad + L1 saves to this slot and touchpad + L2 loads it."
-msgstr ""
+msgstr "Το Touchpad + L1 αποθηκεύει σε αυτήν την υποδοχή και το touchpad + L2 το φορτώνει."
 
 #: port/frontend/shell/porpoise_rows.cpp:270 port/frontend/shell/settings.cpp:921
 msgid "Turbo button"
@@ -6257,39 +6259,39 @@ msgstr "Κουμπί turbo"
 
 #: port/frontend/shell/porpoise_rows.cpp:270
 msgid "Holding this button presses it repeatedly."
-msgstr ""
+msgstr "Κρατώντας αυτό το κουμπί, το πατάτε επανειλημμένα."
 
 #: port/frontend/shell/porpoise_rows.cpp:271
 msgid "Cross"
-msgstr ""
+msgstr "Σταυρός"
 
 #: port/frontend/shell/porpoise_rows.cpp:271
 msgid "Circle"
-msgstr ""
+msgstr "Κύκλος"
 
 #: port/frontend/shell/porpoise_rows.cpp:271
 msgid "Square"
-msgstr ""
+msgstr "Τετράγωνο"
 
 #: port/frontend/shell/porpoise_rows.cpp:271
 msgid "Triangle"
-msgstr ""
+msgstr "Τρίγωνο"
 
 #: port/frontend/shell/porpoise_rows.cpp:272
 msgid "Screenshot buttons"
-msgstr ""
+msgstr "Κουμπιά στιγμιότυπου οθόνης"
 
 #: port/frontend/shell/porpoise_rows.cpp:272
 msgid "In a game, touchpad + Square takes a screenshot."
-msgstr ""
+msgstr "Σε ένα παιχνίδι, το touchpad + Τετράγωνο παίρνει ένα στιγμιότυπο οθόνης."
 
 #: port/frontend/shell/porpoise_rows.cpp:274
 msgid "Trigger click"
-msgstr ""
+msgstr "Έναρξη κλικ"
 
 #: port/frontend/shell/porpoise_rows.cpp:274
 msgid "L2 and R2 click near the bottom, like the GameCube's triggers."
-msgstr ""
+msgstr "Τα L2 και R2 κάνουν κλικ κοντά στο κάτω μέρος, όπως οι σκανδάλες του GameCube."
 
 #: port/frontend/shell/porpoise_rows.cpp:275 port/frontend/shell/settings.cpp:169
 msgid "Light"
@@ -6297,171 +6299,171 @@ msgstr "Ανοιχτόχρωμο"
 
 #: port/frontend/shell/porpoise_rows.cpp:275
 msgid "Firm"
-msgstr ""
+msgstr "Στερεά"
 
 #: port/frontend/shell/porpoise_rows.cpp:275
 msgid "Extra firm"
-msgstr ""
+msgstr "Έξτρα σταθερό"
 
 #: port/frontend/shell/porpoise_rows.cpp:276 port/frontend/shell/porpoise_rows.cpp:278 port/frontend/shell/porpoise_rows.cpp:280 port/frontend/shell/porpoise_rows.cpp:282
 msgid "Light bar"
-msgstr ""
+msgstr "Φωτεινή μπάρα"
 
 #: port/frontend/shell/porpoise_rows.cpp:276 port/frontend/shell/porpoise_rows.cpp:278 port/frontend/shell/porpoise_rows.cpp:280 port/frontend/shell/porpoise_rows.cpp:282
 msgid "The colour of this player's light bar."
-msgstr ""
+msgstr "Το χρώμα της φωτεινής γραμμής αυτού του παίκτη."
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Blue"
-msgstr ""
+msgstr "Μπλε"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Red"
-msgstr ""
+msgstr "Κόκκινο"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Green"
-msgstr ""
+msgstr "Πράσινο"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Pink"
-msgstr ""
+msgstr "Ροζ"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Purple"
-msgstr ""
+msgstr "Μωβ"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Orange"
-msgstr ""
+msgstr "Πορτοκαλί"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Yellow"
-msgstr ""
+msgstr "Κίτρινο"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "Cyan"
-msgstr ""
+msgstr "κυανό"
 
 #: port/frontend/shell/porpoise_rows.cpp:277 port/frontend/shell/porpoise_rows.cpp:279 port/frontend/shell/porpoise_rows.cpp:281 port/frontend/shell/porpoise_rows.cpp:283
 msgid "White"
-msgstr ""
+msgstr "Λευκό"
 
 #: port/frontend/shell/porpoise_rows.cpp:284
 msgid "Wii Remotes"
-msgstr ""
+msgstr "Τηλεχειριστήρια Wii"
 
 #: port/frontend/shell/porpoise_rows.cpp:284
 msgid "Use your DualSense, or real Remotes through a Mayflash DolphinBar."
-msgstr ""
+msgstr "Χρησιμοποιήστε το DualSense ή τα πραγματικά τηλεχειριστήρια μέσω ενός Mayflash DolphinBar."
 
 #: port/frontend/shell/porpoise_rows.cpp:285
 msgid "DualSense: your controller is the Wii Remote. Real Wii Remotes: up to four through a Mayflash DolphinBar (mode 4) in a USB port, with their own attachments, pointer and motion. Applies when the game starts."
-msgstr ""
+msgstr "DualSense: το χειριστήριό σας είναι το Wii Remote. Πραγματικά τηλεχειριστήρια Wii: έως τέσσερα μέσω ενός Mayflash DolphinBar (λειτουργία 4) σε μια θύρα USB, με τα δικά τους προσαρτήματα, δείκτη και κίνηση. Ισχύει όταν ξεκινά το παιχνίδι."
 
 #: port/frontend/shell/porpoise_rows.cpp:286
 msgid "Real Wii Remotes (DolphinBar)"
-msgstr ""
+msgstr "Πραγματικά τηλεχειριστήρια Wii (DolphinBar)"
 
 #: port/frontend/shell/porpoise_rows.cpp:287
 msgid "Wii buttons"
-msgstr ""
+msgstr "Κουμπιά Wii"
 
 #: port/frontend/shell/porpoise_rows.cpp:287
 msgid "Which buttons the Wii controllers use."
-msgstr ""
+msgstr "Ποια κουμπιά χρησιμοποιούν οι ελεγκτές Wii."
 
 #: port/frontend/shell/porpoise_rows.cpp:288 port/frontend/shell/porpoise_rows.cpp:363 port/frontend/shell/porpoise_rows.cpp:674
 msgid "Default set"
-msgstr ""
+msgstr "Προεπιλεγμένο σύνολο"
 
 #: port/frontend/shell/porpoise_rows.cpp:288 port/frontend/shell/porpoise_rows.cpp:363 port/frontend/shell/porpoise_rows.cpp:674
 msgid "Mine 1"
-msgstr ""
+msgstr "Το δικό μου 1"
 
 #: port/frontend/shell/porpoise_rows.cpp:288 port/frontend/shell/porpoise_rows.cpp:363 port/frontend/shell/porpoise_rows.cpp:674
 msgid "Mine 2"
-msgstr ""
+msgstr "Το δικό μου 2"
 
 #: port/frontend/shell/porpoise_rows.cpp:289
 msgid "Pointer speed"
-msgstr ""
+msgstr "Ταχύτητα δείκτη"
 
 #: port/frontend/shell/porpoise_rows.cpp:289
 msgid "How far you turn the controller to reach the screen's edge."
-msgstr ""
+msgstr "Πόσο μακριά στρίβετε το χειριστήριο για να φτάσετε στην άκρη της οθόνης."
 
 #: port/frontend/shell/porpoise_rows.cpp:290
 msgid "Your screen"
-msgstr ""
+msgstr "Η οθόνη σας"
 
 #: port/frontend/shell/porpoise_rows.cpp:291
 msgid "Pointer range"
-msgstr ""
+msgstr "Εύρος δείκτη"
 
 #: port/frontend/shell/porpoise_rows.cpp:291
 msgid "Widen it if the pointer can't reach the screen's edge."
-msgstr ""
+msgstr "Διευρύνετε το εάν ο δείκτης δεν μπορεί να φτάσει στην άκρη της οθόνης."
 
 #: port/frontend/shell/porpoise_rows.cpp:292
 msgid "Wide"
-msgstr ""
+msgstr "Ευρεία"
 
 #: port/frontend/shell/porpoise_rows.cpp:292
 msgid "Extra wide"
-msgstr ""
+msgstr "Εξαιρετικά φαρδύ"
 
 #: port/frontend/shell/porpoise_rows.cpp:293
 msgid "Grip"
-msgstr ""
+msgstr "Λαβή"
 
 #: port/frontend/shell/porpoise_rows.cpp:293
 msgid "How you hold the DualSense. Automatic detects it."
-msgstr ""
+msgstr "Πώς κρατάτε το DualSense. Αυτόματα το εντοπίζει."
 
 #: port/frontend/shell/porpoise_rows.cpp:294
 msgid "Both hands"
-msgstr ""
+msgstr "Και τα δύο χέρια"
 
 #: port/frontend/shell/porpoise_rows.cpp:294
 msgid "Upright, trigger to the TV"
-msgstr ""
+msgstr "Όρθια, σκανδάλη στην τηλεόραση"
 
 #: port/frontend/shell/porpoise_rows.cpp:294
 msgid "Upright, facing you"
-msgstr ""
+msgstr "Όρθια, απέναντι σου"
 
 #: port/frontend/shell/porpoise_rows.cpp:295 port/frontend/shell/timeline.cpp:142
 msgid "Motion"
-msgstr ""
+msgstr "Κίνηση"
 
 #: port/frontend/shell/porpoise_rows.cpp:295
 msgid "Tilt, swing and point with the DualSense."
-msgstr ""
+msgstr "Γείρετε, ταλαντεύστε και σημαδέψτε με το DualSense."
 
 #: port/frontend/shell/porpoise_rows.cpp:297
 msgid "Flick to shake"
-msgstr ""
+msgstr "Τίναγμα για κούνημα"
 
 #: port/frontend/shell/porpoise_rows.cpp:297
 msgid "A quick flick of the controller shakes the Remote."
-msgstr ""
+msgstr "Μια γρήγορη κίνηση του χειριστηρίου ανακινεί το τηλεχειριστήριο."
 
 #: port/frontend/shell/porpoise_rows.cpp:299
 msgid "Wii MotionPlus"
-msgstr ""
+msgstr "Wii MotionPlus"
 
 #: port/frontend/shell/porpoise_rows.cpp:299
 msgid "Adds MotionPlus using the gyroscope. Automatic: for games that need it."
-msgstr ""
+msgstr "Προσθέτει το MotionPlus χρησιμοποιώντας το γυροσκόπιο. Αυτόματο: για παιχνίδια που το χρειάζονται."
 
 #: port/frontend/shell/porpoise_rows.cpp:301
 msgid "Setup before each game"
-msgstr ""
+msgstr "Ρύθμιση πριν από κάθε παιχνίδι"
 
 #: port/frontend/shell/porpoise_rows.cpp:301
 msgid "Shows the Wii Remote's setup when a game starts."
-msgstr ""
+msgstr "Εμφανίζει τη ρύθμιση του Wii Remote όταν ξεκινά ένα παιχνίδι."
 
 #: port/frontend/shell/porpoise_rows.cpp:303
 msgid "The game's sound."
@@ -6469,71 +6471,71 @@ msgstr "Ο ήχος του παιχνιδιού."
 
 #: port/frontend/shell/porpoise_rows.cpp:304
 msgid "Mute the game"
-msgstr ""
+msgstr "Σίγασε το παιχνίδι"
 
 #: port/frontend/shell/porpoise_rows.cpp:304
 msgid "Silences the game."
-msgstr ""
+msgstr "Σιωπά το παιχνίδι."
 
 #: port/frontend/shell/porpoise_rows.cpp:305
 msgid "Accurate sound"
-msgstr ""
+msgstr "Ακριβής ήχος"
 
 #: port/frontend/shell/porpoise_rows.cpp:305
 msgid "Exact sound emulation. Fixes a few games but is much slower."
-msgstr ""
+msgstr "Ακριβής εξομοίωση ήχου. Διορθώνει μερικά παιχνίδια αλλά είναι πολύ πιο αργό."
 
 #: port/frontend/shell/porpoise_rows.cpp:307
 msgid "Wii Remote speaker"
-msgstr ""
+msgstr "Wii Remote ηχείο"
 
 #: port/frontend/shell/porpoise_rows.cpp:307
 msgid "The Remote's sounds: from the TV, or from each player's controller."
-msgstr ""
+msgstr "Οι ήχοι του τηλεχειριστηρίου: από το TV ή από το χειριστήριο κάθε παίκτη."
 
 #: port/frontend/shell/porpoise_rows.cpp:309
 msgid "Sound preset"
-msgstr ""
+msgstr "Προεπιλογή ήχου"
 
 #: port/frontend/shell/porpoise_rows.cpp:309
 msgid "How sound handles a game running slow."
-msgstr ""
+msgstr "Πώς ο ήχος χειρίζεται ένα παιχνίδι που τρέχει αργά."
 
 #: port/frontend/shell/porpoise_rows.cpp:310
 msgid "Smooth fills gaps when a game runs slow instead of crackling. Responsive has a little less delay. Extra smooth suits games that slow down often. Classic is the older sound; changing to or from it applies next time a game starts."
-msgstr ""
+msgstr "Το Smooth γεμίζει τα κενά όταν ένα παιχνίδι τρέχει αργά αντί να χτυπάει. Το Responsive έχει λίγο λιγότερη καθυστέρηση. Εξαιρετικά ομαλά ταιριάζει παιχνίδια που επιβραδύνουν συχνά. Κλασικός είναι ο παλαιότερος ήχος. Η αλλαγή προς ή από αυτήν ισχύει την επόμενη φορά που ξεκινά ένα παιχνίδι."
 
 #: port/frontend/shell/porpoise_rows.cpp:311
 msgid "Responsive"
-msgstr ""
+msgstr "Ανταπόκριση"
 
 #: port/frontend/shell/porpoise_rows.cpp:311
 msgid "Extra smooth"
-msgstr ""
+msgstr "Εξαιρετικά ομαλή"
 
 #: port/frontend/shell/porpoise_rows.cpp:312
 msgid "Audio buffer"
-msgstr ""
+msgstr "Buffer ήχου"
 
 #: port/frontend/shell/porpoise_rows.cpp:312
 msgid "More prevents crackling but adds a little delay."
-msgstr ""
+msgstr "Το More αποτρέπει το τρίξιμο αλλά προσθέτει μια μικρή καθυστέρηση."
 
 #: port/frontend/shell/porpoise_rows.cpp:314
 msgid "Fill audio gaps"
-msgstr ""
+msgstr "Συμπληρώστε τα κενά ήχου"
 
 #: port/frontend/shell/porpoise_rows.cpp:314
 msgid "Fills gaps with a faded repeat when a game runs slow."
-msgstr ""
+msgstr "Γεμίζει τα κενά με μια ξεθωριασμένη επανάληψη όταν ένα παιχνίδι τρέχει αργά."
 
 #: port/frontend/shell/porpoise_rows.cpp:315
 msgid "Audio stretching"
-msgstr ""
+msgstr "Διατάσεις ήχου"
 
 #: port/frontend/shell/porpoise_rows.cpp:315
 msgid "When a game slows down, its sound slows with it, instead of crackling."
-msgstr ""
+msgstr "Όταν ένα παιχνίδι επιβραδύνει, ο ήχος του επιβραδύνεται μαζί του, αντί να κροταλίζει."
 
 #: port/frontend/shell/porpoise_rows.cpp:316 port/frontend/shell/settings.cpp:1104
 msgid "Microphone"
@@ -6541,7 +6543,7 @@ msgstr "Μικρόφωνο"
 
 #: port/frontend/shell/porpoise_rows.cpp:316
 msgid "Use the DualSense mic as the GameCube Microphone and Wii Speak."
-msgstr ""
+msgstr "Χρησιμοποιήστε το μικρόφωνο DualSense ως μικρόφωνο GameCube και το Wii Speak."
 
 #: port/frontend/shell/porpoise_rows.cpp:318 port/frontend/shell/shell.cpp:2235
 msgid "Resume where you left off"
@@ -6609,315 +6611,315 @@ msgstr "Κορεατικά"
 
 #: port/frontend/shell/porpoise_rows.cpp:327
 msgid "Fast save states"
-msgstr ""
+msgstr "Καταστάσεις γρήγορης αποθήκευσης"
 
 #: port/frontend/shell/porpoise_rows.cpp:327
 msgid "Quicker and smaller states. Turn it off if a game looks wrong after loading one."
-msgstr ""
+msgstr "Γρήγορες και μικρότερες πολιτείες. Απενεργοποιήστε το εάν ένα παιχνίδι φαίνεται λάθος μετά τη φόρτωση ενός."
 
 #: port/frontend/shell/porpoise_rows.cpp:329
 msgid "Progressive scan"
-msgstr ""
+msgstr "Προοδευτική σάρωση"
 
 #: port/frontend/shell/porpoise_rows.cpp:329
 msgid "480p output, as on a component cable."
-msgstr ""
+msgstr "Έξοδος 480p, όπως σε καλώδιο εξαρτημάτων."
 
 #: port/frontend/shell/porpoise_rows.cpp:331
 msgid "Wii widescreen"
-msgstr ""
+msgstr "Wii ευρεία οθόνη"
 
 #: port/frontend/shell/porpoise_rows.cpp:331
 msgid "The Wii's 16:9 setting, used by Wii games."
-msgstr ""
+msgstr "Η ρύθμιση 16:9 του Wii, που χρησιμοποιείται από τα παιχνίδια Wii."
 
 #: port/frontend/shell/porpoise_rows.cpp:333
 msgid "PAL games at 60 Hz"
-msgstr ""
+msgstr "Παιχνίδια PAL στα 60 Hz"
 
 #: port/frontend/shell/porpoise_rows.cpp:333
 msgid "European Wii games at 60 Hz, as a Wii set to EURGB60. Off: 50 Hz."
-msgstr ""
+msgstr "Ευρωπαϊκά παιχνίδια Wii στα 60 Hz, ως Wii σε 60 EURGB. Απενεργοποίηση: 50 Hz."
 
 #: port/frontend/shell/porpoise_rows.cpp:335
 msgid "Sensor bar"
-msgstr ""
+msgstr "Μπάρα αισθητήρα"
 
 #: port/frontend/shell/porpoise_rows.cpp:335
 msgid "Where the sensor bar is."
-msgstr ""
+msgstr "Εκεί που βρίσκεται η μπάρα αισθητήρα."
 
 #: port/frontend/shell/porpoise_rows.cpp:336
 msgid "Below the TV"
-msgstr ""
+msgstr "Κάτω από την τηλεόραση"
 
 #: port/frontend/shell/porpoise_rows.cpp:336
 msgid "Above the TV"
-msgstr ""
+msgstr "Πάνω από την τηλεόραση"
 
 #: port/frontend/shell/porpoise_rows.cpp:337
 msgid "GameCube boot animation"
-msgstr ""
+msgstr "Κινούμενο σχέδιο εκκίνησης GameCube"
 
 #: port/frontend/shell/porpoise_rows.cpp:337
 msgid "Shows the GameCube start-up before games. Needs your own IPL.bin."
-msgstr ""
+msgstr "Εμφανίζει την εκκίνηση του GameCube πριν από τους αγώνες. Χρειάζεται το δικό σας IPL.bin."
 
 #: port/frontend/shell/porpoise_rows.cpp:339
 msgid "WiiConnect24 channels"
-msgstr ""
+msgstr "Κανάλια WiiConnect24"
 
 #: port/frontend/shell/porpoise_rows.cpp:339
 msgid "Forecast, News, Check Mii Out and more through WiiLink. Needs the PS5 online."
-msgstr ""
+msgstr "Forecast, News, Check Mii Out και πολλά άλλα μέσω του WiiLink. Χρειάζεται το PS5 online."
 
 #: port/frontend/shell/porpoise_rows.cpp:341
 msgid "Overclocking can smooth a game that slows down. 100% is the real console."
-msgstr ""
+msgstr "Το overclocking μπορεί να εξομαλύνει ένα παιχνίδι που επιβραδύνει. Το 100% είναι η πραγματική κονσόλα."
 
 #: port/frontend/shell/porpoise_rows.cpp:343 port/frontend/shell/porpoise_rows.cpp:1761 port/frontend/shell/settings.cpp:329
 msgid "Auto Boost"
-msgstr ""
+msgstr "Αυτόματη ενίσχυση"
 
 #: port/frontend/shell/porpoise_rows.cpp:343
 msgid "New games start with the settings that run them best on PS5. Turn it off for a game in its own settings."
-msgstr ""
+msgstr "Τα νέα παιχνίδια ξεκινούν με τις ρυθμίσεις που τα τρέχουν καλύτερα στο PS5. Απενεργοποιήστε το για ένα παιχνίδι στις δικές του ρυθμίσεις."
 
 #: port/frontend/shell/porpoise_rows.cpp:346 port/frontend/shell/porpoise_rows.cpp:1771
 msgid "Riptide Boost"
-msgstr ""
+msgstr "Riptide Boost"
 
 #: port/frontend/shell/porpoise_rows.cpp:346 port/frontend/shell/porpoise_rows.cpp:1771
 msgid "Speeds up the emulated processor's 3D math. Turn it off if a game misbehaves."
-msgstr ""
+msgstr "Επιταχύνει τα τρισδιάστατα μαθηματικά του εξομοιούμενου επεξεργαστή. Απενεργοποιήστε το εάν ένα παιχνίδι δεν συμπεριφέρεται σωστά."
 
 #: port/frontend/shell/porpoise_rows.cpp:348
 msgid "Performance profiler"
-msgstr ""
+msgstr "Προφίλ απόδοσης"
 
 #: port/frontend/shell/porpoise_rows.cpp:348
 msgid "For reporting a slow game: logs where the CPU spends its time. Costs a little speed; turn it off after."
-msgstr ""
+msgstr "Για την αναφορά ενός αργού παιχνιδιού: αρχεία καταγραφής όπου περνάει το χρόνο του το CPU. Κοστίζει λίγη ταχύτητα? απενεργοποιήστε το μετά."
 
 #: port/frontend/shell/porpoise_rows.cpp:350
 msgid "Debug logs"
-msgstr ""
+msgstr "Αρχεία εντοπισμού σφαλμάτων"
 
 #: port/frontend/shell/porpoise_rows.cpp:350
 msgid "Keeps detailed logs for reporting a problem. Can slow games a little."
-msgstr ""
+msgstr "Διατηρεί λεπτομερή αρχεία καταγραφής για την αναφορά ενός προβλήματος. Μπορεί να επιβραδύνει λίγο τα παιχνίδια."
 
 #: port/frontend/shell/porpoise_rows.cpp:352
 msgid "Dual core"
-msgstr ""
+msgstr "Διπύρηνος"
 
 #: port/frontend/shell/porpoise_rows.cpp:352
 msgid "Faster. Turn it off for a game that freezes or glitches."
-msgstr ""
+msgstr "Πιο γρήγορα. Απενεργοποιήστε το για ένα παιχνίδι που παγώνει ή παρουσιάζει προβλήματα."
 
 #: port/frontend/shell/porpoise_rows.cpp:354
 msgid "Emulator on its own cores"
-msgstr ""
+msgstr "Εξομοιωτής στους δικούς του πυρήνες"
 
 #: port/frontend/shell/porpoise_rows.cpp:354
 msgid "A PS5 core each for the emulated processor and graphics. Usually faster."
-msgstr ""
+msgstr "Ένας πυρήνας PS5 για τον εξομοιούμενο επεξεργαστή και τα γραφικά. Συνήθως πιο γρήγορα."
 
 #: port/frontend/shell/porpoise_rows.cpp:356
 msgid "Exact multiply-add"
-msgstr ""
+msgstr "Ακριβής πολλαπλασιασμός-προσθήκη"
 
 #: port/frontend/shell/porpoise_rows.cpp:356
 msgid "Exact floating-point rounding. Much slower, and very few games need it."
-msgstr ""
+msgstr "Ακριβής στρογγυλοποίηση κινητής υποδιαστολής. Πολύ πιο αργά και πολύ λίγα παιχνίδια το χρειάζονται."
 
 #: port/frontend/shell/porpoise_rows.cpp:358
 msgid "Fast disc loading"
-msgstr ""
+msgstr "Γρήγορη φόρτωση δίσκου"
 
 #: port/frontend/shell/porpoise_rows.cpp:358
 msgid "Shorter loading screens. A few games need real disc speed."
-msgstr ""
+msgstr "Κοντότερες οθόνες φόρτωσης. Μερικά παιχνίδια χρειάζονται πραγματική ταχύτητα δίσκου."
 
 #: port/frontend/shell/porpoise_rows.cpp:360
 msgid "Cheat codes, for games that have them."
-msgstr ""
+msgstr "Κωδικοί εξαπάτησης, για παιχνίδια που τους έχουν."
 
 #: port/frontend/shell/porpoise_rows.cpp:362
 msgid "GBA buttons in use"
-msgstr ""
+msgstr "Κουμπιά GBA σε χρήση"
 
 #: port/frontend/shell/porpoise_rows.cpp:362
 msgid "The default set, or one of your own."
-msgstr ""
+msgstr "Το προεπιλεγμένο σύνολο ή ένα δικό σας."
 
 #: port/frontend/shell/porpoise_rows.cpp:364
 msgid "GBA web page"
-msgstr ""
+msgstr "Ιστοσελίδα GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:364
 msgid "Play the GBA in a browser on the same network, on port 6771."
-msgstr ""
+msgstr "Παίξτε το GBA σε ένα πρόγραμμα περιήγησης στο ίδιο δίκτυο, στη θύρα 6771."
 
 #: port/frontend/shell/porpoise_rows.cpp:366 port/frontend/shell/porpoise_rows.cpp:378 port/frontend/shell/porpoise_rows.cpp:390 port/frontend/shell/porpoise_rows.cpp:402
 msgid "Position"
-msgstr ""
+msgstr "Θέση"
 
 #: port/frontend/shell/porpoise_rows.cpp:366 port/frontend/shell/porpoise_rows.cpp:378 port/frontend/shell/porpoise_rows.cpp:390 port/frontend/shell/porpoise_rows.cpp:402
 msgid "Where its screen sits on the TV. Moving it in a game makes it Manual."
-msgstr ""
+msgstr "Εκεί που η οθόνη του κάθεται στην τηλεόραση. Η μετακίνηση του σε ένα παιχνίδι το καθιστά Μη αυτόματο."
 
 #: port/frontend/shell/porpoise_rows.cpp:367 port/frontend/shell/porpoise_rows.cpp:379 port/frontend/shell/porpoise_rows.cpp:391 port/frontend/shell/porpoise_rows.cpp:403
 msgid "Top left"
-msgstr ""
+msgstr "Επάνω αριστερά"
 
 #: port/frontend/shell/porpoise_rows.cpp:367 port/frontend/shell/porpoise_rows.cpp:379 port/frontend/shell/porpoise_rows.cpp:391 port/frontend/shell/porpoise_rows.cpp:403
 msgid "Top right"
-msgstr ""
+msgstr "Πάνω δεξιά"
 
 #: port/frontend/shell/porpoise_rows.cpp:367 port/frontend/shell/porpoise_rows.cpp:379 port/frontend/shell/porpoise_rows.cpp:391 port/frontend/shell/porpoise_rows.cpp:403
 msgid "Bottom left"
-msgstr ""
+msgstr "Κάτω αριστερά"
 
 #: port/frontend/shell/porpoise_rows.cpp:367 port/frontend/shell/porpoise_rows.cpp:379 port/frontend/shell/porpoise_rows.cpp:391 port/frontend/shell/porpoise_rows.cpp:403
 msgid "Bottom right"
-msgstr ""
+msgstr "Κάτω δεξιά"
 
 #: port/frontend/shell/porpoise_rows.cpp:368 port/frontend/shell/porpoise_rows.cpp:380 port/frontend/shell/porpoise_rows.cpp:392 port/frontend/shell/porpoise_rows.cpp:404 port/frontend/shell/porpoise_rows.cpp:617
 msgid "Show the GBA's screen"
-msgstr ""
+msgstr "Εμφάνιση της οθόνης του GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:368 port/frontend/shell/porpoise_rows.cpp:380 port/frontend/shell/porpoise_rows.cpp:392 port/frontend/shell/porpoise_rows.cpp:404
 msgid "Shows it over the game while held, toggled with each press, or always on or off."
-msgstr ""
+msgstr "Το δείχνει πάνω από το παιχνίδι ενώ κρατιέται, εναλλάσσεται με κάθε πάτημα ή πάντα ενεργοποιημένο ή απενεργοποιημένο."
 
 #: port/frontend/shell/porpoise_rows.cpp:369 port/frontend/shell/porpoise_rows.cpp:381 port/frontend/shell/porpoise_rows.cpp:393 port/frontend/shell/porpoise_rows.cpp:405
 msgid "While held"
-msgstr ""
+msgstr "Ενώ κρατούνταν"
 
 #: port/frontend/shell/porpoise_rows.cpp:370 port/frontend/shell/porpoise_rows.cpp:382 port/frontend/shell/porpoise_rows.cpp:394 port/frontend/shell/porpoise_rows.cpp:406
 msgid "Position across"
-msgstr ""
+msgstr "Θέση απέναντι"
 
 #: port/frontend/shell/porpoise_rows.cpp:370 port/frontend/shell/porpoise_rows.cpp:372 port/frontend/shell/porpoise_rows.cpp:382 port/frontend/shell/porpoise_rows.cpp:384 port/frontend/shell/porpoise_rows.cpp:394 port/frontend/shell/porpoise_rows.cpp:396 port/frontend/shell/porpoise_rows.cpp:406 port/frontend/shell/porpoise_rows.cpp:408
 msgid "Where its screen sits on the TV. Automatic picks a corner."
-msgstr ""
+msgstr "Εκεί που η οθόνη του βρίσκεται στο TV. Αυτόματα επιλέγει μια γωνία."
 
 #: port/frontend/shell/porpoise_rows.cpp:372 port/frontend/shell/porpoise_rows.cpp:384 port/frontend/shell/porpoise_rows.cpp:396 port/frontend/shell/porpoise_rows.cpp:408
 msgid "Position down"
-msgstr ""
+msgstr "Τοποθετήστε κάτω"
 
 #: port/frontend/shell/porpoise_rows.cpp:374 port/frontend/shell/porpoise_rows.cpp:386 port/frontend/shell/porpoise_rows.cpp:398 port/frontend/shell/porpoise_rows.cpp:410
 msgid "Screen size"
-msgstr ""
+msgstr "Μέγεθος οθόνης"
 
 #: port/frontend/shell/porpoise_rows.cpp:374 port/frontend/shell/porpoise_rows.cpp:386 port/frontend/shell/porpoise_rows.cpp:398 port/frontend/shell/porpoise_rows.cpp:410
 msgid "How big its screen is: 1 to 4 times the GBA's size."
-msgstr ""
+msgstr "Πόσο μεγάλη είναι η οθόνη του: 1 έως 4 φορές το μέγεθος του GBA."
 
 #: port/frontend/shell/porpoise_rows.cpp:375 port/frontend/shell/porpoise_rows.cpp:387 port/frontend/shell/porpoise_rows.cpp:399 port/frontend/shell/porpoise_rows.cpp:411
 msgid "Opacity"
-msgstr ""
+msgstr "Αδιαφάνεια"
 
 #: port/frontend/shell/porpoise_rows.cpp:375 port/frontend/shell/porpoise_rows.cpp:387 port/frontend/shell/porpoise_rows.cpp:399 port/frontend/shell/porpoise_rows.cpp:411
 msgid "How much of the game shows through its screen on the TV."
-msgstr ""
+msgstr "Πόσο μεγάλο μέρος του παιχνιδιού εμφανίζεται μέσω της οθόνης του στην τηλεόραση."
 
 #: port/frontend/shell/porpoise_rows.cpp:376 port/frontend/shell/porpoise_rows.cpp:388 port/frontend/shell/porpoise_rows.cpp:400 port/frontend/shell/porpoise_rows.cpp:412
 msgid "Sharp or soft pixels. The web page has its own setting."
-msgstr ""
+msgstr "Αιχμηρά ή μαλακά pixel. Η ιστοσελίδα έχει τη δική της ρύθμιση."
 
 #: port/frontend/shell/porpoise_rows.cpp:376 port/frontend/shell/porpoise_rows.cpp:388 port/frontend/shell/porpoise_rows.cpp:400 port/frontend/shell/porpoise_rows.cpp:412
 msgid "Soft pixels"
-msgstr ""
+msgstr "Μαλακά pixel"
 
 #: port/frontend/shell/porpoise_rows.cpp:377 port/frontend/shell/porpoise_rows.cpp:389 port/frontend/shell/porpoise_rows.cpp:401 port/frontend/shell/porpoise_rows.cpp:413
 msgid "Interframe blending"
-msgstr ""
+msgstr "Ανάμειξη μεταξύ πλαισίων"
 
 #: port/frontend/shell/porpoise_rows.cpp:377 port/frontend/shell/porpoise_rows.cpp:389 port/frontend/shell/porpoise_rows.cpp:401 port/frontend/shell/porpoise_rows.cpp:413
 msgid "Blends each frame with the last, for games that flicker sprites. TV only."
-msgstr ""
+msgstr "Συνδυάζει κάθε καρέ με το τελευταίο, για παιχνίδια που τρεμοπαίζουν sprites. TV μόνο."
 
 #: port/frontend/shell/porpoise_rows.cpp:414 port/frontend/shell/porpoise_rows.cpp:418 port/frontend/shell/porpoise_rows.cpp:422 port/frontend/shell/porpoise_rows.cpp:426
 msgid "Its sound, on the TV or its player's controller."
-msgstr ""
+msgstr "Ο ήχος του, στην τηλεόραση ή στο χειριστήριο της συσκευής αναπαραγωγής του."
 
 #: port/frontend/shell/porpoise_rows.cpp:415 port/frontend/shell/porpoise_rows.cpp:419 port/frontend/shell/porpoise_rows.cpp:423 port/frontend/shell/porpoise_rows.cpp:427
 msgid "Mute"
-msgstr ""
+msgstr "Σίγαση"
 
 #: port/frontend/shell/porpoise_rows.cpp:415 port/frontend/shell/porpoise_rows.cpp:419 port/frontend/shell/porpoise_rows.cpp:423 port/frontend/shell/porpoise_rows.cpp:427
 msgid "Turns its sound off."
-msgstr ""
+msgstr "Απενεργοποιεί τον ήχο του."
 
 #: port/frontend/shell/porpoise_rows.cpp:416 port/frontend/shell/porpoise_rows.cpp:420 port/frontend/shell/porpoise_rows.cpp:424 port/frontend/shell/porpoise_rows.cpp:428
 msgid "Sound on the controller"
-msgstr ""
+msgstr "Ήχος στο χειριστήριο"
 
 #: port/frontend/shell/porpoise_rows.cpp:416 port/frontend/shell/porpoise_rows.cpp:420 port/frontend/shell/porpoise_rows.cpp:424 port/frontend/shell/porpoise_rows.cpp:428
 msgid "From its player's controller speaker instead of the TV."
-msgstr ""
+msgstr "Από το ηχείο του χειριστηρίου της συσκευής αναπαραγωγής αντί για την τηλεόραση."
 
 #: port/frontend/shell/porpoise_rows.cpp:417 port/frontend/shell/porpoise_rows.cpp:421 port/frontend/shell/porpoise_rows.cpp:425 port/frontend/shell/porpoise_rows.cpp:429
 msgid "Speaker resampling"
-msgstr ""
+msgstr "Επαναδειγματοληψία ηχείων"
 
 #: port/frontend/shell/porpoise_rows.cpp:417 port/frontend/shell/porpoise_rows.cpp:421 port/frontend/shell/porpoise_rows.cpp:425 port/frontend/shell/porpoise_rows.cpp:429
 msgid "Simple is sharper; Smooth is a little softer."
-msgstr ""
+msgstr "Το απλό είναι πιο ευκρινές. Το Smooth είναι λίγο πιο απαλό."
 
 #: port/frontend/shell/porpoise_rows.cpp:417 port/frontend/shell/porpoise_rows.cpp:421 port/frontend/shell/porpoise_rows.cpp:425 port/frontend/shell/porpoise_rows.cpp:429
 msgid "Simple"
-msgstr ""
+msgstr "Απλό"
 
 #: port/frontend/shell/porpoise_rows.cpp:453
 msgid "Arcade Cabinet"
-msgstr ""
+msgstr "Arcade ντουλάπι"
 
 #: port/frontend/shell/porpoise_rows.cpp:453
 msgid "Retro Cabinet"
-msgstr ""
+msgstr "Ρετρό ντουλάπι"
 
 #: port/frontend/shell/porpoise_rows.cpp:453
 msgid "Synthwave Cabinet"
-msgstr ""
+msgstr "Ντουλάπι Synthwave"
 
 #: port/frontend/shell/porpoise_rows.cpp:453
 msgid "80s TV"
-msgstr ""
+msgstr "τηλεόραση της δεκαετίας του '80"
 
 #: port/frontend/shell/porpoise_rows.cpp:454
 msgid "Wood-Grain TV"
-msgstr ""
+msgstr "Τηλεόραση ξύλου"
 
 #: port/frontend/shell/porpoise_rows.cpp:454
 msgid "90s TV"
-msgstr ""
+msgstr "τηλεόραση της δεκαετίας του '90"
 
 #: port/frontend/shell/porpoise_rows.cpp:454
 msgid "Black TV"
-msgstr ""
+msgstr "Μαύρη τηλεόραση"
 
 #: port/frontend/shell/porpoise_rows.cpp:454
 msgid "Beige Monitor"
-msgstr ""
+msgstr "Μπεζ οθόνη"
 
 #: port/frontend/shell/porpoise_rows.cpp:613 port/frontend/shell/porpoise_rows.cpp:616
 msgid "D-pad up"
-msgstr ""
+msgstr "D-pad επάνω"
 
 #: port/frontend/shell/porpoise_rows.cpp:613 port/frontend/shell/porpoise_rows.cpp:616
 msgid "D-pad down"
-msgstr ""
+msgstr "D-pad κάτω"
 
 #: port/frontend/shell/porpoise_rows.cpp:613 port/frontend/shell/porpoise_rows.cpp:616
 msgid "D-pad left"
-msgstr ""
+msgstr "D-pad αριστερά"
 
 #: port/frontend/shell/porpoise_rows.cpp:613 port/frontend/shell/porpoise_rows.cpp:616
 msgid "D-pad right"
-msgstr ""
+msgstr "D-pad δεξιά"
 
 #: port/frontend/shell/porpoise_rows.cpp:616 port/frontend/shell/shell.cpp:3044 port/frontend/shell/shell.cpp:3082
 msgid "Select"
@@ -6925,35 +6927,35 @@ msgstr "Επιλογή"
 
 #: port/frontend/shell/porpoise_rows.cpp:617
 msgid "Move the GBA's screen"
-msgstr ""
+msgstr "Μετακινήστε την οθόνη του GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:617
 msgid "Adjust the GBA's opacity"
-msgstr ""
+msgstr "Προσαρμόστε την αδιαφάνεια του GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:617
 msgid "Reset the GBA"
-msgstr ""
+msgstr "Επαναφέρετε το GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:617
 msgid "Mute the GBA"
-msgstr ""
+msgstr "Σίγαση του GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:618
 msgid "GBA volume"
-msgstr ""
+msgstr "Όγκος GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:618
 msgid "GBA link cable"
-msgstr ""
+msgstr "Καλώδιο σύνδεσης GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:618
 msgid "Quick save the GBA"
-msgstr ""
+msgstr "Γρήγορη αποθήκευση του GBA"
 
 #: port/frontend/shell/porpoise_rows.cpp:618
 msgid "Quick load the GBA"
-msgstr ""
+msgstr "Γρήγορη φόρτωση του GBA"
 
 #. a button layout of the player's own, made in Porpoise's Customize Buttons: {0} is its number
 #: port/frontend/shell/porpoise_rows.cpp:677 port/frontend/shell/porpoise_rows.cpp:1267
@@ -6962,11 +6964,11 @@ msgstr "Η διάταξή μου {0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:713
 msgid "Left stick as the D-pad"
-msgstr ""
+msgstr "Αριστερό ραβδί ως D-pad"
 
 #: port/frontend/shell/porpoise_rows.cpp:733
 msgid "GBA Buttons"
-msgstr ""
+msgstr "Κουμπιά GBA"
 
 #. {0} is why, in the system's words
 #: port/frontend/shell/porpoise_rows.cpp:778 port/frontend/shell/porpoise_rows.cpp:841 port/frontend/shell/porpoise_rows.cpp:1404 port/frontend/shell/porpoise_rows.cpp:1475 port/frontend/shell/porpoise_rows.cpp:1498 port/frontend/shell/porpoise_rows.cpp:1824
@@ -6975,31 +6977,31 @@ msgstr "Δεν ήταν δυνατή η αποθήκευση των ρυθμίσ
 
 #: port/frontend/shell/porpoise_rows.cpp:810
 msgid "Nothing"
-msgstr ""
+msgstr "Τίποτα"
 
 #: port/frontend/shell/porpoise_rows.cpp:950
 msgid "This DualSense's input, live. Hold Circle to leave."
-msgstr ""
+msgstr "Η είσοδος αυτού του DualSense, ζωντανή. Κρατήστε πατημένο το Κύκλος για να φύγετε."
 
 #: port/frontend/shell/porpoise_rows.cpp:950
 msgid "No DualSense for this player: turn it on and sign in. Hold Circle on yours to leave."
-msgstr ""
+msgstr "Δεν υπάρχει DualSense για αυτό το πρόγραμμα αναπαραγωγής: ενεργοποιήστε το και συνδεθείτε. Κρατήστε το Circle στο δικό σας για να αποχωρήσετε."
 
 #: port/frontend/shell/porpoise_rows.cpp:978
 msgid "Left stick"
-msgstr ""
+msgstr "Αριστερό ραβδί"
 
 #: port/frontend/shell/porpoise_rows.cpp:990
 msgid "Motion (g):"
-msgstr ""
+msgstr "Κίνηση (g):"
 
 #: port/frontend/shell/porpoise_rows.cpp:991
 msgid "Fingers on the touchpad: {0}"
-msgstr ""
+msgstr "Δάχτυλα στην επιφάνεια αφής: {0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:1005
 msgid "This player's DualSense."
-msgstr ""
+msgstr "Το DualSense αυτού του παίκτη."
 
 #: port/frontend/shell/porpoise_rows.cpp:1005 port/frontend/shell/settings.cpp:946
 msgid "No DualSense for this player yet."
@@ -7007,86 +7009,86 @@ msgstr "Κανένα DualSense για αυτόν τον παίκτη ακόμα.
 
 #: port/frontend/shell/porpoise_rows.cpp:1028
 msgid "P{0}"
-msgstr ""
+msgstr "Π{0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:1132
 msgid "Ports"
-msgstr ""
+msgstr "λιμάνια"
 
 #: port/frontend/shell/porpoise_rows.cpp:1133
 msgid "What's plugged into each controller port, and who plays it."
-msgstr ""
+msgstr "Τι είναι συνδεδεμένο σε κάθε θύρα ελεγκτή και ποιος το παίζει."
 
 #: port/frontend/shell/porpoise_rows.cpp:1229
 msgid "None (BIOS)"
-msgstr ""
+msgstr "Κανένα (BIOS)"
 
 #. {0} is a file kept in the settings, not in its folder now
 #: port/frontend/shell/porpoise_rows.cpp:1240
 msgid "{0} (missing)"
-msgstr ""
+msgstr "{0} (λείπει)"
 
 #: port/frontend/shell/porpoise_rows.cpp:1264
 msgid "Custom"
-msgstr ""
+msgstr "Προσαρμοσμένο"
 
 #: port/frontend/shell/porpoise_rows.cpp:1286
 msgid "Pack folder"
-msgstr ""
+msgstr "Φάκελος συσκευασίας"
 
 #: port/frontend/shell/porpoise_rows.cpp:1288
 msgid "Each pack goes in /data/porpoise/saves/User/Load/Textures, in a folder named with the game's ID, like GALE01."
-msgstr ""
+msgstr "Κάθε πακέτο πηγαίνει στο /data/porpoise/saves/User/Load/Textures, σε έναν φάκελο που ονομάζεται με το αναγνωριστικό του παιχνιδιού, όπως το GALE01."
 
 #: port/frontend/shell/porpoise_rows.cpp:1309
 msgid "A texture pack. Custom textures turns packs on or off."
-msgstr ""
+msgstr "Ένα πακέτο υφής. Οι προσαρμοσμένες υφές ενεργοποιούν ή απενεργοποιούν τα πακέτα."
 
 #: port/frontend/shell/porpoise_rows.cpp:1320
 msgid "No packs found"
-msgstr ""
+msgstr "Δεν βρέθηκαν πακέτα"
 
 #: port/frontend/shell/porpoise_rows.cpp:1334
 msgid "Which layout, and what each DualSense button does."
-msgstr ""
+msgstr "Ποια διάταξη και τι κάνει κάθε κουμπί DualSense."
 
 #: port/frontend/shell/porpoise_rows.cpp:1531
 msgid "No saves on a USB drive."
-msgstr ""
+msgstr "Καμία αποθήκευση σε μονάδα USB."
 
 #: port/frontend/shell/porpoise_rows.cpp:1537 port/frontend/shell/porpoise_rows.cpp:2014 port/frontend/shell/porpoise_rows.cpp:2033
 msgid "Copy a save from USB"
-msgstr ""
+msgstr "Αντιγράψτε μια αποθήκευση από USB"
 
 #. {0} is why, in the system's words
 #: port/frontend/shell/porpoise_rows.cpp:1542 port/frontend/shell/porpoise_rows.cpp:1589 port/frontend/shell/porpoise_rows.cpp:2066
 msgid "The save could not be copied: {0}"
-msgstr ""
+msgstr "Δεν ήταν δυνατή η αντιγραφή της αποθήκευσης: {0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:1551
 msgid "No cards on a USB drive."
-msgstr ""
+msgstr "Δεν υπάρχουν κάρτες σε μονάδα USB."
 
 #: port/frontend/shell/porpoise_rows.cpp:1557 port/frontend/shell/porpoise_rows.cpp:2015
 msgid "Copy a card from USB"
-msgstr ""
+msgstr "Αντιγράψτε μια κάρτα από USB"
 
 #. {0} is how many saves came in, {1} how many were already here
 #: port/frontend/shell/porpoise_rows.cpp:1561 port/frontend/shell/porpoise_rows.cpp:2094
 msgid "{0} saves copied, {1} already here"
-msgstr ""
+msgstr "Αντιγράφηκαν {0} αποθηκεύσεις, {1} ήδη εδώ"
 
 #: port/frontend/shell/porpoise_rows.cpp:1563 port/frontend/shell/porpoise_rows.cpp:2090
 msgid "The saves could not be copied: {0}"
-msgstr ""
+msgstr "Δεν ήταν δυνατή η αντιγραφή των αποθηκευμένων: {0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:1568 port/frontend/shell/porpoise_rows.cpp:2016
 msgid "Delete every save on this card"
-msgstr ""
+msgstr "Διαγράψτε κάθε αποθήκευση σε αυτήν την κάρτα"
 
 #: port/frontend/shell/porpoise_rows.cpp:1587 port/frontend/shell/porpoise_rows.cpp:2063
 msgid "Copied to {0}"
-msgstr ""
+msgstr "Αντιγράφηκε στο {0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:1612 port/frontend/shell/settings.cpp:1368
 msgid "Downloading: {0} left"
@@ -7135,194 +7137,194 @@ msgstr "Αντικαθιστά κάθε εξώφυλλο αυτής της πλ�
 #. a saved set of Graphics settings: {0} is its number
 #: port/frontend/shell/porpoise_rows.cpp:1688
 msgid "Use setup {0}"
-msgstr ""
+msgstr "Χρήση ρύθμισης {0}"
 
 #. a saved set of Graphics settings: {0} is its number
 #: port/frontend/shell/porpoise_rows.cpp:1688
 msgid "Applies this setup's Graphics settings to this game."
-msgstr ""
+msgstr "Εφαρμόζει τις ρυθμίσεις γραφικών αυτής της εγκατάστασης σε αυτό το παιχνίδι."
 
 #: port/frontend/shell/porpoise_rows.cpp:1692 port/frontend/shell/porpoise_rows.cpp:1902
 msgid "Save as a setup"
-msgstr ""
+msgstr "Αποθήκευση ως ρύθμιση"
 
 #: port/frontend/shell/porpoise_rows.cpp:1692
 msgid "Saves this game's Graphics settings to use on other games."
-msgstr ""
+msgstr "Αποθηκεύει τις ρυθμίσεις γραφικών αυτού του παιχνιδιού για χρήση σε άλλα παιχνίδια."
 
 #: port/frontend/shell/porpoise_rows.cpp:1706
 msgid "Wii games are 16:9 when Wii widescreen is on in Settings."
-msgstr ""
+msgstr "Τα παιχνίδια Wii είναι 16:9 όταν η ευρεία οθόνη Wii είναι ενεργοποιημένη στις Ρυθμίσεις."
 
 #: port/frontend/shell/porpoise_rows.cpp:1707
 msgid "This game has a widescreen code: Automatic and On show it in 16:9."
-msgstr ""
+msgstr "Αυτό το παιχνίδι έχει έναν κωδικό ευρείας οθόνης: Αυτόματη και Ενεργοποιημένη εμφάνιση σε 16:9."
 
 #: port/frontend/shell/porpoise_rows.cpp:1708
 msgid "This game has its own 16:9 option. Turn it on in the game's options."
-msgstr ""
+msgstr "Αυτό το παιχνίδι έχει τη δική του επιλογή 16:9. Ενεργοποιήστε το στις επιλογές του παιχνιδιού."
 
 #: port/frontend/shell/porpoise_rows.cpp:1709
 msgid "This game has no widescreen code. On uses a widescreen hack, which can glitch at the edges."
-msgstr ""
+msgstr "Αυτό το παιχνίδι δεν έχει κώδικα ευρείας οθόνης. Το On χρησιμοποιεί ένα hack ευρείας οθόνης, το οποίο μπορεί να παρουσιάσει σφάλμα στις άκρες."
 
 #: port/frontend/shell/porpoise_rows.cpp:1710
 msgid "The Wii's setting"
-msgstr ""
+msgstr "Η ρύθμιση του Wii"
 
 #: port/frontend/shell/porpoise_rows.cpp:1710
 msgid "16:9 code"
-msgstr ""
+msgstr "Κωδικός 16:9"
 
 #: port/frontend/shell/porpoise_rows.cpp:1710
 msgid "In the game's options"
-msgstr ""
+msgstr "Στις επιλογές του παιχνιδιού"
 
 #: port/frontend/shell/porpoise_rows.cpp:1710
 msgid "4:3 only"
-msgstr ""
+msgstr "4:3 μόνο"
 
 #: port/frontend/shell/porpoise_rows.cpp:1716
 msgid "Your own code"
-msgstr ""
+msgstr "Ο δικός σας κωδικός"
 
 #: port/frontend/shell/porpoise_rows.cpp:1716
 msgid "Type a Gecko code and a name. It's saved in /data/porpoise/cheats and turned on."
-msgstr ""
+msgstr "Πληκτρολογήστε έναν κωδικό Gecko και ένα όνομα. Είναι αποθηκευμένο στο /data/porpoise/cheats και είναι ενεργοποιημένο."
 
 #: port/frontend/shell/porpoise_rows.cpp:1717
 msgid "Add a code"
-msgstr ""
+msgstr "Προσθέστε έναν κωδικό"
 
 #: port/frontend/shell/porpoise_rows.cpp:1727
 msgid "Your code, from /data/porpoise/cheats."
-msgstr ""
+msgstr "Ο κωδικός σας, από /data/porpoise/cheats."
 
 #: port/frontend/shell/porpoise_rows.cpp:1728
 msgid "From the widescreen collection for this game."
-msgstr ""
+msgstr "Από τη συλλογή ευρείας οθόνης για αυτό το παιχνίδι."
 
 #: port/frontend/shell/porpoise_rows.cpp:1729
 msgid "A patch for this game."
-msgstr ""
+msgstr "Ένα patch για αυτό το παιχνίδι."
 
 #: port/frontend/shell/porpoise_rows.cpp:1729
 msgid "A cheat for this game."
-msgstr ""
+msgstr "Μια απάτη για αυτό το παιχνίδι."
 
 #: port/frontend/shell/porpoise_rows.cpp:1736
 msgid "No codes for this game"
-msgstr ""
+msgstr "Δεν υπάρχουν κωδικοί για αυτό το παιχνίδι"
 
 #: port/frontend/shell/porpoise_rows.cpp:1736
 msgid "Put your own in /data/porpoise/cheats, named with the game's ID."
-msgstr ""
+msgstr "Βάλτε το δικό σας στο /data/porpoise/cheats, με το όνομα ID του παιχνιδιού."
 
 #: port/frontend/shell/porpoise_rows.cpp:1753
 msgid "Your own settings file"
-msgstr ""
+msgstr "Το δικό σας αρχείο ρυθμίσεων"
 
 #: port/frontend/shell/porpoise_rows.cpp:1753
 msgid "This game uses your own settings file, so the options below have no effect. Remove it to use them."
-msgstr ""
+msgstr "Αυτό το παιχνίδι χρησιμοποιεί το δικό σας αρχείο ρυθμίσεων, επομένως οι παρακάτω επιλογές δεν έχουν καμία επίδραση. Αφαιρέστε το για να τα χρησιμοποιήσετε."
 
 #: port/frontend/shell/porpoise_rows.cpp:1761
 msgid "Settings that run this game best on PS5."
-msgstr ""
+msgstr "Ρυθμίσεις που τρέχουν καλύτερα αυτό το παιχνίδι στο PS5."
 
 #: port/frontend/shell/porpoise_rows.cpp:1785
 msgid "Recommended for this game."
-msgstr ""
+msgstr "Προτείνεται για αυτό το παιχνίδι."
 
 #: port/frontend/shell/porpoise_rows.cpp:1794
 msgid "A known fix for this game."
-msgstr ""
+msgstr "Μια γνωστή λύση για αυτό το παιχνίδι."
 
 #: port/frontend/shell/porpoise_rows.cpp:1798
 msgid "Applied"
-msgstr ""
+msgstr "Εφαρμόστηκε"
 
 #: port/frontend/shell/porpoise_rows.cpp:1810
 msgid "No changes needed"
-msgstr ""
+msgstr "Δεν χρειάζονται αλλαγές"
 
 #: port/frontend/shell/porpoise_rows.cpp:1810
 msgid "This game runs well with the default settings."
-msgstr ""
+msgstr "Αυτό το παιχνίδι τρέχει καλά με τις προεπιλεγμένες ρυθμίσεις."
 
 #: port/frontend/shell/porpoise_rows.cpp:1870
 msgid "A name for your code"
-msgstr ""
+msgstr "Ένα όνομα για τον κωδικό σας"
 
 #: port/frontend/shell/porpoise_rows.cpp:1873
 msgid "{0}: the code's digits"
-msgstr ""
+msgstr "{0}: τα ψηφία του κωδικού"
 
 #: port/frontend/shell/porpoise_rows.cpp:1886
 msgid "The code could not be saved."
-msgstr ""
+msgstr "Δεν ήταν δυνατή η αποθήκευση του κωδικού."
 
 #: port/frontend/shell/porpoise_rows.cpp:1886
 msgid "A Gecko code is digits 0-9 and A-F, sixteen to a line."
-msgstr ""
+msgstr "Ένας κωδικός Gecko είναι τα ψηφία 0-9 και A-F, δεκαέξι σε μια γραμμή."
 
 #: port/frontend/shell/porpoise_rows.cpp:1901
 msgid "Setup {0}"
-msgstr ""
+msgstr "Ρύθμιση {0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:1907
 msgid "The setup could not be saved."
-msgstr ""
+msgstr "Δεν ήταν δυνατή η αποθήκευση της ρύθμισης."
 
 #. a GameCube memory card: {0} its slot, A or B, {1} its region, USA, EUR or JAP
 #: port/frontend/shell/porpoise_rows.cpp:1932
 msgid "Memory card {0} ({1})"
-msgstr ""
+msgstr "Κάρτα μνήμης {0} ({1})"
 
 #. {0} and {1} are counts of a memory card's blocks
 #: port/frontend/shell/porpoise_rows.cpp:1942 port/frontend/shell/porpoise_rows.cpp:1956
 msgid "{0} of {1} blocks free"
-msgstr ""
+msgstr "{0} από {1} αποκλεισμούς δωρεάν"
 
 #: port/frontend/shell/porpoise_rows.cpp:1954
 msgid "{0} save"
 msgid_plural "{0} saves"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} αποθήκευση"
+msgstr[1] "{0} αποθηκεύσεις"
 
 #: port/frontend/shell/porpoise_rows.cpp:1984
 msgid "{0} block"
 msgid_plural "{0} blocks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} μπλοκ"
+msgstr[1] "{0} μπλοκ"
 
 #: port/frontend/shell/porpoise_rows.cpp:1984
 msgid "{0} KB"
-msgstr ""
+msgstr "{0} KB"
 
 #: port/frontend/shell/porpoise_rows.cpp:1989
 msgid "This card is a single image file, so saves can't be copied one by one. Use Copy the whole card to USB instead."
-msgstr ""
+msgstr "Αυτή η κάρτα είναι ένα αρχείο εικόνας, επομένως οι αποθηκευμένες εικόνες δεν μπορούν να αντιγραφούν μία προς μία. Χρησιμοποιήστε Αντιγραφή ολόκληρης της κάρτας στο USB."
 
 #: port/frontend/shell/porpoise_rows.cpp:2000
 msgid "Copy the whole card to USB"
-msgstr ""
+msgstr "Αντιγράψτε ολόκληρη την κάρτα σε USB"
 
 #: port/frontend/shell/porpoise_rows.cpp:2001
 msgid "Backs up every save on this card at once."
-msgstr ""
+msgstr "Δημιουργεί αντίγραφα ασφαλείας κάθε αποθήκευσης σε αυτήν την κάρτα ταυτόχρονα."
 
 #: port/frontend/shell/porpoise_rows.cpp:2014
 msgid "Copy one save from the drive to this card."
-msgstr ""
+msgstr "Αντιγράψτε μια αποθήκευση από τη μονάδα δίσκου σε αυτήν την κάρτα."
 
 #: port/frontend/shell/porpoise_rows.cpp:2015
 msgid "Copy every save from a card on the drive to this card. Saves already here are kept."
-msgstr ""
+msgstr "Αντιγράψτε κάθε αποθήκευση από μια κάρτα στη μονάδα δίσκου σε αυτήν την κάρτα. Τα αποθηκευμένα ήδη εδώ διατηρούνται."
 
 #: port/frontend/shell/porpoise_rows.cpp:2016
 msgid "A copy is kept in saves/before."
-msgstr ""
+msgstr "Ένα αντίγραφο διατηρείται στο saves/before."
 
 #: port/frontend/shell/porpoise_rows.cpp:2025 port/frontend/shell/settings.cpp:2050
 msgid "No saves yet"
@@ -7330,71 +7332,71 @@ msgstr "Καμία αποθήκευση ακόμη"
 
 #: port/frontend/shell/porpoise_rows.cpp:2034
 msgid "Copy one save from the drive."
-msgstr ""
+msgstr "Αντιγράψτε μία αποθήκευση από τη μονάδα δίσκου."
 
 #: port/frontend/shell/porpoise_rows.cpp:2041
 msgid "Copy every save from USB"
-msgstr ""
+msgstr "Αντιγράψτε κάθε αποθήκευση από USB"
 
 #: port/frontend/shell/porpoise_rows.cpp:2042
 msgid "From a USB drive's backups and Porpoise Saves folder. Saves already here are kept."
-msgstr ""
+msgstr "Από τα αντίγραφα ασφαλείας μιας μονάδας δίσκου USB και το φάκελο Porpoise Αποθηκεύει. Τα αποθηκευμένα ήδη εδώ διατηρούνται."
 
 #: port/frontend/shell/porpoise_rows.cpp:2057
 msgid "Copy to USB"
-msgstr ""
+msgstr "Αντιγραφή σε USB"
 
 #: port/frontend/shell/porpoise_rows.cpp:2071
 msgid "The save could not be moved: {0}"
-msgstr ""
+msgstr "Δεν ήταν δυνατή η μετακίνηση της αποθήκευσης: {0}"
 
 #: port/frontend/shell/porpoise_rows.cpp:2073
 msgid "Moved to {0}"
-msgstr ""
+msgstr "Μεταφέρθηκε στο {0}"
 
 #: port/frontend/shell/reports.cpp:77
 msgid "When a game ends, Playtendoh can send a short report on how it ran, to help fix problems and grow the list of working games. It has nothing about you, and nothing is sent while you play."
-msgstr ""
+msgstr "Όταν τελειώνει ένα παιχνίδι, το Playtendoh μπορεί να στείλει μια σύντομη αναφορά σχετικά με τον τρόπο λειτουργίας του, για να βοηθήσει στην επίλυση προβλημάτων και στην ανάπτυξη της λίστας των παιχνιδιών που λειτουργούν. Δεν έχει τίποτα για εσάς και τίποτα δεν αποστέλλεται ενώ παίζετε."
 
 #: port/frontend/shell/reports.cpp:88
 msgid "What a report has"
-msgstr ""
+msgstr "Τι έχει μια έκθεση"
 
 #: port/frontend/shell/reports.cpp:89
 msgid "The game and its console, how it ended, and for how long"
-msgstr ""
+msgstr "Το παιχνίδι και η κονσόλα του, πώς τελείωσε και για πόσο καιρό"
 
 #: port/frontend/shell/reports.cpp:89
 msgid "The settings it ran with, and the PS5's firmware and model"
-msgstr ""
+msgstr "Οι ρυθμίσεις με τις οποίες λειτουργούσε και το υλικολογισμικό και το μοντέλο του PS5"
 
 #: port/frontend/shell/reports.cpp:90
 msgid "The last lines of Playtendoh's log, with addresses and folder names removed"
-msgstr ""
+msgstr "Οι τελευταίες γραμμές του αρχείου καταγραφής του Playtendoh, με τις διευθύνσεις και τα ονόματα φακέλων που έχουν αφαιρεθεί"
 
 #: port/frontend/shell/reports.cpp:91
 msgid "What it never has"
-msgstr ""
+msgstr "Αυτό που δεν έχει ποτέ"
 
 #: port/frontend/shell/reports.cpp:92
 msgid "Your PSN name or ID, your console's serial, its IP or MAC address"
-msgstr ""
+msgstr "Το όνομα ή το αναγνωριστικό του PSN, η σειρά της κονσόλας σας, η διεύθυνση IP ή η διεύθυνση MAC του"
 
 #: port/frontend/shell/reports.cpp:93
 msgid "Your RetroAchievements and SteamGridDB accounts, room names, nicknames and Wi-Fi names"
-msgstr ""
+msgstr "Οι λογαριασμοί σας RetroAchievements και SteamGridDB, τα ονόματα δωματίων, τα ψευδώνυμα και τα ονόματα Wi-Fi"
 
 #: port/frontend/shell/reports.cpp:93
 msgid "Your folders, your saves and your game list"
-msgstr ""
+msgstr "Οι φάκελοί σας, τα αποθηκευμένα και η λίστα παιχνιδιών σας"
 
 #: port/frontend/shell/reports.cpp:123
 msgid "Every field a report has"
-msgstr ""
+msgstr "Κάθε πεδίο έχει μια αναφορά"
 
 #: port/frontend/shell/reports.cpp:130
 msgid "You can change this any time in Settings > Online. Turning it off deletes the reports waiting to be sent."
-msgstr ""
+msgstr "Μπορείτε να το αλλάξετε ανά πάσα στιγμή στις Ρυθμίσεις > Online. Η απενεργοποίησή του διαγράφει τις αναφορές που βρίσκονται σε αναμονή για αποστολή."
 
 #: port/frontend/shell/settings.cpp:55
 msgid "Japan"
@@ -7493,23 +7495,23 @@ msgstr "Launcher"
 
 #: port/frontend/shell/settings.cpp:215
 msgid "Theme, layout, systems, music and text."
-msgstr ""
+msgstr "Θέμα, διάταξη, συστήματα, μουσική και κείμενο."
 
 #: port/frontend/shell/settings.cpp:218
 msgid "Accounts and updates"
-msgstr ""
+msgstr "Λογαριασμοί και ενημερώσεις"
 
 #: port/frontend/shell/settings.cpp:218
 msgid "RetroAchievements, reports and Playtendoh's updates."
-msgstr ""
+msgstr "RetroAchievements, αναφορές και ενημερώσεις του Playtendoh."
 
 #: port/frontend/shell/settings.cpp:219
 msgid "Backups"
-msgstr ""
+msgstr "Αντίγραφα ασφαλείας"
 
 #: port/frontend/shell/settings.cpp:219
 msgid "Every system's saves, to a USB drive and back."
-msgstr ""
+msgstr "Κάθε σύστημα αποθηκεύεται σε μονάδα USB και πίσω."
 
 #: port/frontend/shell/settings.cpp:220
 msgid "Play time"
@@ -7551,7 +7553,7 @@ msgstr "Για κάθε παιχνίδι DS."
 #. a libretro system's Settings page's line: {0} is the system (NES, Game Boy...)
 #: port/frontend/shell/settings.cpp:236
 msgid "For every {0} game."
-msgstr ""
+msgstr "Για κάθε παιχνίδι {0}."
 
 #: port/frontend/shell/settings.cpp:241
 msgid "For every GameCube and Wii game."
@@ -7567,19 +7569,19 @@ msgstr "Το DualSense ως χειριστήριο GameCube."
 
 #: port/frontend/shell/settings.cpp:244 port/frontend/shell/settings.cpp:323
 msgid "Sound"
-msgstr ""
+msgstr "Ήχος"
 
 #: port/frontend/shell/settings.cpp:244
 msgid "Game sound, and how it handles slowdowns."
-msgstr ""
+msgstr "Ο ήχος του παιχνιδιού και πώς χειρίζεται τις επιβραδύνσεις."
 
 #: port/frontend/shell/settings.cpp:246 port/frontend/shell/settings.cpp:325
 msgid "GBA"
-msgstr ""
+msgstr "GBA"
 
 #: port/frontend/shell/settings.cpp:246
 msgid "A Game Boy Advance on a GameCube port: set one in Controls, under Ports."
-msgstr ""
+msgstr "A Game Boy Advance σε μια θύρα GameCube: ορίστε μια στα Controls, στην περιοχή Ports."
 
 #: port/frontend/shell/settings.cpp:247 port/frontend/shell/settings.cpp:281 port/frontend/shell/settings.cpp:326
 msgid "System"
@@ -7587,11 +7589,11 @@ msgstr "Σύστημα"
 
 #: port/frontend/shell/settings.cpp:247
 msgid "The emulated console, and how it runs."
-msgstr ""
+msgstr "Η προσομοιωμένη κονσόλα και ο τρόπος λειτουργίας της."
 
 #: port/frontend/shell/settings.cpp:248 port/frontend/shell/settings.cpp:265
 msgid "Where this system's games are."
-msgstr ""
+msgstr "Πού είναι τα παιχνίδια αυτού του συστήματος."
 
 #: port/frontend/shell/settings.cpp:249 port/frontend/shell/settings.cpp:350 port/frontend/shell/shell.cpp:2246
 msgid "Saves"
@@ -7599,15 +7601,15 @@ msgstr "Αποθηκεύσεις"
 
 #: port/frontend/shell/settings.cpp:249
 msgid "Memory cards and saves"
-msgstr ""
+msgstr "Κάρτες μνήμης και αποθήκευση"
 
 #: port/frontend/shell/settings.cpp:250
 msgid "Copy each game's save to a USB drive, or move it aside."
-msgstr ""
+msgstr "Αντιγράψτε την αποθήκευση κάθε παιχνιδιού σε μια μονάδα δίσκου USB ή μετακινήστε την στην άκρη."
 
 #: port/frontend/shell/settings.cpp:250
 msgid "Copy saves on your cards to a USB drive, or move them aside."
-msgstr ""
+msgstr "Αντιγράψτε τις αποθηκευμένες κάρτες στις κάρτες σας σε μια μονάδα USB ή μετακινήστε τις στην άκρη."
 
 #: port/frontend/shell/settings.cpp:251 port/frontend/shell/settings.cpp:266 port/frontend/shell/settings.cpp:305
 msgid "Online"
@@ -7615,19 +7617,19 @@ msgstr "Online"
 
 #: port/frontend/shell/settings.cpp:251 port/frontend/shell/settings.cpp:266 port/frontend/shell/settings.cpp:308
 msgid "Box art for the library."
-msgstr ""
+msgstr "Box art για τη βιβλιοθήκη."
 
 #: port/frontend/shell/settings.cpp:259
 msgid "All of {0}'s options, for every game on this system."
-msgstr ""
+msgstr "Όλες οι επιλογές του {0}, για κάθε παιχνίδι σε αυτό το σύστημα."
 
 #: port/frontend/shell/settings.cpp:260
 msgid "Which emulator plays this system's games."
-msgstr ""
+msgstr "Ποιος εξομοιωτής παίζει τα παιχνίδια αυτού του συστήματος."
 
 #: port/frontend/shell/settings.cpp:264 port/frontend/shell/settings.cpp:338
 msgid "Picture and sound"
-msgstr ""
+msgstr "Εικόνα και ήχος"
 
 #: port/frontend/shell/settings.cpp:274
 msgid "Each player's controller for the Wii U."
@@ -7679,7 +7681,7 @@ msgstr "Πού βρίσκονται τα παιχνίδια 3DS σας και ο
 
 #: port/frontend/shell/settings.cpp:291
 msgid "Where your Switch 2 games are, with their keys and firmware."
-msgstr ""
+msgstr "Πού βρίσκονται τα παιχνίδια σας Switch 2, με τα κλειδιά και το υλικολογισμικό τους."
 
 #: port/frontend/shell/settings.cpp:292
 msgid "Where your Switch games are, with its keys and firmware."
@@ -7688,7 +7690,7 @@ msgstr "Πού είναι τα παιχνίδια Switch σας, με τα κλ�
 #. {0} is a system (Game Boy Advance)
 #: port/frontend/shell/settings.cpp:294
 msgid "Where your {0} games are."
-msgstr ""
+msgstr "Πού βρίσκονται τα παιχνίδια σας {0}."
 
 #: port/frontend/shell/settings.cpp:295
 msgid "Where your DS games are, and where their saves go."
@@ -7696,11 +7698,11 @@ msgstr "Πού βρίσκονται τα παιχνίδια DS σας και π�
 
 #: port/frontend/shell/settings.cpp:300
 msgid "Wii U accounts"
-msgstr ""
+msgstr "Λογαριασμοί Wii U"
 
 #: port/frontend/shell/settings.cpp:300
 msgid "Each account has its own saves."
-msgstr ""
+msgstr "Κάθε λογαριασμός έχει τις δικές του αποθηκεύσεις."
 
 #. Settings' page of the Switch side's players (Eden's user profiles, the people)
 #. the Switch side's players, the people (Eden's user profiles), each with saves of their own; not a number of players
@@ -7716,15 +7718,15 @@ msgstr "Ποιος παίζει, ο καθένας με τις δικές του
 
 #: port/frontend/shell/settings.cpp:305
 msgid "Box art and community graphic packs."
-msgstr ""
+msgstr "Πακέτα γραφικών κουτιών και κοινότητας."
 
 #: port/frontend/shell/settings.cpp:306
 msgid "Box art and Artic Base."
-msgstr ""
+msgstr "Box art και Artic Base."
 
 #: port/frontend/shell/settings.cpp:307
 msgid "Box art and multiplayer rooms."
-msgstr ""
+msgstr "Box art και δωμάτια για πολλούς παίκτες."
 
 #: port/frontend/shell/settings.cpp:315
 msgid "For {0} only. Other settings follow the system's."
@@ -7732,15 +7734,15 @@ msgstr "Μόνο για το {0}. Οι άλλες ρυθμίσεις του ακ
 
 #: port/frontend/shell/settings.cpp:327
 msgid "Setups"
-msgstr ""
+msgstr "Ρυθμίσεις"
 
 #: port/frontend/shell/settings.cpp:328
 msgid "Cheats and patches"
-msgstr ""
+msgstr "Απατεώνες και μπαλώματα"
 
 #: port/frontend/shell/settings.cpp:341 port/frontend/shell/settings.cpp:352
 msgid "Get this game's cheats, and turn each on or off."
-msgstr ""
+msgstr "Αποκτήστε τα cheat αυτού του παιχνιδιού και ενεργοποιήστε ή απενεργοποιήστε το καθένα."
 
 #: port/frontend/shell/settings.cpp:350
 msgid "{0}'s saves only. Settings has every system's."
@@ -7870,11 +7872,11 @@ msgstr[1] "Προστέθηκαν {0} mod: ενεργοποιήστε τα στ�
 
 #: port/frontend/shell/settings.cpp:518
 msgid "Reset all settings"
-msgstr ""
+msgstr "Επαναφέρετε όλες τις ρυθμίσεις"
 
 #: port/frontend/shell/settings.cpp:520
 msgid "Puts every setting back to default. Games, folders and saves are kept."
-msgstr ""
+msgstr "Επαναφέρει κάθε ρύθμιση στην προεπιλογή. Διατηρούνται παιχνίδια, φάκελοι και αποθηκευμένες θέσεις."
 
 #: port/frontend/shell/settings.cpp:550 port/frontend/shell/settings.cpp:1825
 msgid "Which emulator plays this system's games, from the next game. Each keeps its own settings and saves."
@@ -7902,7 +7904,7 @@ msgstr "Ο εξομοιωτής αυτής της πλευράς έχει δικ
 
 #: port/frontend/shell/settings.cpp:564
 msgid "Porpoise's other settings, your button layouts and Wii Remote setup. Circle at the top comes back here."
-msgstr ""
+msgstr "Οι άλλες ρυθμίσεις του Porpoise, οι διατάξεις των κουμπιών σας και η ρύθμιση του Wii Remote. Το Κύκλος στην κορυφή επιστρέφει εδώ."
 
 #: port/frontend/shell/settings.cpp:567 port/frontend/shell/settings.cpp:1338 port/frontend/shell/settings.cpp:2058
 msgid "Back up to USB"
@@ -7926,15 +7928,15 @@ msgstr "Το Cemu δεν ξεκίνησε, οπότε αυτό δεν μπορε
 
 #: port/frontend/shell/settings.cpp:655
 msgid "Sharp, smooth, or a tube TV's lines."
-msgstr ""
+msgstr "Αιχμηρές, λείες ή σωληνοειδείς γραμμές του TV."
 
 #: port/frontend/shell/settings.cpp:658
 msgid "How big the picture is on the TV."
-msgstr ""
+msgstr "Πόσο μεγάλη είναι η εικόνα στο TV."
 
 #: port/frontend/shell/settings.cpp:661
 msgid "The picture's shape."
-msgstr ""
+msgstr "Το σχήμα της εικόνας."
 
 #: port/frontend/shell/settings.cpp:667 port/frontend/shell/settings.cpp:1662
 msgid "The games' sound."
@@ -8417,7 +8419,7 @@ msgstr "Σταυρός: χειριστήριο, κίνηση και κουμπι
 
 #: port/frontend/shell/settings.cpp:946
 msgid "Set to a real Wii Remote, but none found. Cross to change it."
-msgstr ""
+msgstr "Ορίστηκε σε πραγματικό Wii Remote, αλλά δεν βρέθηκε κανένα. Σταυρός για να το αλλάξετε."
 
 #: port/frontend/shell/settings.cpp:947
 msgid "This player's controller, motion, vibration, deadzones and buttons. Player 1 is the user who started Playtendoh; other signed-in users are players 2 to 4."
@@ -8865,36 +8867,36 @@ msgstr "Ένας φάκελος για κάθε σύστημα"
 #. Settings > Game files: a row opening the list of every system's folder; {0} how many have a folder of their own, {1} how many systems
 #: port/frontend/shell/settings.cpp:1216
 msgid "{0} of {1} on their own"
-msgstr ""
+msgstr "{0} του {1} από μόνα τους"
 
 #: port/frontend/shell/settings.cpp:1217
 msgid "Keep a system's files together with the rest, or in a folder of its own."
-msgstr ""
+msgstr "Διατηρήστε τα αρχεία ενός συστήματος μαζί με τα υπόλοιπα ή σε έναν δικό του φάκελο."
 
 #: port/frontend/shell/settings.cpp:1218
 msgid "Saves, BIOS files and settings for every system are kept together in {0}, unless you give a system its own folder. Moving is quick and nothing is deleted. Playtendoh restarts to do it. Some emulators always use their own folder."
-msgstr ""
+msgstr "Αποθηκεύσεις, αρχεία BIOS και ρυθμίσεις για κάθε σύστημα διατηρούνται μαζί στο {0}, εκτός εάν δώσετε σε ένα σύστημα τον δικό του φάκελο. Η μετακίνηση είναι γρήγορη και τίποτα δεν διαγράφεται. Το Playtendoh κάνει επανεκκίνηση για να το κάνει. Ορισμένοι εξομοιωτές χρησιμοποιούν πάντα τον δικό τους φάκελο."
 
 #. Settings > Game files: a system whose emulator always keeps a folder of its own
 #: port/frontend/shell/settings.cpp:1225
 msgid "Its emulator always keeps its own folder."
-msgstr ""
+msgstr "Ο εξομοιωτής του διατηρεί πάντα τον δικό του φάκελο."
 
 #: port/frontend/shell/settings.cpp:1232
 msgid "Moves the next time Playtendoh starts."
-msgstr ""
+msgstr "Μετακινείται την επόμενη φορά που θα ξεκινήσει το Playtendoh."
 
 #: port/frontend/shell/settings.cpp:1233
 msgid "On: this system's files get their own folder. Off: kept with the rest."
-msgstr ""
+msgstr "Ενεργό: τα αρχεία αυτού του συστήματος έχουν τον δικό τους φάκελο. Off: διατηρείται με τα υπόλοιπα."
 
 #: port/frontend/shell/settings.cpp:1234
 msgid "Own folder"
-msgstr ""
+msgstr "Ίδιος φάκελος"
 
 #: port/frontend/shell/settings.cpp:1234
 msgid "Together"
-msgstr ""
+msgstr "Μαζί"
 
 #. {0} is a file or folder already where one would be moved to
 #: port/frontend/shell/settings.cpp:1239
@@ -9052,7 +9054,7 @@ msgstr "Εξώφυλλα"
 
 #: port/frontend/shell/settings.cpp:1376
 msgid "Covers for the library, from libretro's thumbnails."
-msgstr ""
+msgstr "Εξώφυλλα για τη βιβλιοθήκη, από τις μικρογραφίες του libretro."
 
 #: port/frontend/shell/settings.cpp:1376
 msgid "Covers for the library, from GameTDB."
@@ -9209,7 +9211,7 @@ msgstr "Τα πακέτα γραφικών της κοινότητας του Ce
 
 #: port/frontend/shell/settings.cpp:1456
 msgid "Earn achievements in DS, GameCube, Wii, N64, SNES, NES, Game Boy, Virtual Boy and Pokémon mini games. Only a sign-in token is kept on the PS5, never your password. Save states, cheats and speed still work."
-msgstr ""
+msgstr "Κερδίστε επιτεύγματα σε παιχνίδια για το DS, GameCube, Wii, N64, SNES, NES, Game Boy, Virtual Boy, Pokémon mini. Μόνο ένα διακριτικό σύνδεσης διατηρείται στο PS5, ποτέ ο κωδικός πρόσβασής σας. Η αποθήκευση πολιτειών, οι απάτες και η ταχύτητα εξακολουθούν να λειτουργούν."
 
 #. the RetroAchievements account signed in: its name ({1}) and softcore points ({0})
 #: port/frontend/shell/settings.cpp:1460 port/frontend/shell/settings.cpp:1464
@@ -9228,7 +9230,7 @@ msgstr "Κρατήστε τον Σταυρό για αποσύνδεση"
 
 #: port/frontend/shell/settings.cpp:1462
 msgid "Signed in on every console that has achievements."
-msgstr ""
+msgstr "Έχει συνδεθεί σε κάθε κονσόλα που έχει επιτεύγματα."
 
 #: port/frontend/shell/settings.cpp:1465
 msgid "Signing in…"
@@ -9240,7 +9242,7 @@ msgstr "Σταυρός για σύνδεση"
 
 #: port/frontend/shell/settings.cpp:1466
 msgid "Sign in once for every console that has achievements."
-msgstr ""
+msgstr "Συνδεθείτε μία φορά για κάθε κονσόλα που έχει επιτεύγματα."
 
 #: port/frontend/shell/settings.cpp:1467
 msgid "Unlock notices"
@@ -9256,32 +9258,32 @@ msgstr "Ένα επίτευγμα που κερδίσατε, και ο αριθ�
 
 #: port/frontend/shell/settings.cpp:1473
 msgid "Send reports"
-msgstr ""
+msgstr "Αποστολή αναφορών"
 
 #: port/frontend/shell/settings.cpp:1473
 msgid "How games run, with nothing about you."
-msgstr ""
+msgstr "Πώς τρέχουν τα παιχνίδια, χωρίς τίποτα για εσάς."
 
 #. {0} is the address of the page that lists every field a report has
 #: port/frontend/shell/settings.cpp:1475
 msgid "When a game ends, a short report is sent: the game, how it ended, its settings, the PS5's firmware and model, and the end of the log with addresses and folder names removed. Never your PSN name, serial, addresses, accounts or saves. Nothing is sent while you play. Off deletes reports waiting to be sent. Every field: {0}"
-msgstr ""
+msgstr "Όταν τελειώνει ένα παιχνίδι, αποστέλλεται μια σύντομη αναφορά: το παιχνίδι, πώς τελείωσε, οι ρυθμίσεις του, το υλικολογισμικό και το μοντέλο του PS5 και το τέλος του αρχείου καταγραφής με τις διευθύνσεις και τα ονόματα φακέλων που έχουν αφαιρεθεί. Ποτέ το όνομα, η σειρά, οι διευθύνσεις, οι λογαριασμοί ή τα αποθηκευμένα PSN. Δεν αποστέλλεται τίποτα ενώ παίζετε. Το Off διαγράφει αναφορές που περιμένουν να σταλούν. Κάθε πεδίο: {0}"
 
 #: port/frontend/shell/settings.cpp:1478
 msgid "SteamGridDB key"
-msgstr ""
+msgstr "Κλειδί SteamGridDB"
 
 #: port/frontend/shell/settings.cpp:1479
 msgid "Yours"
-msgstr ""
+msgstr "Το δικό σου"
 
 #: port/frontend/shell/settings.cpp:1479 port/frontend/shell/timeline.cpp:52
 msgid "Built in"
-msgstr ""
+msgstr "Ενσωματωμένο"
 
 #: port/frontend/shell/settings.cpp:1480 port/frontend/shell/settings.cpp:1481
 msgid "Wide art shown as a game starts. Your own key from steamgriddb.com is used first; leave it empty to remove it."
-msgstr ""
+msgstr "Ευρεία τέχνη που εμφανίζεται καθώς ξεκινά ένα παιχνίδι. Χρησιμοποιείται πρώτα το δικό σας κλειδί από το steamgriddb.com. αφήστε το κενό για να το αφαιρέσετε."
 
 #: port/frontend/shell/settings.cpp:1483
 msgid "Playtendoh updates"
@@ -9326,35 +9328,35 @@ msgstr "Πώς είναι διαταγμένη η Βιβλιοθήκη."
 
 #: port/frontend/shell/settings.cpp:1528
 msgid "Classic shows one console at a time, with Recently played on top. Orbit is a dial for picking a console, with recent games in the centre. EmulationStation (ES-DE) is a separate launcher: download it on the row below to choose it here. Your games, settings and saves stay the same."
-msgstr ""
+msgstr "Το Classic εμφανίζει μία κονσόλα τη φορά, με το Recently Played στην κορυφή. Το Orbit είναι ένα καντράν για την επιλογή μιας κονσόλας, με πρόσφατα παιχνίδια στο κέντρο. Το EmulationStation (ES-DE) είναι ένα ξεχωριστό πρόγραμμα εκκίνησης: κατεβάστε το στην παρακάτω σειρά για να το επιλέξετε εδώ. Τα παιχνίδια, οι ρυθμίσεις και οι αποθηκευτικές σας αποθήκες παραμένουν ίδια."
 
 #: port/frontend/shell/settings.cpp:1533
 msgid "EmulationStation (ES-DE) shows the same games with its own themes. It's a separate download of about {0} MB and stays through updates. Games still play here with the same settings, saves and in-game menu. Hold L1 while Playtendoh starts to use this launcher instead."
-msgstr ""
+msgstr "Το EmulationStation (ES-DE) δείχνει τα ίδια παιχνίδια με τα δικά του θέματα. Είναι μια ξεχωριστή λήψη περίπου {0} MB και παραμένει μέχρι τις ενημερώσεις. Τα παιχνίδια εξακολουθούν να παίζουν εδώ με τις ίδιες ρυθμίσεις, τις ίδιες αποθηκεύσεις και το μενού εντός παιχνιδιού. Κρατήστε πατημένο το L1 ενώ το Playtendoh αρχίσει να χρησιμοποιεί αυτόν τον εκκινητή."
 
 #: port/frontend/shell/settings.cpp:1537
 msgid "Asking GitHub…"
-msgstr ""
+msgstr "Ζητείται GitHub…"
 
 #: port/frontend/shell/settings.cpp:1544 port/frontend/shell/settings.cpp:1547
 msgid "Hold Cross to remove"
-msgstr ""
+msgstr "Κρατήστε πατημένο το Σταυρός για αφαίρεση"
 
 #: port/frontend/shell/settings.cpp:1544
 msgid "Hold Cross to download · {0} MB"
-msgstr ""
+msgstr "Κρατήστε πατημένο το Σταυρός για λήψη · {0} MB"
 
 #: port/frontend/shell/settings.cpp:1547
 msgid "Hold Cross to try again"
-msgstr ""
+msgstr "Κρατήστε πατημένο το Σταυρός για να προσπαθήσετε ξανά"
 
 #: port/frontend/shell/settings.cpp:1550
 msgid "Installed. Choose it as the Layout above."
-msgstr ""
+msgstr "Εγκατεστημένο. Επιλέξτε το ως το Layout παραπάνω."
 
 #: port/frontend/shell/settings.cpp:1550
 msgid "A separate launcher, as a download."
-msgstr ""
+msgstr "Ένα ξεχωριστό πρόγραμμα εκκίνησης, ως λήψη."
 
 #. Settings > Launcher: a row that opens which sides the bar shows (Wii U, Switch, DS, 3DS)
 #: port/frontend/shell/settings.cpp:1558
@@ -9465,16 +9467,16 @@ msgstr "Μια σειρά φίλτρων πάνω από τη λίστα της 
 #. Settings > Launcher: a game's badge, Playable, Issues or Not playable, from players' reports
 #: port/frontend/shell/settings.cpp:1582
 msgid "How games run"
-msgstr ""
+msgstr "Πώς τρέχουν τα παιχνίδια"
 
 #. Settings > Launcher: a game's badge, Playable, Issues or Not playable, from players' reports
 #: port/frontend/shell/settings.cpp:1582
 msgid "Playable, Issues or Not playable on each game."
-msgstr ""
+msgstr "Δυνατότητα αναπαραγωγής, προβλήματα ή μη αναπαραγωγή σε κάθε παιχνίδι."
 
 #: port/frontend/shell/settings.cpp:1583
 msgid "A badge on each game that has been reported: Playable, Issues or Not playable, from the compatibility list and players' reports, updated when the app starts. Off: no badges."
-msgstr ""
+msgstr "Ένα σήμα σε κάθε παιχνίδι που έχει αναφερθεί: Αναπαραγωγή, Ζητήματα ή Δεν μπορεί να παίξει, από τη λίστα συμβατότητας και τις αναφορές των παικτών, που ενημερώνεται όταν ξεκινά η εφαρμογή. Απενεργοποίηση: χωρίς σήματα."
 
 #: port/frontend/shell/settings.cpp:1591 port/frontend/shell/settings.cpp:1601
 msgid "Larger text"
@@ -9731,15 +9733,15 @@ msgstr "Διαγράφει τις δικές ρυθμίσεις αυτού το�
 
 #: port/frontend/shell/settings.cpp:1894
 msgid "Back to the emulator's own values"
-msgstr ""
+msgstr "Επιστροφή στις τιμές του εξομοιωτή"
 
 #: port/frontend/shell/settings.cpp:1895
 msgid "Nothing changed"
-msgstr ""
+msgstr "Τίποτα δεν άλλαξε"
 
 #: port/frontend/shell/settings.cpp:1897
 msgid "Resets every option above to {0}'s default, for every game on this system."
-msgstr ""
+msgstr "Επαναφέρει κάθε παραπάνω επιλογή στην προεπιλογή του {0}, για κάθε παιχνίδι σε αυτό το σύστημα."
 
 #. a Wii U account by its number, when its name cannot be read
 #: port/frontend/shell/settings.cpp:1972
@@ -9937,11 +9939,11 @@ msgstr "Γλώσσα: {0}"
 
 #: port/frontend/shell/settings.cpp:2402
 msgid "Playtendoh cannot write to {0}"
-msgstr ""
+msgstr "Το Playtendoh δεν μπορεί να γράψει στο {0}"
 
 #: port/frontend/shell/settings.cpp:2406
 msgid "Playtendoh restarts to move the files"
-msgstr ""
+msgstr "Το Playtendoh κάνει επανεκκίνηση για να μετακινήσετε τα αρχεία"
 
 #: port/frontend/shell/settings.cpp:2417
 msgid "At least one system must stay on"
@@ -9986,7 +9988,7 @@ msgstr "Αντίγραφο ασφαλείας των αποθηκεύσεων ό
 
 #: port/frontend/shell/settings.cpp:2984
 msgid "EmulationStation's download stopped"
-msgstr ""
+msgstr "Η λήψη του EmulationStation σταμάτησε"
 
 #. the loading screen's name for a retro side's own emulator menus: {0} is the side (Nintendo 64)
 #: port/frontend/shell/settings.cpp:2993
@@ -9999,13 +10001,13 @@ msgstr "Άνοιγμα ρυθμίσεων εξομοιωτή"
 
 #: port/frontend/shell/settings.cpp:3020
 msgid "Every game has its cover"
-msgstr ""
+msgstr "Κάθε παιχνίδι έχει το εξώφυλλό του"
 
 #: port/frontend/shell/settings.cpp:3020
 msgid "Looking for {0} cover"
 msgid_plural "Looking for {0} covers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Αναζήτηση {0} εξωφύλλου"
+msgstr[1] "Αναζήτηση {0} εξωφύλλων"
 
 #: port/frontend/shell/settings.cpp:3085
 msgid "Switch games play offline"
@@ -10076,27 +10078,27 @@ msgstr "Σύνδεση στο RetroAchievements…"
 
 #: port/frontend/shell/settings.cpp:3191
 msgid "Your SteamGridDB key"
-msgstr ""
+msgstr "Το κλειδί SteamGridDB σας"
 
 #: port/frontend/shell/settings.cpp:3194
 msgid "Your SteamGridDB key is removed"
-msgstr ""
+msgstr "Το κλειδί SteamGridDB καταργήθηκε"
 
 #: port/frontend/shell/settings.cpp:3194
 msgid "Used next time Playtendoh starts"
-msgstr ""
+msgstr "Θα χρησιμοποιηθεί την επόμενη φορά που θα ξεκινήσει το Playtendoh"
 
 #: port/frontend/shell/settings.cpp:3210
 msgid "Downloading EmulationStation. Choose it as the Layout once it's in."
-msgstr ""
+msgstr "Λήψη του EmulationStation. Επιλέξτε το ως Διάταξη μόλις μπει."
 
 #: port/frontend/shell/settings.cpp:3221
 msgid "EmulationStation removed. Its scraped data is kept."
-msgstr ""
+msgstr "Το EmulationStation καταργήθηκε. Τα μεταδεδομένα του παιχνιδιού που κατεβάσατε διατηρούνται."
 
 #: port/frontend/shell/settings.cpp:3231
 msgid "{0} reset to defaults"
-msgstr ""
+msgstr "Το {0} επαναφέρεται στις προεπιλογές"
 
 #: port/frontend/shell/settings.cpp:3242
 msgid "Player removed: their saves and settings are kept"
@@ -10447,26 +10449,26 @@ msgstr "Ενεργό: τα εξώφυλλα έρχονται καθώς εμφα
 
 #: port/frontend/shell/setup.cpp:377
 msgid "System folders"
-msgstr ""
+msgstr "Φάκελοι συστήματος"
 
 #: port/frontend/shell/setup.cpp:380
 msgid "Together in {0}"
-msgstr ""
+msgstr "Μαζί στο {0}"
 
 #. the Setup check: how many of the systems that can move have a folder of their own
 #: port/frontend/shell/setup.cpp:382
 msgid "{0} system in its own folder"
 msgid_plural "{0} systems in their own folders"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} σύστημα στον δικό του φάκελο"
+msgstr[1] "{0} συστήματα στους δικούς τους φακέλους"
 
 #: port/frontend/shell/setup.cpp:384
 msgid "Where each system's files go"
-msgstr ""
+msgstr "Πού πηγαίνουν τα αρχεία κάθε συστήματος"
 
 #: port/frontend/shell/setup.cpp:385
 msgid "Saves, BIOS files and settings for every system are kept together in {0}. You can give the Wii U, 3DS, DS or Switch a folder of its own instead. Cross shows them, each with its own switch."
-msgstr ""
+msgstr "Αποθηκεύσεις, αρχεία BIOS και ρυθμίσεις για κάθε σύστημα διατηρούνται μαζί στο {0}. Μπορείτε να δώσετε στο Wii U, 3DS, DS ή Switch έναν δικό του φάκελο. Το Σταυρός τα δείχνει, το καθένα με το δικό του διακόπτη."
 
 #: port/frontend/shell/setup.cpp:482
 msgid "Checked again"
@@ -10488,18 +10490,18 @@ msgstr "Ας ελέγξουμε την προετοιμασία σας"
 #: port/frontend/shell/setup.cpp:518
 msgid "{0} thing needs you"
 msgid_plural "{0} things need you"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} στοιχείο χρειάζεται την προσοχή σας"
+msgstr[1] "{0} στοιχεία χρειάζονται την προσοχή σας"
 
 #. the Setup check's summary: how many checks need the player, or that every one is ready
 #: port/frontend/shell/setup.cpp:518
 msgid "Everything is ready"
-msgstr ""
+msgstr "Όλα είναι έτοιμα"
 
 #. the Setup check's summary: {0} checks ready of {1}
 #: port/frontend/shell/setup.cpp:521
 msgid "{0} of {1} ready"
-msgstr ""
+msgstr "Έτοιμο το {0} του {1}"
 
 #: port/frontend/shell/setup.cpp:535
 msgid "{0} · same as the PS5"
@@ -10508,17 +10510,17 @@ msgstr "{0} · όπως το PS5"
 #. the Setup check's groups: what needs the player, what is optional, what is ready; {0} how many
 #: port/frontend/shell/setup.cpp:590
 msgid "Needs you · {0}"
-msgstr ""
+msgstr "Σας χρειάζεται · {0}"
 
 #. the Setup check's groups: what needs the player, what is optional, what is ready; {0} how many
 #: port/frontend/shell/setup.cpp:590
 msgid "Optional · {0}"
-msgstr ""
+msgstr "Προαιρετικό · {0}"
 
 #. the Setup check's groups: what needs the player, what is optional, what is ready; {0} how many
 #: port/frontend/shell/setup.cpp:590
 msgid "Ready · {0}"
-msgstr ""
+msgstr "Έτοιμο · {0}"
 
 #: port/frontend/shell/setup.cpp:643
 msgid "The menus' language"
@@ -10796,11 +10798,11 @@ msgstr "Οι φάκελοι μετακινήθηκαν"
 
 #: port/frontend/shell/shell.cpp:543
 msgid "EmulationStation is in. It opens next time Playtendoh starts."
-msgstr ""
+msgstr "Το EmulationStation είναι μέσα. Ανοίγει την επόμενη φορά που θα ξεκινήσει το Playtendoh."
 
 #: port/frontend/shell/shell.cpp:544
 msgid "EmulationStation is in. Choose it in Settings > Launcher > Layout."
-msgstr ""
+msgstr "Το EmulationStation είναι μέσα. Επιλέξτε το στις Ρυθμίσεις > Εκκίνηση > Διάταξη."
 
 #: port/frontend/shell/shell.cpp:949
 msgid "The Wii U emulator did not start: {0}"
@@ -10918,11 +10920,11 @@ msgstr "Χρονολόγιο"
 
 #: port/frontend/shell/shell.cpp:1851
 msgid "Hide"
-msgstr ""
+msgstr "Απόκρυψη"
 
 #: port/frontend/shell/shell.cpp:1851
 msgid "Show"
-msgstr ""
+msgstr "Εμφάνιση"
 
 #: port/frontend/shell/shell.cpp:1851 port/frontend/shell/shell.cpp:1853 port/frontend/shell/shell.cpp:1909 port/frontend/shell/shell.cpp:2957
 msgid "Done"
@@ -11291,207 +11293,207 @@ msgstr "Ο παίκτης μετονομάστηκε"
 
 #: port/frontend/shell/timeline.cpp:53 port/frontend/shell/timeline.cpp:58 port/frontend/shell/timeline.cpp:61 port/frontend/shell/timeline.cpp:64
 msgid "Cartridge"
-msgstr ""
+msgstr "Φυσίγγιο"
 
 #: port/frontend/shell/timeline.cpp:54
 msgid "Arcade board"
-msgstr ""
+msgstr "Arcade πίνακας"
 
 #: port/frontend/shell/timeline.cpp:55
 msgid "Disk Card"
-msgstr ""
+msgstr "Κάρτα δίσκου"
 
 #: port/frontend/shell/timeline.cpp:56 port/frontend/shell/timeline.cpp:57 port/frontend/shell/timeline.cpp:60 port/frontend/shell/timeline.cpp:62
 msgid "Game Pak"
-msgstr ""
+msgstr "Παιχνίδι Pak"
 
 #: port/frontend/shell/timeline.cpp:59
 msgid "Memory Pak"
-msgstr ""
+msgstr "Μνήμη Πακ"
 
 #: port/frontend/shell/timeline.cpp:63
 msgid "8 cm disc"
-msgstr ""
+msgstr "Δίσκος 8 cm"
 
 #: port/frontend/shell/timeline.cpp:65
 msgid "iQue Card"
-msgstr ""
+msgstr "Κάρτα iQue"
 
 #: port/frontend/shell/timeline.cpp:66 port/frontend/shell/timeline.cpp:68 port/frontend/shell/timeline.cpp:70 port/frontend/shell/timeline.cpp:71
 msgid "Game Card"
-msgstr ""
+msgstr "Κάρτα παιχνιδιού"
 
 #: port/frontend/shell/timeline.cpp:67 port/frontend/shell/timeline.cpp:69
 msgid "12 cm disc"
-msgstr ""
+msgstr "Δίσκος 12 cm"
 
 #: port/frontend/shell/timeline.cpp:106
 msgid "One game in each, and a clock. The cross pad began here."
-msgstr ""
+msgstr "Ένα παιχνίδι στο καθένα και ένα ρολόι. Το cross pad ξεκίνησε εδώ."
 
 #: port/frontend/shell/timeline.cpp:107
 msgid "The Famicom, then the NES: it brought games back to living rooms."
-msgstr ""
+msgstr "Το Famicom και μετά το NES: επανέφερε τα παιχνίδια στα σαλόνια."
 
 #: port/frontend/shell/timeline.cpp:108
 msgid "Arcade cabinets that ran NES games, some with two screens."
-msgstr ""
+msgstr "Arcade ντουλάπια που έτρεχαν παιχνίδια NES, μερικά με δύο οθόνες."
 
 #: port/frontend/shell/timeline.cpp:109
 msgid "Games on disks, written again at shop kiosks in Japan."
-msgstr ""
+msgstr "Παιχνίδια σε δίσκους, γραμμένα ξανά σε περίπτερα καταστημάτων στην Ιαπωνία."
 
 #: port/frontend/shell/timeline.cpp:110
 msgid "Four shades of green on AA batteries, and Tetris for two by cable."
-msgstr ""
+msgstr "Τέσσερις αποχρώσεις του πράσινου στις μπαταρίες AA και Tetris για δύο με καλώδιο."
 
 #: port/frontend/shell/timeline.cpp:111
 msgid "Mode 7, and chips in the cartridges that drew in 3D."
-msgstr ""
+msgstr "Λειτουργία 7, και μάρκες στα φυσίγγια που τραβήχτηκαν στο 3D."
 
 #: port/frontend/shell/timeline.cpp:112
 msgid "Game Boy games on the TV, with colours and borders."
-msgstr ""
+msgstr "Παιχνίδια Game Boy στο TV, με χρώματα και περιγράμματα."
 
 #: port/frontend/shell/timeline.cpp:113
 msgid "Games sent by satellite to Super Famicoms in Japan."
-msgstr ""
+msgstr "Παιχνίδια που αποστέλλονται μέσω δορυφόρου στην Super Famicoms στην Ιαπωνία."
 
 #: port/frontend/shell/timeline.cpp:114
 msgid "3D in red and black, in a visor on a stand."
-msgstr ""
+msgstr "3D σε κόκκινο και μαύρο, σε γείσο σε βάση."
 
 #: port/frontend/shell/timeline.cpp:115
 msgid "The analog stick, the Rumble Pak and four controller ports."
-msgstr ""
+msgstr "Το αναλογικό stick, το Rumble Pak και τέσσερις θύρες χειριστηρίου."
 
 #: port/frontend/shell/timeline.cpp:116
 msgid "The Game Boy in colour, and it still plays the old games."
-msgstr ""
+msgstr "Το Game Boy είναι έγχρωμο και εξακολουθεί να παίζει τα παλιά παιχνίδια."
 
 #: port/frontend/shell/timeline.cpp:117
 msgid "A 32-bit Game Boy, with shoulder buttons."
-msgstr ""
+msgstr "Ένα 32-bit Game Boy, με κουμπιά ώμου."
 
 #: port/frontend/shell/timeline.cpp:118
 msgid "8 cm discs, and a handle on the back."
-msgstr ""
+msgstr "Δίσκοι 8 εκ. και λαβή στο πίσω μέρος."
 
 #: port/frontend/shell/timeline.cpp:119
 msgid "The smallest cartridges, with rumble and a shake sensor."
-msgstr ""
+msgstr "Τα μικρότερα φυσίγγια, με βουητό και αισθητήρα δονήσεων."
 
 #: port/frontend/shell/timeline.cpp:120
 msgid "The N64 inside a controller, for China, its games on a card."
-msgstr ""
+msgstr "Το N64 μέσα σε χειριστήριο, για την Κίνα, τα παιχνίδια του σε κάρτα."
 
 #: port/frontend/shell/timeline.cpp:121
 msgid "Two screens, the lower one touched with a stylus."
-msgstr ""
+msgstr "Δύο οθόνες, η κάτω εφάπτεται με γραφίδα."
 
 #: port/frontend/shell/timeline.cpp:122
 msgid "A remote to point and swing, in every hand."
-msgstr ""
+msgstr "Ένα τηλεχειριστήριο για το σημείο και την αιώρηση, σε κάθε χέρι."
 
 #: port/frontend/shell/timeline.cpp:123
 msgid "3D without glasses, and a camera that sees in 3D too."
-msgstr ""
+msgstr "3D χωρίς γυαλιά και κάμερα που βλέπει και σε 3D."
 
 #: port/frontend/shell/timeline.cpp:124
 msgid "A second screen in the controller."
-msgstr ""
+msgstr "Μια δεύτερη οθόνη στο χειριστήριο."
 
 #: port/frontend/shell/timeline.cpp:125
 msgid "On the TV or in your hands: the same console."
-msgstr ""
+msgstr "Στο TV ή στα χέρια σας: η ίδια κονσόλα."
 
 #: port/frontend/shell/timeline.cpp:126
 msgid "A bigger Switch, with Joy-Con that work as a mouse."
-msgstr ""
+msgstr "Ένα μεγαλύτερο Switch, με Joy-Con που λειτουργεί ως ποντίκι."
 
 #. an era on the Timeline's ruler (the years its consoles came out in), and its one line over the shelves
 #: port/frontend/shell/timeline.cpp:137
 msgid "Pocket games"
-msgstr ""
+msgstr "Παιχνίδια τσέπης"
 
 #. an era on the Timeline's ruler (the years its consoles came out in), and its one line over the shelves
 #: port/frontend/shell/timeline.cpp:137
 msgid "Games on LCD screens, small enough for a pocket."
-msgstr ""
+msgstr "Παιχνίδια σε οθόνες LCD, αρκετά μικρά για μια τσέπη."
 
 #: port/frontend/shell/timeline.cpp:138
 msgid "Cartridges brought games home, and the screens began to scroll."
-msgstr ""
+msgstr "Οι κασέτες έφεραν τα παιχνίδια στο σπίτι και οι οθόνες άρχισαν να κυλούν."
 
 #: port/frontend/shell/timeline.cpp:139
 msgid "More colours, richer sound, and Mode 7."
-msgstr ""
+msgstr "Περισσότερα χρώματα, πιο πλούσιος ήχος και Mode 7."
 
 #: port/frontend/shell/timeline.cpp:140
 msgid "3D"
-msgstr ""
+msgstr "3D"
 
 #: port/frontend/shell/timeline.cpp:140
 msgid "Worlds in polygons, the analog stick and rumble."
-msgstr ""
+msgstr "Κόσμοι σε πολύγωνα, το αναλογικό ραβδί και βουητό."
 
 #: port/frontend/shell/timeline.cpp:141
 msgid "Discs and pockets"
-msgstr ""
+msgstr "Δίσκοι και τσέπες"
 
 #: port/frontend/shell/timeline.cpp:141
 msgid "Small discs at home, a 32-bit Game Boy on the go."
-msgstr ""
+msgstr "Μικροί δίσκοι στο σπίτι, ένα 32-bit Game Boy εν κινήσει."
 
 #: port/frontend/shell/timeline.cpp:142
 msgid "Games played by pointing, swinging and touching."
-msgstr ""
+msgstr "Παιχνίδια που παίζονται με κατάδειξη, αιώρηση και άγγιγμα."
 
 #: port/frontend/shell/timeline.cpp:143
 msgid "HD"
-msgstr ""
+msgstr "HD"
 
 #: port/frontend/shell/timeline.cpp:143
 msgid "High definition, and a screen in the controller."
-msgstr ""
+msgstr "Υψηλή ευκρίνεια και οθόνη στο χειριστήριο."
 
 #: port/frontend/shell/timeline.cpp:144
 msgid "Hybrid"
-msgstr ""
+msgstr "Υβριδικό"
 
 #: port/frontend/shell/timeline.cpp:144
 msgid "One console, on the TV or in your hands."
-msgstr ""
+msgstr "Μία κονσόλα, στο TV ή στα χέρια σας."
 
 #. the overline of the Timeline's card in the console lists: it is the library's museum
 #: port/frontend/shell/timeline.cpp:470
 msgid "Museum"
-msgstr ""
+msgstr "Μουσείο"
 
 #: port/frontend/shell/timeline.cpp:476
 msgid "{0} console"
 msgid_plural "{0} consoles"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} κονσόλες"
+msgstr[1] "{0} κονσόλες"
 
 #: port/frontend/shell/timeline.cpp:480
 msgid "Every console's games on one shelf, oldest to newest, each as the disc, card or cartridge it came on."
-msgstr ""
+msgstr "Τα παιχνίδια κάθε κονσόλας σε ένα ράφι, από το παλαιότερο έως το νεότερο, το καθένα ως δίσκος, κάρτα ή κασέτα που εμφανίστηκε."
 
 #: port/frontend/shell/timeline.cpp:894
 msgid "{0} of your games"
 msgid_plural "{0} of your games"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} από τα παιχνίδια σας"
+msgstr[1] "{0} από τα παιχνίδια σας"
 
 #. on a game's museum label in the Timeline: {0} is the day it came out
 #: port/frontend/shell/timeline.cpp:1129
 msgid "Released {0}"
-msgstr ""
+msgstr "Κυκλοφόρησε το {0}"
 
 #: port/frontend/shell/timeline.cpp:1139
 msgid "Not played yet"
-msgstr ""
+msgstr "Δεν παίχτηκε ακόμα"
 
 #: port/frontend/shell/timeline.cpp:1186
 msgid "An empty shelf"
@@ -11509,7 +11511,7 @@ msgstr "Προηγούμενη ή επόμενη κονσόλα"
 #. the Timeline's hint for Up and Down, which go to the era before or after
 #: port/frontend/shell/timeline.cpp:1230
 msgid "Previous or next era"
-msgstr ""
+msgstr "Προηγούμενη ή επόμενη εποχή"
 
 #: port/frontend/shell/welcome.cpp:75
 msgid "For every system: A on Circle as on Nintendo consoles, or on Cross."
@@ -11554,82 +11556,82 @@ msgstr "Αυτή η γραμμή"
 #. What's new in 6.0: the Library's two new ways to browse
 #: port/frontend/shell/whatsnew.cpp:28
 msgid "Orbit and the Timeline"
-msgstr ""
+msgstr "Τροχιά και Χρονολόγιο"
 
 #. What's new in 6.0: the Library's two new ways to browse
 #: port/frontend/shell/whatsnew.cpp:28
 msgid "Turn a dial to pick a console, or see every console's games on one shelf."
-msgstr ""
+msgstr "Γυρίστε ένα καντράν για να επιλέξετε μια κονσόλα ή δείτε τα παιχνίδια κάθε κονσόλας σε ένα ράφι."
 
 #. What's new in 6.0: how many consoles the app plays now
 #: port/frontend/shell/whatsnew.cpp:30
 msgid "21 consoles"
-msgstr ""
+msgstr "21 κονσόλες"
 
 #. What's new in 6.0: how many consoles the app plays now
 #: port/frontend/shell/whatsnew.cpp:30
 msgid "From the Game & Watch to the Switch 2, each with its own settings and saves."
-msgstr ""
+msgstr "Από το Game & Watch έως το Switch 2, το καθένα με τις δικές του ρυθμίσεις και αποθηκευτικές ρυθμίσεις."
 
 #. What's new in 6.0: Switch 2 games; Lichii is the emulator's name, left as it is
 #: port/frontend/shell/whatsnew.cpp:32
 msgid "Switch 2"
-msgstr ""
+msgstr "Switch 2"
 
 #. What's new in 6.0: Switch 2 games; Lichii is the emulator's name, left as it is
 #: port/frontend/shell/whatsnew.cpp:32
 msgid "Switch 2 games on Lichii, with your own keys and firmware."
-msgstr ""
+msgstr "Παιχνίδια Switch 2 στο Lichii, με τα δικά σας κλειδιά και υλικολογισμικό."
 
 #. What's new in 6.0: GameCube and Wii games; Porpoise X is the emulator's name, left as it is
 #: port/frontend/shell/whatsnew.cpp:34
 msgid "GameCube and Wii"
-msgstr ""
+msgstr "GameCube και Wii"
 
 #. What's new in 6.0: GameCube and Wii games; Porpoise X is the emulator's name, left as it is
 #: port/frontend/shell/whatsnew.cpp:34
 msgid "Played by Porpoise X, with menus in Playtendoh's style."
-msgstr ""
+msgstr "Παίζεται από τον Porpoise X, με μενού στο στυλ του Playtendoh."
 
 #. What's new in 6.0: Settings > Emulator lists every option of a console's emulator
 #: port/frontend/shell/whatsnew.cpp:36
 msgid "Every emulator option"
-msgstr ""
+msgstr "Κάθε επιλογή εξομοιωτή"
 
 #. What's new in 6.0: Settings > Emulator lists every option of a console's emulator
 #: port/frontend/shell/whatsnew.cpp:36
 msgid "Settings > Emulator has every option for each console's emulator."
-msgstr ""
+msgstr "Ρυθμίσεις > Εξομοιωτής έχει όλες τις επιλογές για τον εξομοιωτή κάθε κονσόλας."
 
 #. What's new in 6.0: EmulationStation (ES-DE) as a launcher, downloaded when chosen
 #: port/frontend/shell/whatsnew.cpp:38
 msgid "Choose ES-DE as your launcher: it downloads when you pick it."
-msgstr ""
+msgstr "Επιλέξτε το ES-DE ως εκκινητή σας: γίνεται λήψη όταν το επιλέξετε."
 
 #. What's new in 6.0: collections, groups of games the player makes
 #: port/frontend/shell/whatsnew.cpp:40
 msgid "Group your games your way, and find them from the Library's filters."
-msgstr ""
+msgstr "Ομαδοποιήστε τα παιχνίδια σας με τον δικό σας τρόπο και βρείτε τα από τα φίλτρα της Βιβλιοθήκης."
 
 #. What's new in 6.0: the menu over a game, redesigned, with button mapping in every emulator
 #: port/frontend/shell/whatsnew.cpp:42
 msgid "A new in-game menu"
-msgstr ""
+msgstr "Ένα νέο μενού στο παιχνίδι"
 
 #. What's new in 6.0: the menu over a game, redesigned, with button mapping in every emulator
 #: port/frontend/shell/whatsnew.cpp:42
 msgid "One menu for every game, with your own button layout in each emulator."
-msgstr ""
+msgstr "Ένα μενού για κάθε παιχνίδι, με τη δική σας διάταξη κουμπιών σε κάθε εξομοιωτή."
 
 #. What's new in 6.0: the launcher's music and sounds, quieter
 #: port/frontend/shell/whatsnew.cpp:44
 msgid "Calmer sound"
-msgstr ""
+msgstr "Πιο ήρεμος ήχος"
 
 #. What's new in 6.0: the launcher's music and sounds, quieter
 #: port/frontend/shell/whatsnew.cpp:44
 msgid "New, quieter music and soft menu sounds."
-msgstr ""
+msgstr "Νέα, πιο ήσυχη μουσική και απαλοί ήχοι μενού."
 
 #. the heading of the screen a new version opens on, once: what it brings
 #: port/frontend/shell/whatsnew.cpp:85

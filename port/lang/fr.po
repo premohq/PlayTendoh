@@ -466,7 +466,7 @@ msgstr "Problèmes"
 #: port/app/compatibility.cpp:71
 msgctxt "status"
 msgid "Not playable"
-msgstr ""
+msgstr "Non jouable"
 
 #: port/app/emulator.cpp:373
 msgid "the PS5 Vulkan driver did not start"
@@ -530,19 +530,19 @@ msgstr "Arrêté pour un jeu"
 
 #: port/app/esde_get.cpp:190
 msgid "EmulationStation isn't on GitHub for this version yet. Try again after an update."
-msgstr ""
+msgstr "EmulationStation n'est pas encore sur GitHub pour cette version. Réessayez après une mise à jour."
 
 #: port/app/esde_get.cpp:191
 msgid "EmulationStation could not be downloaded. Is the PS5 online?"
-msgstr ""
+msgstr "EmulationStation n’a pas pu être téléchargé. Le PS5 est-il en ligne ?"
 
 #: port/app/esde_get.cpp:197
 msgid "Playtendoh runs from an image that can't be changed. Copy the es-de folder into it yourself."
-msgstr ""
+msgstr "Playtendoh s'exécute à partir d'une image qui ne peut pas être modifiée. Copiez-y vous-même le dossier es-de."
 
 #: port/app/esde_get.cpp:203
 msgid "EmulationStation needs {0} MB free on the drive Playtendoh is on"
-msgstr ""
+msgstr "EmulationStation nécessite {0} MB libre sur le lecteur Playtendoh est activé"
 
 #: port/app/esde_get.cpp:222 port/app/updates.cpp:505
 msgid "The download could not start"
@@ -550,7 +550,7 @@ msgstr "Le téléchargement n’a pas pu démarrer"
 
 #: port/app/esde_get.cpp:239
 msgid "Stopped"
-msgstr ""
+msgstr "Arrêté"
 
 #: port/app/esde_get.cpp:239 port/app/updates.cpp:524
 msgid "The download did not finish: is the PS5 online?"
@@ -566,7 +566,7 @@ msgstr "Il n’a pas pu être décompressé : {0}"
 
 #: port/app/esde_get.cpp:270
 msgid "EmulationStation could not be installed ({0})"
-msgstr ""
+msgstr "EmulationStation n'a pas pu être installé ({0})"
 
 #: port/app/esde_get.cpp:291 port/app/pack_updates.cpp:194 port/app/updates.cpp:621
 msgid "GitHub could not be found: is the PS5 online?"
@@ -574,15 +574,15 @@ msgstr "GitHub est introuvable : la PS5 est-elle en ligne ?"
 
 #: port/app/esde_get.cpp:348
 msgid "EmulationStation is downloading"
-msgstr ""
+msgstr "EmulationStation est en cours de téléchargement"
 
 #: port/app/esde_get.cpp:354
 msgid "Playtendoh runs from an image that can't be changed"
-msgstr ""
+msgstr "Playtendoh s'exécute à partir d'une image qui ne peut pas être modifiée"
 
 #: port/app/esde_get.cpp:360
 msgid "Its folder could not be removed"
-msgstr ""
+msgstr "Son dossier n'a pas pu être supprimé"
 
 #: port/app/forwarders.cpp:151
 msgid "Home screen tiles need elfldr, which is not answering on port 9021. Load elfldr, then try again."
@@ -1767,7 +1767,7 @@ msgstr "Sauvegardes de {0}"
 #: port/app/ingame3ds.cpp:204
 #, menu
 msgid "Auto"
-msgstr ""
+msgstr "Automatique"
 
 #. the Buttons page's Controller row: the game's own choice, the console's pad, a special controller
 #: port/app/ingame3ds.cpp:204 port/frontend/shell/porpoise_rows.cpp:292
@@ -1779,47 +1779,47 @@ msgstr "Standard"
 #: port/app/ingame3ds.cpp:204
 #, menu
 msgid "Arkanoid paddle"
-msgstr ""
+msgstr "Pagaie Arkanoïde"
 
 #: port/app/ingame3ds.cpp:207
 #, menu
 msgid "Turn the knob"
-msgstr ""
+msgstr "Tournez le bouton"
 
 #: port/app/ingame3ds.cpp:207
 #, menu
 msgid "Fire"
-msgstr ""
+msgstr "Feu"
 
 #: port/app/ingame3ds.cpp:207
 #, menu
 msgid "Aim"
-msgstr ""
+msgstr "Objectif"
 
 #: port/app/ingame3ds.cpp:207
 #, menu
 msgid "Aim at the middle"
-msgstr ""
+msgstr "Visez le milieu"
 
 #: port/app/ingame3ds.cpp:207
 #, menu
 msgid "Shoot away from the screen"
-msgstr ""
+msgstr "Tirez loin de l'écran"
 
 #: port/app/ingame3ds.cpp:208
 #, menu
 msgid "Cursor"
-msgstr ""
+msgstr "Curseur"
 
 #: port/app/ingame3ds.cpp:208
 #, menu
 msgid "Turbo"
-msgstr ""
+msgstr "Turbo"
 
 #: port/app/ingame3ds.cpp:208
 #, menu
 msgid "Pause"
-msgstr ""
+msgstr "Pause"
 
 #: port/app/ingame3ds.cpp:208 port/frontend/shell/firststart.cpp:260 port/frontend/shell/firststart.cpp:262 port/frontend/shell/shell.cpp:1861 port/frontend/shell/shell.cpp:1900
 #, menu
@@ -1829,57 +1829,57 @@ msgstr "Déplacer"
 #: port/app/ingame3ds.cpp:208
 #, menu
 msgid "Left button"
-msgstr ""
+msgstr "Bouton gauche"
 
 #: port/app/ingame3ds.cpp:208
 #, menu
 msgid "Right button"
-msgstr ""
+msgstr "Bouton droit"
 
 #. {0} is a number on the Power Pad's mat
 #: port/app/ingame3ds.cpp:210 port/app/ingame3ds.cpp:217
 #, menu
 msgid "Mat {0}"
-msgstr ""
+msgstr "Tapis {0}"
 
 #. {0} is a number on the Power Pad's mat
 #: port/app/ingame3ds.cpp:210
 #, menu
 msgid "Tilt"
-msgstr ""
+msgstr "Inclinaison"
 
 #. the DualSense's inputs for a special controller
 #: port/app/ingame3ds.cpp:212
 #, menu
 msgid "Touchpad, left stick or D-pad"
-msgstr ""
+msgstr "Pavé tactile, joystick gauche ou D-pad"
 
 #. the DualSense's inputs for a special controller
 #: port/app/ingame3ds.cpp:212
 #, menu
 msgid "Touchpad, motion or right stick"
-msgstr ""
+msgstr "Pavé tactile, mouvement ou stick droit"
 
 #. the DualSense's inputs for a special controller
 #: port/app/ingame3ds.cpp:212
 #, menu
 msgid "Touchpad or left stick"
-msgstr ""
+msgstr "Pavé tactile ou stick gauche"
 
 #: port/app/ingame3ds.cpp:213
 #, menu
 msgid "Cross or R2"
-msgstr ""
+msgstr "Croix ou R2"
 
 #: port/app/ingame3ds.cpp:213
 #, menu
 msgid "Circle or L2"
-msgstr ""
+msgstr "Rond ou L2"
 
 #: port/app/ingame3ds.cpp:213
 #, menu
 msgid "Tilt or turn the DualSense"
-msgstr ""
+msgstr "Inclinez ou tournez le DualSense"
 
 #. the 3DS's screen layouts
 #: port/app/ingame3ds.cpp:259 port/frontend/shell/settings.cpp:64
@@ -2014,27 +2014,27 @@ msgstr "Avec l’écran du haut seul, le pavé tactile touche quand même l’é
 #: port/app/ingame3ds.cpp:635
 #, menu
 msgid "How big the picture is on the TV, and its shape."
-msgstr ""
+msgstr "Quelle est la taille de l'image sur le TV et sa forme."
 
 #: port/app/ingame3ds.cpp:636 port/frontend/shell/settings.cpp:658
 #, menu
 msgid "Size"
-msgstr ""
+msgstr "Taille"
 
 #: port/app/ingame3ds.cpp:637 port/frontend/shell/settings.cpp:659
 #, menu
 msgid "Fit makes it as large as the screen allows. Whole pixels keeps every pixel the same size, with a frame around it. Fill screen stretches it edge to edge."
-msgstr ""
+msgstr "Fit le rend aussi grand que l'écran le permet. Les pixels entiers conservent chaque pixel de la même taille, avec un cadre autour. L'écran de remplissage l'étire d'un bord à l'autre."
 
 #: port/app/ingame3ds.cpp:638 port/frontend/shell/settings.cpp:661
 #, menu
 msgid "Shape"
-msgstr ""
+msgstr "Forme"
 
 #: port/app/ingame3ds.cpp:639 port/frontend/shell/settings.cpp:662
 #, menu
 msgid "Original is the console's own. 4:3 is an old TV's. Square pixels shows them as the game draws them."
-msgstr ""
+msgstr "L'original est propre à la console. 4:3 est un ancien TV. Les pixels carrés les montrent au fur et à mesure que le jeu les dessine."
 
 #: port/app/ingame3ds.cpp:649 port/frontend/shell/settings.cpp:258 port/frontend/shell/settings.cpp:336 port/frontend/shell/settings.cpp:545 port/frontend/shell/settings.cpp:1822
 #, menu
@@ -2046,13 +2046,13 @@ msgstr "Émulateur"
 #, menu
 msgid "{0} option"
 msgid_plural "{0} options"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} option"
+msgstr[1] "{0} options"
 
 #: port/app/ingame3ds.cpp:650
 #, menu
 msgid "Every option of this console's emulator. Changes apply now and are kept for every game on it."
-msgstr ""
+msgstr "Toutes les options de l'émulateur de cette console. Les modifications s'appliquent maintenant et sont conservées pour chaque jeu."
 
 #: port/app/ingame3ds.cpp:658 port/app/ingame3ds.cpp:665
 #, menu
@@ -2197,7 +2197,7 @@ msgstr "Codes de triche"
 #: port/app/ingame3ds.cpp:711
 #, menu
 msgid "The game's cheats, from cheats/<game file>.cht in its system's folder (RetroArch's format)."
-msgstr ""
+msgstr "Les astuces du jeu, depuis cheats/<game file>.cht dans le dossier système (format RetroArch)."
 
 #: port/app/ingame3ds.cpp:712
 #, menu
@@ -2223,18 +2223,18 @@ msgstr "Aucun code pour ce jeu"
 #: port/app/ingame3ds.cpp:720
 #, menu
 msgid "Get cheats in the game's settings in the library, or put a .cht file in the system's cheats folder, then restart the game."
-msgstr ""
+msgstr "Obtenez des astuces dans les paramètres du jeu dans la bibliothèque, ou placez un fichier .cht dans le dossier des astuces du système, puis redémarrez le jeu."
 
 #: port/app/ingame3ds.cpp:721
 #, menu
 msgid "Get cheats in the game's settings in the library, or put them in {0}/melonds/cheats/<game file>.mch, then restart the game."
-msgstr ""
+msgstr "Récupérez les cheats dans les paramètres du jeu dans la bibliothèque, ou mettez-les dans {0}/melonds/cheats/<game file>.mch, puis redémarrez le jeu."
 
 #. {0} is the app's data folder: /data/ps5cemu, or the PS5CEMU-HAR-data folder on the drive the app is installed on
 #: port/app/ingame3ds.cpp:723
 #, menu
 msgid "Get cheats in the game's settings in the library, or put them in {0}/azahar/cheats/<title ID>.txt, then restart the game."
-msgstr ""
+msgstr "Récupérez les cheats dans les paramètres du jeu dans la bibliothèque, ou mettez-les dans {0}/azahar/cheats/<title ID>.txt, puis redémarrez le jeu."
 
 #. how many of the game's cheats are on: {0} of {1}
 #: port/app/ingame3ds.cpp:726
@@ -2383,7 +2383,7 @@ msgstr "Toutes les touches reviennent là où la console les place. Maintenez po
 #: port/app/ingame3ds.cpp:808
 #, menu
 msgid "Auto: {0}"
-msgstr ""
+msgstr "Automatique : {0}"
 
 #. the Buttons page's row that plugs a special controller in, for this game: Auto, Standard, the Zapper...
 #: port/app/ingame3ds.cpp:810 port/frontend/shell/porpoise_rows.cpp:308
@@ -2394,23 +2394,23 @@ msgstr "Manette"
 #: port/app/ingame3ds.cpp:811
 #, menu
 msgid "The controller plugged into the console for this game. Auto picks the one the game was made for, such as the Zapper for Duck Hunt."
-msgstr ""
+msgstr "La manette branchée sur la console pour ce jeu. Sélectionne automatiquement celui pour lequel le jeu a été conçu, comme le Zapper pour le Duck Hunt."
 
 #: port/app/ingame3ds.cpp:815
 #, menu
 msgid "What the DualSense does for the controller plugged in."
-msgstr ""
+msgstr "Ce que fait le DualSense pour le contrôleur branché."
 
 #. a row that takes how the DualSense is held now as level, for a game played by tilting it
 #: port/app/ingame3ds.cpp:818
 #, menu
 msgid "Level the motion"
-msgstr ""
+msgstr "Nivelez le mouvement"
 
 #: port/app/ingame3ds.cpp:819
 #, menu
 msgid "Hold the DualSense as you like to play, then press Cross. The game sees it as held level from there."
-msgstr ""
+msgstr "Tenez le DualSense pendant que vous aimez jouer, puis appuyez sur Croix. Le jeu le considère comme étant maintenu au niveau à partir de là."
 
 #: port/app/ingame3ds.cpp:832
 #, menu
@@ -2445,12 +2445,12 @@ msgstr "L’écran inférieur"
 #: port/app/ingame3ds.cpp:850
 #, menu
 msgid "Settings for this game only"
-msgstr ""
+msgstr "Paramètres pour ce jeu uniquement"
 
 #: port/app/ingame3ds.cpp:851
 #, menu
 msgid "On: this game keeps its own settings, and what you change here stays with it. Off: it uses the system's settings from its next start."
-msgstr ""
+msgstr "Activé : ce jeu conserve ses propres paramètres, et ce que vous modifiez ici reste avec lui. Désactivé : il utilise les paramètres du système dès son prochain démarrage."
 
 #: port/app/ingame3ds.cpp:869
 #, menu
@@ -2470,7 +2470,7 @@ msgstr "Emplacement {0} vide"
 #: port/app/ingame3ds.cpp:878
 #, menu
 msgid "Reset"
-msgstr ""
+msgstr "Réinitialiser"
 
 #. {0} is the version the last update replaced, as in 5.0.0
 #. no save of this Switch game in standalone ProsperoEden or on a USB drive
@@ -2482,7 +2482,7 @@ msgstr "Maintenir Croix"
 #: port/app/ingame3ds.cpp:879
 #, menu
 msgid "Restarts the game, as the console's reset button does. What isn't saved is lost."
-msgstr ""
+msgstr "Redémarre le jeu, comme le fait le bouton de réinitialisation de la console. Ce qui n'est pas sauvegardé est perdu."
 
 #: port/app/ingame3ds.cpp:885
 #, menu
@@ -2562,17 +2562,17 @@ msgstr "90° à gauche"
 #: port/app/ingame3ds.h:84
 #, menu
 msgid "Fit"
-msgstr ""
+msgstr "Ajustement"
 
 #: port/app/ingame3ds.h:84
 #, menu
 msgid "Whole pixels"
-msgstr ""
+msgstr "Pixels entiers"
 
 #: port/app/ingame3ds.h:84
 #, menu
 msgid "Fill screen"
-msgstr ""
+msgstr "Remplir l'écran"
 
 #. the 3DS borders' names (artwork around the screens)
 #: port/app/ingame3ds.h:182 port/frontend/shell/settings.cpp:53
@@ -2970,7 +2970,7 @@ msgstr "Shaders : {0} sur {1}"
 #: port/app/loading_screen.h:67
 #, menu
 msgid "Pipelines: {0} of {1}"
-msgstr ""
+msgstr "Pipelines : {0} ou {1}"
 
 #: port/app/loading_screen.h:75
 #, menu
@@ -3094,12 +3094,12 @@ msgstr "Maintenez Croix jusqu’à ce que l’anneau soit plein."
 #: port/app/side_menu.h:503
 #, menu
 msgid "Your controller"
-msgstr ""
+msgstr "Votre contrôleur"
 
 #: port/app/side_menu.h:505
 #, menu
 msgid "Each button shows the console's button it presses."
-msgstr ""
+msgstr "Chaque bouton affiche le bouton de la console sur lequel il appuie."
 
 #: port/app/update_files.cpp:93
 msgid "the download has no eboot.bin"
@@ -3107,7 +3107,7 @@ msgstr "le téléchargement ne contient pas d’eboot.bin"
 
 #: port/app/update_files.cpp:93
 msgid "the download has no {0}"
-msgstr ""
+msgstr "le téléchargement n'a pas de {0}"
 
 #: port/app/update_files.cpp:118
 msgid "{0} could not be written (is /data full?)"
@@ -3892,41 +3892,41 @@ msgstr "Titre"
 
 #: port/frontend/shell/cheat_rows.cpp:22
 msgid "From libretro-database, by the game file's name."
-msgstr ""
+msgstr "De libretro-database, par le nom du fichier du jeu."
 
 #: port/frontend/shell/cheat_rows.cpp:23
 msgid "From Sharkive, by the game's title ID."
-msgstr ""
+msgstr "De Sharkive, par le titre du jeu ID."
 
 #: port/frontend/shell/cheat_rows.cpp:24
 msgid "From switch-cheats-db, for every version of the game."
-msgstr ""
+msgstr "À partir de switch-cheats-db, pour chaque version du jeu."
 
 #: port/frontend/shell/cheat_rows.cpp:25
 msgid "From codes.rc24.xyz, by the disc's ID."
-msgstr ""
+msgstr "De codes.rc24.xyz, par le ID du disque."
 
 #: port/frontend/shell/cheat_rows.cpp:37
 msgid "Fetch cheats automatically"
-msgstr ""
+msgstr "Récupérer automatiquement les astuces"
 
 #: port/frontend/shell/cheat_rows.cpp:40
 msgid "Cheats for every game in your library, each off until you turn it on."
-msgstr ""
+msgstr "Des astuces pour chaque jeu de votre bibliothèque, chacune étant désactivée jusqu'à ce que vous l'activiez."
 
 #: port/frontend/shell/cheat_rows.cpp:41
 msgid "Downloads cheats for every game on the systems that have them: NES, SNES, the Game Boys, N64, DS, 3DS, Switch, GameCube and Wii. Each cheat is off until you turn it on in the game's settings or the in-game menu. Cheats can crash a game or spoil a save: save first."
-msgstr ""
+msgstr "Télécharge des astuces pour chaque jeu sur les systèmes qui en disposent : NES, SNES, les Game Boys, N64, DS, 3DS, Switch, GameCube et Wii. Chaque triche est désactivée jusqu'à ce que vous l'activiez dans les paramètres du jeu ou dans le menu du jeu. Les astuces peuvent faire planter un jeu ou gâcher une sauvegarde : sauvegardez d'abord."
 
 #: port/frontend/shell/cheat_rows.cpp:83
 msgid "Get cheats"
-msgstr ""
+msgstr "Obtenez des astuces"
 
 #: port/frontend/shell/cheat_rows.cpp:84
 msgid "{0} cheat"
 msgid_plural "{0} cheats"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} triche"
+msgstr[1] "{0} astuces"
 
 #: port/frontend/shell/cheat_rows.cpp:85 port/frontend/shell/settings.cpp:1125 port/frontend/shell/shares.cpp:292
 msgid "Looking…"
@@ -3934,11 +3934,11 @@ msgstr "Recherche…"
 
 #: port/frontend/shell/cheat_rows.cpp:86
 msgid "None found"
-msgstr ""
+msgstr "Aucun trouvé"
 
 #: port/frontend/shell/cheat_rows.cpp:87
 msgid "Not reached: is the PS5 online?"
-msgstr ""
+msgstr "Non atteint : le PS5 est-il en ligne ?"
 
 #: port/frontend/shell/cheat_rows.cpp:88 port/frontend/shell/settings.cpp:397
 msgid "Cross to download"
@@ -3946,50 +3946,50 @@ msgstr "Croix pour télécharger"
 
 #: port/frontend/shell/cheat_rows.cpp:90
 msgid "Downloads this game's cheats, adding any new ones to what is here. Each is off until you turn it on. Cheats can crash a game or spoil a save: save first."
-msgstr ""
+msgstr "Télécharge les astuces de ce jeu, en ajoutant de nouvelles à ce qui se trouve ici. Chacun est éteint jusqu'à ce que vous l'allumiez. Les astuces peuvent faire planter un jeu ou gâcher une sauvegarde : sauvegardez d'abord."
 
 #: port/frontend/shell/cheat_rows.cpp:107
 msgid "Cheat"
-msgstr ""
+msgstr "Tricher"
 
 #: port/frontend/shell/cheat_rows.cpp:110
 msgid "Applies when the game starts. Turn it on or off while playing in the in-game menu's Cheats."
-msgstr ""
+msgstr "S'applique au démarrage du jeu. Activez-le ou désactivez-le pendant que vous jouez dans les astuces du menu du jeu."
 
 #: port/frontend/shell/cheat_rows.cpp:118
 msgid "{0} more in the in-game menu"
 msgid_plural "{0} more in the in-game menu"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} de plus dans le menu du jeu"
+msgstr[1] "{0} autres dans le menu du jeu"
 
 #: port/frontend/shell/cheat_rows.cpp:119
 msgid "Every cheat is listed in the in-game menu's Cheats."
-msgstr ""
+msgstr "Chaque triche est répertoriée dans les astuces du menu du jeu."
 
 #: port/frontend/shell/cheat_rows.cpp:128
 msgid "No cheats yet"
-msgstr ""
+msgstr "Pas encore de triche"
 
 #: port/frontend/shell/cheat_rows.cpp:129
 msgid "Get cheats downloads them. Your own files work too."
-msgstr ""
+msgstr "Obtenez des astuces, téléchargez-les. Vos propres fichiers fonctionnent également."
 
 #. {0} is where the game's cheats file goes
 #: port/frontend/shell/cheat_rows.cpp:131
 msgid "Get cheats downloads them. Or put your own file at {0}."
-msgstr ""
+msgstr "Obtenez des astuces, téléchargez-les. Ou placez votre propre fichier sur {0}."
 
 #: port/frontend/shell/cheat_rows.cpp:149
 msgid "This game has no ID to look its cheats up by"
-msgstr ""
+msgstr "Ce jeu n'a pas de ID pour rechercher ses astuces"
 
 #: port/frontend/shell/cheat_rows.cpp:154
 msgid "Looking for cheats…"
-msgstr ""
+msgstr "À la recherche de tricheurs…"
 
 #: port/frontend/shell/cheat_rows.cpp:172
 msgid "The cheat could not be saved: {0}"
-msgstr ""
+msgstr "La triche n'a pas pu être enregistrée : {0}"
 
 #. the first start's steps, as the bar at the top right names them
 #: port/frontend/shell/firststart.cpp:27 port/frontend/shell/settings.cpp:214 port/frontend/shell/settings.cpp:674 port/frontend/shell/settings.cpp:997 port/frontend/shell/settings.cpp:1037 port/frontend/shell/settings.cpp:1095 port/frontend/shell/settings.cpp:2234 port/frontend/shell/setup.cpp:642
@@ -3999,17 +3999,17 @@ msgstr "Langue"
 #. the first start's steps, as the bar at the top right names them
 #: port/frontend/shell/firststart.cpp:27
 msgid "Covers"
-msgstr ""
+msgstr "Couvertures"
 
 #. the first start's steps, as the bar at the top right names them
 #: port/frontend/shell/firststart.cpp:27
 msgid "Reports"
-msgstr ""
+msgstr "Rapports"
 
 #. the first start's steps, as the bar at the top right names them
 #: port/frontend/shell/firststart.cpp:27
 msgid "Ready"
-msgstr ""
+msgstr "Prêt"
 
 #. after EmulationStation is picked as the launcher on the first start or in Settings
 #: port/frontend/shell/firststart.cpp:117 port/frontend/shell/orbit.cpp:559 port/frontend/shell/settings.cpp:2342
@@ -4018,22 +4018,22 @@ msgstr "EmulationStation s’ouvrira au prochain démarrage de Playtendoh. Maint
 
 #: port/frontend/shell/firststart.cpp:121 port/frontend/shell/orbit.cpp:565
 msgid "Downloading EmulationStation. It opens next time Playtendoh starts."
-msgstr ""
+msgstr "Téléchargement de EmulationStation. Il s'ouvrira au prochain démarrage de Playtendoh."
 
 #. the first start's setup: Cross on its last step
 #: port/frontend/shell/firststart.cpp:264
 msgid "Start playing"
-msgstr ""
+msgstr "Commencez à jouer"
 
 #. the first start's first question
 #: port/frontend/shell/firststart.cpp:364
 msgid "Which language?"
-msgstr ""
+msgstr "Quelle langue ?"
 
 #. the first start's first question
 #: port/frontend/shell/firststart.cpp:364
 msgid "Playtendoh speaks your PS5's language. Pick another if you like."
-msgstr ""
+msgstr "Le Playtendoh parle la langue de votre PS5. Choisissez-en un autre si vous le souhaitez."
 
 #. the first start's languages: a tag on the PS5's own language
 #: port/frontend/shell/firststart.cpp:384 port/frontend/shell/pages.cpp:1324
@@ -4042,17 +4042,17 @@ msgstr "PS5"
 
 #: port/frontend/shell/firststart.cpp:401
 msgid "Change it later in Settings > Language."
-msgstr ""
+msgstr "Modifiez-le plus tard dans Paramètres > Langue."
 
 #. the first start's question: the Library's layouts (Classic, Orbit) or EmulationStation
 #: port/frontend/shell/firststart.cpp:407
 msgid "How do you want to browse your games?"
-msgstr ""
+msgstr "Comment souhaitez-vous parcourir vos jeux ?"
 
 #. the first start's question: the Library's layouts (Classic, Orbit) or EmulationStation
 #: port/frontend/shell/firststart.cpp:407
 msgid "Your games, saves and settings are the same in each."
-msgstr ""
+msgstr "Vos jeux, sauvegardes et paramètres sont les mêmes dans chacun."
 
 #: port/frontend/shell/firststart.cpp:414 port/frontend/shell/orbit.cpp:733 port/frontend/shell/porpoise_rows.cpp:311 port/frontend/shell/settings.cpp:1523
 msgid "Classic"
@@ -4080,75 +4080,75 @@ msgstr "EmulationStation"
 #. the first start's layouts: EmulationStation, downloaded when the setup is done
 #: port/frontend/shell/firststart.cpp:417
 msgid "ES-DE's menus and themes. Downloaded when you finish (about 850 MB); games still play here."
-msgstr ""
+msgstr "Menus et thèmes du ES-DE. Téléchargé lorsque vous avez terminé (environ 850 MB) ; les jeux se jouent toujours ici."
 
 #: port/frontend/shell/firststart.cpp:444
 msgid "Change it later in Settings > Launcher > Layout."
-msgstr ""
+msgstr "Modifiez-le plus tard dans Paramètres > Lanceur > Mise en page."
 
 #. the first start's question: covers flat, or as 3D boxes with a spine
 #: port/frontend/shell/firststart.cpp:450
 msgid "How should covers look?"
-msgstr ""
+msgstr "À quoi devraient ressembler les couvertures ?"
 
 #. the first start's question: covers flat, or as 3D boxes with a spine
 #: port/frontend/shell/firststart.cpp:450
 msgid "As flat pictures, or as boxes on a shelf."
-msgstr ""
+msgstr "Sous forme d'images à plat ou sous forme de boîtes sur une étagère."
 
 #. the first start's covers question: the two choices
 #: port/frontend/shell/firststart.cpp:491
 msgid "Flat"
-msgstr ""
+msgstr "Plat"
 
 #. the first start's covers question: the two choices
 #: port/frontend/shell/firststart.cpp:491
 msgid "3D boxes"
-msgstr ""
+msgstr "Boîtes 3D"
 
 #: port/frontend/shell/firststart.cpp:493
 msgid "Each game's cover as a picture. Shows the most games at once."
-msgstr ""
+msgstr "La couverture de chaque jeu sous forme d'image. Affiche le plus grand nombre de jeux à la fois."
 
 #: port/frontend/shell/firststart.cpp:494
 msgid "Each game as its box, with the spine. Covers come from GameTDB."
-msgstr ""
+msgstr "Chaque jeu comme sa boîte, avec le dos. Les couvertures proviennent de GameTDB."
 
 #: port/frontend/shell/firststart.cpp:498
 msgid "Change it later in Settings > Launcher > 3D box art."
-msgstr ""
+msgstr "Modifiez-le plus tard dans Paramètres > Lanceur > Boîte 3D."
 
 #. the first start's question: which of the PS5's buttons is a Nintendo controller's A
 #: port/frontend/shell/firststart.cpp:504
 msgid "Which button is A?"
-msgstr ""
+msgstr "Quel bouton est A ?"
 
 #. the first start's question: which of the PS5's buttons is a Nintendo controller's A
 #: port/frontend/shell/firststart.cpp:504
 msgid "For every game. In Playtendoh's menus, Cross always chooses."
-msgstr ""
+msgstr "Pour chaque jeu. Dans les menus du Playtendoh, Croix choisit toujours."
 
 #. the first start's buttons question: the two choices
 #: port/frontend/shell/firststart.cpp:538
 msgid "Circle is A"
-msgstr ""
+msgstr "Rond est un"
 
 #. the first start's buttons question: the two choices
 #: port/frontend/shell/firststart.cpp:538
 msgid "Cross is A"
-msgstr ""
+msgstr "Croix est un"
 
 #: port/frontend/shell/firststart.cpp:540
 msgid "Where A is on a Nintendo controller: on the right."
-msgstr ""
+msgstr "Où A est sur un contrôleur Nintendo : à droite."
 
 #: port/frontend/shell/firststart.cpp:540
 msgid "Where most PlayStation games confirm: at the bottom."
-msgstr ""
+msgstr "Là où la plupart des jeux PlayStation le confirment : en bas."
 
 #: port/frontend/shell/firststart.cpp:544
 msgid "Change it later in each system's Controls."
-msgstr ""
+msgstr "Modifiez-le plus tard dans les contrôles de chaque système."
 
 #. the first start's question: whether the app may send reports of how games run to the project
 #: port/frontend/shell/firststart.cpp:549 port/frontend/shell/reports.cpp:75
@@ -4157,7 +4157,7 @@ msgstr "Aider Playtendoh à s'améliorer ?"
 
 #: port/frontend/shell/firststart.cpp:550
 msgid "When a game ends, Playtendoh can send a short report on how it ran. Nothing is sent while you play."
-msgstr ""
+msgstr "Lorsqu'un jeu se termine, Playtendoh peut envoyer un bref rapport sur son déroulement. Rien n'est envoyé pendant que vous jouez."
 
 #: port/frontend/shell/firststart.cpp:561 port/frontend/shell/reports.cpp:131
 msgid "Yes, send reports"
@@ -4169,51 +4169,51 @@ msgstr "Pas maintenant"
 
 #: port/frontend/shell/firststart.cpp:563
 msgid "The game, how it ran and its settings, to fix problems and grow the list of working games."
-msgstr ""
+msgstr "Le jeu, son fonctionnement et ses paramètres, pour résoudre les problèmes et élargir la liste des jeux fonctionnels."
 
 #: port/frontend/shell/firststart.cpp:564
 msgid "Nothing is sent. You can turn it on any time."
-msgstr ""
+msgstr "Rien n'est envoyé. Vous pouvez l'activer à tout moment."
 
 #: port/frontend/shell/firststart.cpp:579
 msgid "What a report never has"
-msgstr ""
+msgstr "Ce qu'un rapport n'a jamais fait"
 
 #: port/frontend/shell/firststart.cpp:581
 msgid "Your PSN name or ID, your console's serial or addresses, your accounts, folders, saves or game list."
-msgstr ""
+msgstr "Votre nom PSN ou ID, le numéro de série ou les adresses de votre console, vos comptes, dossiers, sauvegardes ou liste de jeux."
 
 #: port/frontend/shell/firststart.cpp:582
 msgid "Scan the code for every field a report has."
-msgstr ""
+msgstr "Scannez le code de chaque champ d'un rapport."
 
 #: port/frontend/shell/firststart.cpp:584
 msgid "Change it later in Settings > Accounts and updates > Send reports."
-msgstr ""
+msgstr "Modifiez-le plus tard dans Paramètres > Comptes et mises à jour > Envoyer des rapports."
 
 #. the first start's last step: a summary, nothing to answer
 #: port/frontend/shell/firststart.cpp:591
 msgid "You're ready to play"
-msgstr ""
+msgstr "Vous êtes prêt à jouer"
 
 #. the first start's last step: a summary, nothing to answer
 #: port/frontend/shell/firststart.cpp:591
 msgid "Almost ready"
-msgstr ""
+msgstr "Presque prêt"
 
 #: port/frontend/shell/firststart.cpp:592
 msgid "Everything Playtendoh needs is here."
-msgstr ""
+msgstr "Tout ce dont le Playtendoh a besoin se trouve ici."
 
 #: port/frontend/shell/firststart.cpp:593
 msgid "One thing to sort out before some games will play."
 msgid_plural "{0} things to sort out before some games will play."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} choses à régler avant que certains jeux ne soient joués."
+msgstr[1] "{0} choses à régler avant que certains jeux ne soient joués."
 
 #: port/frontend/shell/firststart.cpp:607
 msgid "Your games"
-msgstr ""
+msgstr "Vos jeux"
 
 #: port/frontend/shell/firststart.cpp:613 port/frontend/shell/timeline.cpp:1062
 msgid "No games yet"
@@ -4221,7 +4221,7 @@ msgstr "Pas encore de jeux"
 
 #: port/frontend/shell/firststart.cpp:615
 msgid "Copy your games to the PS5 or a USB drive, each console's in its own folder. They show up the next time you open its library. Settings > Game files says where each one goes."
-msgstr ""
+msgstr "Copiez vos jeux sur le lecteur PS5 ou USB, chaque console étant dans son propre dossier. Ils apparaîtront la prochaine fois que vous ouvrirez sa bibliothèque. Paramètres > Fichiers de jeu indique où chacun va."
 
 #. how many games the Library has
 #: port/frontend/shell/firststart.cpp:629 port/frontend/shell/library.cpp:766 port/frontend/shell/orbit.cpp:323 port/frontend/shell/pages.cpp:1401 port/frontend/shell/shell.cpp:1802 port/frontend/shell/timeline.cpp:476 port/frontend/shell/timeline.cpp:888 port/frontend/shell/timeline.cpp:1045
@@ -4233,32 +4233,32 @@ msgstr[1] "{0} jeux"
 #: port/frontend/shell/firststart.cpp:635
 msgid "{0} game found. Add more any time: each console has its own folder."
 msgid_plural "{0} games found. Add more any time: each console has its own folder."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} jeux trouvés. Ajoutez-en à tout moment : chaque console possède son propre dossier."
+msgstr[1] "{0} jeux trouvés. Ajoutez-en à tout moment : chaque console possède son propre dossier."
 
 #: port/frontend/shell/firststart.cpp:641
 msgid "Checked"
-msgstr ""
+msgstr "Vérifié"
 
 #: port/frontend/shell/firststart.cpp:641
 msgid "Before you play"
-msgstr ""
+msgstr "Avant de jouer"
 
 #: port/frontend/shell/firststart.cpp:649
 msgid "Storage and game speed are fine"
-msgstr ""
+msgstr "Le stockage et la vitesse de jeu sont bons"
 
 #: port/frontend/shell/firststart.cpp:675
 msgid "EmulationStation downloads when you start (about 850 MB). It opens next time Playtendoh starts."
-msgstr ""
+msgstr "EmulationStation se télécharge au démarrage (environ 850 MB). Il s'ouvrira au prochain démarrage de Playtendoh."
 
 #: port/frontend/shell/firststart.cpp:689
 msgid "Scan it for how, on your phone."
-msgstr ""
+msgstr "Scannez-le pour savoir comment, sur votre téléphone."
 
 #: port/frontend/shell/firststart.cpp:695
 msgid "Settings > Setup check has the details any time."
-msgstr ""
+msgstr "Paramètres > La vérification de la configuration contient les détails à tout moment."
 
 #. a chip: the game's update, by its version ("Update v208")
 #. an update found to install ({0}: its version, as 208)
@@ -4355,7 +4355,7 @@ msgstr "Manuel"
 #. in the Game hub, beside a QR code to a game's manual on Nintendo's site
 #: port/frontend/shell/hub.cpp:318
 msgid "Scan it with your phone to read the manual on Nintendo's site."
-msgstr ""
+msgstr "Scannez-le avec votre téléphone pour lire le manuel sur le site de Nintendo."
 
 #: port/frontend/shell/hub.cpp:330
 msgid "Runs well on PS5"
@@ -4365,8 +4365,8 @@ msgstr "Fonctionne bien sur PS5"
 #: port/frontend/shell/hub.cpp:339
 msgid "From reports on {0} console: {1} of {2} sessions went well."
 msgid_plural "From reports on {0} consoles: {1} of {2} sessions went well."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "D'après les rapports sur {0} consoles : les sessions {1} sur {2} se sont bien déroulées."
+msgstr[1] "D'après les rapports sur {0} consoles : les sessions {1} sur {2} se sont bien déroulées."
 
 #. {0} is a status from the compatibility list, such as Playable
 #: port/frontend/shell/hub.cpp:343
@@ -4803,7 +4803,7 @@ msgstr "Tournez le cadran"
 #. the hint for L2 and R2, which go to the Library and Settings tabs
 #: port/frontend/shell/orbit.cpp:462 port/frontend/shell/shell.cpp:1845 port/frontend/shell/timeline.cpp:1231
 msgid "Library or Settings"
-msgstr ""
+msgstr "Bibliothèque ou paramètres"
 
 #: port/frontend/shell/orbit.cpp:718 port/frontend/shell/reports.cpp:73 port/frontend/shell/settings.cpp:1627
 msgid "Make it yours"
@@ -4845,11 +4845,11 @@ msgstr "Utiliser {0}"
 
 #: port/frontend/shell/orbit.cpp:783
 msgid "Download {0} MB"
-msgstr ""
+msgstr "Télécharger {0} MB"
 
 #: port/frontend/shell/orbit.cpp:784
 msgid "Download ES-DE"
-msgstr ""
+msgstr "Télécharger ES-DE"
 
 #. the first start's layout question: Triangle turns the covers flat or into 3D boxes
 #: port/frontend/shell/orbit.cpp:790
@@ -4863,7 +4863,7 @@ msgstr "Jaquettes : plates"
 
 #: port/frontend/shell/orbit.cpp:802
 msgid "ES-DE is a separate download of about {0} MB. Cross again to download it, Circle to cancel. Playtendoh's own launcher opens until it's in."
-msgstr ""
+msgstr "ES-DE est un téléchargement séparé d'environ {0} MB. Croix à nouveau pour le télécharger, Rond pour annuler. Le propre lanceur de Playtendoh s'ouvre jusqu'à ce qu'il soit dedans."
 
 #: port/frontend/shell/orbit.cpp:803
 msgid "Hold L1 while Playtendoh starts to use its own launcher. Switch back any time in Settings > Launcher > Layout."
@@ -4871,7 +4871,7 @@ msgstr "Maintenez L1 au démarrage de Playtendoh pour son propre lanceur. Param�
 
 #: port/frontend/shell/orbit.cpp:804
 msgid "Both have the Timeline, every console's games on one shelf, after the last console."
-msgstr ""
+msgstr "Les deux ont la Timeline, les jeux de chaque console sur une seule étagère, après la dernière console."
 
 #: port/frontend/shell/pages.cpp:307
 msgid "Cross turns a pack on or off. Right shows its presets. Changes apply next time the game starts."
@@ -5307,11 +5307,11 @@ msgstr "Trouvé dans {0}"
 #. {0} is the Switch 2 emulator's data folder
 #: port/frontend/shell/pages.cpp:1423
 msgid "Missing: put it in {0}"
-msgstr ""
+msgstr "Manquant : mettez-le dans {0}"
 
 #: port/frontend/shell/pages.cpp:1430
 msgid "Saves and settings"
-msgstr ""
+msgstr "Sauvegardes et paramètres"
 
 #: port/frontend/shell/pages.cpp:1436 port/frontend/shell/settings.cpp:1099
 msgid "Your DS's BIOS"
@@ -5348,12 +5348,12 @@ msgstr "Les jeux sont des fichiers .nsp et .xci, ici ou chacun dans son propre d
 
 #: port/frontend/shell/pages.cpp:1453
 msgid "Games are .nup files, or folders with exefs/main and romfs/, each with its update. Network shares can't be used. Triangle uses this folder."
-msgstr ""
+msgstr "Les jeux sont des fichiers .nup, ou des dossiers avec exefs/main and romfs/, chacun avec sa mise à jour. Les partages réseau ne peuvent pas être utilisés. Triangle utilise ce dossier."
 
 #. {0} is a list of file types (.gb .gbc)
 #: port/frontend/shell/pages.cpp:1455
 msgid "Games are {0} files, here or in subfolders. Triangle uses this folder."
-msgstr ""
+msgstr "Les jeux sont des fichiers {0}, ici ou dans des sous-dossiers. Triangle utilise ce dossier."
 
 #: port/frontend/shell/pages.cpp:1456
 msgid "Games can be .wua, .wud, .wux, folders with code, content and meta, or in .zip, .7z or .rar. Triangle uses this folder."
@@ -7495,23 +7495,23 @@ msgstr "Lanceur"
 
 #: port/frontend/shell/settings.cpp:215
 msgid "Theme, layout, systems, music and text."
-msgstr ""
+msgstr "Thème, mise en page, systèmes, musique et texte."
 
 #: port/frontend/shell/settings.cpp:218
 msgid "Accounts and updates"
-msgstr ""
+msgstr "Comptes et mises à jour"
 
 #: port/frontend/shell/settings.cpp:218
 msgid "RetroAchievements, reports and Playtendoh's updates."
-msgstr ""
+msgstr "RetroAchievements, rapports et mises à jour de Playtendoh."
 
 #: port/frontend/shell/settings.cpp:219
 msgid "Backups"
-msgstr ""
+msgstr "Sauvegardes"
 
 #: port/frontend/shell/settings.cpp:219
 msgid "Every system's saves, to a USB drive and back."
-msgstr ""
+msgstr "Chaque système enregistre, sur un lecteur USB et inversement."
 
 #: port/frontend/shell/settings.cpp:220
 msgid "Play time"
@@ -7553,7 +7553,7 @@ msgstr "Pour tous les jeux DS."
 #. a libretro system's Settings page's line: {0} is the system (NES, Game Boy...)
 #: port/frontend/shell/settings.cpp:236
 msgid "For every {0} game."
-msgstr ""
+msgstr "Pour chaque jeu {0}."
 
 #: port/frontend/shell/settings.cpp:241
 msgid "For every GameCube and Wii game."
@@ -7593,7 +7593,7 @@ msgstr "La console émulée, et comment elle tourne."
 
 #: port/frontend/shell/settings.cpp:248 port/frontend/shell/settings.cpp:265
 msgid "Where this system's games are."
-msgstr ""
+msgstr "Où se trouvent les jeux de ce système."
 
 #: port/frontend/shell/settings.cpp:249 port/frontend/shell/settings.cpp:350 port/frontend/shell/shell.cpp:2246
 msgid "Saves"
@@ -7621,15 +7621,15 @@ msgstr "Jaquettes pour la bibliothèque."
 
 #: port/frontend/shell/settings.cpp:259
 msgid "All of {0}'s options, for every game on this system."
-msgstr ""
+msgstr "Toutes les options du {0}, pour chaque jeu sur ce système."
 
 #: port/frontend/shell/settings.cpp:260
 msgid "Which emulator plays this system's games."
-msgstr ""
+msgstr "Quel émulateur joue aux jeux de ce système."
 
 #: port/frontend/shell/settings.cpp:264 port/frontend/shell/settings.cpp:338
 msgid "Picture and sound"
-msgstr ""
+msgstr "Image et son"
 
 #: port/frontend/shell/settings.cpp:274
 msgid "Each player's controller for the Wii U."
@@ -7681,7 +7681,7 @@ msgstr "Où sont vos jeux 3DS, et les installations dans le stockage de la 3DS."
 
 #: port/frontend/shell/settings.cpp:291
 msgid "Where your Switch 2 games are, with their keys and firmware."
-msgstr ""
+msgstr "Où se trouvent vos jeux Switch 2, avec leurs clés et leur firmware."
 
 #: port/frontend/shell/settings.cpp:292
 msgid "Where your Switch games are, with its keys and firmware."
@@ -7690,7 +7690,7 @@ msgstr "Où sont vos jeux Switch, avec ses clés et son firmware."
 #. {0} is a system (Game Boy Advance)
 #: port/frontend/shell/settings.cpp:294
 msgid "Where your {0} games are."
-msgstr ""
+msgstr "Où se trouvent vos jeux {0}."
 
 #: port/frontend/shell/settings.cpp:295
 msgid "Where your DS games are, and where their saves go."
@@ -7698,11 +7698,11 @@ msgstr "Où sont vos jeux DS, et où vont leurs sauvegardes."
 
 #: port/frontend/shell/settings.cpp:300
 msgid "Wii U accounts"
-msgstr ""
+msgstr "Comptes Wii U"
 
 #: port/frontend/shell/settings.cpp:300
 msgid "Each account has its own saves."
-msgstr ""
+msgstr "Chaque compte a ses propres sauvegardes."
 
 #. Settings' page of the Switch side's players (Eden's user profiles, the people)
 #. the Switch side's players, the people (Eden's user profiles), each with saves of their own; not a number of players
@@ -7718,15 +7718,15 @@ msgstr "Qui joue, chacun avec ses propres sauvegardes."
 
 #: port/frontend/shell/settings.cpp:305
 msgid "Box art and community graphic packs."
-msgstr ""
+msgstr "Box art et packs graphiques communautaires."
 
 #: port/frontend/shell/settings.cpp:306
 msgid "Box art and Artic Base."
-msgstr ""
+msgstr "Art de la boîte et base arctique."
 
 #: port/frontend/shell/settings.cpp:307
 msgid "Box art and multiplayer rooms."
-msgstr ""
+msgstr "Box art et salles multijoueurs."
 
 #: port/frontend/shell/settings.cpp:315
 msgid "For {0} only. Other settings follow the system's."
@@ -7742,7 +7742,7 @@ msgstr "Codes de triche et correctifs"
 
 #: port/frontend/shell/settings.cpp:341 port/frontend/shell/settings.cpp:352
 msgid "Get this game's cheats, and turn each on or off."
-msgstr ""
+msgstr "Obtenez les astuces de ce jeu et activez ou désactivez chacune d'elles."
 
 #: port/frontend/shell/settings.cpp:350
 msgid "{0}'s saves only. Settings has every system's."
@@ -7928,15 +7928,15 @@ msgstr "Cemu n’a pas démarré, ce réglage ne peut donc pas être modifié."
 
 #: port/frontend/shell/settings.cpp:655
 msgid "Sharp, smooth, or a tube TV's lines."
-msgstr ""
+msgstr "Lignes nettes, lisses ou d'un tube TV."
 
 #: port/frontend/shell/settings.cpp:658
 msgid "How big the picture is on the TV."
-msgstr ""
+msgstr "Quelle est la taille de l'image sur le TV."
 
 #: port/frontend/shell/settings.cpp:661
 msgid "The picture's shape."
-msgstr ""
+msgstr "La forme de l'image."
 
 #: port/frontend/shell/settings.cpp:667 port/frontend/shell/settings.cpp:1662
 msgid "The games' sound."
@@ -8867,36 +8867,36 @@ msgstr "Un dossier pour chaque système"
 #. Settings > Game files: a row opening the list of every system's folder; {0} how many have a folder of their own, {1} how many systems
 #: port/frontend/shell/settings.cpp:1216
 msgid "{0} of {1} on their own"
-msgstr ""
+msgstr "{0} ou {1} seuls"
 
 #: port/frontend/shell/settings.cpp:1217
 msgid "Keep a system's files together with the rest, or in a folder of its own."
-msgstr ""
+msgstr "Conservez les fichiers d'un système avec le reste ou dans un dossier qui lui est propre."
 
 #: port/frontend/shell/settings.cpp:1218
 msgid "Saves, BIOS files and settings for every system are kept together in {0}, unless you give a system its own folder. Moving is quick and nothing is deleted. Playtendoh restarts to do it. Some emulators always use their own folder."
-msgstr ""
+msgstr "Les sauvegardes, les fichiers BIOS et les paramètres de chaque système sont conservés ensemble dans {0}, sauf si vous attribuez à un système son propre dossier. Le déplacement est rapide et rien n'est supprimé. Playtendoh redémarre pour le faire. Certains émulateurs utilisent toujours leur propre dossier."
 
 #. Settings > Game files: a system whose emulator always keeps a folder of its own
 #: port/frontend/shell/settings.cpp:1225
 msgid "Its emulator always keeps its own folder."
-msgstr ""
+msgstr "Son émulateur conserve toujours son propre dossier."
 
 #: port/frontend/shell/settings.cpp:1232
 msgid "Moves the next time Playtendoh starts."
-msgstr ""
+msgstr "Se déplace au prochain démarrage de Playtendoh."
 
 #: port/frontend/shell/settings.cpp:1233
 msgid "On: this system's files get their own folder. Off: kept with the rest."
-msgstr ""
+msgstr "Activé : les fichiers de ce système ont leur propre dossier. Off : conservé avec le reste."
 
 #: port/frontend/shell/settings.cpp:1234
 msgid "Own folder"
-msgstr ""
+msgstr "Propre dossier"
 
 #: port/frontend/shell/settings.cpp:1234
 msgid "Together"
-msgstr ""
+msgstr "Ensemble"
 
 #. {0} is a file or folder already where one would be moved to
 #: port/frontend/shell/settings.cpp:1239
@@ -9054,7 +9054,7 @@ msgstr "Jaquettes"
 
 #: port/frontend/shell/settings.cpp:1376
 msgid "Covers for the library, from libretro's thumbnails."
-msgstr ""
+msgstr "Couvertures de la bibliothèque, à partir des vignettes du libretro."
 
 #: port/frontend/shell/settings.cpp:1376
 msgid "Covers for the library, from GameTDB."
@@ -9211,7 +9211,7 @@ msgstr "Les packs graphiques communautaires de Cemu, depuis la dernière publica
 
 #: port/frontend/shell/settings.cpp:1456
 msgid "Earn achievements in DS, GameCube, Wii, N64, SNES, NES, Game Boy, Virtual Boy and Pokémon mini games. Only a sign-in token is kept on the PS5, never your password. Save states, cheats and speed still work."
-msgstr ""
+msgstr "Gagnez des succès dans les jeux pour DS, GameCube, Wii, N64, SNES, NES, Game Boy, Virtual Boy, Pokémon mini. Seul un jeton de connexion est conservé sur le PS5, jamais votre mot de passe. Les états de sauvegarde, les astuces et la vitesse fonctionnent toujours."
 
 #. the RetroAchievements account signed in: its name ({1}) and softcore points ({0})
 #: port/frontend/shell/settings.cpp:1460 port/frontend/shell/settings.cpp:1464
@@ -9230,7 +9230,7 @@ msgstr "Maintenir Croix pour se déconnecter"
 
 #: port/frontend/shell/settings.cpp:1462
 msgid "Signed in on every console that has achievements."
-msgstr ""
+msgstr "Connectez-vous sur chaque console comportant des succès."
 
 #: port/frontend/shell/settings.cpp:1465
 msgid "Signing in…"
@@ -9242,7 +9242,7 @@ msgstr "Croix pour se connecter"
 
 #: port/frontend/shell/settings.cpp:1466
 msgid "Sign in once for every console that has achievements."
-msgstr ""
+msgstr "Connectez-vous une fois pour chaque console comportant des succès."
 
 #: port/frontend/shell/settings.cpp:1467
 msgid "Unlock notices"
@@ -9328,35 +9328,35 @@ msgstr "La disposition de la Bibliothèque."
 
 #: port/frontend/shell/settings.cpp:1528
 msgid "Classic shows one console at a time, with Recently played on top. Orbit is a dial for picking a console, with recent games in the centre. EmulationStation (ES-DE) is a separate launcher: download it on the row below to choose it here. Your games, settings and saves stay the same."
-msgstr ""
+msgstr "Classic affiche une console à la fois, avec Récemment joué en haut. Orbit est un cadran permettant de choisir une console, avec les jeux récents au centre. EmulationStation (ES-DE) est un lanceur distinct : téléchargez-le sur la ligne ci-dessous pour le choisir ici. Vos jeux, paramètres et sauvegardes restent les mêmes."
 
 #: port/frontend/shell/settings.cpp:1533
 msgid "EmulationStation (ES-DE) shows the same games with its own themes. It's a separate download of about {0} MB and stays through updates. Games still play here with the same settings, saves and in-game menu. Hold L1 while Playtendoh starts to use this launcher instead."
-msgstr ""
+msgstr "EmulationStation (ES-DE) présente les mêmes jeux avec ses propres thèmes. Il s'agit d'un téléchargement séparé d'environ {0} MB et reste via les mises à jour. Les jeux se jouent toujours ici avec les mêmes paramètres, sauvegardes et menu de jeu. Maintenez L1 pendant que Playtendoh commence à utiliser ce lanceur à la place."
 
 #: port/frontend/shell/settings.cpp:1537
 msgid "Asking GitHub…"
-msgstr ""
+msgstr "Demander GitHub…"
 
 #: port/frontend/shell/settings.cpp:1544 port/frontend/shell/settings.cpp:1547
 msgid "Hold Cross to remove"
-msgstr ""
+msgstr "Maintenez Croix pour supprimer"
 
 #: port/frontend/shell/settings.cpp:1544
 msgid "Hold Cross to download · {0} MB"
-msgstr ""
+msgstr "Maintenez Croix pour télécharger · {0} MB"
 
 #: port/frontend/shell/settings.cpp:1547
 msgid "Hold Cross to try again"
-msgstr ""
+msgstr "Maintenez Croix pour réessayer"
 
 #: port/frontend/shell/settings.cpp:1550
 msgid "Installed. Choose it as the Layout above."
-msgstr ""
+msgstr "Installé. Choisissez-le comme mise en page ci-dessus."
 
 #: port/frontend/shell/settings.cpp:1550
 msgid "A separate launcher, as a download."
-msgstr ""
+msgstr "Un lanceur séparé, en téléchargement."
 
 #. Settings > Launcher: a row that opens which sides the bar shows (Wii U, Switch, DS, 3DS)
 #: port/frontend/shell/settings.cpp:1558
@@ -9467,16 +9467,16 @@ msgstr "Une rangée de filtres au-dessus de la liste de la bibliothèque : Tous,
 #. Settings > Launcher: a game's badge, Playable, Issues or Not playable, from players' reports
 #: port/frontend/shell/settings.cpp:1582
 msgid "How games run"
-msgstr ""
+msgstr "Comment fonctionnent les jeux"
 
 #. Settings > Launcher: a game's badge, Playable, Issues or Not playable, from players' reports
 #: port/frontend/shell/settings.cpp:1582
 msgid "Playable, Issues or Not playable on each game."
-msgstr ""
+msgstr "Jouable, Problèmes ou Non jouable sur chaque jeu."
 
 #: port/frontend/shell/settings.cpp:1583
 msgid "A badge on each game that has been reported: Playable, Issues or Not playable, from the compatibility list and players' reports, updated when the app starts. Off: no badges."
-msgstr ""
+msgstr "Un badge sur chaque jeu signalé : Jouable, Problèmes ou Non jouable, issu de la liste de compatibilité et des rapports des joueurs, mis à jour au démarrage de l'application. Éteint : pas de badge."
 
 #: port/frontend/shell/settings.cpp:1591 port/frontend/shell/settings.cpp:1601
 msgid "Larger text"
@@ -9733,15 +9733,15 @@ msgstr "Efface les paramètres propres à ce jeu, pour qu’il reprenne les para
 
 #: port/frontend/shell/settings.cpp:1894
 msgid "Back to the emulator's own values"
-msgstr ""
+msgstr "Retour aux propres valeurs de l'émulateur"
 
 #: port/frontend/shell/settings.cpp:1895
 msgid "Nothing changed"
-msgstr ""
+msgstr "Rien n'a changé"
 
 #: port/frontend/shell/settings.cpp:1897
 msgid "Resets every option above to {0}'s default, for every game on this system."
-msgstr ""
+msgstr "Réinitialise toutes les options ci-dessus aux valeurs par défaut de {0}, pour chaque jeu sur ce système."
 
 #. a Wii U account by its number, when its name cannot be read
 #: port/frontend/shell/settings.cpp:1972
@@ -9939,11 +9939,11 @@ msgstr "Langue : {0}"
 
 #: port/frontend/shell/settings.cpp:2402
 msgid "Playtendoh cannot write to {0}"
-msgstr ""
+msgstr "Playtendoh ne peut pas écrire sur {0}"
 
 #: port/frontend/shell/settings.cpp:2406
 msgid "Playtendoh restarts to move the files"
-msgstr ""
+msgstr "Playtendoh redémarre pour déplacer les fichiers"
 
 #: port/frontend/shell/settings.cpp:2417
 msgid "At least one system must stay on"
@@ -9988,7 +9988,7 @@ msgstr "Copie des sauvegardes de tous les côtés…"
 
 #: port/frontend/shell/settings.cpp:2984
 msgid "EmulationStation's download stopped"
-msgstr ""
+msgstr "Le téléchargement de EmulationStation s'est arrêté"
 
 #. the loading screen's name for a retro side's own emulator menus: {0} is the side (Nintendo 64)
 #: port/frontend/shell/settings.cpp:2993
@@ -10001,13 +10001,13 @@ msgstr "Ouverture des paramètres de l’émulateur"
 
 #: port/frontend/shell/settings.cpp:3020
 msgid "Every game has its cover"
-msgstr ""
+msgstr "Chaque jeu a sa couverture"
 
 #: port/frontend/shell/settings.cpp:3020
 msgid "Looking for {0} cover"
 msgid_plural "Looking for {0} covers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Recherche de {0} jaquette"
+msgstr[1] "Recherche de {0} jaquettes"
 
 #: port/frontend/shell/settings.cpp:3085
 msgid "Switch games play offline"
@@ -10090,15 +10090,15 @@ msgstr "Utilisée au prochain démarrage"
 
 #: port/frontend/shell/settings.cpp:3210
 msgid "Downloading EmulationStation. Choose it as the Layout once it's in."
-msgstr ""
+msgstr "Téléchargement de EmulationStation. Choisissez-le comme mise en page une fois inséré."
 
 #: port/frontend/shell/settings.cpp:3221
 msgid "EmulationStation removed. Its scraped data is kept."
-msgstr ""
+msgstr "EmulationStation supprimé. Ses métadonnées de jeu téléchargées sont conservées."
 
 #: port/frontend/shell/settings.cpp:3231
 msgid "{0} reset to defaults"
-msgstr ""
+msgstr "{0} réinitialisé aux paramètres par défaut"
 
 #: port/frontend/shell/settings.cpp:3242
 msgid "Player removed: their saves and settings are kept"
@@ -10449,26 +10449,26 @@ msgstr "Activé : les jaquettes arrivent à mesure que vos jeux apparaissent"
 
 #: port/frontend/shell/setup.cpp:377
 msgid "System folders"
-msgstr ""
+msgstr "Dossiers système"
 
 #: port/frontend/shell/setup.cpp:380
 msgid "Together in {0}"
-msgstr ""
+msgstr "Ensemble dans {0}"
 
 #. the Setup check: how many of the systems that can move have a folder of their own
 #: port/frontend/shell/setup.cpp:382
 msgid "{0} system in its own folder"
 msgid_plural "{0} systems in their own folders"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} système dans son propre dossier"
+msgstr[1] "{0} systèmes dans leurs propres dossiers"
 
 #: port/frontend/shell/setup.cpp:384
 msgid "Where each system's files go"
-msgstr ""
+msgstr "Où vont les fichiers de chaque système"
 
 #: port/frontend/shell/setup.cpp:385
 msgid "Saves, BIOS files and settings for every system are kept together in {0}. You can give the Wii U, 3DS, DS or Switch a folder of its own instead. Cross shows them, each with its own switch."
-msgstr ""
+msgstr "Les sauvegardes, les fichiers BIOS et les paramètres de chaque système sont conservés ensemble dans {0}. Vous pouvez plutôt attribuer au Wii U, 3DS, DS ou Switch un dossier qui lui est propre. Croix les montre, chacun avec son propre interrupteur."
 
 #: port/frontend/shell/setup.cpp:482
 msgid "Checked again"
@@ -10490,18 +10490,18 @@ msgstr "Vérifions votre configuration"
 #: port/frontend/shell/setup.cpp:518
 msgid "{0} thing needs you"
 msgid_plural "{0} things need you"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} élément requiert votre attention"
+msgstr[1] "{0} éléments requièrent votre attention"
 
 #. the Setup check's summary: how many checks need the player, or that every one is ready
 #: port/frontend/shell/setup.cpp:518
 msgid "Everything is ready"
-msgstr ""
+msgstr "Tout est prêt"
 
 #. the Setup check's summary: {0} checks ready of {1}
 #: port/frontend/shell/setup.cpp:521
 msgid "{0} of {1} ready"
-msgstr ""
+msgstr "{0} ou {1} prêt"
 
 #: port/frontend/shell/setup.cpp:535
 msgid "{0} · same as the PS5"
@@ -10510,17 +10510,17 @@ msgstr "{0} · comme la PS5"
 #. the Setup check's groups: what needs the player, what is optional, what is ready; {0} how many
 #: port/frontend/shell/setup.cpp:590
 msgid "Needs you · {0}"
-msgstr ""
+msgstr "A besoin de vous · {0}"
 
 #. the Setup check's groups: what needs the player, what is optional, what is ready; {0} how many
 #: port/frontend/shell/setup.cpp:590
 msgid "Optional · {0}"
-msgstr ""
+msgstr "En option · {0}"
 
 #. the Setup check's groups: what needs the player, what is optional, what is ready; {0} how many
 #: port/frontend/shell/setup.cpp:590
 msgid "Ready · {0}"
-msgstr ""
+msgstr "Prêt · {0}"
 
 #: port/frontend/shell/setup.cpp:643
 msgid "The menus' language"
@@ -10798,11 +10798,11 @@ msgstr "Les dossiers ont été déplacés"
 
 #: port/frontend/shell/shell.cpp:543
 msgid "EmulationStation is in. It opens next time Playtendoh starts."
-msgstr ""
+msgstr "EmulationStation est présent. Il s'ouvrira au prochain démarrage de Playtendoh."
 
 #: port/frontend/shell/shell.cpp:544
 msgid "EmulationStation is in. Choose it in Settings > Launcher > Layout."
-msgstr ""
+msgstr "EmulationStation est présent. Choisissez-le dans Paramètres > Lanceur > Mise en page."
 
 #: port/frontend/shell/shell.cpp:949
 msgid "The Wii U emulator did not start: {0}"
@@ -11293,207 +11293,207 @@ msgstr "Joueur renommé"
 
 #: port/frontend/shell/timeline.cpp:53 port/frontend/shell/timeline.cpp:58 port/frontend/shell/timeline.cpp:61 port/frontend/shell/timeline.cpp:64
 msgid "Cartridge"
-msgstr ""
+msgstr "Cartouche"
 
 #: port/frontend/shell/timeline.cpp:54
 msgid "Arcade board"
-msgstr ""
+msgstr "Plateau d'arcade"
 
 #: port/frontend/shell/timeline.cpp:55
 msgid "Disk Card"
-msgstr ""
+msgstr "Carte disque"
 
 #: port/frontend/shell/timeline.cpp:56 port/frontend/shell/timeline.cpp:57 port/frontend/shell/timeline.cpp:60 port/frontend/shell/timeline.cpp:62
 msgid "Game Pak"
-msgstr ""
+msgstr "Pack de jeu"
 
 #: port/frontend/shell/timeline.cpp:59
 msgid "Memory Pak"
-msgstr ""
+msgstr "Pack mémoire"
 
 #: port/frontend/shell/timeline.cpp:63
 msgid "8 cm disc"
-msgstr ""
+msgstr "disque de 8 cm"
 
 #: port/frontend/shell/timeline.cpp:65
 msgid "iQue Card"
-msgstr ""
+msgstr "Carte iQue"
 
 #: port/frontend/shell/timeline.cpp:66 port/frontend/shell/timeline.cpp:68 port/frontend/shell/timeline.cpp:70 port/frontend/shell/timeline.cpp:71
 msgid "Game Card"
-msgstr ""
+msgstr "Carte de jeu"
 
 #: port/frontend/shell/timeline.cpp:67 port/frontend/shell/timeline.cpp:69
 msgid "12 cm disc"
-msgstr ""
+msgstr "disque de 12 cm"
 
 #: port/frontend/shell/timeline.cpp:106
 msgid "One game in each, and a clock. The cross pad began here."
-msgstr ""
+msgstr "Un jeu dans chacun et une horloge. Le cross pad a commencé ici."
 
 #: port/frontend/shell/timeline.cpp:107
 msgid "The Famicom, then the NES: it brought games back to living rooms."
-msgstr ""
+msgstr "Le Famicom, puis le NES : il a ramené le jeu dans les salons."
 
 #: port/frontend/shell/timeline.cpp:108
 msgid "Arcade cabinets that ran NES games, some with two screens."
-msgstr ""
+msgstr "Armoires d'arcade qui exécutaient des jeux NES, certaines avec deux écrans."
 
 #: port/frontend/shell/timeline.cpp:109
 msgid "Games on disks, written again at shop kiosks in Japan."
-msgstr ""
+msgstr "Jeux sur disques, réécrits dans les kiosques des magasins au Japon."
 
 #: port/frontend/shell/timeline.cpp:110
 msgid "Four shades of green on AA batteries, and Tetris for two by cable."
-msgstr ""
+msgstr "Quatre nuances de vert sur piles AA, et Tetris pour deux par câble."
 
 #: port/frontend/shell/timeline.cpp:111
 msgid "Mode 7, and chips in the cartridges that drew in 3D."
-msgstr ""
+msgstr "Mode 7, et puces dans les cartouches qui dessinaient en 3D."
 
 #: port/frontend/shell/timeline.cpp:112
 msgid "Game Boy games on the TV, with colours and borders."
-msgstr ""
+msgstr "Jeux Game Boy sur le TV, avec couleurs et bordures."
 
 #: port/frontend/shell/timeline.cpp:113
 msgid "Games sent by satellite to Super Famicoms in Japan."
-msgstr ""
+msgstr "Jeux envoyés par satellite sur les Super Famicoms au Japon."
 
 #: port/frontend/shell/timeline.cpp:114
 msgid "3D in red and black, in a visor on a stand."
-msgstr ""
+msgstr "3D en rouge et noir, dans une visière sur pied."
 
 #: port/frontend/shell/timeline.cpp:115
 msgid "The analog stick, the Rumble Pak and four controller ports."
-msgstr ""
+msgstr "Le stick analogique, le Rumble Pak et quatre ports de contrôleur."
 
 #: port/frontend/shell/timeline.cpp:116
 msgid "The Game Boy in colour, and it still plays the old games."
-msgstr ""
+msgstr "Le Game Boy en couleur, et il joue toujours aux anciens jeux."
 
 #: port/frontend/shell/timeline.cpp:117
 msgid "A 32-bit Game Boy, with shoulder buttons."
-msgstr ""
+msgstr "Un Game Boy 32 bits, avec des boutons d'épaule."
 
 #: port/frontend/shell/timeline.cpp:118
 msgid "8 cm discs, and a handle on the back."
-msgstr ""
+msgstr "Disques de 8 cm, et une poignée au dos."
 
 #: port/frontend/shell/timeline.cpp:119
 msgid "The smallest cartridges, with rumble and a shake sensor."
-msgstr ""
+msgstr "Les plus petites cartouches, avec grondement et capteur de secousses."
 
 #: port/frontend/shell/timeline.cpp:120
 msgid "The N64 inside a controller, for China, its games on a card."
-msgstr ""
+msgstr "Le N64 à l'intérieur d'une manette, pour la Chine, ses jeux sur une carte."
 
 #: port/frontend/shell/timeline.cpp:121
 msgid "Two screens, the lower one touched with a stylus."
-msgstr ""
+msgstr "Deux écrans, celui du bas touché avec un stylet."
 
 #: port/frontend/shell/timeline.cpp:122
 msgid "A remote to point and swing, in every hand."
-msgstr ""
+msgstr "Une télécommande à pointer et à balancer, dans chaque main."
 
 #: port/frontend/shell/timeline.cpp:123
 msgid "3D without glasses, and a camera that sees in 3D too."
-msgstr ""
+msgstr "3D sans lunettes, et une caméra qui voit aussi dans 3D."
 
 #: port/frontend/shell/timeline.cpp:124
 msgid "A second screen in the controller."
-msgstr ""
+msgstr "Un deuxième écran dans le contrôleur."
 
 #: port/frontend/shell/timeline.cpp:125
 msgid "On the TV or in your hands: the same console."
-msgstr ""
+msgstr "Sur le TV ou entre vos mains : la même console."
 
 #: port/frontend/shell/timeline.cpp:126
 msgid "A bigger Switch, with Joy-Con that work as a mouse."
-msgstr ""
+msgstr "Une Switch plus grande, avec une Joy-Con qui fonctionne comme une souris."
 
 #. an era on the Timeline's ruler (the years its consoles came out in), and its one line over the shelves
 #: port/frontend/shell/timeline.cpp:137
 msgid "Pocket games"
-msgstr ""
+msgstr "Jeux de poche"
 
 #. an era on the Timeline's ruler (the years its consoles came out in), and its one line over the shelves
 #: port/frontend/shell/timeline.cpp:137
 msgid "Games on LCD screens, small enough for a pocket."
-msgstr ""
+msgstr "Jeux sur écrans LCD, suffisamment petits pour une poche."
 
 #: port/frontend/shell/timeline.cpp:138
 msgid "Cartridges brought games home, and the screens began to scroll."
-msgstr ""
+msgstr "Les cartouches ont ramené les jeux à la maison et les écrans ont commencé à défiler."
 
 #: port/frontend/shell/timeline.cpp:139
 msgid "More colours, richer sound, and Mode 7."
-msgstr ""
+msgstr "Plus de couleurs, un son plus riche et le mode 7."
 
 #: port/frontend/shell/timeline.cpp:140
 msgid "3D"
-msgstr ""
+msgstr "3D"
 
 #: port/frontend/shell/timeline.cpp:140
 msgid "Worlds in polygons, the analog stick and rumble."
-msgstr ""
+msgstr "Des mondes en polygones, le stick analogique et le grondement."
 
 #: port/frontend/shell/timeline.cpp:141
 msgid "Discs and pockets"
-msgstr ""
+msgstr "Disques et pochettes"
 
 #: port/frontend/shell/timeline.cpp:141
 msgid "Small discs at home, a 32-bit Game Boy on the go."
-msgstr ""
+msgstr "Des petits disques à la maison, un Game Boy 32 bits en déplacement."
 
 #: port/frontend/shell/timeline.cpp:142
 msgid "Games played by pointing, swinging and touching."
-msgstr ""
+msgstr "Jeux joués en pointant, en se balançant et en touchant."
 
 #: port/frontend/shell/timeline.cpp:143
 msgid "HD"
-msgstr ""
+msgstr "HD"
 
 #: port/frontend/shell/timeline.cpp:143
 msgid "High definition, and a screen in the controller."
-msgstr ""
+msgstr "Haute définition et écran dans le contrôleur."
 
 #: port/frontend/shell/timeline.cpp:144
 msgid "Hybrid"
-msgstr ""
+msgstr "Hybride"
 
 #: port/frontend/shell/timeline.cpp:144
 msgid "One console, on the TV or in your hands."
-msgstr ""
+msgstr "Une console, sur le TV ou entre vos mains."
 
 #. the overline of the Timeline's card in the console lists: it is the library's museum
 #: port/frontend/shell/timeline.cpp:470
 msgid "Museum"
-msgstr ""
+msgstr "Musée"
 
 #: port/frontend/shell/timeline.cpp:476
 msgid "{0} console"
 msgid_plural "{0} consoles"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} console"
+msgstr[1] "{0} consoles"
 
 #: port/frontend/shell/timeline.cpp:480
 msgid "Every console's games on one shelf, oldest to newest, each as the disc, card or cartridge it came on."
-msgstr ""
+msgstr "Les jeux de chaque console sur une étagère, du plus ancien au plus récent, chacun selon le disque, la carte ou la cartouche sur laquelle il est venu."
 
 #: port/frontend/shell/timeline.cpp:894
 msgid "{0} of your games"
 msgid_plural "{0} of your games"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} de vos jeux"
+msgstr[1] "{0} de vos jeux"
 
 #. on a game's museum label in the Timeline: {0} is the day it came out
 #: port/frontend/shell/timeline.cpp:1129
 msgid "Released {0}"
-msgstr ""
+msgstr "Sortie {0}"
 
 #: port/frontend/shell/timeline.cpp:1139
 msgid "Not played yet"
-msgstr ""
+msgstr "Pas encore joué"
 
 #: port/frontend/shell/timeline.cpp:1186
 msgid "An empty shelf"
@@ -11511,7 +11511,7 @@ msgstr "Console précédente ou suivante"
 #. the Timeline's hint for Up and Down, which go to the era before or after
 #: port/frontend/shell/timeline.cpp:1230
 msgid "Previous or next era"
-msgstr ""
+msgstr "Ère précédente ou suivante"
 
 #: port/frontend/shell/welcome.cpp:75
 msgid "For every system: A on Circle as on Nintendo consoles, or on Cross."
@@ -11556,82 +11556,82 @@ msgstr "Cette ligne"
 #. What's new in 6.0: the Library's two new ways to browse
 #: port/frontend/shell/whatsnew.cpp:28
 msgid "Orbit and the Timeline"
-msgstr ""
+msgstr "L'orbite et la chronologie"
 
 #. What's new in 6.0: the Library's two new ways to browse
 #: port/frontend/shell/whatsnew.cpp:28
 msgid "Turn a dial to pick a console, or see every console's games on one shelf."
-msgstr ""
+msgstr "Tournez un bouton pour choisir une console ou voyez les jeux de chaque console sur une étagère."
 
 #. What's new in 6.0: how many consoles the app plays now
 #: port/frontend/shell/whatsnew.cpp:30
 msgid "21 consoles"
-msgstr ""
+msgstr "21 consoles"
 
 #. What's new in 6.0: how many consoles the app plays now
 #: port/frontend/shell/whatsnew.cpp:30
 msgid "From the Game & Watch to the Switch 2, each with its own settings and saves."
-msgstr ""
+msgstr "Du Game & Watch au Switch 2, chacun avec ses propres paramètres et sauvegardes."
 
 #. What's new in 6.0: Switch 2 games; Lichii is the emulator's name, left as it is
 #: port/frontend/shell/whatsnew.cpp:32
 msgid "Switch 2"
-msgstr ""
+msgstr "Switch 2"
 
 #. What's new in 6.0: Switch 2 games; Lichii is the emulator's name, left as it is
 #: port/frontend/shell/whatsnew.cpp:32
 msgid "Switch 2 games on Lichii, with your own keys and firmware."
-msgstr ""
+msgstr "Jeux Switch 2 sur Lichii, avec vos propres clés et firmware."
 
 #. What's new in 6.0: GameCube and Wii games; Porpoise X is the emulator's name, left as it is
 #: port/frontend/shell/whatsnew.cpp:34
 msgid "GameCube and Wii"
-msgstr ""
+msgstr "GameCube et Wii"
 
 #. What's new in 6.0: GameCube and Wii games; Porpoise X is the emulator's name, left as it is
 #: port/frontend/shell/whatsnew.cpp:34
 msgid "Played by Porpoise X, with menus in Playtendoh's style."
-msgstr ""
+msgstr "Joué par Porpoise X, avec des menus dans le style de Playtendoh."
 
 #. What's new in 6.0: Settings > Emulator lists every option of a console's emulator
 #: port/frontend/shell/whatsnew.cpp:36
 msgid "Every emulator option"
-msgstr ""
+msgstr "Chaque option d'émulateur"
 
 #. What's new in 6.0: Settings > Emulator lists every option of a console's emulator
 #: port/frontend/shell/whatsnew.cpp:36
 msgid "Settings > Emulator has every option for each console's emulator."
-msgstr ""
+msgstr "Paramètres > Émulateur propose toutes les options pour l'émulateur de chaque console."
 
 #. What's new in 6.0: EmulationStation (ES-DE) as a launcher, downloaded when chosen
 #: port/frontend/shell/whatsnew.cpp:38
 msgid "Choose ES-DE as your launcher: it downloads when you pick it."
-msgstr ""
+msgstr "Choisissez ES-DE comme lanceur : il se télécharge lorsque vous le choisissez."
 
 #. What's new in 6.0: collections, groups of games the player makes
 #: port/frontend/shell/whatsnew.cpp:40
 msgid "Group your games your way, and find them from the Library's filters."
-msgstr ""
+msgstr "Regroupez vos jeux à votre manière et trouvez-les à partir des filtres de la bibliothèque."
 
 #. What's new in 6.0: the menu over a game, redesigned, with button mapping in every emulator
 #: port/frontend/shell/whatsnew.cpp:42
 msgid "A new in-game menu"
-msgstr ""
+msgstr "Un nouveau menu en jeu"
 
 #. What's new in 6.0: the menu over a game, redesigned, with button mapping in every emulator
 #: port/frontend/shell/whatsnew.cpp:42
 msgid "One menu for every game, with your own button layout in each emulator."
-msgstr ""
+msgstr "Un menu pour chaque jeu, avec votre propre disposition de boutons dans chaque émulateur."
 
 #. What's new in 6.0: the launcher's music and sounds, quieter
 #: port/frontend/shell/whatsnew.cpp:44
 msgid "Calmer sound"
-msgstr ""
+msgstr "Un son plus calme"
 
 #. What's new in 6.0: the launcher's music and sounds, quieter
 #: port/frontend/shell/whatsnew.cpp:44
 msgid "New, quieter music and soft menu sounds."
-msgstr ""
+msgstr "Nouvelle musique plus douce et sons de menu doux."
 
 #. the heading of the screen a new version opens on, once: what it brings
 #: port/frontend/shell/whatsnew.cpp:85
