@@ -170,7 +170,7 @@ namespace testcore
 	size_t MemorySize(unsigned id) { return id == RETRO_MEMORY_SAVE_RAM ? sizeof(saveRam) : 0; }
 
 	const ps5libretro::Core core{"testcore", Init, Deinit, Api, SystemInfo, AvInfo, SetEnvironment, SetVideo, SetSample, SetSamples, SetPoll,
-		SetInput, SetPort, Reset, Run, SerializeSize, Serialize, Unserialize, LoadGame, UnloadGame, MemoryData, MemorySize};
+		SetInput, SetPort, Reset, Run, SerializeSize, Serialize, Unserialize, LoadGame, UnloadGame, MemoryData, MemorySize, nullptr, nullptr};
 }
 
 static void Frames(int count, const ps5libretro::Pad (&pads)[ps5libretro::kPlayers])
