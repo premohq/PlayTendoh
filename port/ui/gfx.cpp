@@ -3,6 +3,9 @@
 
 #include "gfx.h"
 #include "shaders.h"
+#ifdef PLAYTENDOH_DEBUG
+#include "../devloop/grab.h"
+#endif
 
 #include <algorithm>
 #include <cstdio>
@@ -340,6 +343,10 @@ namespace ui
 			info.imageExtent = {m_width, m_height};
 			info.imageArrayLayers = 1;
 			info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+#ifdef PLAYTENDOH_DEBUG
+			// a debug build copies a frame out when PS5_DevLoop asks (devloop/grab.h), where the surface lets it
+			info.imageUsage = devloop::SwapchainUsage(info.imageUsage, caps.supportedUsageFlags);
+#endif
 			info.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
 			info.preTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
 			info.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
@@ -354,6 +361,18 @@ namespace ui
 			vk::vkGetSwapchainImagesKHR(m_device, m_swapchain, &images, m_images.data());
 			Log("[ui] gfx: swapchain " + std::to_string(m_width) + "x" + std::to_string(m_height) + ", " + std::to_string(images) +
 				" images, format " + std::to_string((int)m_format));
+#ifdef PLAYTENDOH_DEBUG
+			if (!m_target.grabFolder.empty())
+			{
+				auto grab = std::make_shared<devloop::Grab>();
+				if (grab->Init(m_device, vk::vkGetDeviceProcAddr, m_memory, m_queueFamily, m_target.grabFolder,
+						[](const std::string& line) { Log("[ui] gfx: " + line); }))
+				{
+					grab->SetSwapchain(m_swapchain, m_images, m_format, {m_width, m_height}, info.imageUsage);
+					m_grab = grab;
+				}
+			}
+#endif
 		}
 		else
 		{
@@ -1197,7 +1216,12 @@ namespace ui
 			present.swapchainCount = 1;
 			present.pSwapchains = &m_swapchain;
 			present.pImageIndices = &image;
-			result = vk::vkQueuePresentKHR(m_queue, &present);
+#ifdef PLAYTENDOH_DEBUG
+			if (m_grab)
+				result = static_cast<devloop::Grab*>(m_grab.get())->QueuePresent(m_queue, present, vk::vkQueuePresentKHR);
+			else
+#endif
+				result = vk::vkQueuePresentKHR(m_queue, &present);
 			if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
 			{
 				Log("[ui] gfx: vkQueuePresentKHR: " + Describe(result));
@@ -1289,6 +1313,7 @@ namespace ui
 			FreeBuffer(m_readback);
 			if (m_pool)
 				vk::vkDestroyCommandPool(m_device, m_pool, nullptr);
+			m_grab.reset(); // its buffer, command pool, semaphore and fence: with the device still there
 			vk::vkDestroyDevice(m_device, nullptr);
 		}
 		if (m_surface && vk::vkDestroySurfaceKHR)

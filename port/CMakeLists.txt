@@ -453,6 +453,13 @@ if(NOT PLAYTENDOH_COMMIT)
 	set(PLAYTENDOH_COMMIT "unknown")
 endif()
 target_compile_definitions(CemuPS5 PUBLIC PLAYTENDOH_COMMIT="${PLAYTENDOH_COMMIT}")
+# A debug build (make release DEBUG=1): what helps develop and test the app on a console, kept out of a
+# release. Now PS5_DevLoop's grab: the frame shown, on request (devloop/grab.h; the launcher's in ui/gfx.cpp)
+option(PLAYTENDOH_DEBUG "a debug build: PS5_DevLoop's grab of the frame shown" OFF)
+if(PLAYTENDOH_DEBUG)
+	target_compile_definitions(CemuPS5 PRIVATE PLAYTENDOH_DEBUG=1)
+	message(STATUS "PS5-ECAM: a debug build (PLAYTENDOH_DEBUG)")
+endif()
 # SteamGridDB's key for this build (boxart.h): from the environment, a secret in CI, never in the source
 if(PS5ECAM_STEAMGRIDDB_KEY)
 	target_compile_definitions(CemuPS5 PRIVATE PS5ECAM_STEAMGRIDDB_KEY="${PS5ECAM_STEAMGRIDDB_KEY}")

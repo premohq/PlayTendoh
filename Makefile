@@ -32,6 +32,12 @@ $(if $(cores_unknown),$(error CORES: no emulator named $(cores_unknown); the nam
 export PS5CEMU_CORES := $(CORES_LIST)
 core = $(filter $(1),$(CORES_LIST))
 
+# A debug build (make release DEBUG=1): what helps develop and test the app on a console, kept out of a
+# release (port/CMakeLists.txt's PLAYTENDOH_DEBUG). Its ZIP and ELF are named -debug.
+DEBUG ?= 0
+export PLAYTENDOH_DEBUG := $(if $(filter 1 on ON yes,$(DEBUG)),ON,OFF)
+DIST_NAME := v$(VERSION)$(if $(filter ON,$(PLAYTENDOH_DEBUG)),-debug)
+
 .PHONY: mupen64plus fceumm gameboy retro-upgrades retro test-retro help deps deps-status radv azahar melonds libretro eden eglantine porpoise build check package release clean distclean test-contribution esde esde-zip
 
 test-retro: ## Host verification for the additional system integration
@@ -68,6 +74,7 @@ help: ## List the targets
 	@echo '                              the emulators a build takes: all, none (the launcher and the Wii U),'
 	@echo '                              libretro, optional, or names: $(CORES_ALL)'
 	@echo '                              $(CORES_OPTIONAL) (CORES=eden,mgba; CORES=all,optional)'
+	@echo '  DEBUG=$(DEBUG)                     1: a debug build (PS5_DevLoop'"'"'s grab of the launcher'"'"'s frame), dist/*-debug'
 
 deps: ## Fetch the pinned inputs and build the libraries Cemu needs for the PS5
 	python3 -B tools/deps.py fetch
@@ -127,13 +134,17 @@ gameboy: ## Build source-pinned GB/GBC and GBA runtimes (prepared PS5 dependenci
 retro-upgrades: ## Build optional N64/NES alternative runtimes (prepared toolchains required)
 	python3 tools/build-retro.py mupen64plus fceumm
 
-# One of them for a package (CORES=mupen64plus, or optional): a runtime staged at its pin is kept, as
-# tools/build-porpoise.sh keeps Porpoise; at another pin it is built again
+# One of them for a package (CORES=mupen64plus, or optional): a runtime staged at its pin, in the same mode
+# (DEBUG=1 or not: its .debug beside it), is kept, as tools/build-porpoise.sh keeps Porpoise; otherwise it is
+# built again, its objects too (make would not see the define change)
 mupen64plus fceumm: deps
 	@pin=$$(python3 -c 'import json,sys; print(next(s["commit"] for s in json.load(open("tools/retro/sources.json"))["sources"] if s["name"] == sys.argv[1]))' $@); \
 	staged=$$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("commit", ""))' build/retro/$@/ECAM-SOURCE.json 2>/dev/null || true); \
-	if [[ $$staged == "$$pin" ]]; then echo "==> [$@] build/retro/$@ is at $${pin:0:12}"; \
-	else rm -rf build/retro/$@ && python3 tools/build-retro.py --reuse-prepared $@; fi
+	mode=$${PLAYTENDOH_DEBUG:-OFF}; \
+	if [[ $$staged == "$$pin" && $$(cat build/retro/$@.debug 2>/dev/null || echo OFF) == "$$mode" ]]; then \
+		echo "==> [$@] build/retro/$@ is at $${pin:0:12}"; \
+	else rm -rf build/retro/$@ build/retro/$@.debug build/retro-source/$@/ps5/build && \
+		python3 tools/build-retro.py --reuse-prepared $@ && echo "$$mode" >build/retro/$@.debug; fi
 
 retro: ## Build the pinned Porpoise, N64 and NES runtimes (prepared donor toolchains required)
 	python3 tools/build-retro.py porpoise n64 nes
@@ -146,16 +157,16 @@ package: build $(call core,eden eglantine porpoise mupen64plus fceumm esde) ## T
 release: export PS5CEMU_RELEASE := 1
 release: package ## dist/PS5-ECAM-vVERSION.zip (the PPSA99360 folder), SHA256SUMS, and the ELF with its symbols
 	@mkdir -p dist
-	rm -f dist/PS5-ECAM-v$(VERSION).zip
-	cd build/app && python3 -m zipfile -c ../../dist/PS5-ECAM-v$(VERSION).zip PPSA99360
-	cd dist && sha256sum PS5-ECAM-v$(VERSION).zip > SHA256SUMS
+	rm -f dist/PS5-ECAM-$(DIST_NAME).zip
+	cd build/app && python3 -m zipfile -c ../../dist/PS5-ECAM-$(DIST_NAME).zip PPSA99360
+	cd dist && sha256sum PS5-ECAM-$(DIST_NAME).zip > SHA256SUMS
 	@# the unstripped ELF of the eboot, kept to look up this release's crash reports
 	@# (tools/symbolize-crash.py dist/ps5cemu-vVERSION.elf boot.log)
-	cp build/cemu/ps5cemu.elf dist/ps5cemu-v$(VERSION).elf
+	cp build/cemu/ps5cemu.elf dist/ps5cemu-$(DIST_NAME).elf
 	@# and the Switch side's program's (ProsperoEdenX's tools/symbolize-crash.py)
-	if [[ -f build/eden/eden.elf ]]; then cp build/eden/eden.elf dist/eden-v$(VERSION).elf; fi
+	if [[ -f build/eden/eden.elf ]]; then cp build/eden/eden.elf dist/eden-$(DIST_NAME).elf; fi
 	@# and the Switch 2's games' program's (EglantinePS5's tools/symbolize-crash.py)
-	if [[ -f build/eglantine/eglantine.elf ]]; then cp build/eglantine/eglantine.elf dist/eglantine-v$(VERSION).elf; fi
+	if [[ -f build/eglantine/eglantine.elf ]]; then cp build/eglantine/eglantine.elf dist/eglantine-$(DIST_NAME).elf; fi
 	@cat dist/SHA256SUMS
 
 clean: ## Remove build outputs (build/, dist/); dependencies stay

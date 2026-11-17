@@ -1,0 +1,117 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Phononenom <64574232+Phononenom@users.noreply.github.com>
+Date: Tue, 17 Nov 2026 05:32:56 -0600
+Subject: [PATCH] PS5: a debug build's PS5_DevLoop grab of the frame shown
+
+In a debug build (PLAYTENDOH_DEBUG, given to video_core with the port's folder) Swapchain::Present answers
+PS5_DevLoop's grab through the port's devloop/grab.h: the frame as it is shown, the 3DS's screens with
+whatever was drawn over them. What it made goes with the swapchain, before the device. A release build
+presents as before.
+---
+ src/video_core/CMakeLists.txt                 |  7 +++
+ .../renderer_vulkan/vk_swapchain.cpp          | 57 +++++++++++++++++++
+ 2 files changed, 64 insertions(+)
+
+diff --git a/src/video_core/CMakeLists.txt b/src/video_core/CMakeLists.txt
+index 52ef483b2..05058d8c3 100644
+--- a/src/video_core/CMakeLists.txt
++++ b/src/video_core/CMakeLists.txt
+@@ -235,3 +235,10 @@ endif()
+ if (CITRA_USE_PRECOMPILED_HEADERS)
+     target_precompile_headers(video_core PRIVATE precompiled_headers.h)
+ endif()
++
++# PS5: a debug build's PS5_DevLoop grab of the frame shown (vk_swapchain.cpp), with the port's
++# devloop/grab.h and app/paths.h (AZAHAR_EXTERNAL_FRONTEND is the port's azahar folder)
++if (PLAYTENDOH_DEBUG AND AZAHAR_EXTERNAL_FRONTEND)
++    target_compile_definitions(video_core PRIVATE PLAYTENDOH_DEBUG=1)
++    target_include_directories(video_core PRIVATE ${AZAHAR_EXTERNAL_FRONTEND}/..)
++endif()
+diff --git a/src/video_core/renderer_vulkan/vk_swapchain.cpp b/src/video_core/renderer_vulkan/vk_swapchain.cpp
+index 14b9a5783..6bf89a3bf 100644
+--- a/src/video_core/renderer_vulkan/vk_swapchain.cpp
++++ b/src/video_core/renderer_vulkan/vk_swapchain.cpp
+@@ -9,12 +9,26 @@
+ #include "common/settings.h"
+ #include "video_core/renderer_vulkan/vk_instance.h"
+ #include "video_core/renderer_vulkan/vk_swapchain.h"
++#ifdef PLAYTENDOH_DEBUG
++// PS5: a debug build's PS5_DevLoop grab of the frame shown (the port's devloop/grab.h, app/paths.h)
++#include "app/paths.h"
++#include "devloop/grab.h"
++#endif
+ 
+ MICROPROFILE_DEFINE(Vulkan_Acquire, "Vulkan", "Swapchain Acquire", MP_RGB(185, 66, 245));
+ MICROPROFILE_DEFINE(Vulkan_Present, "Vulkan", "Swapchain Present", MP_RGB(66, 185, 245));
+ 
+ namespace Vulkan {
+ 
++#ifdef PLAYTENDOH_DEBUG
++namespace {
++devloop::Grab s_grab;
++VkDevice s_grab_device = VK_NULL_HANDLE; // what the grab was made for
++VkSwapchainKHR s_grab_swapchain = VK_NULL_HANDLE;
++bool s_grab_ready = false;
++} // namespace
++#endif
++
+ Swapchain::Swapchain(const Instance& instance_, u32 width, u32 height, vk::SurfaceKHR surface_,
+                      bool low_refresh_rate)
+     : instance{instance_}, surface{surface_} {
+@@ -128,6 +142,42 @@ void Swapchain::Present() {
+     };
+ 
+     MICROPROFILE_SCOPE(Vulkan_Present);
++#ifdef PLAYTENDOH_DEBUG
++    // a debug build: the frame shown, as PS5_DevLoop's grab takes it (the port's devloop/grab.h)
++    const VkDevice device = static_cast<VkDevice>(instance.GetDevice());
++    if (s_grab_device != device) {
++        s_grab_device = device;
++        s_grab_swapchain = VK_NULL_HANDLE;
++        VkPhysicalDeviceMemoryProperties memory{};
++        VULKAN_HPP_DEFAULT_DISPATCHER.vkGetPhysicalDeviceMemoryProperties(
++            static_cast<VkPhysicalDevice>(instance.GetPhysicalDevice()), &memory);
++        s_grab_ready = s_grab.Init(device, VULKAN_HPP_DEFAULT_DISPATCHER.vkGetDeviceProcAddr, memory,
++                                   instance.GetPresentQueueFamilyIndex(), ps5paths::AppDir(),
++                                   [](const std::string& line) { LOG_INFO(Render_Vulkan, "{}", line); });
++    }
++    if (s_grab_ready) {
++        if (s_grab_swapchain != static_cast<VkSwapchainKHR>(swapchain)) {
++            s_grab_swapchain = static_cast<VkSwapchainKHR>(swapchain);
++            std::vector<VkImage> raw(images.begin(), images.end());
++            s_grab.SetSwapchain(s_grab_swapchain, std::move(raw), static_cast<VkFormat>(surface_format.format),
++                                static_cast<VkExtent2D>(extent), VK_IMAGE_USAGE_TRANSFER_SRC_BIT);
++        }
++        const VkResult result =
++            s_grab.QueuePresent(static_cast<VkQueue>(instance.GetPresentQueue()),
++                                static_cast<const VkPresentInfoKHR&>(present_info),
++                                VULKAN_HPP_DEFAULT_DISPATCHER.vkQueuePresentKHR);
++        if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_ERROR_SURFACE_LOST_KHR) {
++            needs_recreation = true;
++            return;
++        }
++        if (result < 0) {
++            LOG_CRITICAL(Render_Vulkan, "Swapchain presentation failed {}", static_cast<int>(result));
++            UNREACHABLE();
++        }
++        frame_index = (frame_index + 1) % image_count;
++        return;
++    }
++#endif
+     try {
+         [[maybe_unused]] vk::Result result = instance.GetPresentQueue().presentKHR(present_info);
+     } catch (vk::OutOfDateKHRError&) {
+@@ -260,6 +310,13 @@ void Swapchain::SetSurfaceProperties() {
+ 
+ void Swapchain::Destroy() {
+     vk::Device device = instance.GetDevice();
++#ifdef PLAYTENDOH_DEBUG
++    // what the grab made, while the device is still there; made again with the next swapchain
++    s_grab.Destroy();
++    s_grab_device = VK_NULL_HANDLE;
++    s_grab_swapchain = VK_NULL_HANDLE;
++    s_grab_ready = false;
++#endif
+     if (swapchain) {
+         device.destroySwapchainKHR(swapchain);
+         swapchain = VK_NULL_HANDLE;

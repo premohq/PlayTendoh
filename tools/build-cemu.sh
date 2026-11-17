@@ -41,6 +41,8 @@ options=(
     -DPS5ECAM_STEAMGRIDDB_KEY="${PS5ECAM_STEAMGRIDDB_KEY:-}"
     # here, so a new address configures again rather than the one the cache kept
     -DPLAYTENDOH_REPORT_URL="$report_url"
+    # a debug build (make DEBUG=1, port/CMakeLists.txt): here too, so a change of it configures again
+    -DPLAYTENDOH_DEBUG="${PLAYTENDOH_DEBUG:-OFF}"
     -DENABLE_VCPKG=OFF -DENABLE_WXWIDGETS=OFF -DENABLE_OPENGL=OFF -DENABLE_METAL=OFF -DENABLE_VULKAN=ON
     -DENABLE_DISCORD_RPC=OFF -DENABLE_HIDAPI=OFF -DENABLE_SDL=OFF -DENABLE_LIBUSB=OFF -DENABLE_CUBEB=OFF
     -DALLOW_PORTABLE=OFF -DBoost_USE_STATIC_LIBS=ON -DBoost_ROOT="$PS5CEMU_SYSROOT"

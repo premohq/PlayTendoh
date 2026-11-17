@@ -71,6 +71,22 @@ def prepare(source, kind, project):
         helper = folder / 'orbis-shims/ProsperoJailbreak.h'
         port = 9064 if kind == 'mupen64plus' else 9085
         replace(helper, f'constexpr int kHelperPort = {port};', f'constexpr int kHelperPort = {9136 if kind == "mupen64plus" else 9137}; // ECAM bundle')
+        # A debug build (PLAYTENDOH_DEBUG): PS5_DevLoop's grab of the frame shown, taken from the surface the
+        # frontend draws into (menus over the game included) as it is presented, before it is tiled for the
+        # display (A8B8G8R8: its bytes are RGBA). No Vulkan here: this checkout's grab.h without it.
+        shutil.copyfile(project / 'port/devloop/grab.h', folder / 'orbis-shims/devloop_grab.h')
+        video = folder / 'orbis-shims/ProsperoVideo.cpp'
+        replace(video, '#include "ProsperoVideo.h"\n', '#include "ProsperoVideo.h"\n#ifdef PLAYTENDOH_DEBUG\n#define DEVLOOP_NO_VULKAN\n#include "devloop_grab.h"\n#endif\n')
+        replace(video, 'void Present(int x, int y, int w, int h, bool wait_vsync)\n{\n\tif (!g.ok)\n\t\treturn;\n',
+                'void Present(int x, int y, int w, int h, bool wait_vsync)\n{\n\tif (!g.ok)\n\t\treturn;\n'
+                '#ifdef PLAYTENDOH_DEBUG\n\tstatic uint64_t devloop_calls = 0; // ECAM bundle: PS5_DevLoop\'s grab, a debug build\n'
+                '\tif (devloop::Asked("/app0", devloop_calls))\n'
+                '\t\tdevloop::SaveRgba("/app0", reinterpret_cast<const uint8_t*>(g.surface), kWidth, kHeight, false, {});\n'
+                '#endif\n')
+        makefile = source / 'ps5/Makefile'
+        if 'PLAYTENDOH_DEBUG' not in makefile.read_text():
+            makefile.write_text(makefile.read_text() + "\n# ECAM bundle: a debug build (PLAYTENDOH_DEBUG=ON) answers PS5_DevLoop's grab\n"
+                                "ifeq ($(PLAYTENDOH_DEBUG),ON)\nDEFS += -DPLAYTENDOH_DEBUG=1\nendif\n")
         return
     if kind == 'porpoise':
         folder = source / 'src'
@@ -90,6 +106,31 @@ def prepare(source, kind, project):
         replace(main, '    g_app.init(&g_gfx, &g_library, &g_settings, g_settings_path, g_options_path, g_saves_path);',
                 '    if (ecam_bridge::request.valid && !ecam_bridge::request.library && !forwarded_game) leave(2);\n    g_app.init(&g_gfx, &g_library, &g_settings, g_settings_path, g_options_path, g_saves_path);')
         replace(folder / 'porpoise_paths.hpp', '#define PORPOISE_APP "/app0"', '#define PORPOISE_APP "/app0/retro/porpoise"')
+        # A debug build (PLAYTENDOH_DEBUG, given to Porpoise's build): PS5_DevLoop's grab of the frame shown,
+        # at Porpoise's one present, where its in-game menu is drawn over the game in the same pass.
+        (folder / 'devloop').mkdir(exist_ok=True)
+        shutil.copyfile(project / 'port/devloop/grab.h', folder / 'devloop/grab.h')
+        vk = folder / 'porpoise_vk.cpp'
+        replace(vk, '#include "porpoise_vk.hpp"\n', '#include "porpoise_vk.hpp"\n#ifdef PLAYTENDOH_DEBUG\n#include "devloop/grab.h" // ECAM bundle: PS5_DevLoop\'s grab\n#endif\n')
+        replace(vk, '\nState s;\n', '\nState s;\n#ifdef PLAYTENDOH_DEBUG\ndevloop::Grab devloop_grab;\n#endif\n')
+        replace(vk, '    if (!info.imageUsage)\n        info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;\n',
+                '    if (!info.imageUsage)\n        info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;\n'
+                '#ifdef PLAYTENDOH_DEBUG\n    info.imageUsage = devloop::SwapchainUsage(info.imageUsage, caps.supportedUsageFlags);\n#endif\n')
+        replace(vk, '    CHECK(vkGetSwapchainImagesKHR(s.device, s.swapchain, &s.image_count, s.images), "images");\n',
+                '    CHECK(vkGetSwapchainImagesKHR(s.device, s.swapchain, &s.image_count, s.images), "images");\n'
+                '#ifdef PLAYTENDOH_DEBUG\n    {\n        VkPhysicalDeviceMemoryProperties memory{};\n'
+                '        vkGetPhysicalDeviceMemoryProperties(s.gpu, &memory);\n'
+                '        if (devloop_grab.Init(s.device, vkGetDeviceProcAddr, memory, s.queue_family, "/app0",\n'
+                '                              [](const std::string& line) { ps5::debug::mark(line.c_str()); }))\n'
+                '            devloop_grab.SetSwapchain(s.swapchain, std::vector<VkImage>(s.images, s.images + s.image_count),\n'
+                '                                      s.format, s.extent, info.imageUsage);\n    }\n#endif\n')
+        replace(vk, '        (void)vkQueuePresentKHR(s.queue, &present_info);',
+                '#ifdef PLAYTENDOH_DEBUG\n        (void)devloop_grab.QueuePresent(s.queue, present_info, vkQueuePresentKHR);\n#else\n'
+                '        (void)vkQueuePresentKHR(s.queue, &present_info);\n#endif')
+        replace(vk, '    if (s.device_is_ours)\n        vkDestroyDevice(s.device, nullptr);',
+                '#ifdef PLAYTENDOH_DEBUG\n    devloop_grab.Destroy();\n#endif\n    if (s.device_is_ours)\n        vkDestroyDevice(s.device, nullptr);')
+        replace(source / 'tools/build-porpoise.sh', 'APP_DEFINITIONS="PS5_RETROARCH_RADV PORPOISE" \\\n',
+                'APP_DEFINITIONS="PS5_RETROARCH_RADV PORPOISE$([[ ${PLAYTENDOH_DEBUG:-OFF} == ON ]] && echo " PLAYTENDOH_DEBUG")" \\\n')
     else:
         folder = source / kind / 'src'
         shutil.copyfile(project / 'port/retro/runtime/ecam_bridge.h', folder / 'ecam_bridge.h')

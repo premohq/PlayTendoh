@@ -1,0 +1,235 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Phononenom <64574232+Phononenom@users.noreply.github.com>
+Date: Tue, 17 Nov 2026 05:47:32 -0600
+Subject: [PATCH] PS5-ECAM's debug build: PS5_DevLoop's grab of the frame
+ shown, OpenGL and Vulkan
+
+In PS5-ECAM's debug build (PLAYTENDOH_DEBUG, passed to Eden's configure) Eden answers PS5_DevLoop's grab
+with the frame as it is shown, with PS5-ECAM's port/devloop/grab.h: OpenGL's default framebuffer read
+back before each swap (the game's and the loading screen's, headless/graphics.cpp), and Vulkan's
+swapchain image at its present (tools/eden-patches/13-devloop-grab.diff, carried into the derived
+vulkan_swapchain.cpp). A release build is as before.
+---
+ headless/graphics.cpp                   |  46 +++++++++++
+ headless/inject.cmake                   |   7 ++
+ tools/build-headless-native.sh          |   1 +
+ tools/eden-patches/13-devloop-grab.diff | 105 ++++++++++++++++++++++++
+ 4 files changed, 159 insertions(+)
+ create mode 100644 tools/eden-patches/13-devloop-grab.diff
+
+diff --git a/headless/graphics.cpp b/headless/graphics.cpp
+index 96b5a82..75f442f 100644
+--- a/headless/graphics.cpp
++++ b/headless/graphics.cpp
+@@ -24,6 +24,12 @@
+ #include "diagnostics.h"
+ #include "display_refresh.h"
+ #include "graphics.h"
++#ifdef PLAYTENDOH_DEBUG
++// PS5-ECAM: a debug build's PS5_DevLoop grab of the OpenGL frame shown (its port/devloop/grab.h)
++#define DEVLOOP_NO_VULKAN
++#include "app/paths.h"
++#include "devloop/grab.h"
++#endif
+ #include "common/scope_exit.h"
+ #include "core/core.h"
+ #include "core/frontend/graphics_context.h"
+@@ -43,6 +49,40 @@ extern "C" int sceSystemServiceHideSplashScreen(void);
+ #endif
+ 
+ namespace Eden {
++
++#ifdef PLAYTENDOH_DEBUG
++namespace {
++// Before a frame is shown: when PS5_DevLoop asks, the default framebuffer read back as it is about to be
++// shown (the game with the HUD, the in-game menu and the loading screen over it) and written for the
++// payload. The GL state it touches is put back.
++void DevLoopGrab(EGLDisplay display, EGLSurface surface) {
++    static uint64_t calls = 0;
++    static const std::string folder = ps5paths::AppDir();
++    if (folder.empty() || !devloop::Asked(folder, calls)) return;
++    EGLint width = 0, height = 0;
++    eglQuerySurface(display, surface, EGL_WIDTH, &width);
++    eglQuerySurface(display, surface, EGL_HEIGHT, &height);
++    if (width <= 0 || height <= 0) return;
++    GLint read_framebuffer = 0, pack_buffer = 0, pack_alignment = 4, pack_row_length = 0;
++    glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &read_framebuffer);
++    glGetIntegerv(GL_PIXEL_PACK_BUFFER_BINDING, &pack_buffer);
++    glGetIntegerv(GL_PACK_ALIGNMENT, &pack_alignment);
++    glGetIntegerv(GL_PACK_ROW_LENGTH, &pack_row_length);
++    glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
++    glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
++    glPixelStorei(GL_PACK_ALIGNMENT, 4);
++    glPixelStorei(GL_PACK_ROW_LENGTH, 0);
++    std::vector<uint8_t> rgba(static_cast<size_t>(width) * height * 4);
++    glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, rgba.data());
++    glBindFramebuffer(GL_READ_FRAMEBUFFER, read_framebuffer);
++    glBindBuffer(GL_PIXEL_PACK_BUFFER, pack_buffer);
++    glPixelStorei(GL_PACK_ALIGNMENT, pack_alignment);
++    glPixelStorei(GL_PACK_ROW_LENGTH, pack_row_length);
++    devloop::SaveRgba(folder, rgba.data(), static_cast<uint32_t>(width), static_cast<uint32_t>(height), true,
++                      [](const std::string& line) { std::printf("%s\n", line.c_str()); });
++}
++} // namespace
++#endif
+ #ifdef EDEN_PS5_VULKAN
+ void PresentVulkanLoading(VideoCore::RendererBase& renderer);
+ #endif
+@@ -359,6 +399,9 @@ public:
+                                             static_cast<uint32_t>(hud_fields.load(std::memory_order_relaxed)));
+             DrawHud(text.data(), false);
+         }
++#ifdef PLAYTENDOH_DEBUG
++        DevLoopGrab(display, surface);
++#endif
+         Check(eglSwapBuffers(display, surface), "eglSwapBuffers");
+     }
+     void PresentLoading() {
+@@ -371,6 +414,9 @@ public:
+             for (unsigned i = 0; i < dots; ++i) text[7 + i] = '.';
+             DrawHud(text, true);
+         }
++#ifdef PLAYTENDOH_DEBUG
++        DevLoopGrab(display, surface);
++#endif
+         Check(eglSwapBuffers(display, surface), "loading swap");
+         if (loading_frames++ < 4) std::printf("EDEN_LOADING frame=%u scene=%d\n", loading_frames, !loading_failed);
+     }
+diff --git a/headless/inject.cmake b/headless/inject.cmake
+index 9817add..67501ef 100644
+--- a/headless/inject.cmake
++++ b/headless/inject.cmake
+@@ -20,3 +20,10 @@ if(PS5_NATIVE)
+                         "-ffile-prefix-map=${CMAKE_BINARY_DIR}/=build/"
+                         "-ffile-prefix-map=${EDEN_PORT_ROOT}/=")
+ endif()
++# PS5-ECAM's debug build (its make DEBUG=1): PS5_DevLoop's grab of the frame shown, at OpenGL's swap
++# (graphics.cpp) and Vulkan's present (tools/eden-patches/13-devloop-grab.diff), with PS5-ECAM's
++# port/devloop/grab.h and app/paths.h from the port/ folder PS5ECAM_PORT names. Before any target exists.
++if(PLAYTENDOH_DEBUG AND EXISTS "$ENV{PS5ECAM_PORT}/devloop/grab.h")
++    add_compile_definitions(PLAYTENDOH_DEBUG=1)
++    include_directories(AFTER "$ENV{PS5ECAM_PORT}")
++endif()
+diff --git a/tools/build-headless-native.sh b/tools/build-headless-native.sh
+index 750ec0d..b96ac2e 100644
+--- a/tools/build-headless-native.sh
++++ b/tools/build-headless-native.sh
+@@ -43,6 +43,7 @@ cmake -S "$scratch/source" -B "$scratch/native-local" -G Ninja \
+     -DCMAKE_TOOLCHAIN_FILE="$root/headless/ps5.cmake" -DPS5_NATIVE=ON -DEDEN_DEVICE_FRONTEND="$devices" \
+     -DCMAKE_BUILD_TYPE=Release -DENABLE_LTO=OFF \
+     -DEDEN_PS5_VULKAN="${EDEN_PS5_VULKAN:-OFF}" \
++    -DPLAYTENDOH_DEBUG="${PLAYTENDOH_DEBUG:-OFF}" \
+     -DEDEN_VULKAN_DRIVER="${EDEN_VULKAN_DRIVER:-CUSTOM}" \
+     -DEDEN_DEV_VULKAN="${EDEN_DEV_VULKAN:-OFF}" \
+     -DCMAKE_C_COMPILER_LAUNCHER="$cache" -DCMAKE_CXX_COMPILER_LAUNCHER="$cache" \
+diff --git a/tools/eden-patches/13-devloop-grab.diff b/tools/eden-patches/13-devloop-grab.diff
+new file mode 100644
+index 0000000..6e9ab38
+--- /dev/null
++++ b/tools/eden-patches/13-devloop-grab.diff
+@@ -0,0 +1,105 @@
++--- a/src/video_core/renderer_vulkan/vk_swapchain.cpp
+++++ b/src/video_core/renderer_vulkan/vk_swapchain.cpp
++@@ -18,6 +18,11 @@
++ #include "common/settings_enums.h"
++ #include "video_core/renderer_vulkan/vk_scheduler.h"
++ #include "video_core/renderer_vulkan/vk_swapchain.h"
+++#ifdef PLAYTENDOH_DEBUG
+++// PS5-ECAM: a debug build's PS5_DevLoop grab of the frame shown (its port/devloop/grab.h, app/paths.h)
+++#include "app/paths.h"
+++#include "devloop/grab.h"
+++#endif
++ #include "video_core/vulkan_common/vk_enum_string_helper.h"
++ #include "video_core/vulkan_common/vulkan_device.h"
++ #include "video_core/vulkan_common/vulkan_wrapper.h"
++@@ -25,6 +30,16 @@
++ 
++ namespace Vulkan {
++ 
+++#ifdef PLAYTENDOH_DEBUG
+++namespace {
+++devloop::Grab devloop_grab;
+++VkQueue devloop_queue{};                // the present queue, as the grab submits to it
+++VkSwapchainKHR devloop_swapchain{};     // the swapchain the grab was last given
+++VkImageUsageFlags devloop_usage{};      // what that swapchain was made for
+++bool devloop_ready{};
+++} // namespace
+++#endif
+++
++ namespace {
++ 
++ VkSurfaceFormatKHR ChooseSwapSurfaceFormat(vk::Span<VkSurfaceFormatKHR> formats) {
++@@ -130,7 +145,14 @@
++     Create(surface, width_, height_);
++ }
++ 
++-Swapchain::~Swapchain() = default;
+++Swapchain::~Swapchain() {
+++#ifdef PLAYTENDOH_DEBUG
+++    // what the grab made, while the device is still there (the renderer's swapchain goes before it)
+++    devloop_grab.Destroy();
+++    devloop_ready = false;
+++    devloop_swapchain = VK_NULL_HANDLE;
+++#endif
+++}
++ 
++ void Swapchain::Create(
++     VkSurfaceKHR_T* surface_,
++@@ -227,7 +249,23 @@
++         .pResults = nullptr,
++     };
++     std::scoped_lock lock{scheduler.submit_mutex};
+++#ifdef PLAYTENDOH_DEBUG
+++    // PS5-ECAM: a debug build answers PS5_DevLoop's grab with the frame as it is shown
+++    VkResult presented;
+++    if (devloop_ready) {
+++        if (devloop_swapchain != *swapchain) {
+++            devloop_swapchain = *swapchain;
+++            devloop_grab.SetSwapchain(devloop_swapchain, images, surface_format.format, extent, devloop_usage);
+++        }
+++        presented = devloop_grab.QueuePresent(devloop_queue, present_info,
+++                                              device.GetDispatchLoader().vkQueuePresentKHR);
+++    } else {
+++        presented = present_queue.Present(present_info);
+++    }
+++    switch (const VkResult result = presented) {
+++#else
++     switch (const VkResult result = present_queue.Present(present_info)) {
+++#endif
++     case VK_SUCCESS:
++         break;
++     case VK_SUBOPTIMAL_KHR:
++@@ -287,7 +325,13 @@
++         .imageColorSpace = surface_format.colorSpace,
++         .imageExtent = {},
++         .imageArrayLayers = 1,
+++#ifdef PLAYTENDOH_DEBUG
+++        // a debug build copies the frame shown out when PS5_DevLoop asks, where the surface lets it
+++        .imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT |
+++                      (capabilities.supportedUsageFlags & VK_IMAGE_USAGE_TRANSFER_SRC_BIT),
+++#else
++         .imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT,
+++#endif
++         .imageSharingMode = VK_SHARING_MODE_EXCLUSIVE,
++         .queueFamilyIndexCount = 0,
++         .pQueueFamilyIndices = nullptr,
++@@ -340,6 +384,19 @@
++     extent = swapchain_ci.imageExtent;
++ 
++     images = swapchain.GetImages();
+++#ifdef PLAYTENDOH_DEBUG
+++    if (!devloop_ready) {
+++        const auto& dld = device.GetDispatchLoader();
+++        VkPhysicalDeviceMemoryProperties memory{};
+++        dld.vkGetPhysicalDeviceMemoryProperties(device.GetPhysical(), &memory);
+++        dld.vkGetDeviceQueue(*device.GetLogical(), device.GetPresentFamily(), 0, &devloop_queue);
+++        devloop_ready = devloop_grab.Init(*device.GetLogical(), dld.vkGetDeviceProcAddr, memory,
+++                                          device.GetPresentFamily(), ps5paths::AppDir(),
+++                                          [](const std::string& line) { LOG_INFO(Render_Vulkan, "{}", line); });
+++    }
+++    devloop_swapchain = VK_NULL_HANDLE; // given to the grab again at the next present
+++    devloop_usage = swapchain_ci.imageUsage;
+++#endif
++     image_count = static_cast<u32>(images.size());
++ #ifdef __ANDROID__
++     // Android is already ordered the same as Switch.

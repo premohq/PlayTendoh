@@ -118,6 +118,10 @@ namespace ps5shell
 		m_fonts.SetFallbackFolders(host.fontFolders);
 		ApplyTheme();
 		ui::Target target = host.target();
+#ifdef PLAYTENDOH_DEBUG
+		// a debug build answers PS5_DevLoop's grab from the app's own folder (devloop/grab.h)
+		target.grabFolder = ps5paths::AppDir();
+#endif
 		const auto createSurface = target.createSurface;
 		if (createSurface)
 			target.createSurface = [this, createSurface](VkInstance instance, std::string& why) {

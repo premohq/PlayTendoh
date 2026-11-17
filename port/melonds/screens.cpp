@@ -11,6 +11,10 @@
 #include "../ps5/display.h"
 #include "../ps5/log.h"
 #include "../ps5/vulkan_display.h"
+#ifdef PLAYTENDOH_DEBUG
+#include "../app/paths.h"
+#include "../devloop/grab.h"
+#endif
 
 #include <algorithm>
 #include <cmath>
@@ -217,6 +221,11 @@ namespace ps5melonds::screens
 			uint64_t frames = 0;
 		};
 		State s;
+#ifdef PLAYTENDOH_DEBUG
+		// a debug build's PS5_DevLoop grab (devloop/grab.h): the frame shown, the DS's or a libretro core's,
+		// with whatever was drawn over it
+		devloop::Grab s_grab;
+#endif
 
 		const char* ResultName(VkResult result)
 		{
@@ -383,6 +392,9 @@ namespace ps5melonds::screens
 			info.imageExtent = {s.width, s.height};
 			info.imageArrayLayers = 1;
 			info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+#ifdef PLAYTENDOH_DEBUG
+			info.imageUsage = devloop::SwapchainUsage(info.imageUsage, caps.supportedUsageFlags);
+#endif
 			info.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
 			info.preTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
 			info.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
@@ -396,6 +408,11 @@ namespace ps5melonds::screens
 			s.images.resize(images);
 			vk.GetSwapchainImagesKHR(s.device, s.swapchain, &images, s.images.data());
 			ps5log::Line("[{}] screens: swapchain {}x{}, {} images, format {}", s_who, s.width, s.height, images, (int)s.format);
+#ifdef PLAYTENDOH_DEBUG
+			if (s_grab.Init(s.device, vk.GetDeviceProcAddr, s.memory, s.queueFamily, ps5paths::AppDir(),
+					[](const std::string& line) { ps5log::Line("[{}] screens: {}", s_who, line); }))
+				s_grab.SetSwapchain(s.swapchain, s.images, s.format, {s.width, s.height}, info.imageUsage);
+#endif
 
 			// the render pass: cleared (black, as Azahar's screens are on), drawn, then shown
 			VkAttachmentDescription attachment{};
@@ -909,7 +926,11 @@ namespace ps5melonds::screens
 		present.swapchainCount = 1;
 		present.pSwapchains = &s.swapchain;
 		present.pImageIndices = &image;
+#ifdef PLAYTENDOH_DEBUG
+		result = s_grab.QueuePresent(s.queue, present, vk.QueuePresentKHR);
+#else
 		result = vk.QueuePresentKHR(s.queue, &present);
+#endif
 		if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
 		{
 			ps5log::Line("[{}] screens: vkQueuePresentKHR: {}", s_who, Describe(result));
@@ -965,6 +986,9 @@ namespace ps5melonds::screens
 				vk.DestroySwapchainKHR(s.device, s.swapchain, nullptr);
 			if (s.pool)
 				vk.DestroyCommandPool(s.device, s.pool, nullptr);
+#ifdef PLAYTENDOH_DEBUG
+			s_grab.Destroy();
+#endif
 			vk.DestroyDevice(s.device, nullptr);
 		}
 		if (s.surface && vk.DestroySurfaceKHR)
