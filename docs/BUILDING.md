@@ -30,6 +30,48 @@ make release   # the app (build/app/PPSA99360), dist/PS5-ECAM-vVERSION.zip with 
 make check     # the same build with a stand-in for RADV: checks everything else, not an app
 ```
 
+**Choosing the emulators.** `CORES` names the emulators a build takes, comma or space separated; it
+works with `make release`, `make package`, `make build` and `make check`:
+
+```bash
+make release                             # CORES=all: every emulator a release has
+make release CORES=none                  # the launcher alone, with the Wii U (Cemu is the app's own program)
+make release CORES=eden,azahar,mgba      # those only
+make release CORES=all,optional          # and Mupen64Plus, FCEUmm and ES-DE, which a release leaves out
+```
+
+The names are `azahar`, `melonds`, `eden`, `eglantine`, `porpoise` and the libretro cores `mesen`,
+`mesens`, `mgba`, `paralleln64`, `beetlevb`, `pokemini` and `gw`; `libretro` is all seven. `optional` is
+`mupen64plus`, `fceumm` and `esde` (ES-DE in the app's folder, as `PS5CEMU_WITH_ESDE=1`), which can be named
+on their own too. An emulator left out is not linked or packaged even when an earlier build left it in
+`build/`, and its sides say it is not in this copy.
+
+**A debug build.** `make release DEBUG=1` builds the same app with what helps develop and test it on a
+console (`PLAYTENDOH_DEBUG` in `port/CMakeLists.txt`), and names its ZIP and ELFs `-debug`. Now that is
+[PS5_DevLoop](https://github.com/griches/PS5_DevLoop)'s `grab`: the frame shown, on request, as a PNG.
+`port/devloop/grab.h` sits where a program shows its frames (`vkQueuePresentKHR`), so a grab is what the
+screen shows, with in-game menus and loading screens over the game: every few frames the program tries to
+remove `devloop-shot` in its own folder, and when that works the next frame goes into `devloop-shots` there,
+which DevLoop sends on and deletes. The launcher (`port/ui/gfx.cpp`), the screens the DS and every
+libretro core share (`port/melonds/screens.cpp`), Cemu (`port/cemu/DevLoopPS5.h`, `patches/cemu`), Azahar
+(`patches/azahar`), and Eden and EglantinePS5 (`patches/eden`, `patches/eglantine`: at OpenGL's swap and at
+Vulkan's present) have it. A program that shows its frames otherwise than through Vulkan calls
+`devloop::Asked` before each frame and `devloop::SaveRgba` with it read back. DevLoop's `titles.json` names the app:
+
+```json
+"playtendoh": {
+  "title_id": "PPSA99360",
+  "request": "/data/homebrew/PPSA99360/devloop-shot",
+  "folder": "/data/homebrew/PPSA99360/devloop-shots"
+}
+```
+
+Porpoise X answers it at its one present, where it draws its in-game menu over the game in the same pass:
+`tools/retro/prepare.py` puts it there, with this checkout's `grab.h`, and gives Porpoise's build `PLAYTENDOH_DEBUG`
+in a debug build. A staged Porpoise is kept only for the same mode (debug or not).
+Mupen64Plus and FCEUmm (`CORES=optional`) answer it from the picture their frontends draw, as it is presented
+(`tools/retro/prepare.py`); each of these is kept staged only for the same mode too.
+
 **The version** is set in one place, `VERSION` in the `Makefile`. The launcher and the boot log
 show it (`port/CMakeLists.txt` reads it), and `tools/package.sh` writes it into the app's
 `param.json`: `3.0.0` is `contentVersion` `03.000.000` and `masterVersion` `03.00` (`2.0.0d` was

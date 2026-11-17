@@ -198,8 +198,11 @@ cp "$PS5CEMU_ROOT"/port/azahar/borders/*.png "$app/assets/borders/"
 cp -a "$deps/Cemu/bin/resources/sharedFonts" "$app/assets/cemu/resources/"
 
 # The Switch side's program (tools/build-eden.sh): ProsperoEdenX's eboot.bin and the files it reads
-# from its own folder, with the boilerplate's libc.prx beside it as in the app's own sce_module
-if [[ -f $PS5CEMU_BUILD/eden/app/eboot.bin ]]; then
+# from its own folder, with the boilerplate's libc.prx beside it as in the app's own sce_module. Only when
+# CORES takes it (tools/env.sh): a build from before stays out of one that leaves it out.
+if ! ps5cemu_core_wanted eden; then
+    echo "CORES leaves out Eden: the Switch side cannot start games"
+elif [[ -f $PS5CEMU_BUILD/eden/app/eboot.bin ]]; then
     cp -a "$PS5CEMU_BUILD/eden/app" "$app/eden"
     mkdir -p "$app/eden/sce_module"
     cp "$boilerplate/runtime/libc.prx" "$app/eden/sce_module/libc.prx"
@@ -211,7 +214,9 @@ fi
 # Switch 2's EglantinePS5 child runtime (tools/build-eglantine.sh), without its standalone title
 # metadata: it reads its assets from /app0/eglantine and returns to /app0/eboot.bin. The boilerplate's
 # libc.prx goes beside it, as in the app's own sce_module and Eden's.
-if [[ -f $PS5CEMU_BUILD/eglantine/app/eboot.bin ]]; then
+if ! ps5cemu_core_wanted eglantine; then
+    echo "CORES leaves out EglantinePS5: the Switch 2 side cannot start games"
+elif [[ -f $PS5CEMU_BUILD/eglantine/app/eboot.bin ]]; then
     cp -a "$PS5CEMU_BUILD/eglantine/app" "$app/eglantine"
     mkdir -p "$app/eglantine/sce_module"
     cp "$boilerplate/runtime/libc.prx" "$app/eglantine/sce_module/libc.prx"
@@ -222,14 +227,18 @@ fi
 
 # EmulationStation (tools/build-esde.sh) is not in the package: the app downloads it when it is chosen
 # (port/app/esde_get.h), from the release `make esde-zip`'s ES-DE-PS5.zip is put on. PS5CEMU_WITH_ESDE=1
-# packages it in the app's folder anyway, for a console with no network.
-if [[ ${PS5CEMU_WITH_ESDE:-0} == 1 && -f $PS5CEMU_BUILD/esde/es-de/es-de.bin ]]; then
-    cp -a "$PS5CEMU_BUILD/esde/es-de" "$app/es-de"
+# packages it in the app's folder anyway, for a console with no network, as CORES=esde (or optional) does.
+if [[ ${PS5CEMU_WITH_ESDE:-0} == 1 ]] || ps5cemu_core_wanted esde; then
+    if [[ -f $PS5CEMU_BUILD/esde/es-de/es-de.bin ]]; then
+        cp -a "$PS5CEMU_BUILD/esde/es-de" "$app/es-de"
+    fi
 fi
 
 # Optional additional systems: only source-built ECAM overlays are staged here.
 for system in porpoise n64 nes mupen64plus fceumm gbc gba; do
     runtime="$PS5CEMU_BUILD/retro/$system"
+    # the ones CORES names, only when it takes them (the others have no name in it)
+    case $system in porpoise|mupen64plus|fceumm) ps5cemu_core_wanted "$system" || continue ;; esac
     if [[ -f $runtime/eboot.bin ]]; then
         [[ -f $runtime/ECAM-SOURCE.json ]] || { echo "Missing source provenance: $runtime" >&2; exit 2; }
         mkdir -p "$app/retro"

@@ -2168,7 +2168,6 @@ namespace ps5shell
 			const char* side;
 			uint32_t minutes;
 		};
-		const char* sides[kSides] = {"Wii U", "3DS", "DS", "Switch", "GameCube", "Wii", "N64", "NES", "GB", "GBC", "GBA", "SNES", "Virtual Boy", "Pokémon mini"};
 		std::vector<Played> games;
 		std::string text;
 		uint64_t all = 0;
@@ -2181,12 +2180,12 @@ namespace ps5shell
 				{
 					minutes += entry.minutesPlayed;
 					played++;
-					games.push_back({entry.game.name, sides[side], entry.minutesPlayed});
+					games.push_back({entry.game.name, SideTitle((System)side), entry.minutesPlayed});
 				}
 			all += minutes;
 			if (played > 0)
 				// tr: Settings > Play time, a side's line: {1} the side (Wii U, 3DS, DS, Switch), {2} its play time, {0} how many games
-				text += TrP(played, "{1}: {2}, {0} game", "{1}: {2}, {0} games", sides[side], Duration(minutes)) + "\n";
+				text += TrP(played, "{1}: {2}, {0} game", "{1}: {2}, {0} games", SideTitle((System)side), Duration(minutes)) + "\n";
 		}
 		if (games.empty())
 			return Tr("Nothing played yet. Play time shows here and on each game's page.");

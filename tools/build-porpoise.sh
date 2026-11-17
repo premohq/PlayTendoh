@@ -20,11 +20,13 @@ out=$PS5CEMU_BUILD/retro/porpoise
 tree=$PS5CEMU_BUILD/retro-source/porpoise
 
 staged=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("commit", ""))' "$out/ECAM-SOURCE.json" 2>/dev/null || true)
-if [[ -f $out/eboot.bin && $staged == "$pin" ]]; then
+# a debug build's Porpoise and a release's are not the same: which one was staged (beside it, not in it)
+mode=${PLAYTENDOH_DEBUG:-OFF}
+if [[ -f $out/eboot.bin && $staged == "$pin" && $(cat "$out.debug" 2>/dev/null || echo OFF) == "$mode" ]]; then
     echo "==> [porpoise] $out is Porpoise X at ${pin:0:12}"
     exit 0
 fi
-rm -rf "$out"
+rm -rf "$out" "$out.debug"
 reuse=()
 if [[ -d $tree ]]; then
     if [[ $(git -C "$tree" rev-parse HEAD 2>/dev/null) == "$pin" ]]; then
@@ -52,5 +54,7 @@ fi
 # it, which this build has no use for: the text alone, where it looks (../PS5_LLVM)
 mkdir -p "$PS5CEMU_BUILD/retro-source/PS5_LLVM/llvm"
 cp -f "$PS5CEMU_ROOT/tools/retro/LLVM-LICENSE.TXT" "$PS5CEMU_BUILD/retro-source/PS5_LLVM/llvm/LICENSE.TXT"
+# a debug build (make DEBUG=1, PLAYTENDOH_DEBUG): Porpoise answers PS5_DevLoop's grab (tools/retro/prepare.py)
 python3 "$PS5CEMU_ROOT/tools/build-retro.py" "${reuse[@]}" porpoise
+echo "$mode" >"$out.debug"
 echo "==> [porpoise] $out ($(du -sh "$out" | cut -f1))"

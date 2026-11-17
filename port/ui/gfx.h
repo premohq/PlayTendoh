@@ -18,6 +18,7 @@
 
 #include <cstdint>
 #include <functional>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -38,6 +39,9 @@ namespace ui
 		std::function<void(const uint8_t* bgra, uint32_t width, uint32_t height, size_t pitch)> readback;
 		// RADV's pipeline cache, kept between sessions (empty: none)
 		std::string pipelineCache;
+		// A debug build's PS5_DevLoop grab (devloop/grab.h): the program's own folder, where the payload asks
+		// for a frame (empty, or a release build: none)
+		std::string grabFolder;
 	};
 
 	// One quad, as the shaders take it (shaders/ui.vert's attributes).
@@ -195,6 +199,7 @@ namespace ui
 		std::vector<VkSemaphore> m_rendered; // one per swapchain image
 		Image m_offscreen;
 		Buffer m_readback;
+		std::shared_ptr<void> m_grab; // a debug build's devloop::Grab (opaque here: the same layout in every build)
 		VkRenderPass m_renderPass = VK_NULL_HANDLE;
 		VkCommandPool m_pool = VK_NULL_HANDLE;
 		VkPipelineCache m_cache = VK_NULL_HANDLE;

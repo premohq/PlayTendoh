@@ -28,7 +28,7 @@ def build(kind, prepare_only=False, reuse_prepared=False):
     # Separate worktree: existing dependency trees, patches and user changes are not modified.
     if subprocess.run(['git', 'cat-file', '-e', pin['commit']], cwd=source, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode:
         run('git', 'fetch', 'origin', pin['commit'], cwd=source)
-    overlay_hashes = {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in [ROOT / 'tools/retro/prepare.py', ROOT / 'port/retro/runtime/ecam_bridge.h']}
+    overlay_hashes = {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in [ROOT / 'tools/retro/prepare.py', ROOT / 'port/retro/runtime/ecam_bridge.h', ROOT / 'port/devloop/grab.h']}
     preparation = {**pin, 'overlay_sha256': overlay_hashes}
     tree = ROOT / 'build/retro-source' / kind
     tree.parent.mkdir(parents=True, exist_ok=True)
@@ -37,8 +37,14 @@ def build(kind, prepare_only=False, reuse_prepared=False):
             raise RuntimeError(f'{tree} exists; use --reuse-prepared after reviewing it, or move it aside')
         recorded = json.loads((tree / 'ECAM-PREPARED.json').read_text())
         actual = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=tree, text=True).strip()
-        if recorded != preparation or actual != pin['commit']:
+        if actual != pin['commit'] or {**recorded, 'overlay_sha256': None} != {**preparation, 'overlay_sha256': None}:
             raise RuntimeError('Prepared source does not match the pinned revision')
+        if recorded != preparation:
+            # the same revision, this checkout's overlay changed since: applied again (prepare.py's
+            # replacements are kept where they are already in, and its files copied over)
+            print(f'{kind}: the overlay changed since {tree} was prepared; applying it again')
+            run('python3', str(ROOT / 'tools/retro/prepare.py'), kind, str(tree))
+            (tree / 'ECAM-PREPARED.json').write_text(json.dumps(preparation, indent=2) + '\n')
     else:
         run('git', 'worktree', 'add', '--detach', str(tree), pin['commit'], cwd=source)
         run('python3', str(ROOT / 'tools/retro/prepare.py'), kind, str(tree))

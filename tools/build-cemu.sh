@@ -41,16 +41,29 @@ options=(
     -DPS5ECAM_STEAMGRIDDB_KEY="${PS5ECAM_STEAMGRIDDB_KEY:-}"
     # here, so a new address configures again rather than the one the cache kept
     -DPLAYTENDOH_REPORT_URL="$report_url"
+    # a debug build (make DEBUG=1, port/CMakeLists.txt): here too, so a change of it configures again
+    -DPLAYTENDOH_DEBUG="${PLAYTENDOH_DEBUG:-OFF}"
     -DENABLE_VCPKG=OFF -DENABLE_WXWIDGETS=OFF -DENABLE_OPENGL=OFF -DENABLE_METAL=OFF -DENABLE_VULKAN=ON
     -DENABLE_DISCORD_RPC=OFF -DENABLE_HIDAPI=OFF -DENABLE_SDL=OFF -DENABLE_LIBUSB=OFF -DENABLE_CUBEB=OFF
     -DALLOW_PORTABLE=OFF -DBoost_USE_STATIC_LIBS=ON -DBoost_ROOT="$PS5CEMU_SYSROOT"
     -DCMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE=OFF
-    # Azahar's core, when tools/build-azahar.sh has built it (port/CMakeLists.txt)
-    -DPS5CEMU_AZAHAR_LIBRARIES="$PS5CEMU_BUILD/azahar/azahar_ps5_libraries.txt"
-    # melonDS's core, when tools/build-melonds.sh has built it (port/CMakeLists.txt)
-    -DPS5CEMU_MELONDS_LIBRARIES="$PS5CEMU_BUILD/melonds/melonds_ps5_libraries.txt"
-    # the libretro cores, when tools/build-libretro.py has built them (port/CMakeLists.txt)
-    -DPS5CEMU_LIBRETRO_OBJECTS="$PS5CEMU_BUILD/libretro/objects.txt"
+)
+# Azahar's core, melonDS's and the libretro cores, when their builds made them (port/CMakeLists.txt) and
+# CORES takes them: one left out is named empty, so a build of it from before is not linked
+taken() { # taken PATH CORE...: PATH if CORES takes one of them, else nothing
+    local path=$1 core
+    shift
+    for core in "$@"; do
+        if ps5cemu_core_wanted "$core"; then
+            echo "$path"
+            return 0
+        fi
+    done
+}
+options+=(
+    -DPS5CEMU_AZAHAR_LIBRARIES="$(taken "$PS5CEMU_BUILD/azahar/azahar_ps5_libraries.txt" azahar)"
+    -DPS5CEMU_MELONDS_LIBRARIES="$(taken "$PS5CEMU_BUILD/melonds/melonds_ps5_libraries.txt" melonds)"
+    -DPS5CEMU_LIBRETRO_OBJECTS="$(taken "$PS5CEMU_BUILD/libretro/objects.txt" mesen mesens mgba paralleln64 beetlevb pokemini gw)"
 )
 if [[ -z $report_url ]]; then
     echo "note: PLAYTENDOH_REPORT_URL is empty: this build asks for no reports and sends none (tools/log-intake/README.md)"

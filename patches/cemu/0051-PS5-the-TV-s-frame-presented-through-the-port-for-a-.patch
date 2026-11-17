@@ -1,0 +1,70 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Phononenom <64574232+Phononenom@users.noreply.github.com>
+Date: Tue, 17 Nov 2026 05:31:04 -0600
+Subject: [PATCH] PS5: the TV's frame presented through the port, for a debug
+ build's PS5_DevLoop grab
+
+VulkanRenderer::SwapBuffer presents through PS5Cemu_Present (port/cemu/DevLoopPS5), which in a debug
+build (PLAYTENDOH_DEBUG, given to CemuCafe) answers PS5_DevLoop's grab with the TV's swapchain image as
+it is shown (port/devloop/grab.h), and in a release build is vkQueuePresentKHR. What it made for the
+device goes before the device.
+---
+ src/Cafe/CMakeLists.txt                              |  6 ++++++
+ src/Cafe/HW/Latte/Renderer/Vulkan/VulkanRenderer.cpp | 12 ++++++++++++
+ 2 files changed, 18 insertions(+)
+
+diff --git a/src/Cafe/CMakeLists.txt b/src/Cafe/CMakeLists.txt
+index 85f5441..945670b 100644
+--- a/src/Cafe/CMakeLists.txt
++++ b/src/Cafe/CMakeLists.txt
+@@ -556,8 +556,14 @@ if(CEMU_PS5)
+ 		"${CEMU_PS5_PORT_DIR}/cemu/VulkanPS5.cpp"
+ 		"${CEMU_PS5_PORT_DIR}/cemu/FrameGenPS5.cpp"
+ 		"${CEMU_PS5_PORT_DIR}/cemu/FrameGenPS5.h"
++		"${CEMU_PS5_PORT_DIR}/cemu/DevLoopPS5.cpp"
++		"${CEMU_PS5_PORT_DIR}/cemu/DevLoopPS5.h"
+ 	)
+ 	target_include_directories(CemuCafe PUBLIC "${CEMU_PS5_PORT_DIR}/cemu")
++	# a debug build (make DEBUG=1): PS5_DevLoop's grab of the TV's frame (port/cemu/DevLoopPS5.h)
++	if(PLAYTENDOH_DEBUG)
++		target_compile_definitions(CemuCafe PRIVATE PLAYTENDOH_DEBUG=1)
++	endif()
+ 	# frame generation (#66): Mihawk-99's PS5_MihawkGen, its compute shaders compiled into it, calling
+ 	# Vulkan through Cemu's entry points (VulkanAPI.h, read before its own headers)
+ 	set(PS5_MIHAWKGEN "${CEMU_PS5_PORT_DIR}/../.deps/PS5_MihawkGen/framegen")
+diff --git a/src/Cafe/HW/Latte/Renderer/Vulkan/VulkanRenderer.cpp b/src/Cafe/HW/Latte/Renderer/Vulkan/VulkanRenderer.cpp
+index 1a54092..10871c6 100644
+--- a/src/Cafe/HW/Latte/Renderer/Vulkan/VulkanRenderer.cpp
++++ b/src/Cafe/HW/Latte/Renderer/Vulkan/VulkanRenderer.cpp
+@@ -1,4 +1,7 @@
+ #include "Cafe/HW/Latte/Renderer/Vulkan/VulkanRenderer.h"
++#if defined(CEMU_PS5)
++#include "DevLoopPS5.h" // a debug build's PS5_DevLoop grab (port/cemu/DevLoopPS5.h)
++#endif
+ 
+ #if defined(CEMU_PS5)
+ #include <string_view>
+@@ -980,6 +983,9 @@ VulkanRenderer::~VulkanRenderer()
+ 	{
+ 		if (m_logicalDevice != VK_NULL_HANDLE)
+ 		{
++#if defined(CEMU_PS5)
++			PS5Cemu_PresentRelease();
++#endif
+ 			vkDestroyDevice(m_logicalDevice, nullptr);
+ 		}
+ 
+@@ -3314,7 +3320,13 @@ void VulkanRenderer::SwapBuffer(bool mainWindow)
+ 
+ 	performanceMonitor.gpuTime_waitForHostGPU.beginMeasuring();
+ 	PS5_WAIT_BEGIN();
++#if defined(CEMU_PS5)
++	// PS5: the TV's frame, as a debug build's PS5_DevLoop grab takes it (port/cemu/DevLoopPS5.h)
++	VkResult result = PS5Cemu_Present(m_presentQueue, presentInfo, chainInfo.mainWindow, m_logicalDevice, m_physicalDevice,
++		m_indices.presentFamily, chainInfo.m_swapchainImages, chainInfo.m_surfaceFormat.format, chainInfo.m_actualExtent);
++#else
+ 	VkResult result = vkQueuePresentKHR(m_presentQueue, &presentInfo);
++#endif
+ 	PS5_WAIT_END(4);
+ 	performanceMonitor.gpuTime_waitForHostGPU.endMeasuring();
+ 	if (result < 0 && result != VK_ERROR_OUT_OF_DATE_KHR)

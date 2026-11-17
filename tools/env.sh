@@ -15,6 +15,16 @@ export JOBS=${JOBS:-$(nproc)}
 export PS5CEMU_RADV=$ps5cemu_root/.deps/PS5_Vulkan/.deps/native/radv-ps5cemu
 export PS5CEMU_RADV_ARCHIVE=${RADV_ARCHIVE:-$PS5CEMU_RADV/lib/libvulkan_radeon.ps5.a}
 
+ps5cemu_core_wanted() {
+    # ps5cemu_core_wanted NAME: whether the build takes that emulator (the Makefile's CORES, which it
+    # exports as PS5CEMU_CORES). A script run by hand, without it, takes all but the optional ones.
+    if [[ -z ${PS5CEMU_CORES+set} ]]; then
+        [[ $1 != mupen64plus && $1 != fceumm && $1 != esde ]]
+        return
+    fi
+    [[ " $PS5CEMU_CORES " == *" $1 "* ]]
+}
+
 ps5cemu_radv_stamp() {
     # Which RADV archive a link takes: its real path, size and time. tools/link.sh keeps it beside the
     # ELF, and tools/build-cemu.sh links again when it changes, which ninja would not see.

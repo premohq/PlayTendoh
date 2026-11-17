@@ -47,6 +47,8 @@ options=(
     -DUSE_SYSTEM_FMT=ON -DUSE_SYSTEM_GLSLANG=ON -DUSE_SYSTEM_ZSTD=ON -DUSE_SYSTEM_OPENSSL=ON
     -DPS5_PLATFORM_INCLUDE="$PS5CEMU_ROOT/.deps/PS5_PayloadSDK/platform/include"
     -DAZAHAR_EXTERNAL_FRONTEND="$PS5CEMU_ROOT/port/azahar"
+    # a debug build (make DEBUG=1): PS5_DevLoop's grab of the frame shown (port/devloop/grab.h)
+    -DPLAYTENDOH_DEBUG="${PLAYTENDOH_DEBUG:-OFF}"
 )
 # configured again when the options change (this script's), as CMake would not know
 if [[ ! -f $build/build.ninja || $(cat "$build/ps5-options" 2>/dev/null) != "${options[*]}" ]]; then
