@@ -19,6 +19,10 @@
       }
     ]
   },
+  "kernel": {
+    "cpuPageTableSize": 134217728,
+    "flexibleMemorySize": 335544320
+  },
   "localizedParameters": {
     "defaultLanguage": "en-US",
     "en-US": {
