@@ -109,6 +109,7 @@ int main(int argc, char* argv[])
 	// the other sides' games in the games folder's folder of their key (gba/: preview-shell.sh puts a few there)
 	for (size_t i = 0; i < ps5retro::kSystems.size(); i++)
 		settings.retro[i].gamesFolder = std::string(argv[3]) + "/" + std::string(ps5retro::kSystems[i].key);
+	settings.nx2.gamesFolder = std::string(argv[3]) + "/switch2"; // preview-shell.sh's Switch 2 game
 	if (!std::getenv("PREVIEW_FIRST"))
 	{
 		// earlier sessions: the side last used, the games last played, the counts their scans saved
@@ -178,6 +179,8 @@ int main(int argc, char* argv[])
 			ps5melonds::StartScan(settings.nds.gamesFolder);
 		else if (system == ps5launcher::System::Switch)
 			ps5eden::StartScan(settings.nx.gamesFolder);
+		else if (system == ps5launcher::System::Switch2)
+			ps5eden::StartScan(settings.nx2.gamesFolder, true);
 		else if (ps5retro::IsRetro((int)system)) // as main_ps5.cpp's: the side's folder looked through
 			ps5retro::StartScan((int)system, settings.retro[ps5retro::Slot((int)system)].gamesFolder);
 		else
@@ -193,6 +196,7 @@ namespace ps5eglantine
 	bool KeysFound() { return true; }
 	bool FirmwareFound() { return true; }
 	std::string DataFolder() { return "/data/eglantineps5"; }
+	std::string ClearShaderCache(uint64_t) { return ps5lang::TrP(2, "{0} file deleted ({1} MB)", "{0} files deleted ({1} MB)", 412); }
 }
 
 namespace ps5libretro

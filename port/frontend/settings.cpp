@@ -134,6 +134,10 @@ namespace ps5settings
 			ReadBool(json, "nxSkipInvalidation", n3ds.nxSkipInvalidation);
 			ReadBool(json, "nxBlockList", n3ds.nxBlockList);
 			ReadBool(json, "nxCompactMemory", n3ds.nxCompactMemory);
+			ReadInt(json, "nxPacking", n3ds.nxPacking, 0, 1);
+			ReadInt(json, "nxTextureMemory", n3ds.nxTextureMemory, 0, 3);
+			ReadInt(json, "nxGiveBack", n3ds.nxGiveBack, 0, 4);
+			ReadBool(json, "nxKeepShaders", n3ds.nxKeepShaders);
 			ReadString(json, "nxRoomHost", n3ds.nxRoomHost);
 			ReadInt(json, "nxRoomPort", n3ds.nxRoomPort, 1, 65535);
 			ReadString(json, "nxRoomName", n3ds.nxRoomName);
@@ -268,6 +272,14 @@ namespace ps5settings
 			writer.Bool(n3ds.nxBlockList);
 			writer.Key("nxCompactMemory");
 			writer.Bool(n3ds.nxCompactMemory);
+			writer.Key("nxPacking");
+			writer.Int(n3ds.nxPacking);
+			writer.Key("nxTextureMemory");
+			writer.Int(n3ds.nxTextureMemory);
+			writer.Key("nxGiveBack");
+			writer.Int(n3ds.nxGiveBack);
+			writer.Key("nxKeepShaders");
+			writer.Bool(n3ds.nxKeepShaders);
 			writer.Key("nxRoomHost");
 			writer.String(n3ds.nxRoomHost.c_str());
 			writer.Key("nxRoomPort");
@@ -840,6 +852,10 @@ namespace ps5settings
 				{"nxSkipInvalidation", nullptr, nullptr, nullptr, &N3ds::nxSkipInvalidation},
 				{"nxBlockList", nullptr, nullptr, nullptr, &N3ds::nxBlockList},
 				{"nxCompactMemory", nullptr, nullptr, nullptr, &N3ds::nxCompactMemory},
+				{"nxPacking", nullptr, nullptr, &N3ds::nxPacking, nullptr, 0, 1},
+				{"nxTextureMemory", nullptr, nullptr, &N3ds::nxTextureMemory, nullptr, 0, 3},
+				{"nxGiveBack", nullptr, nullptr, &N3ds::nxGiveBack, nullptr, 0, 4},
+				{"nxKeepShaders", nullptr, nullptr, nullptr, &N3ds::nxKeepShaders},
 			};
 			return fields;
 		}
@@ -852,23 +868,24 @@ namespace ps5settings
 			return nullptr;
 		}
 
-		const N3ds& Handheld(const Launcher& settings, const std::string& side)
-		{
-			// the other sides' own (a side of ps5retro::kSystems')
-			for (size_t i = 0; i < ps5retro::kSystems.size(); i++)
-				if (side == ps5retro::kSystems[i].key)
-					return settings.retro[i];
-			return side == "ds" ? settings.nds : side == "switch2" ? settings.nx2 : side == "switch" ? settings.nx : settings.n3ds;
-		}
+	}
 
-		N3ds& Handheld(Launcher& settings, const std::string& side)
-		{
-			// the other sides' own (a side of ps5retro::kSystems')
-			for (size_t i = 0; i < ps5retro::kSystems.size(); i++)
-				if (side == ps5retro::kSystems[i].key)
-					return settings.retro[i];
-			return side == "ds" ? settings.nds : side == "switch2" ? settings.nx2 : side == "switch" ? settings.nx : settings.n3ds;
-		}
+	const N3ds& Handheld(const Launcher& settings, const std::string& side)
+	{
+		// the other sides' own (a side of ps5retro::kSystems')
+		for (size_t i = 0; i < ps5retro::kSystems.size(); i++)
+			if (side == ps5retro::kSystems[i].key)
+				return settings.retro[i];
+		return side == "ds" ? settings.nds : side == "switch2" ? settings.nx2 : side == "switch" ? settings.nx : settings.n3ds;
+	}
+
+	N3ds& Handheld(Launcher& settings, const std::string& side)
+	{
+		// the other sides' own (a side of ps5retro::kSystems')
+		for (size_t i = 0; i < ps5retro::kSystems.size(); i++)
+			if (side == ps5retro::kSystems[i].key)
+				return settings.retro[i];
+		return side == "ds" ? settings.nds : side == "switch2" ? settings.nx2 : side == "switch" ? settings.nx : settings.n3ds;
 	}
 
 	std::string GameKey(const std::string& side, uint64_t titleId)
@@ -889,7 +906,8 @@ namespace ps5settings
 			"nxUnsafeCpu", "nxUnsafeDma", "nxReactiveFlushing", "nxSkipInvalidation", "nxBlockList", "nxCompactMemory"};
 		static const std::vector<std::string> nx2 = {"nxResolution", "nxFilter", "nxFrameGeneration", "nxDocked", "volume", "nxController", "nxDeadzone",
 			"performance", "nxOutput", "nxHighRefresh", "nxLanguage", "nxAsyncShaders", "nxBlockList", "nxFastGpu", "nxUnsafeCpu", "nxUnsafeDma",
-			"nxReactiveFlushing", "nxSkipInvalidation"};
+			"nxReactiveFlushing", "nxSkipInvalidation", "nxPacking", "nxAntiAliasing", "nxSharpening", "nxSpeedLimit",
+			"nxTextureMemory", "nxGiveBack", "nxKeepShaders"};
 		// the other sides' (their in-game menu's, port/libretro)
 		static const std::vector<std::string> retro = {"dsFilter", "border", "volume", "pictureSize", "pictureShape", "retroController"};
 		static const std::vector<std::string> none;

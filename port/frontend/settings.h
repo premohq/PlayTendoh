@@ -107,6 +107,13 @@ namespace ps5settings
 		bool nxSkipInvalidation = false; // fewer CPU cache invalidations
 		bool nxBlockList = false;	  // the blocks of earlier sessions compiled ahead
 		bool nxCompactMemory = false; // the game's memory in 16 KiB pages where it is mostly zeroes
+		int nxPacking = 0;			  // the Switch 2's game memory packed while the console runs short: 0 Faster (LZ4), 1 Smaller (zstd)
+		// the Switch 2's: the most its textures keep (0 Lichii's own, about 5 GB on the console; 1 2.5 GB, 2 2 GB, its default; 3 1.5 GB),
+		// how they are let go while a write of the game's memory waits (0 a little at a time; 1, 2, 3 all of them
+		// after 0.5, 1, 2 s of waiting; 4 all at once), and the shaders read at start kept then (EglantinePS5's env)
+		int nxTextureMemory = 0;
+		int nxGiveBack = 2;
+		bool nxKeepShaders = false;
 		// ProsperoEden's rooms (Settings > Online > Multiplayer): the one a Switch game joins as it starts, none
 		// when nxRoomHost is empty, and the nickname shown in it
 		std::string nxRoomHost, nxRoomName, nxRoomPassword, nxNickname;
@@ -149,6 +156,9 @@ namespace ps5settings
 		nx.gamesFolder = "/data/eglantineps5/roms";
 		nx.nxFastGpu = true;
 		nx.nxReactiveFlushing = false;
+		// 2 GB of textures (1536/2048 MiB thresholds): Ocarina of Time walked the whole of Kokiri Forest with
+		// it, where Lichii's own (about 5 GB) ran out of memory sooner (18-19 Nov)
+		nx.nxTextureMemory = 2;
 		return nx;
 	}
 
@@ -377,6 +387,10 @@ namespace ps5settings
 	// side: "wiiu", "3ds", "ds" or "switch", as ps5cemu.json names them
 
 	std::string GameKey(const std::string& side, uint64_t titleId);
+	// A side's own settings in a Launcher, by its name: the DS's nds, the Switch 2's nx2, the Switch's nx, a
+	// libretro side's retro slot, the 3DS's (and the Wii U's, which has none) n3ds
+	const N3ds& Handheld(const Launcher& settings, const std::string& side);
+	N3ds& Handheld(Launcher& settings, const std::string& side);
 	// The settings a game on a side can have its own of, by their names in ps5cemu.json
 	const std::vector<std::string>& GameSettingNames(const std::string& side);
 	// A side's setting as a number (on and off as 1 and 0), and set from one (clamped as Load clamps).

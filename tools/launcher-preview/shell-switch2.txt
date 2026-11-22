@@ -1,0 +1,59 @@
+# The Switch 2 side's settings: its own pages, then a game's, each row showing the value it keeps
+# (PREVIEW_SIDE=switch2 PREVIEW_SIDES=1048576 tools/preview-shell.sh tools/launcher-preview/shell-switch2.txt)
+wait 120
+press options
+press down down cross            # the game's settings
+wait 45
+press right                      # Graphics' rows
+press left                       # Internal resolution: 0.75x, the game's own
+press down right                 # Upscaling: AMD FSR 1, so FSR sharpening shows
+press down down right            # Anti-aliasing: FXAA
+wait 25
+shot s2-game-graphics
+press circle circle              # out of the game's settings
+wait 30
+press options
+press down down cross            # its settings again: what it keeps
+wait 45
+press right
+wait 25
+shot s2-game-graphics-again
+press circle
+press down                       # System
+press right
+wait 25
+shot s2-game-system
+press circle
+press down                       # Performance
+press right
+wait 25
+shot s2-game-performance
+press circle circle circle       # back to the Library
+wait 30
+press up                         # the bar
+press right right                # Settings, on Graphics
+wait 25
+press right                      # its rows
+press down right                 # Upscaling: AMD FSR 1
+wait 25
+shot s2-graphics
+press circle
+press down down                  # System
+press right
+wait 25
+shot s2-system
+press down down down down        # Speed limit, Language, the volume
+wait 25
+shot s2-system-down
+press circle
+press down                       # Performance
+press right
+wait 25
+shot s2-performance
+press down down cross            # Memory: packing, texture memory, how textures go, the shaders kept
+wait 25
+shot s2-performance-memory
+press right                      # Memory packing: Smaller
+press down right                 # Texture memory: 2.5 GB
+wait 25
+shot s2-performance-memory-changed

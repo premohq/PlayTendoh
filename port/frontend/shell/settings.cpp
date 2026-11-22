@@ -231,6 +231,7 @@ namespace ps5shell
 		std::vector<SettingsPage> pages;
 		const std::string every = IsWiiU() ? Tr("For every Wii U game.") :
 			Is3ds()						   ? Tr("For every 3DS game.") :
+			IsSwitch2()					   ? TrF("For every {0} game.", SideTitle(m_side)) :
 			IsSwitch()					   ? Tr("For every Switch game.") :
 			IsDs()						   ? Tr("For every DS game.") :
 											 // tr: a libretro system's Settings page's line: {0} is the system (NES, Game Boy...)
@@ -569,7 +570,7 @@ namespace ps5shell
 			Row diagnostic; diagnostic.id = "retro-diagnostics"; diagnostic.kind = Kind::Action; diagnostic.label = Tr("Emulator diagnostics"); rows.push_back(diagnostic);
 			return rows;
 		}
-		const ps5settings::N3ds& hand = IsRetro() ? settings.retro[ps5retro::Slot(SideIndex())] : m_side == System::Nds ? settings.nds : m_side == System::Switch ? settings.nx : settings.n3ds;
+		const ps5settings::N3ds& hand = ps5settings::Handheld(settings, ps5launcher::SideName(m_side));
 		std::vector<Row> rows;
 		std::string group; // the › page the rows made now are on (sub)
 		auto toggle = [&](const char* id, const std::string& label, bool on, const std::string& description, const std::string& help) {
@@ -783,14 +784,14 @@ namespace ps5shell
 					IsSwitch2() ? Tr("Choose Bilinear, AMD FSR 1, Bicubic or Nearest neighbour. Applies when the next game starts.") :
 					Tr("Bilinear is soft, Bicubic sharper, Nearest neighbour keeps pixels square. AMD FSR 1 keeps edges clean for games below 4K, at a small GPU cost.")),
 				"nxFilter");
-			if (!IsSwitch2())
-			{
 			// FSR's sharpening, anti-aliasing and Eden's ReShade looks (switch_extras.cpp's, which SettingRows adds
-			// behind this row), what is done over the picture
+			// behind this row), what is done over the picture; the Switch 2's have no ReShade, so they are on
+			// Graphics itself
 			const std::vector<std::string> antiAliasing{Tr("Off"), "FXAA", "SMAA"};
-			// tr: Settings > Graphics on the Switch side: a row that opens FSR sharpening, anti-aliasing and Eden's ReShade looks
-			sub("nxpost", Tr("Picture effects"), antiAliasing[std::clamp(hand.nxAntiAliasing, 0, 2)], Tr("Sharpening, anti-aliasing and ReShade."),
-				Tr("FSR sharpening, anti-aliasing and ReShade looks (built-in or your own). Press Triangle on each for more."));
+			if (!IsSwitch2())
+				// tr: Settings > Graphics on the Switch side: a row that opens FSR sharpening, anti-aliasing and Eden's ReShade looks
+				sub("nxpost", Tr("Picture effects"), antiAliasing[std::clamp(hand.nxAntiAliasing, 0, 2)], Tr("Sharpening, anti-aliasing and ReShade."),
+					Tr("FSR sharpening, anti-aliasing and ReShade looks (built-in or your own). Press Triangle on each for more."));
 			// FSR 1's own setting, while it is the filter
 			if (hand.nxFilter == 1)
 			{
@@ -806,6 +807,8 @@ namespace ps5shell
 					Tr("FXAA smooths edges lightly, SMAA more cleanly, each at a small GPU cost. Also in the in-game menu."),
 					Kind::Segmented),
 				"nxAntiAliasing");
+			if (!IsSwitch2())
+			{
 			endSub();
 			own(choice("nx-astc", Tr("ASTC textures"), {Tr("Compressed"), Tr("Full quality")}, hand.nxAstc,
 					Tr("Compressed saves graphics memory; full quality looks best."),
@@ -1032,7 +1035,7 @@ namespace ps5shell
 			for (int percent : {100, 150, 200, 300})
 				speeds.push_back(Percent(percent));
 			speeds.push_back(TrC("speed limit", "None"));
-			if (!IsSwitch2()) own(choice("nx-speedlimit", Tr("Speed limit"), speeds, std::clamp(hand.nxSpeedLimit, 0, 4), Tr("How fast the game may run."),
+			own(choice("nx-speedlimit", Tr("Speed limit"), speeds, std::clamp(hand.nxSpeedLimit, 0, 4), Tr("How fast the game may run."),
 					Tr("Compared to the Switch's speed. Above 100% can let a 30 fps game reach 60, but games that time by frames play faster. None runs as fast as possible. Applies to the next game.")),
 				"nxSpeedLimit");
 			// the system language games see, each named in its own language
@@ -1082,8 +1085,50 @@ namespace ps5shell
 				"nxAsyncShaders");
 			own(toggle(switches[1].id, Tr(switches[1].label), hand.*(switches[1].value), Tr(switches[1].about), Tr(switches[1].about)),
 				switches[1].field);
-			// how many shortcuts differ from Eden's own choice (all off, Reactive flushing on)
-			const ps5settings::N3ds defaults;
+			// the Switch 2's ways of making room as the console runs short of memory, behind a row of their own as
+			// Accuracy's shortcuts are (EglantinePS5 turns each into its core's env at the game's start, where
+			// env.txt's own line wins): read once as the game starts, so none is in the in-game menu
+			if (IsSwitch2())
+			{
+				const ps5settings::N3ds room = ps5settings::Switch2Defaults();
+				const int roomChanged = (hand.nxPacking != room.nxPacking) + (hand.nxTextureMemory != room.nxTextureMemory) +
+					(hand.nxGiveBack != room.nxGiveBack) + (hand.nxKeepShaders != room.nxKeepShaders);
+				// tr: Settings > Performance on the Switch 2 side: a row that opens how Lichii makes room when memory runs short; its value: how many are changed
+				sub("nxmemory", Tr("Memory"), roomChanged ? TrP(roomChanged, "{0} changed", "{0} changed") : std::string(Tr("Default")),
+					Tr("Packing, textures and shaders."),
+					Tr("How Lichii makes room when the console runs short of memory. Press Triangle on each for more."));
+				// tr: Settings > Performance on the Switch 2 side: how the game's memory is packed while the console runs short of it
+				own(choice("nx-packing", Tr("Memory packing"), {Tr("Faster"), Tr("Smaller")}, std::clamp(hand.nxPacking, 0, 1),
+						Tr("How the game's memory is packed when the console runs short."),
+						Tr("Faster unpacks quickly. Smaller packs the game's memory tighter, so more of it fits, but unpacking takes longer and can add hitches. Applies to the next game."),
+						Kind::Segmented),
+					"nxPacking");
+				// the texture cache's thresholds (EDEN_NX2_TC_CRITICAL_MIB, its EXPECTED 512 MiB under it): Lichii's own
+				// come from the graphics memory budget, about 5 GB on the console
+				own(choice("nx-texturememory", Tr("Texture memory"), {Tr("Automatic"), "2.5 GB", "2 GB", "1.5 GB"}, std::clamp(hand.nxTextureMemory, 0, 3),
+						Tr("The most graphics memory the game's textures keep."),
+						Tr("Automatic lets Lichii keep up to about 5 GB. Less leaves more room for the rest of the game, but textures load again more often, which can add hitches. Applies to the next game.")),
+					"nxTextureMemory");
+				// how the textures go while a write of the game's memory waits for room (EDEN_TC_GIVE_BACK_MODE and
+				// _WAIT_MS): a little at a time, or all of them after a wait or at once
+				std::vector<std::string> giveBack{Tr("A little at a time")};
+				for (const char* seconds : {"0.5", "1", "2"})
+					// tr: Settings > Performance > Memory on the Switch 2 side: let go of every unused texture once the game has waited {0} seconds for memory
+					giveBack.push_back(TrF("All after {0} s", seconds));
+				giveBack.push_back(Tr("All at once"));
+				own(choice("nx-giveback", Tr("When memory runs short"), giveBack, std::clamp(hand.nxGiveBack, 0, 4),
+						Tr("How textures are let go while the game waits for memory."),
+						Tr("A little at a time lets go of unused textures in steps. All lets go of every one the game isn't using, so it gets going sooner but loads more again. Applies to the next game.")),
+					"nxGiveBack");
+				// the shaders the cache read at start, let go while a write waits (EDEN_SHADER_PROGRAMS_KEEP)
+				own(toggle("nx-keepshaders", Tr("Keep loaded shaders"), hand.nxKeepShaders, Tr("Keeps the shaders read at start when memory runs short."),
+						Tr("Off lets them go while the game waits for memory (about 220 MB in Ocarina of Time) and builds any it needs again. On keeps them. Applies to the next game.")),
+					"nxKeepShaders");
+				endSub();
+			}
+			// how many shortcuts differ from Eden's own choice (all off, Reactive flushing on), or EglantinePS5's
+			// on the Switch 2 side (Fast GPU on, Reactive flushing off)
+			const ps5settings::N3ds defaults = IsSwitch2() ? ps5settings::Switch2Defaults() : ps5settings::N3ds{};
 			int changed = 0;
 			for (int i = kShortcuts; i < (int)std::size(switches); i++)
 				changed += hand.*(switches[i].value) != defaults.*(switches[i].value);
@@ -1663,7 +1708,7 @@ namespace ps5shell
 		// System
 		if (page == "system")
 		{
-			own(slider("volume", IsWiiU() ? Tr("Wii U games' volume") : Is3ds() ? Tr("3DS games' volume") : IsSwitch() ? Tr("Switch games' volume") : Tr("DS games' volume"),
+			own(slider("volume", IsWiiU() ? Tr("Wii U games' volume") : Is3ds() ? Tr("3DS games' volume") : IsSwitch2() ? Tr("Switch 2 games' volume") : IsSwitch() ? Tr("Switch games' volume") : Tr("DS games' volume"),
 					IsWiiU() ? settings.volume : hand.volume, 100, Tr("The games' sound."), Tr("Game volume for this system. Left and Right change it by 10%.")),
 				"volume");
 			if (IsWiiU())
@@ -1799,6 +1844,20 @@ namespace ps5shell
 			rows.push_back(std::move(row));
 		}
 		rows = SubPageRows(withExtras(std::move(rows)));
+		// a Switch 2 game's shader cache, Lichii's, built again as it plays (Settings > Game files has the
+		// other sides' caches, each a whole emulator's)
+		if (IsSwitch2() && page == "performance" && m_subPage.empty())
+		{
+			Row clear;
+			clear.kind = Row::Kind::Hold;
+			clear.id = "nxclearcache";
+			// tr: Settings for one Switch 2 game > Performance: a row that deletes that game's shader cache
+			clear.label = Tr("Clear shader cache");
+			clear.value = Tr("Hold Cross");
+			clear.description = Tr("Try this if a game crashes.");
+			clear.help = Tr("Deletes this game's shader cache. It is built again as you play, so the first few minutes may stutter.");
+			rows.push_back(clear);
+		}
 		if (!rows.empty() && m_subPage.empty())
 		{
 			Row reset;
@@ -2283,7 +2342,7 @@ namespace ps5shell
 
 	void Shell::SetRowIndex(ps5settings::Launcher& settings, const std::string& id, int index)
 	{
-		ps5settings::N3ds& hand = IsRetro() ? settings.retro[ps5retro::Slot(SideIndex())] : m_side == System::Nds ? settings.nds : m_side == System::Switch ? settings.nx : settings.n3ds;
+		ps5settings::N3ds& hand = ps5settings::Handheld(settings, ps5launcher::SideName(m_side));
 		if (id == "retro-backend" && IsRetro()) settings.retro[ps5retro::Slot(SideIndex())].retroBackend = std::clamp(index, 0, 1);
 		else if (id.rfind("core:", 0) == 0 && IsRetro())
 		{
@@ -2363,6 +2422,12 @@ namespace ps5shell
 			hand.nxLanguage = std::clamp(index - 1, -1, (int)std::size(ps5eden::kLanguages) - 1);
 		else if (id == "nx-memory")
 			hand.nxMemory = std::clamp(index, 0, 2);
+		else if (id == "nx-packing")
+			hand.nxPacking = std::clamp(index, 0, 1);
+		else if (id == "nx-texturememory")
+			hand.nxTextureMemory = std::clamp(index, 0, 3);
+		else if (id == "nx-giveback")
+			hand.nxGiveBack = std::clamp(index, 0, 4);
 		else if (id == "theme")
 			settings.ui.theme = index >= 0 && index < (int)m_themes.size() ? m_themes[index].id : "";
 		else if (id == "launcher")
@@ -2416,7 +2481,7 @@ namespace ps5shell
 
 	bool Shell::ApplyRow(ps5settings::Launcher& settings, const Row& row, int step, bool cross)
 	{
-		ps5settings::N3ds& hand = IsRetro() ? settings.retro[ps5retro::Slot(SideIndex())] : m_side == System::Nds ? settings.nds : m_side == System::Switch ? settings.nx : settings.n3ds;
+		ps5settings::N3ds& hand = ps5settings::Handheld(settings, ps5launcher::SideName(m_side));
 		const std::string& id = row.id;
 		switch (row.kind)
 		{
@@ -2548,6 +2613,8 @@ namespace ps5shell
 				hand.nxBlockList = on;
 			else if (id == "nx-compactmemory")
 				hand.nxCompactMemory = on;
+			else if (id == "nx-keepshaders")
+				hand.nxKeepShaders = on;
 			else if (id == "hiddentouch")
 				hand.hiddenTouch = on;
 			else if (id == "screengap")
@@ -3421,6 +3488,8 @@ namespace ps5shell
 		}
 		else if (id == "porpoiseresetall")
 			ResetAllPorpoise();
+		else if (id == "nxclearcache" && IsSwitch2() && InGameSettings())
+			Toast(ps5eglantine::ClearShaderCache(m_gameTitle));
 		else if (id == "resetgame")
 		{
 			if (IsPorpoise())

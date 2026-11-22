@@ -8,7 +8,9 @@
 #include "../eden/ingame.h"
 #include "../ps5/log.h"
 
+#include <algorithm>
 #include <filesystem>
+#include <fmt/format.h>
 
 namespace ps5eglantine
 {
@@ -33,6 +35,35 @@ namespace ps5eglantine
 		if (!std::filesystem::is_directory(ps5files::OwnStatus(folder, error)) || error)
 			return false;
 		return std::filesystem::directory_iterator(folder, error) != std::filesystem::directory_iterator{} && !error;
+	}
+
+	std::string ClearShaderCache(uint64_t titleId)
+	{
+		namespace fs = std::filesystem;
+		// the folder vk_pipeline_cache.cpp makes for the title: user/cache/shader/<its ID, 16 hex digits>
+		const fs::path folder = DataFolder() + fmt::format("/user/cache/shader/{:016x}", titleId);
+		std::error_code ec;
+		int files = 0;
+		uintmax_t bytes = 0;
+		std::vector<fs::path> doomed;
+		for (auto it = fs::directory_iterator(folder, ec); !ec && it != fs::directory_iterator(); it.increment(ec))
+		{
+			std::error_code statusError;
+			if (fs::is_regular_file(ps5files::OwnStatus(it->path(), statusError)) && !statusError)
+				doomed.push_back(it->path());
+		}
+		for (const fs::path& file : doomed)
+		{
+			const uintmax_t size = fs::file_size(file, ec);
+			const uintmax_t counted = ec ? 0 : size;
+			if (fs::remove(file, ec))
+			{
+				files++;
+				bytes += counted;
+			}
+		}
+		ps5log::Line("[switch2] shader cache cleared in {}: {} files, {} MiB", folder.string(), files, bytes >> 20);
+		return files ? ps5lang::TrP(files, "{0} file deleted ({1} MB)", "{0} files deleted ({1} MB)", bytes / 1000000) : std::string(ps5lang::Tr("None to delete"));
 	}
 
 	void LaunchGame(const ps5emu::Game& game, const ps5settings::Launcher& settings, std::string& error)
@@ -67,6 +98,9 @@ namespace ps5eglantine
 			"--ecam-session", ps5ingamenx::SessionFile(),
 			"--ecam-setting", "resolution=" + std::to_string(settings.nx.nxResolution),
 			"--ecam-setting", "filter=" + std::to_string(settings.nx.nxFilter == 1 ? 1 : settings.nx.nxFilter == 2 ? 2 : settings.nx.nxFilter == 3 ? 3 : 0),
+			"--ecam-setting", "anti_aliasing=" + std::to_string(std::clamp(settings.nx.nxAntiAliasing, 0, 2)),
+			"--ecam-setting", "sharpening=" + std::to_string(std::clamp(settings.nx.nxSharpening, 0, 200)),
+			"--ecam-setting", "speed_limit=" + std::to_string(std::clamp(settings.nx.nxSpeedLimit, 0, 4)),
 			"--ecam-setting", "output=" + std::to_string(settings.nx.nxOutput),
 			"--ecam-setting", "refresh=" + std::to_string(settings.nx.nxHighRefresh ? 1 : 0),
 			"--ecam-setting", "frame_gen=" + std::to_string(settings.nx.nxFrameGeneration ? 1 : 0),
@@ -79,6 +113,10 @@ namespace ps5eglantine
 			"--ecam-setting", "language=" + std::to_string(settings.nx.nxLanguage + 1),
 			"--ecam-setting", "async_shaders=" + std::to_string(settings.nx.nxAsyncShaders ? 1 : 0),
 			"--ecam-setting", "block_list=" + std::to_string(settings.nx.nxBlockList ? 1 : 0),
+			"--ecam-setting", "memory_packing=" + std::to_string(std::clamp(settings.nx.nxPacking, 0, 1)),
+			"--ecam-setting", "texture_memory=" + std::to_string(std::clamp(settings.nx.nxTextureMemory, 0, 3)),
+			"--ecam-setting", "give_back=" + std::to_string(std::clamp(settings.nx.nxGiveBack, 0, 4)),
+			"--ecam-setting", "keep_shaders=" + std::to_string(settings.nx.nxKeepShaders ? 1 : 0),
 			"--ecam-setting", "fast_gpu=" + std::to_string(settings.nx.nxFastGpu ? 1 : 0),
 			"--ecam-setting", "unsafe_cpu=" + std::to_string(settings.nx.nxUnsafeCpu ? 1 : 0),
 			"--ecam-setting", "unsafe_dma=" + std::to_string(settings.nx.nxUnsafeDma ? 1 : 0),

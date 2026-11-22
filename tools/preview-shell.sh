@@ -72,6 +72,24 @@ for game in "Super Mario Odyssey [0100000000010000][v0].nsp" "The Legend of Zeld
     : >"$roms/$game"
 done
 : >"$out/eden/keys/prod.keys"
+# a Switch 2 game for the Switch 2 side (its settings pages), a folder with exefs/main, its npdm with a
+# Switch 2 title's ACID (0x300 bytes in, port/eden/exefs.h) and romfs/
+python3 -B - "$games/switch2/A Switch 2 game" <<'PY'
+import os, struct, sys
+root = sys.argv[1]
+os.makedirs(root + "/exefs", exist_ok=True)
+os.makedirs(root + "/romfs", exist_ok=True)
+open(root + "/exefs/main", "wb").write(b"code")
+open(root + "/romfs/data.bin", "wb").write(b"data")
+npdm = bytearray(0x100 + 0x300 + 0x40)
+npdm[0:4] = b"META"
+npdm[0x70:0x74] = struct.pack("<I", 0x80)
+npdm[0x78:0x7c] = struct.pack("<I", 0x100)
+npdm[0x80:0x84] = b"ACI0"
+npdm[0x90:0x98] = struct.pack("<Q", 0x0400486024DEC000)
+npdm[0x400:0x404] = b"ACID"
+open(root + "/exefs/main.npdm", "wb").write(npdm)
+PY
 # a game's saves for its Saves page: Breath of the Wild's, two accounts' and the
 # one they share
 for save in 80000001:4100000 80000002:3800000 common:12000; do

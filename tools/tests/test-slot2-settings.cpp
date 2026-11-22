@@ -75,5 +75,52 @@ int main()
 	Check(Save(migrated), "the player's own GPU shortcuts serialize");
 	const auto chosen = Load();
 	Check(!chosen.nx2.nxFastGpu && chosen.nx2.nxReactiveFlushing, "after that, the player's own GPU shortcuts stay");
+	// The Switch 2 pages' rows are the Switch 2's own, not the 3DS's: a side's settings by its name
+	Launcher sides;
+	Check(&Handheld(sides, "switch2") == &sides.nx2 && &Handheld(sides, "switch") == &sides.nx && &Handheld(sides, "3ds") == &sides.n3ds &&
+		  &Handheld(sides, "ds") == &sides.nds && &Handheld(sides, ps5retro::kSystems[0].key) == &sides.retro[0],
+		"a side's settings by its name: the Switch 2's are nx2");
+	// a game's page, as the shell does it (KeepGameSetting): the row changes the game's view, the view's value is kept
+	sides.nx2.nxResolution = 2;
+	sides.nx2.nxPacking = 0;
+	Launcher view = ForGame(sides, "switch2", title);
+	Check(Handheld(view, "switch2").nxResolution == 2, "a Switch 2 game's page shows the side's resolution until the game has its own");
+	Handheld(view, "switch2").nxResolution = 1;
+	Handheld(view, "switch2").nxPacking = 1;
+	Check(Value(view, "switch2", "nxResolution", value) && value == 1, "a Switch 2 game's resolution changes on its page");
+	sides.games[GameKey("switch2", title)]["nxResolution"] = value;
+	Check(Value(view, "switch2", "nxPacking", value) && value == 1, "a Switch 2 game's memory packing changes on its page");
+	sides.games[GameKey("switch2", title)]["nxPacking"] = value;
+	Check(Save(sides), "a Switch 2 game's own resolution and packing serialize");
+	const auto reread = Load();
+	const auto game = ForGame(reread, "switch2", title);
+	Check(Handheld(game, "switch2").nxResolution == 1 && game.nx.nxResolution == 1 && game.nx.nxPacking == 1 && reread.nx2.nxResolution == 2 &&
+		  reread.nx2.nxPacking == 0,
+		"a Switch 2 game's own values show on its page and reach the launch (nx), the side's stay");
+	Check(reread.n3ds.nxResolution == Launcher{}.n3ds.nxResolution, "the 3DS's settings are not the Switch 2's");
+	// anti-aliasing, FSR sharpening and the speed limit: on the Switch 2's pages, each game's own as well
+	for (const char* name : {"nxAntiAliasing", "nxSharpening", "nxSpeedLimit"})
+		Check(std::find(switch2Settings.begin(), switch2Settings.end(), name) != switch2Settings.end(), name);
+	sides.games[GameKey("switch2", title)]["nxAntiAliasing"] = 2;
+	sides.games[GameKey("switch2", title)]["nxSharpening"] = 50;
+	sides.games[GameKey("switch2", title)]["nxSpeedLimit"] = 4;
+	const auto effects = ForGame(sides, "switch2", title);
+	Check(effects.nx.nxAntiAliasing == 2 && effects.nx.nxSharpening == 50 && effects.nx.nxSpeedLimit == 4 && sides.nx2.nxAntiAliasing == 0,
+		"a Switch 2 game's anti-aliasing, sharpening and speed limit reach the launch (nx), the side's stay");
+	// Settings > Performance > Memory: texture memory, how textures go, the shaders kept, the side's and a game's
+	Check(Launcher{}.nx2.nxTextureMemory == 2 && Launcher{}.nx2.nxGiveBack == 2 && !Launcher{}.nx2.nxKeepShaders,
+		"Switch 2's memory rows start at 2 GB of textures, all after 1 s, shaders let go");
+	for (const char* name : {"nxTextureMemory", "nxGiveBack", "nxKeepShaders"})
+		Check(std::find(switch2Settings.begin(), switch2Settings.end(), name) != switch2Settings.end(), name);
+	sides.nx2.nxTextureMemory = 1;
+	sides.games[GameKey("switch2", title)]["nxGiveBack"] = 4;
+	sides.games[GameKey("switch2", title)]["nxKeepShaders"] = 1;
+	sides.games[GameKey("switch2", title)]["nxTextureMemory"] = 9; // past its steps: clamped
+	Check(Save(sides), "Switch 2's memory rows serialize");
+	const auto memory = Load();
+	const auto memoryGame = ForGame(memory, "switch2", title);
+	Check(memory.nx2.nxTextureMemory == 1 && memory.nx2.nxGiveBack == 2 && !memory.nx2.nxKeepShaders && memoryGame.nx.nxGiveBack == 4 &&
+			  memoryGame.nx.nxKeepShaders && memoryGame.nx.nxTextureMemory == 3,
+		"a Switch 2 game's own memory rows reach the launch (nx), the side's stay, out of range clamped");
 	return failures ? 1 : 0;
 }
