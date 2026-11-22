@@ -1,0 +1,165 @@
+From: Playtendoh
+Subject: [PATCH] PS5: the big globals from the heap while the core is up
+
+The emulated machine (g_dev, 50.5 MiB), the save memory (saved_memory, 67.4 MiB, the 64DD disk's room
+in it) and Angrylion's workers' state (8.8 MiB) were .bss: the app's image, which the PS5 keeps in
+flexible memory for every side, an N64 game or not. Each is now a heap block (direct memory): g_dev and
+saved_memory from retro_init to retro_deinit, the workers' state from the renderer's first start to
+retro_deinit. Their names stay, as macros over the pointers, so the code that uses them is unchanged.
+
+---
+diff --git a/libretro/libretro.c b/libretro/libretro.c
+index d0a70c1..56413ec 100644
+--- a/libretro/libretro.c
++++ b/libretro/libretro.c
+@@ -191,7 +191,7 @@ static const struct retro_subsystem_info subsystems[] = {
+    { NULL }
+ };
+ 
+-save_memory_data saved_memory;
++save_memory_data* saved_memory_heap = NULL;
+ 
+ static bool stop_stepping;
+ extern unsigned int r4300_emumode;
+@@ -1452,6 +1452,9 @@ static bool retro_init_gl(bool core)
+  * until ConfigInit() flips the subsystem on. */
+ extern m64p_error ConfigInit(const char *ConfigDirOverride, const char *DataDirOverride);
+ 
++/* PS5: Angrylion's workers' state back to the heap (n64video.c), from retro_deinit */
++extern void angrylion_free_state(void);
++
+ void retro_init(void)
+ {
+    struct retro_log_callback log;
+@@ -1464,6 +1467,13 @@ void retro_init(void)
+     * draws into a 0x0 viewport -- a black screen with working audio. */
+    ConfigInit(NULL, NULL);
+ 
++   /* PS5: the emulated machine and the save memory, from the heap while the core is up (main.h,
++      libretro_memory.h); zeroed, as their .bss was at the program's start */
++   if (!g_dev_heap)
++      g_dev_heap = calloc(1, sizeof(struct device));
++   if (!saved_memory_heap)
++      saved_memory_heap = calloc(1, sizeof(save_memory_data));
++
+    screen_pitch = 0;
+ 
+    if (environ_cb(RETRO_ENVIRONMENT_GET_LOG_INTERFACE, &log))
+@@ -1496,6 +1506,13 @@ void retro_deinit(void)
+ 
+    deinit_audio_libretro();
+ 
++   /* PS5: given back once nothing runs (retro_init) */
++   angrylion_free_state();
++   free(g_dev_heap);
++   g_dev_heap = NULL;
++   free(saved_memory_heap);
++   saved_memory_heap = NULL;
++
+    if (perf_cb.perf_log)
+       perf_cb.perf_log();
+ 
+@@ -2813,6 +2830,8 @@ void update_variables(bool startup)
+ 
+ static void format_saved_memory(void)
+ {
++   if (!saved_memory_heap) /* PS5: none (retro_init); retro_load_game turns the game down */
++      return;
+    format_sram(saved_memory.sram);
+    format_eeprom(saved_memory.eeprom, sizeof(saved_memory.eeprom));
+    format_flashram(saved_memory.flashram);
+@@ -2837,6 +2856,9 @@ bool retro_load_game(const struct retro_game_info *game)
+ 
+    update_variables(true);
+    initial_boot = false;
++   /* PS5: no game without the machine's memory (retro_init) */
++   if (!g_dev_heap || !saved_memory_heap)
++      return false;
+ 
+    init_audio_libretro();
+ 
+diff --git a/libretro/libretro_memory.h b/libretro/libretro_memory.h
+index 18f430b..9475f97 100644
+--- a/libretro/libretro_memory.h
++++ b/libretro/libretro_memory.h
+@@ -13,6 +13,8 @@ typedef struct _save_memory_data
+    uint8_t disk[0x0435B0C0];
+ } save_memory_data;
+ 
+-extern save_memory_data saved_memory;
++/* PS5: a heap block while the core is up (67 MiB, the 64DD disk's room in it), as g_dev is (main.h) */
++extern save_memory_data* saved_memory_heap;
++#define saved_memory (*saved_memory_heap)
+ 
+ #endif
+diff --git a/mupen64plus-core/src/main/main.c b/mupen64plus-core/src/main/main.c
+index 8800892..3045540 100644
+--- a/mupen64plus-core/src/main/main.c
++++ b/mupen64plus-core/src/main/main.c
+@@ -126,7 +126,7 @@ void* g_mem_base = NULL;
+ 
+ uint32_t g_start_address = UINT32_C(0xa4000040);
+ 
+-struct device g_dev;
++struct device* g_dev_heap = NULL;
+ 
+ m64p_media_loader g_media_loader;
+ 
+diff --git a/mupen64plus-core/src/main/main.h b/mupen64plus-core/src/main/main.h
+index d8ca098..9009eb6 100644
+--- a/mupen64plus-core/src/main/main.h
++++ b/mupen64plus-core/src/main/main.h
+@@ -46,7 +46,11 @@ extern struct cheat_ctx g_cheat_ctx;
+ 
+ extern void* g_mem_base;
+ 
+-extern struct device g_dev;
++/* PS5: the emulated machine (50 MiB, the RDRAM in it) is a heap block while the core is up, from
++   retro_init to retro_deinit, not .bss the app's image keeps in flexible memory for every side. The
++   name stays g_dev, so its users are unchanged. */
++extern struct device* g_dev_heap;
++#define g_dev (*g_dev_heap)
+ 
+ extern m64p_media_loader g_media_loader;
+ 
+diff --git a/mupen64plus-video-angrylion/n64video.c b/mupen64plus-video-angrylion/n64video.c
+index b52eb0a..fd45dd1 100644
+--- a/mupen64plus-video-angrylion/n64video.c
++++ b/mupen64plus-video-angrylion/n64video.c
+@@ -518,6 +518,10 @@ static bool rdp_dump_in_command_list;
+ 
+ void n64video_init(struct n64video_config* _config)
+ {
++    /* PS5: the workers' state from the heap at the first start; kept over a restart for a changed
++       option, as the .bss array was, and given back by angrylion_free_state */
++    if (!state)
++        state = calloc(PARALLEL_MAX_WORKERS, sizeof(struct rdp_state));
+     if (_config)
+         config = *_config;
+ 
+@@ -1262,3 +1266,10 @@ void n64video_close(void)
+     parallel_close();
+     rdram_close();
+ }
++
++/* PS5: the workers' state back to the heap, once the renderer is closed for good (retro_deinit) */
++void angrylion_free_state(void)
++{
++    free(state);
++    state = NULL;
++}
+diff --git a/mupen64plus-video-angrylion/n64video/rdp.c b/mupen64plus-video-angrylion/n64video/rdp.c
+index e86fcab..0e3cd0e 100644
+--- a/mupen64plus-video-angrylion/n64video/rdp.c
++++ b/mupen64plus-video-angrylion/n64video/rdp.c
+@@ -408,7 +408,9 @@ struct rdp_state
+     int32_t pastrawdzmem;
+ };
+ 
+-struct rdp_state state[PARALLEL_MAX_WORKERS];
++/* PS5: a heap block from the renderer's first start to angrylion_free_state (retro_deinit), not .bss
++   the app's image keeps in flexible memory for every side; indexed as the array was */
++struct rdp_state* state = NULL;
+ 
+ static int32_t one_color = 0x100;
+ static int32_t zero_color = 0x00;
