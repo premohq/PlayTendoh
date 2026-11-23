@@ -1,0 +1,516 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Phononenom <64574232+Phononenom@users.noreply.github.com>
+Date: Mon, 23 Nov 2026 12:44:59 -0600
+Subject: [PATCH] Playtendoh's Switch 2 side: crash and threads reports say
+ more
+
+Each report names the memory: the largest free block, the heap, the page tables, what the guest memory
+service holds; a threads report is written when a write of the game's memory has waited 3 s for a block.
+
+From these commits (oldest first):
+- 2026-11-19 Playtendoh's Switch 2 side: a hang report when the game stops making frames
+- 2026-11-19 Playtendoh's Switch 2 side: the graphics threads keep the last of the guest memory reserve
+---
+ headless/crash_report.cpp   | 222 ++++++++++++++++++++++++++++++++++--
+ headless/crash_report.h     |  12 ++
+ tools/check-crash-report.py | 104 ++++++++++++++++-
+ 3 files changed, 326 insertions(+), 12 deletions(-)
+
+diff --git a/headless/crash_report.cpp b/headless/crash_report.cpp
+index 7288f7a..dcc1477 100644
+--- a/headless/crash_report.cpp
++++ b/headless/crash_report.cpp
+@@ -30,6 +30,7 @@ std::int64_t sceKernelGetDirectMemorySize();
+ std::int32_t sceKernelAvailableDirectMemorySize(std::int64_t, std::int64_t, std::size_t, std::int64_t*, std::size_t*);
+ std::size_t eden_heap_committed(void);
+ std::size_t eden_heap_large_held(unsigned* blocks);
++int sceKernelGetPageTableStats(int*, int*, int*, int*);
+ #endif
+ // The app's code, from the link (tools/unwind.ld).
+ extern const char __eden_text_start[];
+@@ -229,11 +230,11 @@ bool AfterCall(const unsigned char* bytes) noexcept {
+ // these are the calls that led to the fault, and now and then one left by an earlier call. The
+ // console does not let its code be read, so there every value that points into the code is
+ // listed with a "?", and tools/symbolize-crash.py drops those that do not follow a call.
+-void PutCalls(std::uint64_t stack) noexcept {
++template <std::size_t N>
++void PutCalls(Text<N>& out, std::uint64_t stack, unsigned most, std::uint64_t (&words)[512]) noexcept {
+     constexpr std::size_t kWords = 16 * 1024;  // 128 KiB of stack
+-    constexpr unsigned kMost = 64;
++    const unsigned kMost = most;
+     unsigned found = 0;
+-    static std::uint64_t words[512];
+     std::uint64_t at = stack & ~std::uint64_t{7};
+     for (std::size_t seen = 0; seen < kWords && found < kMost;) {
+         // Up to the end of the page: a read is whole or not at all.
+@@ -245,17 +246,20 @@ void PutCalls(std::uint64_t stack) noexcept {
+             unsigned char before[8];
+             const bool checked = Copy(reinterpret_cast<const void*>(value - 8), before, sizeof(before));
+             if (checked && !AfterCall(before)) continue;
+-            report.Put("  ");
+-            report.Address(value);
+-            report.Put(checked ? "\n" : " ?\n");
++            out.Put("  ");
++            out.Address(value);
++            out.Put(checked ? "\n" : " ?\n");
+             ++found;
+         }
+         at += bytes;
+         seen += bytes / 8;
+     }
+-    if (found == 0) report.Put("  none found\n");
++    if (found == 0) out.Put("  none found\n");
+ }
+ 
++std::uint64_t report_words[512];
++void PutCalls(std::uint64_t stack) noexcept { PutCalls(report, stack, 64, report_words); }
++
+ Registers FromContext(void* context) noexcept {
+     Registers r{};
+     if (!context) return r;
+@@ -281,6 +285,163 @@ const char* ThreadName(std::uintptr_t thread) noexcept {
+     return "not named";
+ }
+ 
++// The hang report. Mario Kart World stopped making frames at the PS5's memory wall (19 Nov):
++// every log stopped and nothing crashed, so nothing said where it was stuck. A watching thread
++// asks each named thread in turn, by SIGUSR1, for where it is: the handler runs on that thread
++// and lists its stack as a crash report does. One thread at a time (the stack reads share the
++// probe pipe); one that does not answer within 300 ms (signals blocked, or held in the kernel)
++// is listed as such, and a late answer finds itself no longer asked.
++constexpr std::uintptr_t kHangTaken = 1;
++std::atomic<std::uintptr_t> hang_target{0};
++std::atomic<bool> hang_answered{false};
++Text<128 * 1024> hang;
++Text<64> hang_name;
++Text<300> hang_path;
++Text<300> hang_note;
++std::uint64_t hang_words[512];
++
++void HangSignal(int, siginfo_t*, void* context) {
++    const int saved_errno = errno;
++    std::uintptr_t expected = (std::uintptr_t)pthread_self();
++    if (hang_target.compare_exchange_strong(expected, kHangTaken, std::memory_order_acq_rel)) {
++        const Registers r = FromContext(context);
++        hang.Put("  at ");
++        hang.Address(r.rip);
++        hang.Put("\n");
++        PutCalls(hang, r.rsp, 24, hang_words);
++        hang_answered.store(true, std::memory_order_release);
++    }
++    errno = saved_errno;
++}
++
++void PutStamp(Text<128 * 1024>& t, const Stamp& stamp) noexcept;
++bool WriteFile(const char* path, const char* data, std::size_t size) noexcept;
++
++// One report at a time: the hang watch and a write waiting for memory (eden_threads_report) share
++// the buffers above; the later one is left out.
++std::atomic_flag threads_report_busy = ATOMIC_FLAG_INIT;
++bool hang_signal_ready = false;
++
++// `kind` names the file (kind-YYYYMMDD-HHMMSS.txt) and the report; `tag` starts its kernel log line.
++void ReportThreads(const char* kind, const char* tag, const char* what) noexcept {
++    if (!hang_signal_ready || threads_report_busy.test_and_set(std::memory_order_acq_rel)) return;
++    const Stamp stamp = LocalNow();
++    hang.Clear();
++    hang.Put("EglantinePS5 ");
++    hang.Put(kind);
++    hang.Put(" report\nversion: ");
++    hang.Put(version);
++    hang.Put("\ntime: ");
++    PutStamp(hang, stamp);
++    hang.Put(", ");
++    hang.Dec(static_cast<std::uint64_t>(std::time(nullptr) - started_at));
++    hang.Put(" s after the app started\nwhat: ");
++    hang.Put(what);
++    hang.Put("\nrunning: ");
++    hang.Put(sessions[session_now.load(std::memory_order_acquire) & 1]);
++    hang.Put("\ncode: 0x");
++    hang.Hex(CodeStart(), 16);
++    hang.Put(" (eboot+offset is an address in the build's llvm-pie.elf)\n");
++    hang.Put("each named thread: where it was, then the app's code addresses on its stack, most "
++             "recent first (\"?\": not checked against a call instruction)\n");
++    const auto self = (std::uintptr_t)pthread_self();
++    const unsigned count = std::min(named_thread_count.load(std::memory_order_acquire), kNamedThreads);
++    unsigned asked = 0, answered = 0;
++    for (unsigned i = 0; i < count; ++i) {
++        const std::uintptr_t thread = named_threads[i].thread.load(std::memory_order_acquire);
++        if (thread == 0 || thread == self) continue;
++        hang.Put("thread ");
++        hang.Put(named_threads[i].name);
++        hang.Put(" (0x");
++        hang.Hex(thread);
++        hang.Put(")\n");
++        hang_answered.store(false, std::memory_order_release);
++        hang_target.store(thread, std::memory_order_release);
++        ++asked;
++        if (pthread_kill((pthread_t)thread, SIGUSR1) != 0) {
++            hang_target.store(0, std::memory_order_release);
++            hang.Put("  gone\n");
++            continue;
++        }
++        for (int wait = 0; wait < 30 && !hang_answered.load(std::memory_order_acquire); ++wait) Sleep(10000);
++        std::uintptr_t expected = thread;
++        if (hang_target.compare_exchange_strong(expected, 0, std::memory_order_acq_rel)) {
++            hang.Put("  no answer (signals blocked, or held in the kernel)\n");
++            continue;
++        }
++        // Its handler is writing: wait for it to finish before asking the next thread.
++        for (int wait = 0; wait < 200 && !hang_answered.load(std::memory_order_acquire); ++wait) Sleep(10000);
++        if (!hang_answered.load(std::memory_order_acquire)) {
++            hang.Put("  (the report ends here: this thread did not finish its answer)\n");
++            break;
++        }
++        hang_target.store(0, std::memory_order_release);
++        ++answered;
++    }
++    hang_name.Clear();
++    hang_name.Put(kind);
++    hang_name.Put('-');
++    hang_name.Dec(static_cast<std::uint64_t>(stamp.year), 4);
++    hang_name.Dec(stamp.month, 2);
++    hang_name.Dec(stamp.day, 2);
++    hang_name.Put('-');
++    hang_name.Dec(stamp.hour, 2);
++    hang_name.Dec(stamp.minute, 2);
++    hang_name.Dec(stamp.second, 2);
++    hang_name.Put(".txt");
++    hang_path.Clear();
++    hang_path.Put(logs);
++    hang_path.Put('/');
++    hang_path.Put(hang_name.data);
++    const bool saved = WriteFile(hang_path.data, hang.data, hang.size);
++    hang_note.Clear();
++    hang_note.Put(tag);
++    hang_note.Put(' ');
++    hang_note.Put(what);
++    hang_note.Put("; threads asked ");
++    hang_note.Dec(asked);
++    hang_note.Put(", answered ");
++    hang_note.Dec(answered);
++    hang_note.Put(saved ? "; report=" : "; report_not_written=");
++    hang_note.Put(hang_path.data);
++    hang_note.Put("\n");
++    Note(hang_note.data);
++    (void)!write(2, hang_note.data, hang_note.size);
++    threads_report_busy.clear(std::memory_order_release);
++}
++
++void ReportHang(unsigned seconds) noexcept {
++    Text<64> what;
++    what.Clear();
++    what.Put("no frame for ");
++    what.Dec(seconds);
++    what.Put(" s");
++    ReportThreads("hang", "EDEN_HANG", what.data);
++}
++
++// Counts whole seconds without a new frame once the game has made one. A sleep that took far
++// longer than asked (the app suspended at the console's home screen) starts the count over.
++void HangWatch() {
++    std::uint64_t last = frames_presented.load(std::memory_order_relaxed);
++    unsigned still = 0, reports = 0;
++    for (;;) {
++        const std::time_t before = std::time(nullptr);
++        Sleep(1000000);
++        const std::uint64_t now = frames_presented.load(std::memory_order_relaxed);
++        const bool suspended = std::time(nullptr) - before > 3;
++        if (now != last || now == 0 || suspended || state.load(std::memory_order_acquire) != kIdle) {
++            last = now;
++            still = 0;
++            continue;
++        }
++        ++still;
++        if ((still == 20 || still == 60) && reports < 6) {
++            ++reports;
++            ReportHang(still);
++        }
++    }
++}
++
+ void PutRegister(const char* before, const char* name, std::uint64_t value) noexcept {
+     report.Put(before);
+     report.Put(name);
+@@ -360,7 +521,20 @@ void Compose(const Kind* kind, int code, std::uint64_t address, const Registers&
+         t.Dec(large >> 20);
+         t.Put(" MiB in ");
+         t.Dec(blocks);
+-        t.Put(" large blocks\n");
++        t.Put(" large blocks");
++        // The title's page tables: past them the kernel refuses mappings with memory still free.
++        int cpu_tables = 0, cpu_free = 0, gpu_tables = 0, gpu_free = 0;
++        if (sceKernelGetPageTableStats(&cpu_tables, &cpu_free, &gpu_tables, &gpu_free) == 0) {
++            t.Put(", page tables free: CPU ");
++            t.Dec(static_cast<unsigned>(cpu_free));
++            t.Put(" of ");
++            t.Dec(static_cast<unsigned>(cpu_tables));
++            t.Put(", GPU ");
++            t.Dec(static_cast<unsigned>(gpu_free));
++            t.Put(" of ");
++            t.Dec(static_cast<unsigned>(gpu_tables));
++        }
++        t.Put("\n");
+     }
+ #endif
+     t.Put("registers:");
+@@ -523,6 +697,20 @@ void Flusher() {
+     std::fflush(stdout);
+ }
+ 
++void PutStamp(Text<128 * 1024>& t, const Stamp& stamp) noexcept {
++    t.Dec(static_cast<std::uint64_t>(stamp.year), 4);
++    t.Put('-');
++    t.Dec(stamp.month, 2);
++    t.Put('-');
++    t.Dec(stamp.day, 2);
++    t.Put(' ');
++    t.Dec(stamp.hour, 2);
++    t.Put(':');
++    t.Dec(stamp.minute, 2);
++    t.Put(':');
++    t.Dec(stamp.second, 2);
++}
++
+ void CopyText(char* target, std::size_t size, const char* text) noexcept {
+     std::size_t length = 0;
+     for (; text && text[length] && length + 1 < size; ++length) target[length] = text[length];
+@@ -567,11 +755,29 @@ void Install(const std::string& logs_folder, const char* app_version, bool resta
+     sigemptyset(&action.sa_mask);
+     unsigned handled = 0;
+     for (const Kind& kind : kKinds) handled += sigaction(kind.signal, &action, nullptr) == 0;
++    struct sigaction hang_action {};
++    hang_action.sa_sigaction = HangSignal;
++    hang_action.sa_flags = SA_SIGINFO | SA_RESTART;
++    sigemptyset(&hang_action.sa_mask);
++    hang_signal_ready = probe && sigaction(SIGUSR1, &hang_action, nullptr) == 0;
++    if (hang_signal_ready) std::thread(HangWatch).detach();
+     installed = true;
+     std::fprintf(stderr, "EDEN_CRASH_REPORT installed=1 signals=%u stack_reads=%d folder=%s after_crash=%d\n", handled,
+                  probe ? 1 : 0, logs, restarted ? 1 : 0);
+ }
+ 
++} // namespace Eden::Crash
++
++// Where every named thread is now (logs/threads-YYYYMMDD-HHMMSS.txt and an EDEN_THREADS line), for a
++// moment worth seeing that is no crash: src/guest_memory_service.inc calls it when a write to the
++// game's memory has waited 3 s for a block. Safe in a signal handler; nothing while a crash or
++// another such report is being written.
++extern "C" void eden_threads_report(const char* why) {
++    if (Eden::Crash::state.load(std::memory_order_acquire) != Eden::Crash::kIdle) return;
++    Eden::Crash::ReportThreads("threads", "EDEN_THREADS", why);
++}
++
++namespace Eden::Crash {
+ void SetSession(const std::string& text, bool game) noexcept {
+     const unsigned next = (session_now.load(std::memory_order_relaxed) + 1) & 1;
+     CopyText(sessions[next], sizeof(sessions[next]), text.c_str());
+diff --git a/headless/crash_report.h b/headless/crash_report.h
+index 9621c58..8b91344 100644
+--- a/headless/crash_report.h
++++ b/headless/crash_report.h
+@@ -20,6 +20,7 @@
+ #include <cstddef>
+ #include <cstdint>
+ #include <pthread.h>
++#include <signal.h>
+ #include <string>
+ #include <string_view>
+ 
+@@ -48,8 +49,19 @@ inline void NameThread(const char* name) noexcept {
+     for (; name && name[length] && length + 1 < sizeof(entry->name); ++length) entry->name[length] = name[length];
+     entry->name[length] = '\0';
+     entry->thread.store(self, std::memory_order_release);
++    // The hang report asks each named thread where it is (SIGUSR1, crash_report.cpp).
++    sigset_t hang_signal;
++    sigemptyset(&hang_signal);
++    sigaddset(&hang_signal, SIGUSR1);
++    pthread_sigmask(SIG_UNBLOCK, &hang_signal, nullptr);
+ }
+ 
++// A frame the game presented (graphics.cpp). The hang report watches it: a game that has made
++// frames and then makes none for 20 s gets a report of where each named thread is
++// (logs/hang-YYYYMMDD-HHMMSS.txt and an EDEN_HANG line), again at 60 s, and the game goes on.
++inline std::atomic<std::uint64_t> frames_presented{0};
++inline void NoteFrame() noexcept { frames_presented.fetch_add(1, std::memory_order_relaxed); }
++
+ // How the launcher is told of a report: its launch error is this, followed by the report's path
+ // (eglantineps5/eden_services.cpp).
+ inline constexpr std::string_view kNotice = "crash-report:";
+diff --git a/tools/check-crash-report.py b/tools/check-crash-report.py
+index ffa04c7..4303ddc 100644
+--- a/tools/check-crash-report.py
++++ b/tools/check-crash-report.py
+@@ -16,6 +16,11 @@ process and logs folder:
+   memory that cannot be read                        answered, not faulted on
+   what the next start does (TakeLast)               the logs move beside the report, the notice
+                                                     comes once, five reports stay
++  no frame for 20 s after one was shown             a hang report: where each named thread is
++                                                    (one with signals blocked: no answer), and
++                                                    the program goes on
++  a threads report asked for (a write waiting for   the same, as threads-*.txt and EDEN_THREADS
++  memory, src/guest_memory_service.inc)
+ 
+ and the functions are named from the report with tools/symbolize-crash.py (--show prints that
+ report).
+@@ -33,6 +38,7 @@ root = pathlib.Path(__file__).resolve().parents[1]
+ PROGRAM = r'''
+ #include "crash_report.h"
+ #include <atomic>
++#include <chrono>
+ #include <cstdio>
+ #include <cstdlib>
+ #include <cstring>
+@@ -42,6 +48,7 @@ PROGRAM = r'''
+ #include <string>
+ #include <thread>
+ #include <vector>
++#include <signal.h>
+ #include <sys/mman.h>
+ #include <sys/stat.h>
+ #include <unistd.h>
+@@ -63,6 +70,10 @@ extern "C" int eden_exit_app(void) {
+ extern "C" int sceKernelDebugOutText(int, const char* text) { return static_cast<int>(write(2, text, std::strlen(text))); }
+ extern "C" int sceKernelUsleep(unsigned microseconds) { return usleep(microseconds); }
+ extern "C" std::int64_t sceKernelGetDirectMemorySize() { return std::int64_t{12} << 30; }
++extern "C" int sceKernelGetPageTableStats(int* cpu_tables, int* cpu_free, int* gpu_tables, int* gpu_free) {
++    *cpu_tables = 16384; *cpu_free = 1200; *gpu_tables = 8192; *gpu_free = 7000;
++    return 0;
++}
+ extern "C" std::int32_t sceKernelAvailableDirectMemorySize(std::int64_t, std::int64_t, std::size_t, std::int64_t* start,
+                                                            std::size_t* size) {
+     *start = 0;
+@@ -100,6 +111,57 @@ static volatile std::uintptr_t bad = 16;
+     sink = 3;
+ }
+ 
++// A thread stuck three calls deep (the hang report).
++[[gnu::noinline]] void HangInner(volatile int* stop) {
++    while (!*stop) usleep(1000);
++    sink = 4;
++}
++[[gnu::noinline]] void HangMiddle(volatile int* stop) {
++    HangInner(stop);
++    sink = 5;
++}
++[[gnu::noinline]] void HangOuter(volatile int* stop) {
++    HangMiddle(stop);
++    sink = 6;
++}
++
++static int HangCheck() {
++    static volatile int stop = 0;
++    std::thread stuck([] {
++        Eden::Crash::NameThread("GPU");
++        HangOuter(&stop);
++    });
++    std::thread blocked([] {
++        Eden::Crash::NameThread("Blocked");
++        sigset_t all;
++        sigfillset(&all);
++        pthread_sigmask(SIG_BLOCK, &all, nullptr);
++        while (!stop) usleep(1000);
++    });
++    Eden::Crash::NoteFrame();  // one frame, then none
++    std::this_thread::sleep_for(std::chrono::seconds(23));
++    stop = 1;
++    stuck.join();
++    blocked.join();
++    std::puts("HANG_DONE");
++    return 0;
++}
++
++extern "C" void eden_threads_report(const char* why);
++static int ThreadsCheck() {
++    static volatile int stop = 0;
++    std::thread stuck([] {
++        Eden::Crash::NameThread("GPU");
++        HangOuter(&stop);
++    });
++    usleep(200000);
++    eden_threads_report("a test moment");
++    stop = 1;
++    stuck.join();
++    std::puts("THREADS_DONE");
++    return 0;
++}
++
+ static bool Exists(const std::string& path) {
+     struct stat info {};
+     return stat(path.c_str(), &info) == 0;
+@@ -178,6 +240,8 @@ int main(int argc, char** argv) {
+     if (mode == "readable") return ReadableCheck();
+     if (mode != "again")
+         Eden::Crash::SetSession("game Test.nsp (0100000000000000), Vulkan, resolution 2x, AMD FSR", true);
++    if (mode == "hang") return HangCheck();
++    if (mode == "threads") return ThreadsCheck();
+     if (mode == "abort") std::abort();
+     if (mode == "ill") __builtin_trap();
+     if (mode == "throw")
+@@ -221,10 +285,10 @@ def functions(binary):
+                              check=True).stdout
+     for line in listing.splitlines():
+         parts = line.split()
+-        for name in ('Innermost', 'Middle', 'Outer'):
++        for name in ('Innermost', 'Middle', 'Outer', 'HangMiddle', 'HangOuter'):
+             if len(parts) == 4 and re.fullmatch(rf'_Z\d+{name}PVi', parts[3]):
+                 found[name] = (int(parts[0], 16) - text_start, int(parts[1], 16))
+-    assert set(found) == {'Innermost', 'Middle', 'Outer'}, listing[:400]
++    assert set(found) == {'Innermost', 'Middle', 'Outer', 'HangMiddle', 'HangOuter'}, listing[:400]
+     return found
+ 
+ 
+@@ -271,7 +335,8 @@ def check(binary, console):
+     assert note == reports[0].name + ' 1\n', note
+     assert 'EDEN_CRASH_REPORT installed=1 signals=7 ' in err and 'EDEN_CRASH what=SIGSEGV where=eboot+0x' in err
+     assert f'thread=CPUCore_1 report={reports[0]} restart=1' in err, err[-400:]
+-    assert ('memory: largest free block 1234 MiB of 12288 MiB, heap 256 MiB and 96 MiB in 3 large blocks\n' in report) \
++    assert ('memory: largest free block 1234 MiB of 12288 MiB, heap 256 MiB and 96 MiB in 3 large blocks, '
++            'page tables free: CPU 1200 of 16384, GPU 7000 of 8192\n' in report) \
+         == console, report
+ 
+     # The functions, named from the report.
+@@ -332,6 +397,36 @@ def check(binary, console):
+     assert status == -11 and out == '' and len(reports) == 1, (status, out)
+     assert 'EDEN_CRASH the app did not start again; the system handles the crash' in err
+ 
++    # No frame for 20 s: a hang report, and the program goes on.
++    status, out, err, reports, note = run(binary, 'hang', console)
++    hangs = sorted(pathlib.Path(re.search(r'report=(\S+)', err).group(1)).parent.glob('hang-*.txt')) \
++        if 'report=' in err else []
++    assert status == 0 and out == 'HANG_DONE\n' and not reports and len(hangs) == 1, (status, out, err[-600:])
++    hang = hangs[0].read_text()
++    assert hang.startswith('EglantinePS5 hang report\nversion: test-version\ntime: '), hang[:200]
++    assert '\nwhat: no frame for 20 s\nrunning: game Test.nsp (0100000000000000)' in hang, hang[:400]
++    assert f'EDEN_HANG no frame for 20 s; threads asked 3, answered 2; report={hangs[0]}' in err, err[-400:]
++    gpu = hang.split('\nthread GPU (0x', 1)[1].split('\nthread ', 1)[0]
++    assert '\n  at ' in gpu, gpu
++    calls = offsets(gpu.split('\n', 2)[2])
++    middle = [i for i, offset in enumerate(calls) if inside(offset, 'HangMiddle')]
++    outer = [i for i, offset in enumerate(calls) if inside(offset, 'HangOuter')]
++    assert middle and outer and middle[0] < outer[0], (calls, where)
++    assert re.search(r'\nthread Blocked \(0x[0-9a-f]+\)\n  no answer \(signals blocked', hang), hang
++    assert re.search(r'\nthread main \(0x[0-9a-f]+\)\n  at ', hang), hang
++
++    # A threads report asked for: the same list, under its own name.
++    status, out, err, reports, note = run(binary, 'threads', console)
++    listed = sorted(pathlib.Path(re.search(r'report=(\S+)', err).group(1)).parent.glob('threads-*.txt')) \
++        if 'report=' in err else []
++    assert status == 0 and out == 'THREADS_DONE\n' and not reports and len(listed) == 1, (status, out, err[-600:])
++    text = listed[0].read_text()
++    assert text.startswith('EglantinePS5 threads report\nversion: test-version\n') and \
++        '\nwhat: a test moment\n' in text, text[:300]
++    assert f'EDEN_THREADS a test moment; threads asked 1, answered 1; report={listed[0]}' in err, err[-400:]
++    calls = offsets(text.split('\nthread GPU (0x', 1)[1].split('\nthread ', 1)[0].split('\n', 2)[2])
++    assert any(inside(offset, 'HangOuter') for offset in calls), (calls, where)
++
+     for mode, answer in (('readable', 'READABLE_OK\n'), ('takelast', 'TAKELAST_OK\n')):
+         status, out, err, reports, note = run(binary, mode, console)
+         assert status == 0 and out == answer, (mode, status, err[-600:])
+@@ -343,4 +438,5 @@ with tempfile.TemporaryDirectory(prefix='eden-crash-') as work:
+     check(build(work, 'console-calls', ['-DPS5_NATIVE']), True)
+ print('Crash report: signal, address, thread, session, registers and calls; abort, illegal instruction and '
+       'uncaught exception; one report for many threads; no restart loop; refusal falls back to the system; '
+-      'unreadable memory; logs kept beside five reports; functions named from the report PASS')
++      'unreadable memory; logs kept beside five reports; functions named from the report; '
++      'a hang report of each named thread; a threads report asked for PASS')

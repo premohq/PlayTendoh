@@ -1,0 +1,397 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Phononenom <64574232+Phononenom@users.noreply.github.com>
+Date: Mon, 23 Nov 2026 12:44:59 -0600
+Subject: [PATCH] Playtendoh's Switch 2 side: the session's start takes
+ Playtendoh's settings
+
+headless/main.cpp: anti-aliasing, FSR sharpening and the speed limit at each start; Performance > Memory as
+the core's switches (texture memory, when memory runs short, keep loaded shaders, memory packing), each set
+only where env.txt has not (a line in env.txt wins); the AV1 decoder's threads and frame delay; the
+console's defaults for the core's switches.
+
+From these commits (oldest first):
+- 2026-11-18 Playtendoh's Switch 2 side: task and mesh draws take Lichii's fallback by default
+- 2026-11-18 Playtendoh's Switch 2 side: Lichii's built-in game patches apply without a mods folder
+- 2026-11-20 Playtendoh's Switch 2 side: the give-back runs between the GPU back thread's entries (core 0117)
+- 2026-11-20 Playtendoh's Switch 2 side: refused memory waits before the session ends
+- 2026-11-22 Playtendoh's Switch 2 side: GPU threads wait on a refused heap allocation, and waits free memory
+- 2026-11-23 Playtendoh's Switch 2 side: its anti-aliasing, FSR sharpening and speed limit at each start
+- 2026-11-23 Playtendoh's Switch 2 side: Settings > Performance > Memory as the core's switches
+---
+ headless/main.cpp              | 228 +++++++++++++++++++++++++++++++--
+ headless/preferences_check.cpp |   3 +-
+ headless/settings_store.h      |   2 +
+ 3 files changed, 222 insertions(+), 11 deletions(-)
+
+diff --git a/headless/main.cpp b/headless/main.cpp
+index af79f87..3957802 100644
+--- a/headless/main.cpp
++++ b/headless/main.cpp
+@@ -28,6 +28,95 @@ extern "C" int sceSystemServiceLoadExec(const char* path, const char** args);
+ #include <cstring>
+ #include <sys/stat.h>
+ extern "C" size_t eden_heap_last_failure(unsigned*, size_t*);
++// Where the heap's free memory sits for a request (headless/heap_arenas.inc), and what its last
++// growth got from the pool (src/memory_pages.cpp): a measure for the heap's next change.
++extern "C" void eden_heap_space_detail(char*, size_t, size_t) __attribute__((weak));
++extern "C" int pthread_getname_np(pthread_t, char*, std::size_t);
++
++namespace {
++// An allocation the heap refused waits for memory before the session ends: operator new's handler
++// sleeps 20 ms and returns, so the allocation is tried again, for up to EDEN_NEW_WAIT_MS (0 to
++// 10,000; else 1,000), with the heap's empty spaces given back at its start and every 500 ms. The
++// graphics caches give memory back between the GPU back thread's entries now, so a short wait can
++// end with memory where the refusal ended the session (as another PS5 port's operator new does).
++// Not on the threads that build pipelines (Vulkan*, VkShader*: a build that waited got nothing), not
++// for a request over 1 GiB, and after a wait that ran out the thread's refusals throw at once for
++// 30 s. The GPU threads (GPU*) wait too, up to EDEN_NEW_WAIT_GPU_MS (0 to 10,000; else 2,000):
++// GPUBack's refused heap growth ended Ocarina of Time's longest session (22 Nov 03:51, 37 min).
++// While a thread waits, the shader cache's programs read at boot go (once), cold game memory is
++// packed every 100 ms (eden_memory_recover_heap: no driver step, nothing allocated), and the heap's
++// empty spaces go back every 500 ms.
++extern "C" std::size_t eden_memory_recover_heap(std::size_t bytes) noexcept __attribute__((weak));
++extern "C" std::size_t eden_shader_programs_drop(std::size_t* count) __attribute__((weak));
++bool NewHandlerWaits(std::size_t bytes) {
++    static const long long limit_ns = [] {
++        const char* value = std::getenv("EDEN_NEW_WAIT_MS");
++        const long long ms = value != nullptr ? std::clamp<long long>(std::strtoll(value, nullptr, 10), 0, 10000) : 1000;
++        return ms * 1'000'000;
++    }();
++    static const long long gpu_limit_ns = [] {
++        const char* value = std::getenv("EDEN_NEW_WAIT_GPU_MS");
++        const long long ms = value != nullptr ? std::clamp<long long>(std::strtoll(value, nullptr, 10), 0, 10000) : 2000;
++        return ms * 1'000'000;
++    }();
++    if (bytes > (std::size_t{1} << 30)) return false;
++    thread_local int may_wait = -1; // 0 no, 1 yes, 2 a GPU thread
++    if (may_wait < 0) {
++        char name[32]{};
++        pthread_getname_np(pthread_self(), name, sizeof(name));
++        may_wait = std::strncmp(name, "Vulkan", 6) == 0 || std::strncmp(name, "VkShader", 8) == 0 ? 0
++                   : std::strncmp(name, "GPU", 3) == 0                                          ? 2
++                                                                                                  : 1;
++    }
++    const long long budget_ns = may_wait == 2 ? gpu_limit_ns : may_wait == 1 ? limit_ns : 0;
++    if (budget_ns == 0) return false;
++    thread_local long long started_ns = 0, last_ns = 0, cooldown_ns = 0;
++    const long long now = Eden::Performance::GraphicsMemoryClockNs();
++    if (now < cooldown_ns) return false;
++    if (now - last_ns > 1'000'000'000) {
++        started_ns = now; // a new wait
++        static std::atomic<unsigned> logged{0};
++        if (logged.fetch_add(1, std::memory_order_relaxed) < 32) {
++            char name[32]{};
++            pthread_getname_np(pthread_self(), name, sizeof(name));
++            std::fprintf(stderr, "EDEN_NEW_WAIT %zu bytes refused on %s: waiting for memory\n", bytes, name);
++        }
++    }
++    last_ns = now;
++    if (now - started_ns >= budget_ns) {
++        cooldown_ns = now + 30'000'000'000LL;
++        return false;
++    }
++    static std::atomic<bool> programs_dropped{false};
++    if (eden_shader_programs_drop != nullptr && !programs_dropped.exchange(true, std::memory_order_relaxed)) {
++        std::size_t programs = 0;
++        const std::size_t freed = eden_shader_programs_drop(&programs);
++        if (programs != 0)
++            std::fprintf(stderr, "EDEN_SHADER_PROGRAMS let go %zu programs read at boot (%zu MiB): an allocation waits\n",
++                         programs, freed >> 20);
++    }
++    static std::atomic<long long> recovered_ns{0};
++    if (eden_memory_recover_heap != nullptr && now - recovered_ns.load(std::memory_order_relaxed) >= 100'000'000) {
++        recovered_ns.store(now, std::memory_order_relaxed);
++        (void)eden_memory_recover_heap(bytes + (std::size_t{8} << 20));
++    }
++    static std::atomic<long long> trimmed_ns{0};
++    if (now - trimmed_ns.load(std::memory_order_relaxed) >= 500'000'000) {
++        trimmed_ns.store(now, std::memory_order_relaxed);
++        Eden::Performance::TrimHeap("an allocation waits for memory");
++    }
++    const timespec pause{0, 20'000'000};
++    nanosleep(&pause, nullptr);
++    return true;
++}
++} // namespace
++// The guest memory service's read-through (src/guest_memory_service.inc), for the core's GPU-side
++// reads of guest memory (Eglantine's common/guest_read_through.h).
++extern "C" void eden_guest_read_through_copy(void*, const void*, std::size_t) noexcept __attribute__((weak));
++extern "C" int eden_guest_read_through_covers(const void*, std::size_t) noexcept __attribute__((weak));
++namespace Common {
++void HeapCommitShortfall(std::size_t* wanted, std::size_t* got) noexcept;
++}
+ #endif
+ #ifdef EDEN_DEV_VULKAN
+ #include "sdk_audit.h"
+@@ -73,7 +162,9 @@ extern "C" size_t eden_heap_last_failure(unsigned*, size_t*);
+ #include "video_core/dma_pusher.h"
+ #include "video_core/host1x/host1x.h"
+ #include "video_core/host1x/syncpoint_manager.h"
+-#include "video_core/nx2_loading_probe.h"
++#ifdef EDEN_MKW_DIAGNOSTICS
++#include "video_core/nx2_loading_probe.h"  // its probe, with that core patch (pending on Lichii)
++#endif
+ #include "stall_watchdog.h"
+ #include "dev_vulkan.h"
+ #include "../src/fastmem.h"
+@@ -130,6 +221,8 @@ extern "C" std::int64_t sceKernelGetDirectMemorySize();
+ extern "C" bool eden_jit_shared;  // headless/dynarmic/jit_group_support.inc
+ #endif
+ #include "video_core/gpu.h"
++#include "video_core/gpu_split.h"
++#include "common/guest_read_through.h"
+ #ifdef EDEN_PS5_FRAMEGEN
+ #include "video_core/frame_gen/lossless_dll.h"
+ #endif
+@@ -352,13 +445,13 @@ static void UpdateGrips(Core::System& system, Eden::Pad& pad) {
+     }
+ }
+ 
+-#ifdef EDEN_PS5_RADV
++#ifdef EDEN_NIR_BACKEND
+ void EdenRegisterNirBackend(); // nir_backend.cpp
+ #endif
+ 
+ int main(int argc, char** argv) {
+     try {
+-#ifdef EDEN_PS5_RADV
++#ifdef EDEN_NIR_BACKEND
+         // Compute shaders reach RADV as NIR where translatable (nir_handoff.h; EDEN_NX2_NIR=0: SPIR-V).
+         EdenRegisterNirBackend();
+ #endif
+@@ -443,8 +536,20 @@ int main(int argc, char** argv) {
+             unsigned reason = 0;
+             size_t count = 0;
+             const size_t bytes = eden_heap_last_failure(&reason, &count);
++            if (NewHandlerWaits(bytes)) {
++                return; // operator new tries again
++            }
+             std::fprintf(stderr, "EDEN_HEAP_FAILURE requested=%zu reason=%u count=%zu\n", bytes,
+                          reason, count);
++            std::size_t wanted = 0, got = 0;
++            Common::HeapCommitShortfall(&wanted, &got);
++            std::fprintf(stderr, "EDEN_HEAP_GROW_SHORT the last growth the pool could not give asked %zu MiB "
++                                 "and had %zu MiB when the pool ran out\n", wanted >> 20, got >> 20);
++            if (eden_heap_space_detail) {
++                char line[384];
++                eden_heap_space_detail(line, sizeof(line), bytes);
++                std::fputs(line, stderr);
++            }
+             ps5_opengl_heap_snapshot("allocation_failure", 0);
+             std::fflush(stdout);
+             Eden::Report("allocation failure", "operator new: heap exhausted");
+@@ -568,6 +673,9 @@ int main(int argc, char** argv) {
+             LOG_ERROR(Frontend, "Ignoring invalid PS5-ECAM session path");
+ #endif
+         Eden::SetSessionPreferenceOverrides(forwarded.ecam_settings);
++        // Memory packing: Smaller packs the game's memory with zstd (src/guest_memory_service.inc,
++        // read when the guest memory service starts); an EDEN_CRAM_CODEC in env.txt stays.
++        if (Eden::ActiveSessionPreferenceOverrides().memory_packing == 1) setenv("EDEN_CRAM_CODEC", "zstd", 0);
+ #endif
+ #if defined(EDEN_ECAM_CHILD) && EDEN_ECAM_CHILD
+         // Playtendoh asked for this game: an earlier crash, which Playtendoh said already, does not keep it
+@@ -669,16 +777,42 @@ int main(int argc, char** argv) {
+         // pages with nothing to flush answer on the guest core instead of waiting for the GPU
+         // thread, as they do with fastmem (Mario Kart World's title screen: 13 -> 20 FPS). The
+         // three waits poll 300 us before sleeping: a wake-up here is a system call on both sides.
+-        // Playtendoh: Ocarina of Time's task and mesh draws are all skipped, as core patch 0071 had
+-        // them. 0075 issues the mesh-only ones, and on PS5-680 the GPU stopped at the first of them
+-        // every time (VK_ERROR_DEVICE_LOST 10 s later); with them skipped the game plays on.
++        // Playtendoh: task and mesh draws don't use the GPU's mesh shading (VK_EXT_mesh_shader):
++        // Ocarina of Time's stopped this GPU at the first of them, before the port (0071/0075 then
++        // skipped them) and again on Lichii (its loading screen after the title: the graphics pipe
++        // hung, then the system ended the app). Lichii's fallback runs them as compute and plain
++        // draws where it can and skips the rest; with it the game plays on. Every game, since a
++        // hung GPU leaves the whole console without picture or input. =0 in env.txt uses them.
+         for (const auto& [name, value] : {std::pair{"EDEN_NX2_UNSAFE_PREEMPTIVE_READS", "1"},
+                                           std::pair{"EDEN_PS5_READ_SPIN_US", "300"},
+                                           std::pair{"EDEN_PS5_GPU_SPIN_US", "300"},
+                                           std::pair{"EDEN_PS5_WORKER_SPIN_US", "300"},
+-                                          std::pair{"EDEN_OOT_MESH_DRAWS", "skip"}}) {
++                                          std::pair{"EDEN_NX2_FORCE_MESH_FALLBACK", "1"}}) {
+             setenv(name, value, 0);
+         }
++#if defined(EDEN_ECAM_CHILD) && EDEN_ECAM_CHILD
++        // Playtendoh's Settings > Performance > Memory, as the core's switches (env.txt above wins):
++        // the texture cache's thresholds (texture_memory 1-3: 2.5, 2 or 1.5 GB; 0 Lichii's own), how
++        // its images go while a write of the game's memory waits (give_back 0 in steps, 1-3 all of them
++        // after 0.5, 1 or 2 s, 4 all at once; 2 is the core's own, so nothing is set), and the shader
++        // programs read at boot kept then (keep_shaders).
++        if (const int texture = Eden::EcamSetting(forwarded, "texture_memory"); texture >= 1 && texture <= 3) {
++            static constexpr const char* expected[] = {"2048", "1536", "1280"};
++            static constexpr const char* critical[] = {"2560", "2048", "1536"};
++            setenv("EDEN_NX2_TC_EXPECTED_MIB", expected[texture - 1], 0);
++            setenv("EDEN_NX2_TC_CRITICAL_MIB", critical[texture - 1], 0);
++        }
++        if (const int give_back = Eden::EcamSetting(forwarded, "give_back"); give_back >= 0 && give_back <= 4 && give_back != 2) {
++            static constexpr const char* modes[] = {"never", "mixed", "mixed", "mixed", "full"};
++            static constexpr const char* waits[] = {"1000", "500", "1000", "2000", "0"};
++            setenv("EDEN_TC_GIVE_BACK_MODE", modes[give_back], 0);
++            setenv("EDEN_TC_GIVE_BACK_WAIT_MS", waits[give_back], 0);
++        }
++        if (Eden::EcamSetting(forwarded, "keep_shaders") == 1) setenv("EDEN_SHADER_PROGRAMS_KEEP", "1", 0);
++#endif
++        // (Lichii reads the switch as set or not.)
++        if (const char* mesh = std::getenv("EDEN_NX2_FORCE_MESH_FALLBACK"); mesh != nullptr && mesh[0] == '0')
++            unsetenv("EDEN_NX2_FORCE_MESH_FALLBACK");
+         // The 64-bit fastmem window (src/host_memory.cpp, Window64): opt-in while it is qualified,
+         // EDEN_FASTMEM64=1. Chosen here, before Core::System (and so HostMemory) is made.
+         if (const char* window64 = std::getenv("EDEN_FASTMEM64")) Eden::Fastmem::RequestA64(window64[0] == '1');
+@@ -1305,6 +1439,19 @@ int main(int argc, char** argv) {
+             if (controller >= 0 && controller <= 5) video.controller = controller - 1;
+             const int language = Eden::EcamSetting(forwarded, "language");
+             if (language >= 1 && language <= int(std::size(Eden::kLanguageKeys))) video.language = language - 1;
++            // Playtendoh's anti-aliasing, FSR sharpening and speed limit, the in-game menu's (EcamSettings
++            // reads them back from here, EcamApply changes them live)
++            static constexpr Settings::AntiAliasing anti_aliasing[] = {
++                Settings::AntiAliasing::None, Settings::AntiAliasing::Fxaa, Settings::AntiAliasing::Smaa};
++            if (const int aa = Eden::EcamSetting(forwarded, "anti_aliasing"); aa >= 0 && aa < int(std::size(anti_aliasing)))
++                Settings::values.anti_aliasing.SetValue(anti_aliasing[aa]);
++            if (const int sharpening = Eden::EcamSetting(forwarded, "sharpening"); sharpening >= 0 && sharpening <= 200)
++                Settings::values.fsr_sharpening_slider.SetValue(sharpening);
++            static constexpr int speed_limits[] = {100, 150, 200, 300, 0}; // the menu's order; 0 none
++            if (const int speed = Eden::EcamSetting(forwarded, "speed_limit"); speed >= 0 && speed < int(std::size(speed_limits))) {
++                Settings::values.use_speed_limit.SetValue(speed_limits[speed] > 0);
++                Settings::values.speed_limit.SetValue(static_cast<u16>(speed_limits[speed] > 0 ? speed_limits[speed] : 100));
++            }
+             // Settings > Video > Skip game anti-aliasing (video_core/oot_network.h): read by the core
+             // at each dispatch of a game's network.
+             setenv("EDEN_OOT_ANTI_ALIASING", video.skip_game_aa ? "skip" : "game", 1);
+@@ -1366,10 +1513,11 @@ int main(int argc, char** argv) {
+                 const bool active = (override_rate >= 0 || override_multiplier >= 0 || video.frame_gen) &&
+                                     video.backend == Eden::GraphicsBackend::Vulkan;
+                 Settings::values.frame_gen.SetValue(active);
+-                // AMD FSR 3 (Eglantine's own, nothing needed from the user) or Lossless Scaling's.
++                // Lichii's own (its Optical Flow, called FSR 3 before; nothing needed from the user) or
++                // Lossless Scaling's.
+                 const bool lossless = video.frame_gen_type == 1;
+                 Settings::values.frame_gen_type.SetValue(lossless ? Settings::FrameGenType::Lsfg
+-                                                                  : Settings::FrameGenType::Fsr3);
++                                                                  : Settings::FrameGenType::OpticalFlow);
+                 Settings::values.frame_gen_target_rate.SetValue(
+                     active ? static_cast<unsigned>(std::min(target, 240)) : 0u);
+                 Settings::values.frame_gen_multiplier.SetValue(
+@@ -1476,7 +1624,17 @@ int main(int argc, char** argv) {
+             const auto cheats_on = Eden::LoadChosenCheats(title);
+             Eden::Cheats::Off() = Eden::Mods::CheatsOff(all_mods, cheats_on);
+             const std::string mods = Eden::Mods::Summary(all_mods, mods_off, cheats_on);
+-            Settings::values.disabled_addons[title] = mods_off;
++            // Lichii's built-in "Max Resolution" for Ocarina of Time draws its 3D at full scale instead of
++            // the game's dynamic resolution: more GPU work, held back until the speed without it is known.
++            // "Texture Pool x2" is there for it (the larger scene outgrows the game's pool) and only costs
++            // memory without it. EDEN_OOT_MAX_RESOLUTION=1 lets both apply.
++            auto addons_off = mods_off;
++            if (const char* max_resolution = std::getenv("EDEN_OOT_MAX_RESOLUTION");
++                max_resolution == nullptr || max_resolution[0] != '1') {
++                addons_off.push_back("Max Resolution (built-in)");
++                addons_off.push_back("Texture Pool x2 (built-in)");
++            }
++            Settings::values.disabled_addons[title] = addons_off;
+             Eden::Report("launch", ("Mods: " + mods).c_str());
+             Eden::Crash::SetSession("game " + std::filesystem::path(guest).filename().string() + " (" + title_id +
+                                     "), " + Eden::BackendName(backend) + ", resolution " +
+@@ -1675,6 +1833,7 @@ int main(int argc, char** argv) {
+                     completion->wake.notify_one();
+                 });
+                 SCOPE_EXIT {
++                    Eden::Performance::graphics_give_back.store(nullptr, std::memory_order_release);
+                     if (system.IsPoweredOn()) system.ShutdownMainProcess();
+                     system.RegisterExitCallback({});
+                 };
+@@ -1988,6 +2147,54 @@ int main(int argc, char** argv) {
+                                       (guest_held > outside ? guest_held - outside : 0) >> 20);
+                     std::fputs(line, stderr);
+                 });
++                // What the graphics caches can let go, now (performance.h, graphics_give_back): on
++                // the thread that draws, never waited for. The pass runs once for each ask, wherever
++                // it comes first.
++                if (eden_guest_read_through_copy && eden_guest_read_through_covers) {
++                    Common::GuestReadThrough::copy_fn.store(eden_guest_read_through_copy, std::memory_order_release);
++                    Common::GuestReadThrough::covers_packed_fn.store(
++                        +[](const void* src, std::size_t size) { return eden_guest_read_through_covers(src, size) != 0; },
++                        std::memory_order_release);
++                }
++                static std::atomic<unsigned> give_back_asks{0}, give_back_runs{0};
++                static std::atomic<void (*)(unsigned long long)> give_back_done{nullptr};
++                static void (*const run_give_back)() = [] {
++                    const unsigned asked = give_back_asks.load(std::memory_order_acquire);
++                    if (give_back_runs.exchange(asked, std::memory_order_acq_rel) == asked) return;
++                    auto* const running = reporting_system;
++                    auto* const done = give_back_done.load(std::memory_order_acquire);
++                    if (!running || done == nullptr) return;
++                    auto* const rasterizer = running->Renderer().ReadRasterizer();
++                    // The pass collects as after a refusal (costly images too); the frames after
++                    // it as before it, unless a refusal of their own came meanwhile. Set for the
++                    // second after each pass, the collectors made textures again and again
++                    // (Mario Kart World: slower, choppier).
++                    auto& refused_ns = Eden::Performance::graphics_memory_refused_ns;
++                    const long long before = refused_ns.load(std::memory_order_relaxed);
++                    Eden::Performance::NoteGraphicsMemoryRefused();
++                    long long noted = refused_ns.load(std::memory_order_relaxed);
++                    const unsigned long long bytes = rasterizer != nullptr ? rasterizer->ReleaseMemoryNow() : 0;
++                    refused_ns.compare_exchange_strong(noted, before, std::memory_order_relaxed);
++                    done(bytes);
++                };
++                Eden::Performance::graphics_give_back.store([](void (*done)(unsigned long long)) -> bool {
++                    auto* const running = reporting_system;
++                    if (!running || !running->IsPoweredOn()) return false;
++                    give_back_done.store(done, std::memory_order_release);
++                    give_back_asks.fetch_add(1, std::memory_order_acq_rel);
++                    // While the GPU's back thread works through its entries, between two of them:
++                    // queued after the work before it, the pass waited behind a full queue until a
++                    // write of the game's memory found no block (Ocarina of Time loading Castle
++                    // Town, 20 Nov: no pass in a whole session, this thread waiting in the queue).
++                    auto& split = VideoCommon::GpuSplit::Get();
++                    if (split.Active() && split.BackWorking()) {
++                        split.RequestBetweenEntries(run_give_back);
++                        if (split.BackWorking()) return true;
++                    }
++                    // A quiet back (it may stay so) or no split: after the work queued before it.
++                    running->GPU().RunInOrder([] { run_give_back(); });
++                    return true;
++                });
+ #ifdef EDEN_ECAM
+                 ps5ingamenx::SetLoading(ps5ingamenx::Step::Starting);
+ #endif
+@@ -2375,6 +2582,7 @@ int main(int argc, char** argv) {
+                     for (;;) std::this_thread::sleep_for(std::chrono::seconds(1));
+                 }
+ #endif
++                Eden::Performance::graphics_give_back.store(nullptr, std::memory_order_release);
+                 system.ShutdownMainProcess();
+                 Eden::Report("shutdown", "Game stopped; releasing renderer");
+ #ifndef PS5_NATIVE
+diff --git a/headless/preferences_check.cpp b/headless/preferences_check.cpp
+index bab734b..8604887 100644
+--- a/headless/preferences_check.cpp
++++ b/headless/preferences_check.cpp
+@@ -504,7 +504,8 @@ int main() {
+     // Playtendoh's child-session performance values override saved defaults without rewriting them.
+     Eden::SetSessionPreferenceOverrides({"block_list=1", "async_shaders=1", "fast_gpu=1",
+                                          "unsafe_cpu=1", "unsafe_dma=1", "reactive_flushing=0",
+-                                         "skip_invalidation=1"});
++                                         "skip_invalidation=1", "memory_packing=1"});
++    assert(Eden::ActiveSessionPreferenceOverrides().memory_packing == 1);
+     const auto session = Eden::LoadPerformance(quest, file);
+     assert(session.block_list && session.async_shaders && session.fast_gpu && session.unsafe_cpu &&
+            session.unsafe_dma && !session.reactive_flushing && session.skip_invalidation);
+diff --git a/headless/settings_store.h b/headless/settings_store.h
+index 762ea56..2fe492c 100644
+--- a/headless/settings_store.h
++++ b/headless/settings_store.h
+@@ -183,6 +183,7 @@ struct SessionPreferenceOverrides {
+     int resolution = -1, filter = -1, output = -1, refresh = -1, frame_gen = -1;
+     int block_list = -1, async_shaders = -1, fast_gpu = -1, unsafe_cpu = -1;
+     int unsafe_dma = -1, reactive_flushing = -1, skip_invalidation = -1;
++    int memory_packing = -1; // Settings > Performance > Memory packing: 0 Faster (LZ4), 1 Smaller (zstd)
+     int controller = -2;
+ };
+ 
+@@ -212,6 +213,7 @@ inline void SetSessionPreferenceOverrides(const std::vector<std::string>& entrie
+         else if (key == "language" && number >= 1 && number <= int(std::size(kLanguageKeys))) value.language = number - 1;
+         else if (key == "resolution" && number < int(std::size(kResolutionKeys))) value.resolution = number;
+         else if (key == "filter" && number < 4) value.filter = number;
++        else if (key == "memory_packing" && number <= 1) value.memory_packing = number;
+         else if (key == "output" && number < int(std::size(kOutputKeys))) value.output = number;
+         else if (key == "refresh" && number <= 1) value.refresh = number;
+         else if (key == "frame_gen" && number <= 1) value.frame_gen = number;

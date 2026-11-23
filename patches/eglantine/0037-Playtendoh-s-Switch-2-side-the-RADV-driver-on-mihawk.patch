@@ -1,0 +1,2552 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Phononenom <64574232+Phononenom@users.noreply.github.com>
+Date: Mon, 23 Nov 2026 12:44:59 -0600
+Subject: [PATCH] Playtendoh's Switch 2 side: the RADV driver on mihawk's
+ PS5_Mesa 75238ae4, with memory compaction
+
+tools/deps.json moves ps5-mesa (https://github.com/mihawk-99/PS5_Mesa) from 7b59ef27 to 75238ae4. The
+build's patches to it: RADV_PS5_COMPACT, which packs the driver's partly used memory blocks so whole ones
+go back to the pool (tools/radv-compact.inc, radv-compact-plan.inc, checked by check-radv-compact.py);
+shaders the driver refused handled (patch-radv-refused-shaders.py); the trim, pieces, WSI and robustness
+patches on the new pin.
+
+From these commits (oldest first):
+- 2026-11-18 Playtendoh's Switch 2 side: the driver maps sparse ranges for the GPU only
+- 2026-11-18 Playtendoh's Switch 2 side: the driver's trim never gives back memory a sparse resource shows
+- 2026-11-18 Playtendoh's Switch 2 side: the driver watches its shared zero block and clears it when written
+- 2026-11-18 Playtendoh's Switch 2 side: each large sparse resource has a zero block of its own
+- 2026-11-18 Playtendoh's Switch 2 side: the driver's image and buffer counting is patched once a build
+- 2026-11-18 Playtendoh's Switch 2 side: a sparse bind with no memory leaves its pieces unbound
+- 2026-11-19 Playtendoh's Switch 2 side: the driver logs the memory it frees while memory is short
+- 2026-11-19 Playtendoh's Switch 2 side: driver memory compaction, a dry run and a self-test
+- 2026-11-19 Playtendoh's Switch 2 side: driver memory compaction moves memory (RADV_PS5_COMPACT=1)
+- 2026-11-19 Playtendoh's Switch 2 side: driver memory compaction on by default; the free trace out
+- 2026-11-19 Playtendoh's Switch 2 side: compaction keeps CPU page tables free
+- 2026-11-19 Playtendoh's Switch 2 side: the PS5 driver moves to Mesa 75238ae
+- 2026-11-19 Playtendoh's Switch 2 side: a pipeline whose shader was refused memory fails, not missing a stage
+- 2026-11-19 Playtendoh's Switch 2 side: the driver's free trace back, where memory is really unmapped
+---
+ tools/build-radv-dependencies.sh    |  14 +
+ tools/check-radv-compact.py         | 532 ++++++++++++++++++
+ tools/check-radv-robustness.py      |  11 +-
+ tools/deps.json                     |   2 +-
+ tools/patch-radv-pieces.py          |  97 +---
+ tools/patch-radv-refused-shaders.py | 111 ++++
+ tools/patch-radv-trim.py            | 805 +++++++++++++++++++++++++++-
+ tools/patch-radv-wsi.py             |  27 +-
+ tools/radv-compact-plan.inc         |  72 +++
+ tools/radv-compact.inc              | 547 +++++++++++++++++++
+ 10 files changed, 2122 insertions(+), 96 deletions(-)
+ create mode 100644 tools/check-radv-compact.py
+ create mode 100755 tools/patch-radv-refused-shaders.py
+ create mode 100644 tools/radv-compact-plan.inc
+ create mode 100644 tools/radv-compact.inc
+
+diff --git a/tools/build-radv-dependencies.sh b/tools/build-radv-dependencies.sh
+index ce30d9f..21d73ed 100644
+--- a/tools/build-radv-dependencies.sh
++++ b/tools/build-radv-dependencies.sh
+@@ -39,6 +39,17 @@ for lang, compiler in [('c', 'prospero-clang'), ('cpp', 'prospero-clang++')]:
+     s = s.replace(plain, cached)
+ p.write_text(s)
+ PY
++# The driver build script names its own Mesa revision: it builds the one tools/deps.json pins (the
++# PS5 Mesa moves on without the build scripts: 75238ae, 17 Nov, with the scripts at 7b59ef2's).
++python3 - "$vulkan/tools/build-radv.sh" "$(pin ps5-mesa)" <<'PY'
++from pathlib import Path
++import re
++import sys
++p, revision = Path(sys.argv[1]), sys.argv[2]
++s = p.read_text()
++assert len(re.findall(r'^mesa_revision=[0-9a-f]{40}$', s, re.M)) == 1, 'Unexpected upstream Mesa revision line'
++p.write_text(re.sub(r'^mesa_revision=[0-9a-f]{40}$', f'mesa_revision={revision}', s, flags=re.M))
++PY
+ bash "$vulkan/tools/setup-native-dependencies.sh"
+ bash "$vulkan/tools/build-radv.sh" release
+ python3 "$root/tools/patch-radv-wsi.py"
+@@ -47,6 +58,7 @@ python3 "$root/tools/patch-radv-memory-report.py"
+ python3 "$root/tools/patch-radv-pieces.py"
+ python3 "$root/tools/patch-radv-trim.py"
+ python3 "$root/tools/patch-radv-gs-compute.py"
++python3 "$root/tools/patch-radv-refused-shaders.py"
+ # ProsperoEden's patch-radv-transfer-split.py (splitting before transfers and barriers) is not
+ # taken: with it, Mario Kart World hung the GPU under memory pressure (PR #77).
+ bash "$vulkan/tools/build-radv.sh" release
+@@ -63,3 +75,5 @@ python3 "$root/tools/patch-radv-trim.py" --digest \
+     > "$vulkan/.deps/native/radv-release/EDEN_MEMORY_TRIM_SHA256"
+ python3 "$root/tools/patch-radv-gs-compute.py" --digest \
+     > "$vulkan/.deps/native/radv-release/EDEN_GS_COMPUTE_SHA256"
++python3 "$root/tools/patch-radv-refused-shaders.py" --digest \
++    > "$vulkan/.deps/native/radv-release/EDEN_REFUSED_SHADERS_SHA256"
+diff --git a/tools/check-radv-compact.py b/tools/check-radv-compact.py
+new file mode 100644
+index 0000000..43a30a9
+--- /dev/null
++++ b/tools/check-radv-compact.py
+@@ -0,0 +1,532 @@
++#!/usr/bin/env python3
++"""Builds the driver memory compaction's planner (tools/radv-compact-plan.inc) on the host and checks
++its plans: as many pieces emptied as their units can fit elsewhere (or the limit), every unit in use of
++an emptied piece moved once, each into a free unit of a piece that stays, no unit taken twice."""
++from pathlib import Path
++import subprocess
++import tempfile
++
++root = Path(__file__).resolve().parents[1]
++plan = (root / 'tools/radv-compact-plan.inc').read_text()
++code = r'''
++#include <assert.h>
++#include <stdbool.h>
++#include <stdint.h>
++#include <stdio.h>
++#include <string.h>
++struct radv_ps5_memory;
++''' + plan + r'''
++#define MAX_PIECES 600
++static struct radv_ps5_compact_move moves[MAX_PIECES * 31];
++
++static uint32_t
++run(struct radv_ps5_compact_piece *pieces, uint32_t count, uint32_t limit, uint32_t *moved)
++{
++   uint32_t order[MAX_PIECES];
++   radv_ps5_compact_order(pieces, count, order);
++   for (uint32_t i = 1; i < count; ++i)
++      assert(__builtin_popcount(pieces[order[i - 1]].used) >= __builtin_popcount(pieces[order[i]].used));
++   return radv_ps5_compact_plan(pieces, order, count, limit, moves, moved);
++}
++
++static void
++check(const struct radv_ps5_compact_piece *pieces, uint32_t count, uint32_t limit, uint32_t emptied, uint32_t moved)
++{
++   uint64_t in_use = 0;
++   uint32_t taken[MAX_PIECES], moved_from[MAX_PIECES], gone = 0, units = 0;
++   memset(moved_from, 0, sizeof(moved_from));
++   for (uint32_t i = 0; i < count; ++i) {
++      in_use += (uint32_t)__builtin_popcount(pieces[i].used);
++      taken[i] = pieces[i].used;
++      gone += pieces[i].moves;
++      assert(!(pieces[i].moves && pieces[i].takes));
++      if (pieces[i].moves)
++         units += (uint32_t)__builtin_popcount(pieces[i].used);
++   }
++   const uint64_t needed = (in_use + 31) / 32;
++   uint64_t best = count > needed ? count - needed : 0;
++   if (best > limit)
++      best = limit;
++   assert(emptied == best && gone == emptied && moved == units);
++   for (uint32_t m = 0; m < moved; ++m) {
++      const struct radv_ps5_compact_move *const move = &moves[m];
++      assert(move->from < count && move->to < count && move->from_unit < 32 && move->to_unit < 32);
++      assert(pieces[move->from].moves && !pieces[move->to].moves && pieces[move->to].takes);
++      assert(pieces[move->from].used & (1u << move->from_unit));          /* a unit in use... */
++      assert(!(moved_from[move->from] & (1u << move->from_unit)));        /* ...moved once */
++      moved_from[move->from] |= 1u << move->from_unit;
++      assert(!(taken[move->to] & (1u << move->to_unit)));                  /* into a free unit */
++      taken[move->to] |= 1u << move->to_unit;
++   }
++   for (uint32_t i = 0; i < count; ++i)
++      assert(!pieces[i].moves || moved_from[i] == pieces[i].used);
++}
++
++int
++main(void)
++{
++   struct radv_ps5_compact_piece pieces[MAX_PIECES];
++   uint32_t moved, emptied;
++
++   /* Two half-used pieces: one goes into the other. */
++   memset(pieces, 0, sizeof(pieces));
++   pieces[0].used = 0x0000ffffu;
++   pieces[1].used = 0xffff0000u;
++   emptied = run(pieces, 2, UINT32_MAX, &moved);
++   check(pieces, 2, UINT32_MAX, emptied, moved);
++   assert(emptied == 1 && moved == 16);
++
++   /* 30, 2, 2 in use (34 units): two pieces are needed, one is emptied, its 2 units into the 30. */
++   memset(pieces, 0, sizeof(pieces));
++   pieces[0].used = 0x3fffffffu;
++   pieces[1].used = 0x3u;
++   pieces[2].used = 0xc0000000u;
++   emptied = run(pieces, 3, UINT32_MAX, &moved);
++   check(pieces, 3, UINT32_MAX, emptied, moved);
++   assert(emptied == 1 && moved == 2);
++
++   /* 20, 20, 20 in use (60 units): two pieces hold them; the third's 20 units split over the two. */
++   memset(pieces, 0, sizeof(pieces));
++   for (uint32_t i = 0; i < 3; ++i)
++      pieces[i].used = 0x000fffffu << (i * 4);
++   emptied = run(pieces, 3, UINT32_MAX, &moved);
++   check(pieces, 3, UINT32_MAX, emptied, moved);
++   assert(emptied == 1 && moved == 20);
++
++   /* Eight pieces with 4 units each: seven fill the first one's 28 free units. */
++   memset(pieces, 0, sizeof(pieces));
++   for (uint32_t i = 0; i < 8; ++i)
++      pieces[i].used = 0xfu << (4 * i);
++   emptied = run(pieces, 8, UINT32_MAX, &moved);
++   check(pieces, 8, UINT32_MAX, emptied, moved);
++   assert(emptied == 7 && moved == 28);
++
++   /* The limit. */
++   emptied = run(pieces, 8, 3, &moved);
++   check(pieces, 8, 3, emptied, moved);
++   assert(emptied == 3 && moved == 12);
++
++   /* Nothing to plan with; nothing that fits. */
++   assert(run(pieces, 0, UINT32_MAX, &moved) == 0 && moved == 0);
++   memset(pieces, 0, sizeof(pieces));
++   pieces[0].used = 0x7fffffffu;
++   pieces[1].used = 0xfffffffeu;
++   emptied = run(pieces, 2, UINT32_MAX, &moved);
++   check(pieces, 2, UINT32_MAX, emptied, moved);
++   assert(emptied == 0 && moved == 0);
++
++   /* Random sets and limits. */
++   uint32_t seed = 12345, total = 0;
++   for (int round = 0; round < 3000; ++round) {
++      const uint32_t count = 1 + (seed = seed * 1103515245u + 12345u) % MAX_PIECES;
++      seed = seed * 1103515245u + 12345u;
++      const uint32_t limit = seed % 4 == 0 ? seed % 64 : UINT32_MAX;
++      for (uint32_t i = 0; i < count; ++i) {
++         seed = seed * 1103515245u + 12345u;
++         uint32_t used = seed;
++         if (seed % 3 == 0)
++            used &= (1u << (seed % 31 + 1)) - 1;
++         if (used == 0)
++            used = 1;
++         if (used == 0xffffffffu)
++            used = 0x7fffffffu;
++         pieces[i] = (struct radv_ps5_compact_piece){.used = used};
++      }
++      emptied = run(pieces, count, limit, &moved);
++      check(pieces, count, limit, emptied, moved);
++      total += emptied;
++   }
++   assert(total > 0);
++   printf("RADV compaction plan: PASS (fixed cases, limits, 3000 random sets: %u pieces emptied)\n", total);
++   return 0;
++}
++'''
++# The compaction itself (tools/radv-compact.inc) against a model of the kernel's memory calls: direct
++# memory in 2 MiB pieces with a tag per 64 KiB slot, and a page table from addresses to slots.
++compact = (root / 'tools/radv-compact.inc').read_text()
++model = r'''
++#include <assert.h>
++#include <inttypes.h>
++#include <stdbool.h>
++#include <stdint.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#define MIN2(a, b) ((a) < (b) ? (a) : (b))
++#define RADV_PS5_LARGE_BYTES UINT64_C(0x200000)
++#define RADV_PS5_DIRECT_TYPE 12
++#define PS5_KERNEL_PROT_CPU_READ 1
++#define PS5_KERNEL_PROT_CPU_WRITE 2
++struct radv_ps5_memory {
++   uint8_t *cpu;
++   uint64_t bytes;
++   int64_t physical;
++   uint32_t granule, granules;
++   bool window_replay;
++   int64_t *pieces;
++   uint16_t *uses;
++   uint32_t *idle_ms;
++   uint16_t *unit_uses;
++   uint32_t *released_ms;
++   bool no_compact;
++   int64_t *unit_phys;
++};
++struct radv_ps5_compact_report {
++   uint32_t partial, partial_free, candidates, emptied, moved, dropped, managed;
++   uint64_t released;
++   int32_t tables_free;
++   bool tables_low, timed_out, broken;
++};
++static int tables_free = 9000;
++static int radv_ps5_compact_tables_free(void) { return tables_free; }
++#define PIECES 64u
++#define UNIT (UINT64_C(64) << 10)
++#define ZERO ((int64_t)(PIECES * RADV_PS5_LARGE_BYTES))
++#define VA_BASE UINT64_C(0x4000000000)
++#define VA_UNITS 16384u /* 1 GiB of addresses for memories */
++#define VIEW_BASE (VA_BASE + VA_UNITS * UNIT)
++#define VIEW_UNITS 64u
++static bool allocated[PIECES];
++static uint64_t content[PIECES * 32];
++static int64_t pages[VA_UNITS + VIEW_UNITS]; /* -2: nothing mapped */
++static unsigned allocations, releases;
++static bool locked;
++
++static int64_t sceKernelGetDirectMemorySize(void) { return (int64_t)(PIECES * RADV_PS5_LARGE_BYTES); }
++static uint64_t page_of(const void *at) { return ((uint64_t)(uintptr_t)at - VA_BASE) / UNIT; }
++static int
++sceKernelAllocateDirectMemory(int64_t lo, int64_t hi, uint64_t length, uint64_t alignment, int type, int64_t *out)
++{
++   (void)lo, (void)hi, (void)alignment, (void)type;
++   assert(length == RADV_PS5_LARGE_BYTES);
++   for (unsigned i = 0; i < PIECES; ++i)
++      if (!allocated[i]) {
++         allocated[i] = true;
++         allocations++;
++         *out = (int64_t)(i * RADV_PS5_LARGE_BYTES);
++         for (unsigned s = 0; s < 32; ++s)
++            content[i * 32 + s] = 0xdead;
++         return 0;
++      }
++   return -1;
++}
++static int
++sceKernelReleaseDirectMemory(int64_t start, uint64_t length)
++{
++   assert(length == RADV_PS5_LARGE_BYTES && start % (int64_t)RADV_PS5_LARGE_BYTES == 0);
++   const unsigned piece = (unsigned)(start / (int64_t)RADV_PS5_LARGE_BYTES);
++   assert(piece < PIECES && allocated[piece]);
++   for (unsigned v = 0; v < VA_UNITS + VIEW_UNITS; ++v) /* nothing may still show it */
++      assert(pages[v] < start || pages[v] >= start + (int64_t)RADV_PS5_LARGE_BYTES);
++   allocated[piece] = false;
++   releases++;
++   return 0;
++}
++static bool
++radv_ps5_map_fixed(uint8_t *at, uint64_t bytes, int64_t physical)
++{
++   assert((uint64_t)(uintptr_t)at % UNIT == 0 && bytes % UNIT == 0 && bytes <= RADV_PS5_LARGE_BYTES);
++   for (uint64_t i = 0; i < bytes / UNIT; ++i)
++      pages[page_of(at) + i] = physical + (int64_t)(i * UNIT);
++   return true;
++}
++static bool radv_ps5_map_fixed_sparse(uint8_t *at, uint64_t bytes, int64_t physical) { (void)at, (void)bytes, (void)physical; return true; }
++static int
++sceKernelMapDirectMemory(void **at, uint64_t bytes, int protection, int flags, int64_t physical, uint64_t alignment)
++{
++   (void)protection, (void)flags, (void)alignment;
++   assert(bytes == RADV_PS5_LARGE_BYTES);
++   for (unsigned v = 0; v < VIEW_UNITS; v += 32)
++      if (pages[VA_UNITS + v] == -2) {
++         for (unsigned i = 0; i < 32; ++i)
++            pages[VA_UNITS + v + i] = physical + (int64_t)(i * UNIT);
++         *at = (void *)(uintptr_t)(VIEW_BASE + v * UNIT);
++         return 0;
++      }
++   return -1;
++}
++static int
++sceKernelMunmap(void *at, uint64_t bytes)
++{
++   for (uint64_t i = 0; i < bytes / UNIT; ++i)
++      pages[page_of(at) + i] = -2;
++   return 0;
++}
++static uint64_t *
++slot_content(const void *at)
++{
++   const int64_t physical = pages[page_of(at)];
++   assert(physical >= 0 && physical < ZERO && physical % (int64_t)UNIT == 0);
++   return &content[physical / (int64_t)UNIT];
++}
++static void radv_ps5_compact_copy(uint8_t *to, const uint8_t *from) { *slot_content(to) = *slot_content(from); }
++static void radv_ps5_cpu_flush(const void *at, uint64_t bytes) { (void)at, (void)bytes; }
++static int64_t radv_ps5_zero_block(void) { return ZERO; }
++static int64_t radv_ps5_zero_block_for(void *at) { (void)at; return ZERO; }
++static uint64_t radv_ps5_now_ns(void) { return 0; }
++static uint32_t clock_ms = 100000;
++static uint32_t radv_ps5_trim_now_ms(void) { return clock_ms; }
++static uint32_t radv_ps5_trim_quarantine_ms(void) { return 2000; }
++static bool radv_ps5_trim_trylock(void) { if (locked) return false; locked = true; return true; }
++static void radv_ps5_trim_acquire(void) { assert(!locked); locked = true; }
++static void radv_ps5_trim_release(void) { assert(locked); locked = false; }
++static struct radv_ps5_memory *radv_ps5_trim_tracked[64];
++static uint32_t radv_ps5_trim_count;
++static uint64_t radv_ps5_trim_retaken;
++static bool radv_ps5_trim_pieces(struct radv_ps5_memory *memory) { return memory->pieces != NULL; }
++static void
++radv_ps5_trim_untrack(struct radv_ps5_memory *memory)
++{
++   radv_ps5_trim_acquire();
++   for (uint32_t i = 0; i < radv_ps5_trim_count; ++i)
++      if (radv_ps5_trim_tracked[i] == memory) {
++         radv_ps5_trim_tracked[i] = radv_ps5_trim_tracked[--radv_ps5_trim_count];
++         break;
++      }
++   free(memory->uses);
++   free(memory->idle_ms);
++   free(memory->unit_uses);
++   free(memory->released_ms);
++   memory->uses = NULL;
++   memory->idle_ms = NULL;
++   memory->unit_uses = NULL;
++   memory->released_ms = NULL;
++   radv_ps5_trim_release();
++}
++static int radv_ps5_region;
++static void radv_ps5_granules_give(int *region, uint32_t granule, uint32_t granules) { (void)region, (void)granule, (void)granules; }
++''' + plan + compact + r'''
++#define MEMORIES 12u
++#define GRANULES 4u
++static struct radv_ps5_memory memories[MEMORIES];
++static uint32_t seed;
++static uint32_t next(void) { return seed = seed * 1103515245u + 12345u; }
++static uint64_t tag(uint32_t m, uint32_t unit) { return ((uint64_t)m << 32) | unit | (UINT64_C(1) << 63); }
++
++static void
++verify(void)
++{
++   assert(!locked);
++   uint64_t free_slots = 0;
++   for (unsigned piece = 0; piece < PIECES && radv_ps5_slots; ++piece) {
++      uint32_t mask = 0;
++      for (unsigned s = 0; s < 32; ++s) {
++         const struct radv_ps5_slot *const shown = &radv_ps5_slots[piece * 32 + s];
++         if (!shown->memory)
++            continue;
++         mask |= 1u << s;
++         if (shown->memory == RADV_PS5_SLOT_HELD)
++            continue; /* a retired memory's: its copy checks it (retired_check) */
++         assert(shown->memory->unit_phys && shown->memory->unit_phys[shown->unit] ==
++                                               (int64_t)(piece * RADV_PS5_LARGE_BYTES + s * UNIT));
++      }
++      assert(mask == radv_ps5_slot_masks[piece]);
++      if (mask)
++         free_slots += 32 - (uint64_t)__builtin_popcount(mask);
++      assert(!mask || allocated[piece]);
++   }
++   assert(!radv_ps5_slots || free_slots == radv_ps5_free_slots);
++   for (uint32_t m = 0; m < MEMORIES; ++m) {
++      struct radv_ps5_memory *const memory = &memories[m];
++      if (!memory->cpu)
++         continue;
++      for (uint32_t unit = 0; unit < GRANULES * 32; ++unit) {
++         const int64_t shown = pages[page_of(memory->cpu) + unit];
++         if (memory->unit_phys) {
++            assert(shown == (memory->unit_phys[unit] >= 0 ? memory->unit_phys[unit] : shown));
++            assert(memory->unit_phys[unit] >= 0 || shown >= ZERO);
++         } else {
++            const int64_t piece = memory->pieces[unit / 32];
++            assert(piece >= 0 ? shown == piece + (int64_t)(unit % 32 * UNIT) : shown >= ZERO);
++         }
++         if (memory->unit_uses && memory->unit_uses[unit])
++            assert(shown >= 0 && shown < ZERO && content[shown / (int64_t)UNIT] == tag(m, unit));
++      }
++   }
++   /* every piece allocated is either a managed piece some unit shows or an unmanaged memory's own */
++   for (unsigned piece = 0; piece < PIECES; ++piece) {
++      if (!allocated[piece] || (radv_ps5_slots && radv_ps5_slot_masks[piece]))
++         continue;
++      bool owned = false;
++      for (uint32_t m = 0; m < MEMORIES; ++m)
++         for (uint32_t g = 0; memories[m].cpu && memories[m].pieces && g < GRANULES; ++g)
++            owned |= memories[m].pieces[g] == (int64_t)(piece * RADV_PS5_LARGE_BYTES);
++      assert(owned);
++   }
++}
++
++/* A retired memory (Mesa f5610fe's retire keeps a copy of the struct; the buffer object goes): its
++ * units keep their slots, held, their data intact, until the copy is freed. */
++static struct radv_ps5_memory retired;
++static uint32_t retired_index = UINT32_MAX;
++static void
++retired_check(void)
++{
++   if (!retired.cpu || !retired.unit_phys)
++      return;
++   for (uint32_t unit = 0; unit < GRANULES * 32; ++unit) {
++      const int64_t physical = retired.unit_phys[unit];
++      if (physical < 0)
++         continue;
++      assert(radv_ps5_slots[physical / (int64_t)UNIT].memory == RADV_PS5_SLOT_HELD);
++      assert(radv_ps5_slot_masks[physical / (int64_t)RADV_PS5_LARGE_BYTES] & (1u << (physical % (int64_t)RADV_PS5_LARGE_BYTES / (int64_t)UNIT)));
++      assert(pages[page_of(retired.cpu) + unit] == physical);
++   }
++}
++
++static void
++bind(uint32_t m, uint32_t first, uint32_t count)
++{
++   struct radv_ps5_memory *const memory = &memories[m];
++   radv_ps5_trim_acquire();
++   if (memory->unit_phys)
++      assert(radv_ps5_compact_retake(memory, (uint64_t)first * UNIT, (uint64_t)count * UNIT));
++   radv_ps5_trim_release();
++   for (uint32_t unit = first; unit < first + count; ++unit) {
++      if (!memory->unit_uses[unit]++)
++         *slot_content(radv_ps5_unit_address(memory, unit)) = tag(m, unit);
++      memory->uses[unit / 32]++;
++   }
++}
++
++static void
++unbind_all(uint32_t m, uint32_t granule)
++{
++   struct radv_ps5_memory *const memory = &memories[m];
++   for (uint32_t unit = granule * 32; unit < granule * 32 + 32; ++unit) {
++      memory->uses[granule] -= memory->unit_uses[unit];
++      memory->unit_uses[unit] = 0;
++   }
++   memory->released_ms[granule] = clock_ms;
++   memory->idle_ms[granule] = clock_ms;
++}
++
++static uint32_t
++round_trip(uint32_t round)
++{
++   seed = round * 7919u + 1;
++   memset(allocated, 0, sizeof(allocated));
++   for (unsigned v = 0; v < VA_UNITS + VIEW_UNITS; ++v)
++      pages[v] = -2;
++   radv_ps5_trim_count = 0;
++   for (uint32_t m = 0; m < MEMORIES; ++m) {
++      struct radv_ps5_memory *const memory = &memories[m];
++      *memory = (struct radv_ps5_memory){
++         .cpu = (uint8_t *)(uintptr_t)(VA_BASE + m * GRANULES * RADV_PS5_LARGE_BYTES),
++         .bytes = GRANULES * RADV_PS5_LARGE_BYTES, .physical = -1,
++         .pieces = malloc(GRANULES * sizeof(int64_t)), .uses = calloc(GRANULES, 2), .idle_ms = calloc(GRANULES, 4),
++         .unit_uses = calloc(GRANULES * 32, 2), .released_ms = calloc(GRANULES, 4),
++         .no_compact = m == MEMORIES - 1 && round % 2}; /* now and then one that must stay */
++      for (uint32_t g = 0; g < GRANULES; ++g) {
++         assert(sceKernelAllocateDirectMemory(0, 0, RADV_PS5_LARGE_BYTES, 0, 0, &memory->pieces[g]) == 0);
++         radv_ps5_map_fixed(memory->cpu + g * RADV_PS5_LARGE_BYTES, RADV_PS5_LARGE_BYTES, memory->pieces[g]);
++      }
++      radv_ps5_trim_tracked[radv_ps5_trim_count++] = memory;
++      for (uint32_t b = next() % 9; b--;) {
++         const uint32_t first = next() % (GRANULES * 32), count = 1 + next() % 6;
++         bind(m, first, MIN2(count, GRANULES * 32 - first));
++      }
++   }
++   verify();
++   uint32_t emptied = 0;
++   for (int pass = 0; pass < 3; ++pass) {
++      struct radv_ps5_compact_report report;
++      const unsigned before = releases;
++      assert(radv_ps5_compact_pass(UINT64_C(256) << 20, false, &report));
++      assert(!report.broken && report.released == (uint64_t)(releases - before) * RADV_PS5_LARGE_BYTES);
++      emptied += report.emptied;
++      verify();
++      retired_check();
++      /* binds over units that show the zero block take free slots; resources go; granules are trimmed */
++      for (uint32_t b = next() % 6; b--;) {
++         const uint32_t m = next() % MEMORIES, first = next() % (GRANULES * 32), count = 1 + next() % 4;
++         if (memories[m].cpu)
++            bind(m, first, MIN2(count, GRANULES * 32 - first));
++      }
++      verify();
++      if (pass == 1) {
++         /* Retire one managed memory, as radv_ps5_trim_detach does before the struct is copied. */
++         for (uint32_t m = 0; m < MEMORIES && retired_index == UINT32_MAX; ++m) {
++            if (!memories[m].unit_phys)
++               continue;
++            radv_ps5_trim_untrack(&memories[m]);
++            radv_ps5_trim_acquire();
++            memories[m].no_compact = true;
++            radv_ps5_compact_hold(&memories[m]);
++            radv_ps5_trim_release();
++            retired = memories[m];
++            memset(&memories[m], 0, sizeof(memories[m])); /* the buffer object is gone */
++            retired_index = m;
++         }
++         retired_check();
++      }
++      if (pass == 2) {
++         /* What the GPU had to run has run: the copy is freed. */
++         if (retired_index != UINT32_MAX) {
++            assert(radv_ps5_compact_free(&retired));
++            retired_index = UINT32_MAX;
++         }
++      }
++      verify();
++      retired_check();
++      const uint32_t m = next() % MEMORIES, g = next() % GRANULES;
++      if (!memories[m].cpu)
++         continue;
++      unbind_all(m, g);
++      clock_ms += 3000;
++      radv_ps5_trim_acquire();
++      if (memories[m].unit_phys)
++         radv_ps5_compact_trim_granule(&memories[m], g, ZERO);
++      radv_ps5_trim_release();
++      verify();
++   }
++   for (uint32_t m = 0; m < MEMORIES; ++m) {
++      struct radv_ps5_memory *const memory = &memories[m];
++      if (!memory->cpu)
++         continue;
++      if (!radv_ps5_compact_free(memory)) {
++         radv_ps5_trim_untrack(memory);
++         sceKernelMunmap(memory->cpu, memory->bytes);
++         for (uint32_t g = 0; g < GRANULES; ++g)
++            if (memory->pieces[g] >= 0)
++               sceKernelReleaseDirectMemory(memory->pieces[g], RADV_PS5_LARGE_BYTES);
++         free(memory->pieces);
++         memset(memory, 0, sizeof(*memory));
++      }
++      verify();
++   }
++   for (unsigned piece = 0; piece < PIECES; ++piece)
++      assert(!allocated[piece]);
++   assert(radv_ps5_free_slots == 0);
++   return emptied;
++}
++
++int
++main(void)
++{
++   uint32_t emptied = 0;
++   for (uint32_t round = 0; round < 400; ++round)
++      emptied += round_trip(round);
++   assert(emptied > 0);
++   /* Page tables under the mark: a pass moves nothing. */
++   tables_free = 100;
++   memset(allocated, 0, sizeof(allocated));
++   {
++      struct radv_ps5_compact_report report;
++      assert(radv_ps5_compact_pass(UINT64_C(256) << 20, false, &report) && report.tables_low && !report.moved &&
++             !report.emptied && report.tables_free == 100);
++   }
++   tables_free = 9000;
++   printf("RADV compaction moves: PASS (400 rounds of binds, passes, trims and frees: %u pieces emptied, every unit in use "
++          "read back through its address, %u pieces taken, %u given back)\n", emptied, allocations, releases);
++   return 0;
++}
++'''
++with tempfile.TemporaryDirectory(prefix='eglantine-radv-compact-') as directory:
++    for name, text in (('plan', code), ('moves', model)):
++        source_path = Path(directory) / f'{name}.c'
++        executable = Path(directory) / name
++        source_path.write_text(text)
++        subprocess.run(['cc', '-std=c11', '-O1', '-g', '-Wall', '-Wextra', '-Werror', '-Wno-unused-function',
++                        str(source_path), '-o', str(executable)], check=True)
++        subprocess.run([str(executable)], check=True)
+diff --git a/tools/check-radv-robustness.py b/tools/check-radv-robustness.py
+index 5023223..50c8b1b 100644
+--- a/tools/check-radv-robustness.py
++++ b/tools/check-radv-robustness.py
+@@ -1,6 +1,6 @@
+ #!/usr/bin/env python3
+ # SPDX-License-Identifier: GPL-3.0-or-later
+-"""The driver robustness patch (geometry-shader compute sinks) is wired in.
++"""The driver robustness patches (geometry-shader compute sinks, refused shaders) are wired in.
+ 
+ Checks that build-radv-dependencies.sh applies and stamps it, that prepare-build.sh rebuilds the
+ driver when a stamp is missing or stale, and, when the driver export is on this machine, that it
+@@ -15,7 +15,8 @@ import tempfile
+ root = Path(__file__).resolve().parents[1]
+ prepare = (root / 'tools/prepare-build.sh').read_text()
+ build = (root / 'tools/build-radv-dependencies.sh').read_text()
+-scripts = {'patch-radv-gs-compute.py': 'EDEN_GS_COMPUTE_SHA256'}
++scripts = {'patch-radv-gs-compute.py': 'EDEN_GS_COMPUTE_SHA256',
++           'patch-radv-refused-shaders.py': 'EDEN_REFUSED_SHADERS_SHA256'}
+ 
+ for name, stamp_name in scripts.items():
+     script = root / 'tools' / name
+@@ -49,6 +50,12 @@ if export.is_dir():
+         vulkan = tree / 'src/amd/vulkan'
+         assert 'const uint64_t null_sink = radv_gs_compute_upload' in (vulkan / 'radv_cmd_buffer.c').read_text()
+         assert 'block->ro_sink;\n      p->count_buffer' in (vulkan / 'cl/radv_gs_compute.cl').read_text()
++        graphics = (vulkan / 'radv_pipeline_graphics.c').read_text()
++        assert graphics.count('result = VK_ERROR_OUT_OF_DEVICE_MEMORY;') >= 3 and \
++            'if (!skip_shaders_cache && result == VK_SUCCESS) {\n      radv_pipeline_cache_insert' in graphics
++        compute = (vulkan / 'radv_pipeline_compute.c').read_text()
++        assert 'if (!pipeline->base.shaders[MESA_SHADER_COMPUTE])\n      result = VK_ERROR_OUT_OF_DEVICE_MEMORY;' in compute
++        assert '!= VK_SUCCESS || !shader)\n         return NULL;' in (vulkan / 'radv_pipeline_cache.c').read_text()
+     print('RADV robustness: wired in, stamped, applies to the export and is idempotent')
+ else:
+     print('RADV robustness: wired in and stamped (no driver export here to apply to)')
+diff --git a/tools/deps.json b/tools/deps.json
+index ef5b303..3bd1874 100644
+--- a/tools/deps.json
++++ b/tools/deps.json
+@@ -130,7 +130,7 @@
+       "about": "Mihawk's PS5 Mesa (RADV) source",
+       "kind": "git",
+       "url": "https://github.com/mihawk-99/PS5_Mesa.git",
+-      "commit": "7b59ef27c1b09b9671bc4153c41940c3155c3af2",
++      "commit": "75238ae4db3249803df3deeba47340f6de27962e",
+       "path": "../mihawk-mesa-review"
+     },
+     {
+diff --git a/tools/patch-radv-pieces.py b/tools/patch-radv-pieces.py
+index 058f96a..bd77d3f 100644
+--- a/tools/patch-radv-pieces.py
++++ b/tools/patch-radv-pieces.py
+@@ -1,6 +1,6 @@
+ #!/usr/bin/env python3
+ # SPDX-License-Identifier: GPL-3.0-or-later
+-"""Driver memory from 2 MiB pieces when the console's pool has no span in one piece.
++"""Driver memory as 2 MiB pieces, for the memory trim and compaction (patch-radv-trim.py).
+ 
+ The PS5 winsys takes each buffer object as one run of direct memory. The pool it shares with the
+ guest's memory and Eden's heap fragments over a session. On Mario Kart World, with the guest
+@@ -10,6 +10,12 @@ VK_ERROR_OUT_OF_DEVICE_MEMORY. When the single run is refused, a buffer outside
+ takes its device-region granules and maps one 2 MiB piece of direct memory at each, in order. The
+ GPU address is the CPU mapping, as before, so nothing else changes. Freeing, sparse binding and
+ mapping at another address go piece by piece. Patches the build export, never the Mesa checkout.
++
++Mesa 53cc83f (PS5 Mesa, 31 Oct) does the allocation itself now: a buffer the pool has no one range
++for is backed by several 2 MiB-aligned chunks (radv_ps5_memory_alloc_chunked), so this script no
++longer allocates. It keeps the per-granule `pieces` the trim converts a buffer to (contiguous or
++chunked), their mapping, freeing and sparse binding, and the app's give-back: an allocation that
++finds neither a range nor chunks asks the app for memory (eden_memory_recover) and tries once more.
+ """
+ from pathlib import Path
+ import hashlib
+@@ -28,68 +34,11 @@ source = (Path(sys.argv[1]) if len(sys.argv) > 1 else
+ MARK = 'EglantinePS5 memory pieces'
+ 
+ PIECES = r'''
+-/* ''' + MARK + r''': a buffer from 2 MiB pieces of direct memory, mapped in order at its
+- * device-region granules, for when the pool has no run as long as the buffer. Each piece is
+- * mapped at the address asked for or not at all (never over another mapping). */
++/* ''' + MARK + r''': a buffer as 2 MiB pieces of direct memory (`pieces`), which the memory trim
++ * converts a contiguous or chunked buffer to; each mapped at its granule. */
+ /* The app's: gives memory back when the pool has none (EglantinePS5, absent elsewhere). */
+ extern size_t eden_memory_recover(size_t bytes) __attribute__((weak));
+ 
+-static bool
+-radv_ps5_memory_alloc_pieces(uint64_t bytes, uint64_t alignment, struct radv_ps5_memory *out)
+-{
+-   const uint32_t granules = (uint32_t)DIV_ROUND_UP(bytes, RADV_PS5_LARGE_BYTES);
+-   int64_t *const pieces = calloc(granules, sizeof(*pieces));
+-   if (!pieces)
+-      return false;
+-   const uint32_t granule =
+-      radv_ps5_granules_take(&radv_ps5_region, granules, (uint32_t)MAX2(alignment / RADV_PS5_LARGE_BYTES, 1));
+-   if (granule == UINT32_MAX) {
+-      free(pieces);
+-      return false;
+-   }
+-   uint8_t *const at = (uint8_t *)(uintptr_t)(RADV_PS5_REGION_BASE + (uint64_t)granule * RADV_PS5_LARGE_BYTES);
+-   uint32_t done = 0;
+-   for (; done < granules; ++done) {
+-      int64_t physical = -1;
+-      if (sceKernelAllocateDirectMemory(0, sceKernelGetDirectMemorySize(), RADV_PS5_LARGE_BYTES, RADV_PS5_LARGE_BYTES,
+-                                        RADV_PS5_DIRECT_TYPE, &physical) != 0)
+-         break;
+-      void *const want = at + (uint64_t)done * RADV_PS5_LARGE_BYTES;
+-      void *address = want;
+-      const int32_t result =
+-         sceKernelMapDirectMemory(&address, RADV_PS5_LARGE_BYTES, RADV_PS5_PROTECTION, 0, physical, RADV_PS5_LARGE_BYTES);
+-      if (result != 0 || address != want) {
+-         if (result == 0 && address != NULL)
+-            sceKernelMunmap(address, RADV_PS5_LARGE_BYTES);
+-         sceKernelReleaseDirectMemory(physical, RADV_PS5_LARGE_BYTES);
+-         break;
+-      }
+-      pieces[done] = physical;
+-   }
+-   if (done != granules) {
+-      for (uint32_t i = 0; i < done; ++i) {
+-         sceKernelMunmap(at + (uint64_t)i * RADV_PS5_LARGE_BYTES, RADV_PS5_LARGE_BYTES);
+-         sceKernelReleaseDirectMemory(pieces[i], RADV_PS5_LARGE_BYTES);
+-      }
+-      radv_ps5_granules_give(&radv_ps5_region, granule, granules);
+-      free(pieces);
+-      return false;
+-   }
+-   *out = (struct radv_ps5_memory){
+-      .cpu = at,
+-      .bytes = (uint64_t)granules * RADV_PS5_LARGE_BYTES,
+-      .physical = -1,
+-      .granule = granule,
+-      .granules = granules,
+-      .pieces = pieces,
+-   };
+-   static uint32_t told;
+-   if (told++ < 4)
+-      fprintf(stderr, "radv/ps5: %" PRIu64 " MiB in %u pieces of 2 MiB (no run that long in the pool)\n",
+-              out->bytes >> 20, granules);
+-   return true;
+-}
+-
+ /* Maps [offset, offset + bytes) of a pieced buffer at `at`, piece by piece. */
+ static bool
+ radv_ps5_pieces_map(const struct radv_ps5_memory *memory, uint8_t *at, uint64_t bytes, uint64_t offset, int protection)
+@@ -109,8 +58,7 @@ radv_ps5_pieces_map(const struct radv_ps5_memory *memory, uint8_t *at, uint64_t
+    return true;
+ }
+ 
+-bool
+-radv_ps5_memory_alloc(uint64_t bytes, uint64_t alignment, bool window32, struct radv_ps5_memory *out)
++static bool radv_ps5_memory_alloc_chunked(uint64_t bytes, uint64_t alignment, struct radv_ps5_memory *out);
+ '''
+ 
+ edits = {
+@@ -127,35 +75,28 @@ edits = {
+ };
+ ''')],
+     'src/amd/vulkan/winsys/ps5/radv_ps5_platform.c': [
+-        ('''      return 0;
+-   return available;
+-}
+-
+-bool
+-radv_ps5_memory_alloc(uint64_t bytes, uint64_t alignment, bool window32, struct radv_ps5_memory *out)
+-''', '''      return 0;
+-   return available;
+-}
+-''' + PIECES),
++        ('''static bool radv_ps5_memory_alloc_chunked(uint64_t bytes, uint64_t alignment, struct radv_ps5_memory *out);
++''', PIECES),
+         ('''   int64_t physical = -1;
+    if (sceKernelAllocateDirectMemory(0, sceKernelGetDirectMemorySize(), bytes, alignment,
+                                      RADV_PS5_DIRECT_TYPE, &physical) != 0)
+-      return false;
++      return !window32 && bytes > RADV_PS5_LARGE_BYTES && radv_ps5_memory_alloc_chunked(bytes, alignment, out);
+ 
+    /* A window buffer goes where''',
+          '''   int64_t physical = -1;
+    if (sceKernelAllocateDirectMemory(0, sceKernelGetDirectMemorySize(), bytes, alignment,
+                                      RADV_PS5_DIRECT_TYPE, &physical) != 0)
+    {
+-      /* No run that long: pieces; else the app gives memory back (eden_memory_recover packs cold
+-       * guest memory) and the run, or pieces, are asked for once more. */
+-      if (!window32 && bytes >= RADV_PS5_LARGE_BYTES && radv_ps5_memory_alloc_pieces(bytes, alignment, out))
++      /* No range that long: chunks (Mesa 53cc83f); else the app gives memory back
++       * (eden_memory_recover packs cold guest memory) and the range, or chunks, are asked for
++       * once more. */
++      if (!window32 && bytes > RADV_PS5_LARGE_BYTES && radv_ps5_memory_alloc_chunked(bytes, alignment, out))
+          return true;
+       if (!eden_memory_recover || eden_memory_recover(bytes + (UINT64_C(16) << 20)) == 0)
+          return false;
+       if (sceKernelAllocateDirectMemory(0, sceKernelGetDirectMemorySize(), bytes, alignment,
+                                         RADV_PS5_DIRECT_TYPE, &physical) != 0)
+-         return !window32 && bytes >= RADV_PS5_LARGE_BYTES && radv_ps5_memory_alloc_pieces(bytes, alignment, out);
++         return !window32 && bytes > RADV_PS5_LARGE_BYTES && radv_ps5_memory_alloc_chunked(bytes, alignment, out);
+    }
+ 
+    /* A window buffer goes where'''),
+@@ -226,4 +167,4 @@ if changed:
+     receipt = root.parent / 'mihawk-vulkan-review/.deps/native/radv-release/PROVENANCE.txt'
+     if source.resolve() == (root.parent / 'mihawk-vulkan-review/.deps/work/radv-src').resolve() and receipt.exists():
+         receipt.replace(receipt.with_suffix('.base.txt'))
+-print('RADV memory pieces: buffers from 2 MiB pieces, and memory asked back from the app')
++print('RADV memory pieces: buffers as 2 MiB pieces for the trim, and memory asked back from the app')
+diff --git a/tools/patch-radv-refused-shaders.py b/tools/patch-radv-refused-shaders.py
+new file mode 100755
+index 0000000..bcdde9f
+--- /dev/null
++++ b/tools/patch-radv-refused-shaders.py
+@@ -0,0 +1,111 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-3.0-or-later
++"""RADV: a pipeline whose shader the device had no memory for fails, instead of being made without it.
++
++radv_shader_create returns NULL when its code cannot be placed in device memory (the shader arena
++refused), and the graphics and compute compiles stored that NULL and returned the pipeline as made:
++the first draw with it read the vertex stage through a null pointer (Mario Kart World on the PS5,
++19 Nov, the pool at its wall). The compiles now return VK_ERROR_OUT_OF_DEVICE_MEMORY (the core draws
++nothing with a pipeline whose build failed, and builds it again later) and leave such a pipeline out
++of the cache; the uncached create no longer reads the shader it did not get. Applied to the driver
++checkout after patch-radv-wsi.py; running it again changes nothing. Patches the driver build
++export, never the Mesa checkout.
++"""
++from pathlib import Path
++import sys
++import hashlib
++
++fingerprint = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
++if sys.argv[1:2] == ['--digest']:
++    print(fingerprint)
++    raise SystemExit(0)
++if sys.argv[1:2] == ['--check']:
++    stamp = Path(sys.argv[2])
++    raise SystemExit(0 if stamp.is_file() and stamp.read_text().strip() == fingerprint else 1)
++
++root = Path(__file__).resolve().parents[1]
++src = Path(sys.argv[1]) if len(sys.argv) > 1 else root.parent / 'mihawk-vulkan-review/.deps/work/radv-src'
++vulkan = src / 'src/amd/vulkan'
++changed = False
++
++
++def edit(name, marker, anchor, replacement, what):
++    """Replace anchor once, unless the marker (the edit's own code) is already there."""
++    global changed
++    path = vulkan / name
++    text = path.read_text()
++    if marker in text:
++        return
++    assert text.count(anchor) == 1, f'{name}: {what} changed'
++    path.write_text(text.replace(anchor, replacement))
++    changed = True
++
++
++# The uncached create: a shader not made is not read.
++edit('radv_pipeline_cache.c', 'radv_shader_create_uncached(device, binary, false, NULL, dbg, &shader) != VK_SUCCESS',
++     '''      radv_shader_create_uncached(device, binary, false, NULL, dbg, &shader);
++''', '''      if (radv_shader_create_uncached(device, binary, false, NULL, dbg, &shader) != VK_SUCCESS || !shader)
++         return NULL; /* EglantinePS5: no device memory for its code (the caller fails the pipeline) */
++''', 'radv_shader_create (uncached)')
++
++# Graphics: every stage compiled has its shader, the copy shader and the geometry-as-compute
++# shaders too, or the pipeline fails and is not cached.
++edit('radv_pipeline_graphics.c', 'EglantinePS5: a shader the device had no memory for',
++     '''   radv_graphics_shaders_create(device, cache, skip_shaders_cache, pipeline->base.shaders, binaries, debug,
++                                &pipeline->base.gs_copy_shader, gs_copy_binary, &gs_copy_debug);
++''', '''   radv_graphics_shaders_create(device, cache, skip_shaders_cache, pipeline->base.shaders, binaries, debug,
++                                &pipeline->base.gs_copy_shader, gs_copy_binary, &gs_copy_debug);
++   /* EglantinePS5: a shader the device had no memory for is NULL here; the pipeline fails rather than
++    * being made without that stage (a draw then read the vertex stage through a null pointer). */
++   for (int i = 0; i < MESA_VULKAN_SHADER_STAGES; ++i) {
++      if (binaries[i] && !pipeline->base.shaders[i])
++         result = VK_ERROR_OUT_OF_DEVICE_MEMORY;
++   }
++   if (gs_copy_binary && !pipeline->base.gs_copy_shader)
++      result = VK_ERROR_OUT_OF_DEVICE_MEMORY;
++''', 'radv_graphics_shaders_create call')
++edit('radv_pipeline_graphics.c', 'EglantinePS5: as above, for the geometry-as-compute shaders',
++     '''            pipeline->base.gs_compute->shaders[i] =
++               radv_shader_create(device, cache, gs_compute.binaries[i], true, &gs_compute.debug[i]);
++''', '''            pipeline->base.gs_compute->shaders[i] =
++               radv_shader_create(device, cache, gs_compute.binaries[i], true, &gs_compute.debug[i]);
++         /* EglantinePS5: as above, for the geometry-as-compute shaders. */
++         if (gs_compute.binaries[i] && pipeline->base.gs_compute && !pipeline->base.gs_compute->shaders[i])
++            result = VK_ERROR_OUT_OF_DEVICE_MEMORY;
++''', 'geometry-as-compute shader creation')
++edit('radv_pipeline_graphics.c', '   if (!skip_shaders_cache && result == VK_SUCCESS) {\n      radv_pipeline_cache_insert(device, cache, &pipeline->base);\n   }\n\n   free(gs_copy_binary);',
++     '''   if (!skip_shaders_cache) {
++      radv_pipeline_cache_insert(device, cache, &pipeline->base);
++   }
++
++   free(gs_copy_binary);''', '''   if (!skip_shaders_cache && result == VK_SUCCESS) {
++      radv_pipeline_cache_insert(device, cache, &pipeline->base);
++   }
++
++   free(gs_copy_binary);''', 'graphics pipeline cache insert')
++
++# Compute: the same for its one shader.
++edit('radv_pipeline_compute.c', 'EglantinePS5: no device memory for the shader',
++     '''   pipeline->base.shaders[MESA_SHADER_COMPUTE] =
++      radv_shader_create(device, cache, cs_binary, skip_shaders_cache, &cs_dbg);
++
++   cs_stage.feedback.duration += os_time_get_nano() - stage_start;
++
++   if (!skip_shaders_cache) {
++''', '''   pipeline->base.shaders[MESA_SHADER_COMPUTE] =
++      radv_shader_create(device, cache, cs_binary, skip_shaders_cache, &cs_dbg);
++   if (!pipeline->base.shaders[MESA_SHADER_COMPUTE])
++      result = VK_ERROR_OUT_OF_DEVICE_MEMORY; /* EglantinePS5: no device memory for the shader */
++
++   cs_stage.feedback.duration += os_time_get_nano() - stage_start;
++
++   if (!skip_shaders_cache && result == VK_SUCCESS) {
++''', 'compute shader creation')
++
++if changed:
++    # Upstream skips the whole build while its receipt names the pinned revision: set the receipt
++    # aside so the next build compiles the changed files (Ninja keeps every other object).
++    provenance = src.parents[1] / 'native/radv-release/PROVENANCE.txt'
++    if provenance.exists():
++        provenance.replace(provenance.with_suffix('.base.txt'))
++print('RADV refused shaders: the pipeline fails instead of missing a stage')
+diff --git a/tools/patch-radv-trim.py b/tools/patch-radv-trim.py
+index 9f8cb7a..22e2483 100644
+--- a/tools/patch-radv-trim.py
++++ b/tools/patch-radv-trim.py
+@@ -18,7 +18,8 @@ import hashlib
+ import sys
+ 
+ root = Path(__file__).resolve().parents[1]
+-fingerprint = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
++fingerprint = hashlib.sha256(Path(__file__).read_bytes() + (root / 'tools/radv-compact-plan.inc').read_bytes() +
++                             (root / 'tools/radv-compact.inc').read_bytes()).hexdigest()
+ if sys.argv[1:2] == ['--check']:
+     stamp = Path(sys.argv[2])
+     raise SystemExit(0 if stamp.is_file() and stamp.read_text().strip() == fingerprint else 1)
+@@ -54,6 +55,8 @@ static struct radv_ps5_memory *radv_ps5_trim_tracked[RADV_PS5_TRIM_TRACKED];
+ static uint32_t radv_ps5_trim_count;
+ static uint64_t radv_ps5_trim_returned, radv_ps5_trim_retaken;
+ 
++''' + (root / 'tools/radv-compact-plan.inc').read_text() + r'''
++
+ /* A granule goes back only after no resource has been on it for this long: Eden destroys an image
+  * when its texture cache evicts it, while command lists recorded before (the split GPU thread runs
+  * frames behind) may still read or write it. Giving its memory back at once left the GPU writing
+@@ -85,7 +88,7 @@ radv_ps5_trim_eligible(const struct radv_ps5_memory *memory)
+ {
+    return memory->cpu && !memory->window_replay && memory->bytes >= RADV_PS5_LARGE_BYTES &&
+           memory->bytes % RADV_PS5_LARGE_BYTES == 0 && (uintptr_t)memory->cpu % RADV_PS5_LARGE_BYTES == 0 &&
+-          (memory->physical >= 0 || memory->pieces) &&
++          (memory->physical >= 0 || memory->pieces || memory->chunks) &&
+           (memory->physical < 0 || memory->physical % (int64_t)RADV_PS5_LARGE_BYTES == 0);
+ }
+ 
+@@ -99,8 +102,34 @@ radv_ps5_trim_pieces(struct radv_ps5_memory *memory)
+    int64_t *pieces = calloc(granules, sizeof(*pieces));
+    if (!pieces)
+       return false;
+-   for (uint64_t i = 0; i < granules; ++i)
+-      pieces[i] = memory->physical + (int64_t)(i * RADV_PS5_LARGE_BYTES);
++   if (memory->chunks) {
++      /* Chunks (Mesa 53cc83f: several 2 MiB-aligned allocations when no one range was free), each
++       * split into its granules' pieces. */
++      for (uint64_t i = 0; i < granules; ++i)
++         pieces[i] = -1;
++      for (uint32_t c = 0; c < memory->chunk_count; ++c) {
++         const struct radv_ps5_chunk *const chunk = &memory->chunks[c];
++         if (chunk->offset % RADV_PS5_LARGE_BYTES || chunk->bytes % RADV_PS5_LARGE_BYTES ||
++             chunk->physical % (int64_t)RADV_PS5_LARGE_BYTES || chunk->offset + chunk->bytes > memory->bytes) {
++            free(pieces);
++            return false;
++         }
++         for (uint64_t k = 0; k < chunk->bytes / RADV_PS5_LARGE_BYTES; ++k)
++            pieces[chunk->offset / RADV_PS5_LARGE_BYTES + k] = chunk->physical + (int64_t)(k * RADV_PS5_LARGE_BYTES);
++      }
++      for (uint64_t i = 0; i < granules; ++i) {
++         if (pieces[i] < 0) {
++            free(pieces);
++            return false;
++         }
++      }
++      free(memory->chunks);
++      memory->chunks = NULL;
++      memory->chunk_count = 0;
++   } else {
++      for (uint64_t i = 0; i < granules; ++i)
++         pieces[i] = memory->physical + (int64_t)(i * RADV_PS5_LARGE_BYTES);
++   }
+    memory->pieces = pieces;
+    memory->physical = -1;
+    return true;
+@@ -122,9 +151,17 @@ radv_ps5_trim_untrack(struct radv_ps5_memory *memory)
+    memory->uses = NULL;
+    free(memory->idle_ms);
+    memory->idle_ms = NULL;
++   free(memory->unit_uses);
++   memory->unit_uses = NULL;
++   free(memory->released_ms);
++   memory->released_ms = NULL;
+    radv_ps5_trim_release();
+ }
+ 
++static bool radv_ps5_compact_retake(struct radv_ps5_memory *memory, uint64_t offset, uint64_t size);
++static uint64_t radv_ps5_compact_trim_granule(struct radv_ps5_memory *memory, uint64_t granule, int64_t zero);
++static bool radv_ps5_compact_free(struct radv_ps5_memory *memory);
++
+ bool
+ radv_ps5_memory_use(struct radv_ps5_memory *memory, uint64_t offset, uint64_t size, int delta)
+ {
+@@ -142,9 +179,18 @@ radv_ps5_memory_use(struct radv_ps5_memory *memory, uint64_t offset, uint64_t si
+          radv_ps5_trim_release();
+          return true;
+       }
+-      if (!(memory->idle_ms = calloc(granules, sizeof(*memory->idle_ms)))) {
++      memory->idle_ms = calloc(granules, sizeof(*memory->idle_ms));
++      memory->released_ms = calloc(granules, sizeof(*memory->released_ms));
++      memory->unit_uses = calloc(granules * RADV_PS5_COMPACT_UNITS, sizeof(*memory->unit_uses));
++      if (!memory->idle_ms || !memory->released_ms || !memory->unit_uses) {
+          free(memory->uses);
++         free(memory->idle_ms);
++         free(memory->released_ms);
++         free(memory->unit_uses);
+          memory->uses = NULL;
++         memory->idle_ms = NULL;
++         memory->released_ms = NULL;
++         memory->unit_uses = NULL;
+          radv_ps5_trim_release();
+          return true;
+       }
+@@ -157,9 +203,10 @@ radv_ps5_memory_use(struct radv_ps5_memory *memory, uint64_t offset, uint64_t si
+       if (delta < 0) {
+          if (memory->uses[g] && --memory->uses[g] == 0)
+             memory->idle_ms[g] = radv_ps5_trim_now_ms();
++         memory->released_ms[g] = radv_ps5_trim_now_ms();
+          continue;
+       }
+-      if (memory->pieces && memory->pieces[g] < 0) {
++      if (!memory->unit_phys && memory->pieces && memory->pieces[g] < 0) {
+          int64_t physical = -1;
+          if (sceKernelAllocateDirectMemory(0, sceKernelGetDirectMemorySize(), RADV_PS5_LARGE_BYTES,
+                                            RADV_PS5_LARGE_BYTES, RADV_PS5_DIRECT_TYPE, &physical) != 0 ||
+@@ -179,15 +226,144 @@ radv_ps5_memory_use(struct radv_ps5_memory *memory, uint64_t offset, uint64_t si
+       if (memory->uses[g] < UINT16_MAX)
+          memory->uses[g]++;
+    }
++   /* Managed memory (radv_ps5_compact_manage): units showing the zero block take free slots. */
++   if (ok && delta > 0 && memory->unit_phys && !radv_ps5_compact_retake(memory, offset, size)) {
++      for (uint64_t g = first; g <= last; ++g)
++         if (memory->uses[g])
++            memory->uses[g]--;
++      ok = false;
++   }
++   if (ok) {
++      /* The compaction's units (radv_ps5_compact_pass). */
++      const uint64_t first_unit = offset / RADV_PS5_COMPACT_UNIT;
++      const uint64_t last_unit =
++         MIN2((offset + size - 1) / RADV_PS5_COMPACT_UNIT, granules * RADV_PS5_COMPACT_UNITS - 1);
++      for (uint64_t u = first_unit; u <= last_unit; ++u) {
++         if (delta > 0) {
++            if (memory->unit_uses[u] < UINT16_MAX)
++               memory->unit_uses[u]++;
++         } else if (memory->unit_uses[u]) {
++            memory->unit_uses[u]--;
++         }
++      }
++   }
++   radv_ps5_trim_release();
++   return ok;
++}
++
++/* EglantinePS5 memory compaction: the CPU page tables free (-1: unknown). */
++int sceKernelGetPageTableStats(int *cpu_tables, int *cpu_free, int *gpu_tables, int *gpu_free);
++static int
++radv_ps5_compact_tables_free(void)
++{
++   int cpu_tables = 0, cpu_free = 0, gpu_tables = 0, gpu_free = 0;
++   return sceKernelGetPageTableStats(&cpu_tables, &cpu_free, &gpu_tables, &gpu_free) == 0 ? cpu_free : -1;
++}
++
++/* EglantinePS5 memory compaction: a unit's copy (the host check counts them instead). */
++static void
++radv_ps5_compact_copy(uint8_t *to, const uint8_t *from)
++{
++   memcpy(to, from, RADV_PS5_COMPACT_UNIT);
++}
++
++''' + (root / 'tools/radv-compact.inc').read_text() + r'''
++
++/* Mesa f5610fe retires a freed buffer's memory: it keeps a copy of the memory struct until the GPU
++ * has run what was submitted before, and frees the copy then, while the buffer object, where the
++ * trim's list and the compaction's slots point, goes at once. So before the copy is made: the memory
++ * leaves the trim's list, and the slots of managed memory are held until the copy is freed. */
++void
++radv_ps5_trim_detach(struct radv_ps5_memory *memory)
++{
++   radv_ps5_trim_untrack(memory);
++   radv_ps5_trim_acquire();
++   memory->no_compact = true;
++   radv_ps5_compact_hold(memory);
+    radv_ps5_trim_release();
++}
++/* The compaction's self-test, before it is ever used: a unit of a driver mapping is mapped over with
++ * another 64 KiB of memory, as a compaction would, and the GPU must read the new memory through the
++ * old address (`read`: COPY_DATA through the queue, its caches written back and invalidated after
++ * each read, as before a compaction), its neighbour unchanged. */
++bool
++radv_ps5_compact_self_test(radv_ps5_gpu_read_fn read, void *context)
++{
++   const uint32_t first = 0xa1a1a1a1u, second = 0xa2a2a2a2u, other = 0xb0b0b0b0u;
++   struct radv_ps5_memory memory = {.physical = -1};
++   int64_t unit = -1;
++   uint32_t values[4] = {0, 0, 0, 0}, cpu = 0;
++   bool ok = false;
++   uint8_t *base = NULL;
++   uint64_t sources[2];
++   if (!radv_ps5_memory_alloc(RADV_PS5_LARGE_BYTES, RADV_PS5_LARGE_BYTES, false, &memory) ||
++       sceKernelAllocateDirectMemory(0, sceKernelGetDirectMemorySize(), RADV_PS5_COMPACT_UNIT, RADV_PS5_COMPACT_UNIT,
++                                     RADV_PS5_DIRECT_TYPE, &unit) != 0) {
++      fprintf(stderr, "radv/ps5: compaction self-test: no memory for it\n");
++      goto done;
++   }
++   base = memory.cpu;
++   sources[0] = (uint64_t)(uintptr_t)(base + RADV_PS5_COMPACT_UNIT);
++   sources[1] = (uint64_t)(uintptr_t)(base + 2 * RADV_PS5_COMPACT_UNIT);
++   *(volatile uint32_t *)(base + RADV_PS5_COMPACT_UNIT) = first;
++   *(volatile uint32_t *)(base + 2 * RADV_PS5_COMPACT_UNIT) = second;
++   radv_ps5_cpu_flush(base + RADV_PS5_COMPACT_UNIT, 64);
++   radv_ps5_cpu_flush(base + 2 * RADV_PS5_COMPACT_UNIT, 64);
++   if (!read(context, sources, 2, values)) {
++      fprintf(stderr, "radv/ps5: compaction self-test: the GPU's first read did not finish\n");
++      goto done;
++   }
++   if (!radv_ps5_map_fixed(base + RADV_PS5_COMPACT_UNIT, RADV_PS5_COMPACT_UNIT, unit)) {
++      fprintf(stderr, "radv/ps5: compaction self-test: a 64 KiB unit could not be mapped over\n");
++      goto done;
++   }
++   *(volatile uint32_t *)(base + RADV_PS5_COMPACT_UNIT) = other;
++   radv_ps5_cpu_flush(base + RADV_PS5_COMPACT_UNIT, 64);
++   cpu = *(volatile uint32_t *)(base + RADV_PS5_COMPACT_UNIT);
++   if (!read(context, sources, 2, values + 2)) {
++      fprintf(stderr, "radv/ps5: compaction self-test: the GPU's second read did not finish\n");
++      goto done;
++   }
++   ok = values[0] == first && values[1] == second && values[2] == other && values[3] == second && cpu == other;
++   fprintf(stderr,
++           "radv/ps5: compaction self-test: the GPU read 0x%08x, then 0x%08x through a unit mapped over (want 0x%08x), "
++           "0x%08x then 0x%08x beside it; the CPU 0x%08x: %s\n",
++           values[0], values[2], other, values[1], values[3], cpu, ok ? "ok" : "FAILED");
++done:
++   radv_ps5_memory_free(&memory);
++   if (unit >= 0)
++      sceKernelReleaseDirectMemory(unit, RADV_PS5_COMPACT_UNIT);
+    return ok;
+ }
+ 
++/* A diagnostic: memory unmapped while memory is short (for 30 s after the app last asked for a
++ * trim), with its range and when, so a GPU page fault's address can be matched to what was
++ * unmapped under it: GPU_FAULT_PAGE_FAULT_ASYNC, a read of an unmapped page of this region, in
++ * Ocarina of Time (2026-11-19 00:09, 21:44) and before. A trim never unmaps (its granules show the
++ * zero block); a freed buffer object's memory (once the GPU ran what was submitted before the
++ * free), a released sparse range and placed memory (at its destroy) do. At most 50,000 lines. */
++static uint32_t radv_ps5_free_trace_until;
++void
++radv_ps5_free_trace(const void *begin, uint64_t bytes, const char *what)
++{
++   const uint32_t until = p_atomic_read(&radv_ps5_free_trace_until);
++   const uint32_t now = radv_ps5_trim_now_ms();
++   if (!until || !begin || (int32_t)(now - until) > 0)
++      return;
++   static uint32_t told;
++   const uint32_t line = p_atomic_inc_return(&told);
++   if (line > 50000)
++      return;
++   fprintf(stderr, "radv/ps5: unmapped %p-%p (%" PRIu64 " KiB, %s) at %u ms, #%u\n", begin,
++           (const void *)((const uint8_t *)begin + bytes), bytes >> 10, what, now, line);
++}
++
+ /* Gives back granules no resource is bound over, up to `want` bytes (0: all); returns how much.
+  * Never waits: it may be asked from an allocation that holds the lock. */
+ uint64_t
+ radv_ps5_eden_trim(uint64_t want)
+ {
++   p_atomic_set(&radv_ps5_free_trace_until, radv_ps5_trim_now_ms() + 30000u);
+    if (!radv_ps5_trim_trylock())
+       return 0;
+    const int64_t zero = radv_ps5_zero_block();
+@@ -197,6 +373,13 @@ radv_ps5_eden_trim(uint64_t want)
+       struct radv_ps5_memory *memory = radv_ps5_trim_tracked[i];
+       const uint64_t granules = memory->bytes / RADV_PS5_LARGE_BYTES;
+       for (uint64_t g = 0; g < granules && (!want || returned < want); ++g) {
++         if (memory->unit_phys) {
++            /* Managed (radv_ps5_compact_manage): its slots go free; pieces go back when no unit shows them. */
++            if (memory->uses[g] || (memory->idle_ms[g] && now - memory->idle_ms[g] < quarantine))
++               continue;
++            returned += radv_ps5_compact_trim_granule(memory, g, zero);
++            continue;
++         }
+          if (memory->uses[g] || (memory->pieces && memory->pieces[g] < 0))
+             continue;
+          if (memory->idle_ms[g] && now - memory->idle_ms[g] < quarantine) {
+@@ -233,6 +416,9 @@ radv_ps5_memory_free(struct radv_ps5_memory *memory)
+ {
+    if (!memory->cpu)
+       return;
++   /* EglantinePS5 memory compaction: managed memory goes back unit by unit, and none is managed now. */
++   if (radv_ps5_compact_free(memory))
++      return;
+    if (memory->window_replay) {'''
+ 
+ edits = {
+@@ -245,12 +431,81 @@ edits = {
+    uint16_t *uses;
+    /* Per 2 MiB granule: when its last resource went (ms, CLOCK_MONOTONIC; 0 never bound). */
+    uint32_t *idle_ms;
++   /* Per 64 KiB unit: resources bound over it (EglantinePS5 memory compaction). */
++   uint16_t *unit_uses;
++   /* Per 2 MiB granule: when a resource over it last went (ms; 0 never). */
++   uint32_t *released_ms;
++   /* Never moved by the compaction: memory the CPU reaches, memory a sparse range shows (it finds its
++    * pages by address), memory being freed. */
++   bool no_compact;
++   /* Managed by the compaction: where each 64 KiB unit is (a physical address; -1: the zero block). */
++   int64_t *unit_phys;
+ };
+ 
+ bool radv_ps5_memory_use(struct radv_ps5_memory *memory, uint64_t offset, uint64_t size, int delta);
+ uint64_t radv_ps5_eden_trim(uint64_t want);
++void radv_ps5_free_trace(const void *begin, uint64_t bytes, const char *what);
++void radv_ps5_zero_block_watch(void);
++
++/* EglantinePS5 memory compaction (tools/patch-radv-trim.py, tools/radv-compact-plan.inc). */
++struct radv_ps5_compact_report {
++   uint32_t partial;      /* 2 MiB pieces with 1-31 of their 32 units in use */
++   uint32_t partial_free; /* their free units */
++   uint32_t candidates;   /* of those, the ones nothing was released from lately */
++   uint32_t emptied;      /* pieces emptied (a dry run: that the plan would empty) */
++   uint32_t moved;        /* units moved (copied) */
++   uint32_t dropped;      /* units with nothing bound that now show the zero block */
++   uint32_t managed;      /* memories newly managed */
++   uint64_t released;     /* bytes given back */
++   int32_t tables_free;   /* CPU page tables free at the start (-1: unknown) */
++   bool tables_low;       /* fewer than RADV_PS5_COMPACT_TABLES: nothing moved */
++   bool timed_out;        /* stopped at its time limit */
++   bool broken;           /* a mapping failed: no more passes */
++};
++bool radv_ps5_compact_map_units(struct radv_ps5_memory *memory, void *at, uint64_t bytes, uint64_t offset);
++void radv_ps5_trim_detach(struct radv_ps5_memory *memory);
++bool radv_ps5_compact_pass(uint64_t want, bool dry, struct radv_ps5_compact_report *report);
++typedef bool (*radv_ps5_gpu_read_fn)(void *context, const uint64_t *sources, uint32_t count, uint32_t *values);
++bool radv_ps5_compact_self_test(radv_ps5_gpu_read_fn read, void *context);
++uint64_t radv_ps5_eden_compact(uint64_t want);
+ ''')],
+     'src/amd/vulkan/winsys/ps5/radv_ps5_platform.c': [
++        # A sparse range is the GPU's alone (Vulkan never maps a sparse resource for the CPU): its
++        # zero block and what is bound into it map for the GPU only. A mapping the CPU can reach
++        # takes one of the title's 16,384 CPU page tables per 2 MiB, shared with the game's memory,
++        # the heap and the rest of the driver; Mario Kart World's virtual textures (~2.5 GB of sparse
++        # range) helped use them up, and its loading screen ended with 1.2 GB still free. The GPU's
++        # own tables stayed 97% free.
++        ('''bool
++radv_ps5_vrange_unbind(void *at, uint64_t bytes)
++{
++   const int64_t zero = radv_ps5_zero_block();''', '''/* EglantinePS5 (tools/patch-radv-trim.py): sparse ranges map for the GPU only. */
++#define RADV_PS5_SPARSE_PROTECTION (PS5_KERNEL_PROT_GPU_READ | PS5_KERNEL_PROT_GPU_WRITE)
++static bool
++radv_ps5_map_fixed_sparse(uint8_t *at, uint64_t bytes, int64_t physical)
++{
++   void *address = at;
++   return sceKernelMapDirectMemory(&address, bytes, RADV_PS5_SPARSE_PROTECTION, PS5_KERNEL_MAP_FIXED, physical,
++                                   RADV_PS5_PAGE_BYTES) == 0 &&
++          address == at;
++}
++
++bool
++radv_ps5_vrange_unbind(void *at, uint64_t bytes)
++{
++   const int64_t zero = radv_ps5_zero_block();'''),
++        ('''      if (!radv_ps5_map_fixed((uint8_t *)at + done, piece, zero))
++         return false;''', '''      if (!radv_ps5_map_fixed_sparse((uint8_t *)at + done, piece, zero))
++         return false;'''),
++        ('''   if (memory->pieces)
++      return radv_ps5_pieces_map(memory, at, bytes, offset, RADV_PS5_PROTECTION);
++   return radv_ps5_map_fixed(at, bytes, memory->physical + (int64_t)offset);''',
++         # Memory the compaction manages: unit by unit (tools/radv-compact.inc).
++         '''   if (memory->unit_phys)
++      return radv_ps5_compact_map_units((struct radv_ps5_memory *)memory, at, bytes, offset);
++   if (memory->pieces)
++      return radv_ps5_pieces_map(memory, at, bytes, offset, RADV_PS5_SPARSE_PROTECTION);
++   return radv_ps5_map_fixed_sparse(at, bytes, memory->physical + (int64_t)offset);'''),
+         ('''
+ void
+ radv_ps5_memory_free(struct radv_ps5_memory *memory)
+@@ -288,6 +543,33 @@ radv_ps5_eden_trim(uint64_t want)
+    return 0;
+ }
+ 
++void
++radv_ps5_free_trace(const void *begin, uint64_t bytes, const char *what)
++{
++   (void)begin, (void)bytes, (void)what;
++}
++
++bool
++radv_ps5_compact_pass(uint64_t want, bool dry, struct radv_ps5_compact_report *report)
++{
++   (void)want, (void)dry;
++   memset(report, 0, sizeof(*report));
++   return false;
++}
++
++bool
++radv_ps5_compact_self_test(radv_ps5_gpu_read_fn read, void *context)
++{
++   (void)read, (void)context;
++   return false;
++}
++
++void
++radv_ps5_trim_detach(struct radv_ps5_memory *memory)
++{
++   (void)memory;
++}
++
+ void
+ radv_ps5_memory_free(struct radv_ps5_memory *memory)
+ {
+@@ -300,12 +582,509 @@ radv_ps5_memory_free_host(struct radv_ps5_memory *memory)
+    if (!memory->cpu)
+       return;
+    if (radv_ps5_window_contains('''),
++        # The shared zero block under every unbound piece of a sparse resource is meant to read as
++        # zeros, but the GPU can write it, and what lands in it then shows through every unbound
++        # piece everywhere (Mario Kart World, 2026-11-18: blocks of colour and broken lighting over
++        # the title scene; with the pool full, written at nearly every look and the scene went
++        # black). Each sparse range now gets a block of its own when it is reserved (the shared one
++        # when the pool has no room), so what one resource writes where it has no memory stays in
++        # it. Every quarter second at a submission the shared block and one range's block are read:
++        # written, it is reported (the range by number, size and address, as it was reserved) and
++        # cleared again (RADV_PS5_ZERO_CLEAR=0 only reports).
++        ('''static int64_t radv_ps5_zero_physical = -1;
++''', '''static int64_t radv_ps5_zero_physical = -1;
++/* ''' + MARK + ''': the block's view, which radv_ps5_zero_block_watch reads. */
++static uint64_t *radv_ps5_zero_cpu;
++'''),
++        ('''            sceKernelMunmap(cpu, RADV_PS5_LARGE_BYTES);
++            radv_ps5_zero_physical = physical;
++''', '''            radv_ps5_zero_cpu = cpu;
++            radv_ps5_zero_physical = physical;
++'''),
++        ('''   simple_mtx_unlock(&radv_ps5_zero_lock);
++   return zero;
++}
++''', '''   simple_mtx_unlock(&radv_ps5_zero_lock);
++   return zero;
++}
++
++/* ''' + MARK + ''': a sparse range's own zero block, so that a GPU write to an unbound piece
++ * of one resource shows only in that resource. Only for ranges of 64 MiB or more (Lichii's large
++ * sparse images: a dozen in Mario Kart World's title scene), at most 32 (64 MiB); others, and
++ * ranges reserved when the pool had no room, use the shared block. */
++#define RADV_PS5_ZERO_RANGES 32
++struct radv_ps5_zero_range {
++   uint64_t base, bytes; /* bytes 0: a free entry */
++   int64_t physical;
++   uint64_t *cpu;
++   uint32_t id, looks, written;
++};
++static struct radv_ps5_zero_range radv_ps5_zero_ranges[RADV_PS5_ZERO_RANGES];
++static uint32_t radv_ps5_zero_range_ids, radv_ps5_zero_turn;
++
++static void
++radv_ps5_zero_range_add(const void *at, uint64_t bytes)
++{
++   if (bytes < (UINT64_C(64) << 20))
++      return;
++   int64_t physical = -1;
++   void *cpu = NULL;
++   if (sceKernelAllocateDirectMemory(0, sceKernelGetDirectMemorySize(), RADV_PS5_LARGE_BYTES, RADV_PS5_LARGE_BYTES,
++                                     RADV_PS5_DIRECT_TYPE, &physical) != 0)
++      return;
++   if (sceKernelMapDirectMemory(&cpu, RADV_PS5_LARGE_BYTES, RADV_PS5_PROTECTION, 0, physical, RADV_PS5_LARGE_BYTES) !=
++       0) {
++      sceKernelReleaseDirectMemory(physical, RADV_PS5_LARGE_BYTES);
++      return;
++   }
++   memset(cpu, 0, RADV_PS5_LARGE_BYTES);
++   radv_ps5_cpu_flush(cpu, RADV_PS5_LARGE_BYTES);
++   uint32_t id = 0;
++   simple_mtx_lock(&radv_ps5_zero_lock);
++   for (unsigned i = 0; i < RADV_PS5_ZERO_RANGES; i++) {
++      if (radv_ps5_zero_ranges[i].bytes)
++         continue;
++      id = ++radv_ps5_zero_range_ids;
++      radv_ps5_zero_ranges[i] = (struct radv_ps5_zero_range){
++         .base = (uint64_t)(uintptr_t)at, .bytes = bytes, .physical = physical, .cpu = cpu, .id = id};
++      break;
++   }
++   simple_mtx_unlock(&radv_ps5_zero_lock);
++   if (!id) {
++      sceKernelMunmap(cpu, RADV_PS5_LARGE_BYTES);
++      sceKernelReleaseDirectMemory(physical, RADV_PS5_LARGE_BYTES);
++      return;
++   }
++   if (id <= 256)
++      fprintf(stderr, "radv/ps5: sparse range #%u: %" PRIu64 " MiB at %p, with a zero block of its own\\n", id,
++              bytes >> 20, at);
++}
++
++static void
++radv_ps5_zero_range_remove(const void *at)
++{
++   struct radv_ps5_zero_range gone = {0};
++   simple_mtx_lock(&radv_ps5_zero_lock);
++   for (unsigned i = 0; i < RADV_PS5_ZERO_RANGES; i++) {
++      if (radv_ps5_zero_ranges[i].bytes && radv_ps5_zero_ranges[i].base == (uint64_t)(uintptr_t)at) {
++         gone = radv_ps5_zero_ranges[i];
++         radv_ps5_zero_ranges[i] = (struct radv_ps5_zero_range){0};
++         break;
++      }
++   }
++   simple_mtx_unlock(&radv_ps5_zero_lock);
++   if (!gone.bytes)
++      return;
++   sceKernelMunmap(gone.cpu, RADV_PS5_LARGE_BYTES);
++   sceKernelReleaseDirectMemory(gone.physical, RADV_PS5_LARGE_BYTES);
++}
++
++/* The zero block for an unbound piece at `at`: its range's own, or the shared one. */
++static int64_t
++radv_ps5_zero_block_for(const void *at)
++{
++   const uint64_t address = (uint64_t)(uintptr_t)at;
++   int64_t zero = -1;
++   simple_mtx_lock(&radv_ps5_zero_lock);
++   for (unsigned i = 0; i < RADV_PS5_ZERO_RANGES; i++) {
++      const struct radv_ps5_zero_range *const range = &radv_ps5_zero_ranges[i];
++      if (range->bytes && address - range->base < range->bytes) {
++         zero = range->physical;
++         break;
++      }
++   }
++   simple_mtx_unlock(&radv_ps5_zero_lock);
++   return zero >= 0 ? zero : radv_ps5_zero_block();
++}
++
++/* A new range: its own block, then every piece unbound. */
++static bool
++radv_ps5_vrange_unbind_new(void *at, uint64_t bytes)
++{
++   radv_ps5_zero_range_add(at, bytes);
++   if (radv_ps5_vrange_unbind(at, bytes))
++      return true;
++   radv_ps5_zero_range_remove(at);
++   return false;
++}
++
++/* Pages of a zero block that hold something other than zeros, and the first such word. Lines this
++ * CPU still holds from the last look would hide what the GPU wrote since: dropped first. */
++static uint32_t
++radv_ps5_zero_scan(uint64_t *words, uint32_t *first)
++{
++   radv_ps5_cpu_flush(words, RADV_PS5_LARGE_BYTES);
++   const uint32_t page_words = 4096 / sizeof(uint64_t);
++   const uint32_t page_count = (uint32_t)(RADV_PS5_LARGE_BYTES / 4096);
++   uint32_t pages = 0;
++   *first = UINT32_MAX;
++   for (uint32_t page = 0; page < page_count; page++) {
++      uint64_t any = 0;
++      for (uint32_t i = 0; i < page_words; i++)
++         any |= words[page * page_words + i];
++      if (!any)
++         continue;
++      pages++;
++      if (*first == UINT32_MAX) {
++         *first = page * page_words;
++         while (!words[*first])
++            (*first)++;
++      }
++   }
++   return pages;
++}
++
++static void
++radv_ps5_zero_wipe(uint64_t *words)
++{
++   memset(words, 0, RADV_PS5_LARGE_BYTES);
++   radv_ps5_cpu_flush(words, RADV_PS5_LARGE_BYTES);
++}
++
++/* ''' + MARK + ''': a zero block is meant to read as zeros, but a GPU write to an unbound
++ * piece of a sparse resource lands in it. Every quarter second at a submission the shared block
++ * and one range's block (each in turn) are read; found written, a block is reported once and,
++ * unless RADV_PS5_ZERO_CLEAR=0, cleared again; every 10 s, how often. */
++static uint64_t radv_ps5_zero_next_ms;
++static uint64_t radv_ps5_zero_report_ms;
++static uint32_t radv_ps5_zero_looks, radv_ps5_zero_written;
++
++void
++radv_ps5_zero_block_watch(void)
++{
++   struct timespec now;
++   clock_gettime(CLOCK_MONOTONIC, &now);
++   const uint64_t ms = (uint64_t)now.tv_sec * 1000u + (uint64_t)now.tv_nsec / 1000000u;
++   const uint64_t next = p_atomic_read(&radv_ps5_zero_next_ms);
++   if (ms < next || p_atomic_cmpxchg(&radv_ps5_zero_next_ms, next, ms + 250) != next)
++      return;
++   static int clear = -1;
++   if (clear < 0) {
++      const char *text = getenv("RADV_PS5_ZERO_CLEAR");
++      clear = !text || strcmp(text, "0") != 0;
++   }
++   const char *const after = clear ? "cleared (and again each time it is found written)" : "left (RADV_PS5_ZERO_CLEAR=0)";
++   const uint32_t page_count = (uint32_t)(RADV_PS5_LARGE_BYTES / 4096);
++   uint32_t pages = 0, first;
++   uint64_t *const words = p_atomic_read(&radv_ps5_zero_cpu);
++   if (words) {
++      pages = radv_ps5_zero_scan(words, &first);
++      radv_ps5_zero_looks++;
++      if (pages) {
++         if (!radv_ps5_zero_written++)
++            fprintf(stderr,
++                    "radv/ps5: the shared zero block was written by the GPU: %u of %u pages, first at +0x%x "
++                    "(%016" PRIx64 "), %s\\n",
++                    pages, page_count, first * (uint32_t)sizeof(uint64_t), words[first], after);
++         if (clear)
++            radv_ps5_zero_wipe(words);
++      }
++   }
++   simple_mtx_lock(&radv_ps5_zero_lock);
++   for (unsigned step = 0; step < RADV_PS5_ZERO_RANGES; step++) {
++      struct radv_ps5_zero_range *const range = &radv_ps5_zero_ranges[radv_ps5_zero_turn++ % RADV_PS5_ZERO_RANGES];
++      if (!range->bytes)
++         continue;
++      const uint32_t written = radv_ps5_zero_scan(range->cpu, &first);
++      range->looks++;
++      if (written) {
++         if (!range->written++)
++            fprintf(stderr,
++                    "radv/ps5: sparse range #%u (%" PRIu64 " MiB at %p) wrote into its zero block: %u of %u pages, "
++                    "first at +0x%x (%016" PRIx64 "), %s\\n",
++                    range->id, range->bytes >> 20, (void *)(uintptr_t)range->base, written, page_count,
++                    first * (uint32_t)sizeof(uint64_t), range->cpu[first], after);
++         if (clear)
++            radv_ps5_zero_wipe(range->cpu);
++      }
++      break;
++   }
++   if (ms >= radv_ps5_zero_report_ms) {
++      if (radv_ps5_zero_report_ms) {
++         char ranges[320];
++         int used = 0;
++         for (unsigned i = 0; i < RADV_PS5_ZERO_RANGES && used < (int)sizeof(ranges) - 32; i++) {
++            const struct radv_ps5_zero_range *const range = &radv_ps5_zero_ranges[i];
++            if (range->bytes && range->written)
++               used += snprintf(ranges + used, sizeof(ranges) - used, " #%u %u/%u", range->id, range->written,
++                                range->looks);
++         }
++         fprintf(stderr,
++                 "radv/ps5: zero blocks: the shared one found written at %u of %u looks (this one: %u pages); "
++                 "ranges written (looks written/made):%s\\n",
++                 radv_ps5_zero_written, radv_ps5_zero_looks, pages, used ? ranges : " none");
++      }
++      radv_ps5_zero_report_ms = ms + 10000;
++   }
++   simple_mtx_unlock(&radv_ps5_zero_lock);
++}
++'''),
++        ('''radv_ps5_vrange_unbind(void *at, uint64_t bytes)
++{
++   const int64_t zero = radv_ps5_zero_block();
++''', '''radv_ps5_vrange_unbind(void *at, uint64_t bytes)
++{
++   /* ''' + MARK + ''': the range's own zero block, if it has one. */
++   const int64_t zero = radv_ps5_zero_block_for(at);
++'''),
++        ('''       !radv_ps5_vrange_unbind(at, span)) {
++      sceKernelMunmap(at, span);
++      return false;
++   }
++''', '''       !radv_ps5_vrange_unbind_new(at, span)) {
++      sceKernelMunmap(at, span);
++      return false;
++   }
++'''),
++        ('''   if (!radv_ps5_vrange_unbind(va, span)) {
++      sceKernelMunmap(va, span);
++''', '''   if (!radv_ps5_vrange_unbind_new(va, span)) {
++      sceKernelMunmap(va, span);
++'''),
++        ('''   sceKernelMunmap(range->cpu, range->bytes);
++   radv_ps5_granules_give(&radv_ps5_region, range->granule, range->granules);
++''', '''   sceKernelMunmap(range->cpu, range->bytes);
++   radv_ps5_zero_range_remove(range->cpu);
++   radv_ps5_granules_give(&radv_ps5_region, range->granule, range->granules);
++'''),
+     ],
+-    'src/amd/vulkan/winsys/ps5/radv_ps5_bo.c': [(
++    'src/amd/vulkan/winsys/ps5/radv_ps5_cs.c': [(
++        '''   /* Waits need only their signals submitted: this queue runs in order. */
++''', '''   /* ''' + MARK + ''': the zero blocks, read every quarter second. */
++   radv_ps5_zero_block_watch();
++
++   /* Waits need only their signals submitted: this queue runs in order. */
++'''),
++        # The compaction's self-test runs once, before the first submission, while the pool has room.
++        ('''   simple_mtx_lock(&queue->submit_lock);
++   /* AGC owns the tessellation factor ring's registers: the ring is handed to''',
++         '''   simple_mtx_lock(&queue->submit_lock);
++   radv_ps5_compact_test_once(queue);
++   /* AGC owns the tessellation factor ring's registers: the ring is handed to'''),
++        ('''   simple_mtx_unlock(&queue->submit_lock);
++   return clock;
++}
++''', '''   simple_mtx_unlock(&queue->submit_lock);
++   return clock;
++}
++
++/* EglantinePS5 memory compaction (tools/patch-radv-trim.py). The submit lock without waiting: a pass
++ * that finds it held gives up (an allocation holding the trim lock may be asking for memory). */
++static bool
++radv_ps5_submit_trylock(simple_mtx_t *mtx)
++{
++#if UTIL_FUTEX_SUPPORTED
++   return p_atomic_cmpxchg(&mtx->val, 0, 1) == 0;
++#else
++   _simple_mtx_init_with_once(mtx);
++   return mtx_trylock(&mtx->mtx) == thrd_success;
++#endif
++}
++
++/* The GPU reads `count` (at most 16) 32-bit words, one COPY_DATA each, submitted alone and waited for;
++ * the completion packet after them writes back and invalidates the GPU's caches, as the one ending
++ * every submission does before a compaction. The packets and values live in the marker's page, past
++ * the clock's. The submit lock is held. */
++#define RADV_PS5_COMPACT_WORDS_OFFSET 4096
++#define RADV_PS5_COMPACT_VALUES_OFFSET 8192
++static bool
++radv_ps5_compact_gpu_read(void *context, const uint64_t *sources, uint32_t count, uint32_t *values)
++{
++   struct radv_ps5_queue *const queue = context;
++   if (count > 16)
++      return false;
++   uint8_t *const page = (uint8_t *)queue->marker_memory.cpu;
++   uint32_t *const words = (uint32_t *)(page + RADV_PS5_COMPACT_WORDS_OFFSET);
++   volatile uint32_t *const out = (volatile uint32_t *)(page + RADV_PS5_COMPACT_VALUES_OFFSET);
++   static uint32_t token;
++   const uint32_t done = ++token | 0x80000000u;
++   for (uint32_t i = 0; i < count; ++i)
++      out[i] = 0xdeadbeefu;
++   out[count] = 0;
++   radv_ps5_cpu_flush((const void *)out, (count + 1) * sizeof(uint32_t));
++   uint32_t n = 0;
++   for (uint32_t i = 0; i < count; ++i) {
++      const uint64_t to = (uint64_t)(uintptr_t)&out[i];
++      words[n++] = PKT3(PKT3_COPY_DATA, 4, 0);
++      words[n++] = COPY_DATA_SRC_SEL(COPY_DATA_SRC_MEM) | COPY_DATA_DST_SEL(COPY_DATA_DST_MEM) | COPY_DATA_WR_CONFIRM;
++      words[n++] = (uint32_t)sources[i];
++      words[n++] = (uint32_t)(sources[i] >> 32);
++      words[n++] = (uint32_t)to;
++      words[n++] = (uint32_t)(to >> 32);
++   }
++   radv_ps5_completion_words(words + n, (uint64_t)(uintptr_t)&out[count], done);
++   n += RADV_PS5_COMPLETION_WORDS;
++   radv_ps5_cpu_flush(words, n * sizeof(uint32_t));
++   if (radv_ps5_submit(words, n, NULL, 0) != 0)
++      return false;
++   const uint64_t deadline = os_time_get_nano() + UINT64_C(1000000000);
++   bool finished = false;
++   do {
++      radv_ps5_cpu_flush((const void *)out, (count + 1) * sizeof(uint32_t));
++      finished = out[count] == done;
++   } while (!finished && os_time_get_nano() < deadline);
++   for (uint32_t i = 0; i < count; ++i)
++      values[i] = out[i];
++   return finished;
++}
++
++/* Once, before the first submission (the submit lock held, nothing submitted yet). */
++static bool radv_ps5_compact_tested, radv_ps5_compact_works;
++static void
++radv_ps5_compact_test_once(struct radv_ps5_queue *queue)
++{
++   if (radv_ps5_compact_tested)
++      return;
++   radv_ps5_compact_tested = true;
++   if (!radv_ps5_platform_runs_gpu())
++      return;
++   radv_ps5_queue_wait_seq(queue, queue->submitted_seq, OS_TIMEOUT_INFINITE);
++   radv_ps5_compact_works = radv_ps5_compact_self_test(radv_ps5_compact_gpu_read, queue);
++}
++
++/* Whether passes move memory: unless RADV_PS5_COMPACT=0 (env.txt), once the self-test passed.
++ * Otherwise they only plan and report (a dry run). */
++static bool
++radv_ps5_compact_moves(void)
++{
++   static int mode = -1;
++   if (mode < 0) {
++      const char *const text = getenv("RADV_PS5_COMPACT");
++      mode = !(text && text[0] == '0');
++   }
++   return mode == 1 && radv_ps5_compact_works;
++}
++
++/* Asked by the game memory's service while the pool is short (src/guest_memory_service.inc: its
++ * scanner for a write waiting for a block, and RecoverMemory for an allocation), at most once a
++ * second whoever asks. A pass that moves holds the submit lock until the GPU is idle (at most 250 ms;
++ * given up if the lock is held), so nothing the GPU runs sees a unit move; a dry run does so every
++ * tenth pass, to time it. Returns the bytes given back. */
++uint64_t
++radv_ps5_eden_compact(uint64_t want)
++{
++   static uint64_t last_ns;
++   static uint32_t passes;
++   if (!radv_ps5_platform_runs_gpu())
++      return 0;
++   struct radv_ps5_queue *const queue = radv_ps5_queue_get();
++   if (!queue)
++      return 0;
++   const uint64_t start = os_time_get_nano();
++   const uint64_t last = p_atomic_read(&last_ns);
++   if ((last && start - last < UINT64_C(1000000000)) || p_atomic_cmpxchg(&last_ns, last, start) != last)
++      return 0;
++   const uint32_t pass = p_atomic_inc_return(&passes);
++   const bool moves = radv_ps5_compact_moves();
++   const bool drain = moves || pass % 10 == 1;
++   bool locked = false, idle = true;
++   uint64_t drained = start;
++   if (drain) {
++      locked = radv_ps5_submit_trylock(&queue->submit_lock);
++      idle = locked && radv_ps5_queue_wait_seq(queue, queue->submitted_seq, start + UINT64_C(250000000));
++      drained = os_time_get_nano();
++   }
++   struct radv_ps5_compact_report report;
++   const bool ran = idle && radv_ps5_compact_pass(want, !moves, &report);
++   const uint64_t end = os_time_get_nano();
++   if (locked)
++      simple_mtx_unlock(&queue->submit_lock);
++   const char *const kind = moves ? "" : " (dry run)";
++   if (pass <= 64 || pass % 16 == 0) {
++      if (drain && !locked)
++         fprintf(stderr, "radv/ps5: compaction%s #%u: the submit lock was held; next pass\\n", kind, pass);
++      else if (!idle)
++         fprintf(stderr, "radv/ps5: compaction%s #%u: the GPU was not idle after 250 ms; next pass\\n", kind, pass);
++      else if (!ran)
++         fprintf(stderr, "radv/ps5: compaction%s #%u: the trim lock was held; next pass\\n", kind, pass);
++      else if (moves)
++         fprintf(stderr,
++                 "radv/ps5: compaction #%u: %u pieces partly used (%u MiB free in them), %u movable; emptied %u, "
++                 "%" PRIu64 " MiB given back; %u units moved (%u MiB), %u dropped; %u memories newly managed%s%s%s; "
++                 "CPU page tables free %d; the GPU drained in %.1f ms, held %.1f ms\\n",
++                 pass, report.partial, report.partial_free / 16, report.candidates, report.emptied,
++                 report.released >> 20, report.moved, report.moved / 16, report.dropped, report.managed,
++                 report.timed_out ? "; stopped at 50 ms" : "", report.broken ? "; STOPPED: a mapping failed" : "",
++                 report.tables_low ? "; NOTHING MOVED: page tables low" : "", report.tables_free,
++                 (double)(drained - start) / 1e6, (double)(end - start) / 1e6);
++      else
++         fprintf(stderr,
++                 "radv/ps5: compaction (dry run) #%u, self-test %s: %u pieces partly used (%u MiB free in them), "
++                 "%u idle 2 s; would empty %u (%u MiB) moving %u units (%u MiB)%s",
++                 pass, radv_ps5_compact_works ? "ok" : "not passed", report.partial, report.partial_free / 16,
++                 report.candidates, report.emptied, report.emptied * 2, report.moved, report.moved / 16,
++                 drain ? "" : "\\n");
++      if (ran && drain && !moves)
++         fprintf(stderr, "; the GPU drained in %.1f ms, held %.1f ms\\n", (double)(drained - start) / 1e6,
++                 (double)(end - start) / 1e6);
++   }
++   return ran ? report.released : 0;
++}
++''')],
++    'src/amd/vulkan/winsys/ps5/radv_ps5_bo.c': [
++        # Mesa f5610fe's retire copies the memory struct; it leaves the trim and the compaction first.
++        ('''radv_ps5_memory_retire(struct radv_ps5_queue *queue, struct radv_ps5_memory *memory, bool sparse)
++{
++   const uint64_t seq = p_atomic_read(&queue->submitted_seq);''', '''radv_ps5_memory_retire(struct radv_ps5_queue *queue, struct radv_ps5_memory *memory, bool sparse)
++{
++   /* ''' + MARK + ''': out of the trim's list and the compaction's slots before the copy below. */
++   if (!sparse)
++      radv_ps5_trim_detach(memory);
++   const uint64_t seq = p_atomic_read(&queue->submitted_seq);'''),
++        # The free trace (radv_ps5_free_trace): memory the winsys really unmaps, after the retire's
++        # wait, and placed memory, which its destroy unmaps at once.
++        ('''static void
++radv_ps5_memory_release(struct radv_ps5_memory *memory, bool sparse)
++{
++   if (sparse)''', '''static void
++radv_ps5_memory_release(struct radv_ps5_memory *memory, bool sparse)
++{
++   radv_ps5_free_trace(memory->cpu, memory->bytes, sparse ? "sparse range" : "freed, its submissions run");
++   if (sparse)'''),
++        ('''   if (bo->placed)
++      radv_ps5_memory_unmap_at(bo->placed, bo->memory.bytes, false);''', '''   if (bo->placed) {
++      radv_ps5_free_trace(bo->placed, bo->memory.bytes, "placed, at its destroy");
++      radv_ps5_memory_unmap_at(bo->placed, bo->memory.bytes, false);
++   }'''),
++        # The compaction moves only memory the CPU never reaches (tools/radv-compact.inc).
++        ('''   bo->flags = flags;
++   bo->base.va = (uint64_t)(uintptr_t)bo->memory.cpu;''', '''   bo->flags = flags;
++   bo->memory.no_compact = !(flags & RADEON_FLAG_NO_CPU_ACCESS);
++   bo->base.va = (uint64_t)(uintptr_t)bo->memory.cpu;'''),
++        # Memory bound into a sparse range (vkQueueBindSparse) counts as used too: it was counted only
++        # through vkBind*Memory, so a granule that only a sparse resource showed (Lichii's
++        # virtual-texture pages) looked unused, a trim gave it back while the sparse range still mapped
++        # it, and the memory went to something else: Mario Kart World's textures turned to garbage
++        # after a stutter under memory pressure (2026-11-18). An unbind does not say which memory it
++        # took away, so the count stays until the memory is freed.
++        ('''   uint8_t *const at = (uint8_t *)range->memory.cpu + offset;
++   const bool done = bo ? radv_ps5_vrange_bind(at, size, &radv_ps5_bo(bo)->memory, bo_offset)''',
++         '''   uint8_t *const at = (uint8_t *)range->memory.cpu + offset;
++   /* ''' + MARK + ''': memory a sparse range shows is never given back (a bind over a granule that
++    * was takes a new piece first). With no memory for that piece even after the app gave some back,
++    * the pieces stay unbound (they show the range's zero block, and what the GPU writes there stays
++    * in this resource) and the bind succeeds: RADV takes any failed sparse bind for a lost device
++    * (Mario Kart World in free roam with the pool full, 2026-11-18). */
++   if (bo && !radv_ps5_bo_use(bo, (uint64_t)(uintptr_t)radv_ps5_bo(bo)->memory.cpu + bo_offset, size, 1)) {
++      static uint32_t told;
++      if (told++ < 16)
++         fprintf(stderr, "radv/ps5: no memory for a sparse bind of %" PRIu64 " KiB at %p: left unbound\\n",
++                 size >> 10, (void *)at);
++      return radv_ps5_vrange_unbind(at, size) ? VK_SUCCESS : VK_ERROR_OUT_OF_DEVICE_MEMORY;
++   }
++   /* EglantinePS5 memory compaction: memory a sparse range shows stays where it is. */
++   if (bo)
++      radv_ps5_bo(bo)->memory.no_compact = true;
++   const bool done = bo ? radv_ps5_vrange_bind(at, size, &radv_ps5_bo(bo)->memory, bo_offset)'''),
++        (
+         '''static void *
+ radv_ps5_buffer_map(''',
+-        '''/* ''' + MARK + ''': a resource bound over [va, va + size) of the buffer object (delta 1), or
+- * destroyed (-1). False: no memory could be taken for it. */
++        '''extern size_t eden_memory_recover(size_t bytes) __attribute__((weak));
++
++/* ''' + MARK + ''': a resource bound over [va, va + size) of the buffer object (delta 1), or
++ * destroyed (-1). False: no memory could be taken for it. A granule trim gave back takes a piece
++ * again, which a full pool may refuse: the app gives memory back (eden_memory_recover packs cold
++ * guest memory) and the bind is counted again, up to 3 times, as other allocations are. */
+ bool
+ radv_ps5_bo_use(struct radeon_winsys_bo *base, uint64_t va, uint64_t size, int delta)
+ {
+@@ -315,7 +1094,13 @@ radv_ps5_bo_use(struct radeon_winsys_bo *base, uint64_t va, uint64_t size, int d
+    const uint64_t start = (uint64_t)(uintptr_t)bo->memory.cpu;
+    if (va < start)
+       return true;
+-   return radv_ps5_memory_use(&bo->memory, va - start, size, delta);
++   bool ok = radv_ps5_memory_use(&bo->memory, va - start, size, delta);
++   for (int attempt = 0; !ok && delta > 0 && attempt < 3; ++attempt) {
++      if (!eden_memory_recover || eden_memory_recover(MIN2(size, UINT64_C(48) << 20) + (UINT64_C(16) << 20)) == 0)
++         break;
++      ok = radv_ps5_memory_use(&bo->memory, va - start, size, delta);
++   }
++   return ok;
+ }
+ 
+ static void *
+diff --git a/tools/patch-radv-wsi.py b/tools/patch-radv-wsi.py
+index 5478072..a0c892c 100644
+--- a/tools/patch-radv-wsi.py
++++ b/tools/patch-radv-wsi.py
+@@ -43,16 +43,17 @@ text = (text[:body_start] + '   const char *const asked = getenv("EDEN_VIDEOOUT_
+ # idles at the bottom of its range (a vblank every 20.87 ms, 48 Hz, in two reports), the output
+ # went back to 59.94 Hz, and a game could not have 120 Hz at all. Only a display that stayed at
+ # 59.94 Hz (a vblank about every 16.7 ms) gives the mode back.
+-replace('         if (period > VIDEOOUT_HIGH_REFRESH_LIMIT_NS) {',
+-        '         if (period > UINT64_C(15000000) && period < UINT64_C(18500000)) {')
++# (Mesa 47e9eb6 added: a failed vblank wait, period 0, restores it too; kept.)
++replace('         if (period == 0 || period > VIDEOOUT_HIGH_REFRESH_LIMIT_NS) {',
++        '         if (period == 0 || (period > UINT64_C(15000000) && period < UINT64_C(18500000))) {')
+ # Say so when the display follows, as the pinned source does when it does not.
+-replace('''                    (double)period / 1e6);
++replace('''                       (double)period / 1e6);
+          }
+-      } else {''', '''                    (double)period / 1e6);
++      } else if (supported > 0) {''', '''                       (double)period / 1e6);
+          } else {
+             fprintf(stderr, "wsi/videoout: 119.88 Hz output, a vblank every %.3f ms\\n", (double)period / 1e6);
+          }
+-      } else {''')
++      } else if (supported > 0) {''')
+ replace('   wsi->base.get_support =', '   videoout_ref();\n\n   wsi->base.get_support =')
+ replace('   if (wsi)\n      vk_free(alloc, wsi);',
+         '   if (wsi) {\n      videoout_unref();\n      vk_free(alloc, wsi);\n      wsi_device->wsi[VK_ICD_WSI_PLATFORM_DISPLAY] = NULL;\n   }')
+@@ -75,6 +76,22 @@ print(f'RADV WSI adaptation changed={changed} sha256={hashlib.sha256(text.encode
+ for relative, replacements in {
+     # Restore the pinned upload path: explicit CPU flush did not affect HUD corruption.
+     'src/amd/vulkan/radv_cmd_buffer.c': [],
++    # The winsys's buffer objects, platform header and submissions start from the pinned files each
++    # time, as its platform file does below: the scripts after this one patch them, and each skips a
++    # file it already marked, so a new edit of theirs would not reach a work tree patched before.
++    'src/amd/vulkan/winsys/ps5/radv_ps5_bo.c': [],
++    'src/amd/vulkan/winsys/ps5/radv_ps5_platform.h': [],
++    'src/amd/vulkan/winsys/ps5/radv_ps5_cs.c': [],
++    # The trim script's resource counting: its edits to the image and buffer files keep the line
++    # they are placed after, so on a work tree patched before they went in again each time: after
++    # eight driver builds an image's bind counted once and its destruction eight times, granules
++    # still holding live images read as unused, and trim gave them back with the shared zero block
++    # in their place (Mario Kart World's 3D scenes broke right after the first trim, 2026-11-18).
++    'src/amd/vulkan/radv_image.c': [],
++    'src/amd/vulkan/radv_image.h': [],
++    'src/amd/vulkan/radv_buffer.c': [],
++    'src/amd/vulkan/radv_buffer.h': [],
++    'src/amd/vulkan/radv_radeon_winsys.h': [],
+     'src/amd/vulkan/radv_physical_device.c': [
+         ('   if (result == VK_ERROR_INCOMPATIBLE_DRIVER || result == VK_ERROR_INITIALIZATION_FAILED)\n      return VK_SUCCESS;',
+          '   if (result != VK_SUCCESS) fprintf(stderr, "radv/ps5: physical device creation result=%d\\n", result);\n   if (result == VK_ERROR_INCOMPATIBLE_DRIVER || result == VK_ERROR_INITIALIZATION_FAILED)\n      return VK_SUCCESS;'),
+diff --git a/tools/radv-compact-plan.inc b/tools/radv-compact-plan.inc
+new file mode 100644
+index 0000000..9b4fdd3
+--- /dev/null
++++ b/tools/radv-compact-plan.inc
+@@ -0,0 +1,72 @@
++/* EglantinePS5 memory compaction's planner (tools/patch-radv-trim.py inlines it into the PS5 winsys;
++ * tools/check-radv-compact.py builds it on the host). A piece is a 2 MiB granule of driver memory
++ * that is partly used: 1 to 31 of its 32 units (64 KiB each) have a resource bound over them. */
++#define RADV_PS5_COMPACT_UNIT (UINT64_C(64) << 10)
++#define RADV_PS5_COMPACT_UNITS 32u
++
++struct radv_ps5_compact_piece {
++   /* Its units in use, a bit each. */
++   uint32_t used;
++   /* Where it is: the memory and its granule (the pass reads them; the plan does not). */
++   struct radv_ps5_memory *memory;
++   uint32_t granule;
++   /* The plan: whether its units move out (and it is emptied), or it takes others' units. */
++   bool moves;
++   bool takes;
++};
++
++/* One unit's move: from a unit of one piece to a free unit of another. */
++struct radv_ps5_compact_move {
++   uint32_t from, from_unit, to, to_unit;
++};
++
++/* The pieces, most units in use first. */
++static void
++radv_ps5_compact_order(const struct radv_ps5_compact_piece *pieces, uint32_t count, uint32_t *order)
++{
++   uint32_t at = 0;
++   for (int used = (int)RADV_PS5_COMPACT_UNITS; used >= 0; --used) {
++      for (uint32_t i = 0; i < count; ++i) {
++         if (__builtin_popcount(pieces[i].used) == used)
++            order[at++] = i;
++      }
++   }
++}
++
++/* Units move one by one, so any m of n pieces can be emptied into the others when all their units in
++ * use fit in n - m pieces: m = n - ceil(units in use / 32). The m used least move (the least to copy),
++ * unit by unit into the free units of the rest, most used first. At most `limit` pieces are emptied;
++ * `moves` has room for 31 a piece. Returns how many; `move_count` is the units moved. */
++static uint32_t
++radv_ps5_compact_plan(struct radv_ps5_compact_piece *pieces, const uint32_t *order, uint32_t count,
++                      uint32_t limit, struct radv_ps5_compact_move *moves, uint32_t *move_count)
++{
++   uint64_t in_use = 0;
++   for (uint32_t i = 0; i < count; ++i) {
++      pieces[i].moves = false;
++      pieces[i].takes = false;
++      in_use += (uint32_t)__builtin_popcount(pieces[i].used);
++   }
++   *move_count = 0;
++   const uint64_t needed = (in_use + RADV_PS5_COMPACT_UNITS - 1) / RADV_PS5_COMPACT_UNITS;
++   uint32_t emptied = count > needed ? (uint32_t)(count - needed) : 0;
++   if (emptied > limit)
++      emptied = limit;
++   uint32_t host = 0, host_free = emptied ? ~pieces[order[0]].used : 0;
++   for (uint32_t g = count; g-- > count - emptied;) {
++      struct radv_ps5_compact_piece *const guest = &pieces[order[g]];
++      guest->moves = true;
++      for (uint32_t used = guest->used; used; used &= used - 1) {
++         while (!host_free) {
++            host++;
++            host_free = ~pieces[order[host]].used;
++         }
++         const uint32_t to_unit = (uint32_t)__builtin_ctz(host_free);
++         host_free &= host_free - 1;
++         pieces[order[host]].takes = true;
++         moves[(*move_count)++] = (struct radv_ps5_compact_move){
++            .from = order[g], .from_unit = (uint32_t)__builtin_ctz(used), .to = order[host], .to_unit = to_unit};
++      }
++   }
++   return emptied;
++}
+diff --git a/tools/radv-compact.inc b/tools/radv-compact.inc
+new file mode 100644
+index 0000000..55f9f9b
+--- /dev/null
++++ b/tools/radv-compact.inc
+@@ -0,0 +1,547 @@
++/* EglantinePS5 memory compaction (tools/patch-radv-trim.py inlines this into the PS5 winsys's trim
++ * block, after radv_ps5_memory_use; tools/check-radv-compact.py runs it on the host against a model of
++ * the kernel's memory calls). The planner is tools/radv-compact-plan.inc.
++ *
++ * Driver memory the compaction manages keeps where each of its 64 KiB units is (unit_phys: a physical
++ * address, or -1 where the unit shows the zero block), and each 2 MiB piece of direct memory behind it
++ * keeps which unit shows each of its 32 slots. A piece goes back when no unit shows it any longer.
++ * A pass, with the GPU idle and nothing submitted, copies the units in use of the pieces used least
++ * into free slots of the pieces used most and maps them there, so the emptied pieces go back whole;
++ * a bind over a unit that shows the zero block takes a free slot of such a piece before a new one.
++ * Every function here runs with the trim lock held unless it says otherwise. */
++
++struct radv_ps5_slot {
++   struct radv_ps5_memory *memory; /* NULL: free */
++   uint32_t unit;
++};
++static struct radv_ps5_slot *radv_ps5_slots;
++static uint32_t *radv_ps5_slot_masks; /* per piece: the slots some unit shows */
++static uint64_t radv_ps5_piece_count; /* the pieces the table covers: direct memory / 2 MiB */
++static uint64_t radv_ps5_free_slots;  /* free slots of pieces some unit shows */
++static uint64_t radv_ps5_slot_cursor; /* where the next search for a free slot starts */
++static bool radv_ps5_compact_broken;  /* a mapping failed in a pass: no more passes */
++/* A slot shown by memory that is retired (radv_ps5_trim_detach: its buffer is gone, its memory held
++ * until the GPU has run what was submitted before): neither free nor movable, until the retired copy
++ * is freed (radv_ps5_compact_free clears it). */
++#define RADV_PS5_SLOT_HELD ((struct radv_ps5_memory *)(uintptr_t)1)
++
++static bool
++radv_ps5_slots_ready(void)
++{
++   if (radv_ps5_slots)
++      return true;
++   const uint64_t pieces =
++      ((uint64_t)sceKernelGetDirectMemorySize() + RADV_PS5_LARGE_BYTES - 1) / RADV_PS5_LARGE_BYTES;
++   radv_ps5_slots = calloc(pieces * RADV_PS5_COMPACT_UNITS, sizeof(*radv_ps5_slots));
++   radv_ps5_slot_masks = calloc(pieces, sizeof(*radv_ps5_slot_masks));
++   if (!radv_ps5_slots || !radv_ps5_slot_masks) {
++      free(radv_ps5_slots);
++      free(radv_ps5_slot_masks);
++      radv_ps5_slots = NULL;
++      radv_ps5_slot_masks = NULL;
++      return false;
++   }
++   radv_ps5_piece_count = pieces;
++   return true;
++}
++
++static uint64_t
++radv_ps5_piece_of(int64_t physical)
++{
++   return (uint64_t)physical / RADV_PS5_LARGE_BYTES;
++}
++
++static uint32_t
++radv_ps5_slot_of(int64_t physical)
++{
++   return (uint32_t)((uint64_t)physical % RADV_PS5_LARGE_BYTES / RADV_PS5_COMPACT_UNIT);
++}
++
++static int64_t
++radv_ps5_slot_physical(uint64_t piece, uint32_t slot)
++{
++   return (int64_t)(piece * RADV_PS5_LARGE_BYTES + (uint64_t)slot * RADV_PS5_COMPACT_UNIT);
++}
++
++static uint8_t *
++radv_ps5_unit_address(const struct radv_ps5_memory *memory, uint32_t unit)
++{
++   return memory->cpu + (uint64_t)unit * RADV_PS5_COMPACT_UNIT;
++}
++
++/* The slots a piece's units show: the free-slot count follows, and a piece no unit shows any longer
++ * goes back. Returns the bytes given back. */
++static uint64_t
++radv_ps5_piece_mask(uint64_t piece, uint32_t mask)
++{
++   const uint32_t old = radv_ps5_slot_masks[piece];
++   radv_ps5_free_slots -= old ? RADV_PS5_COMPACT_UNITS - (uint32_t)__builtin_popcount(old) : 0;
++   radv_ps5_free_slots += mask ? RADV_PS5_COMPACT_UNITS - (uint32_t)__builtin_popcount(mask) : 0;
++   radv_ps5_slot_masks[piece] = mask;
++   if (mask || !old)
++      return 0;
++   if (sceKernelReleaseDirectMemory((int64_t)(piece * RADV_PS5_LARGE_BYTES), RADV_PS5_LARGE_BYTES) != 0) {
++      fprintf(stderr, "radv/ps5: compaction: a piece no unit shows would not go back\n");
++      return 0;
++   }
++   return RADV_PS5_LARGE_BYTES;
++}
++
++static void
++radv_ps5_slot_set(int64_t physical, struct radv_ps5_memory *memory, uint32_t unit)
++{
++   const uint64_t piece = radv_ps5_piece_of(physical);
++   const uint32_t slot = radv_ps5_slot_of(physical);
++   radv_ps5_slots[piece * RADV_PS5_COMPACT_UNITS + slot] = (struct radv_ps5_slot){.memory = memory, .unit = unit};
++   radv_ps5_piece_mask(piece, radv_ps5_slot_masks[piece] | (1u << slot));
++}
++
++/* No unit shows the slot any longer (its address was mapped elsewhere or unmapped first). */
++static uint64_t
++radv_ps5_slot_clear(int64_t physical)
++{
++   const uint64_t piece = radv_ps5_piece_of(physical);
++   const uint32_t slot = radv_ps5_slot_of(physical);
++   radv_ps5_slots[piece * RADV_PS5_COMPACT_UNITS + slot] = (struct radv_ps5_slot){0};
++   return radv_ps5_piece_mask(piece, radv_ps5_slot_masks[piece] & ~(1u << slot));
++}
++
++/* `unit` shows the zero block now (the caller mapped it): its slot is free. */
++static uint64_t
++radv_ps5_unit_dropped(struct radv_ps5_memory *memory, uint32_t unit)
++{
++   const int64_t physical = memory->unit_phys[unit];
++   if (physical < 0)
++      return 0;
++   memory->unit_phys[unit] = -1;
++   return radv_ps5_slot_clear(physical);
++}
++
++static bool
++radv_ps5_units_map(struct radv_ps5_memory *memory, uint32_t unit, uint32_t count, int64_t physical)
++{
++   return radv_ps5_map_fixed(radv_ps5_unit_address(memory, unit), (uint64_t)count * RADV_PS5_COMPACT_UNIT, physical);
++}
++
++/* The memory as units, its pieces in the table. Only memory the CPU never reaches (no_compact is set
++ * for the rest when it is made, and by a sparse bind or a free). */
++static bool
++radv_ps5_compact_manage(struct radv_ps5_memory *memory)
++{
++   if (memory->unit_phys)
++      return true;
++   if (memory->no_compact || !memory->unit_uses || !radv_ps5_slots_ready() || !radv_ps5_trim_pieces(memory))
++      return false;
++   const uint64_t granules = memory->bytes / RADV_PS5_LARGE_BYTES;
++   for (uint64_t g = 0; g < granules; ++g) {
++      const int64_t piece = memory->pieces[g];
++      if (piece >= 0 && (piece % (int64_t)RADV_PS5_LARGE_BYTES || radv_ps5_piece_of(piece) >= radv_ps5_piece_count ||
++                         radv_ps5_slot_masks[radv_ps5_piece_of(piece)]))
++         return false;
++   }
++   int64_t *const phys = malloc(granules * RADV_PS5_COMPACT_UNITS * sizeof(*phys));
++   if (!phys)
++      return false;
++   memory->unit_phys = phys;
++   for (uint64_t g = 0; g < granules; ++g) {
++      const int64_t piece = memory->pieces[g];
++      for (uint32_t k = 0; k < RADV_PS5_COMPACT_UNITS; ++k) {
++         const uint32_t unit = (uint32_t)(g * RADV_PS5_COMPACT_UNITS + k);
++         phys[unit] = piece >= 0 ? piece + (int64_t)(k * RADV_PS5_COMPACT_UNIT) : -1;
++         if (piece >= 0)
++            radv_ps5_slot_set(phys[unit], memory, unit);
++      }
++      memory->pieces[g] = -1;
++   }
++   return true;
++}
++
++/* A free slot of a piece some unit shows, else slot 0 of a new piece (shown by none yet); -1 when the
++ * pool has no piece. */
++static int64_t
++radv_ps5_free_slot(void)
++{
++   for (uint64_t i = 0; radv_ps5_free_slots && i < radv_ps5_piece_count; ++i) {
++      const uint64_t piece = (radv_ps5_slot_cursor + i) % radv_ps5_piece_count;
++      const uint32_t mask = radv_ps5_slot_masks[piece];
++      if (mask && mask != UINT32_MAX) {
++         radv_ps5_slot_cursor = piece;
++         return radv_ps5_slot_physical(piece, (uint32_t)__builtin_ctz(~mask));
++      }
++   }
++   int64_t physical = -1;
++   if (sceKernelAllocateDirectMemory(0, sceKernelGetDirectMemorySize(), RADV_PS5_LARGE_BYTES, RADV_PS5_LARGE_BYTES,
++                                     RADV_PS5_DIRECT_TYPE, &physical) != 0)
++      return -1;
++   if (radv_ps5_piece_of(physical) >= radv_ps5_piece_count) {
++      sceKernelReleaseDirectMemory(physical, RADV_PS5_LARGE_BYTES);
++      return -1;
++   }
++   radv_ps5_slot_cursor = radv_ps5_piece_of(physical);
++   radv_ps5_trim_retaken += RADV_PS5_LARGE_BYTES;
++   return physical;
++}
++
++/* A bind over units of managed memory that show the zero block: each takes a free slot. False: no
++ * memory (the units taken keep theirs). */
++static bool
++radv_ps5_compact_retake(struct radv_ps5_memory *memory, uint64_t offset, uint64_t size)
++{
++   const uint32_t first = (uint32_t)(offset / RADV_PS5_COMPACT_UNIT);
++   const uint32_t last = (uint32_t)MIN2((offset + size - 1) / RADV_PS5_COMPACT_UNIT,
++                                        memory->bytes / RADV_PS5_COMPACT_UNIT - 1);
++   for (uint32_t unit = first; unit <= last; ++unit) {
++      if (memory->unit_phys[unit] >= 0)
++         continue;
++      const int64_t physical = radv_ps5_free_slot();
++      if (physical < 0)
++         return false;
++      if (!radv_ps5_units_map(memory, unit, 1, physical)) {
++         if (!radv_ps5_slot_masks[radv_ps5_piece_of(physical)])
++            sceKernelReleaseDirectMemory(physical, RADV_PS5_LARGE_BYTES);
++         return false;
++      }
++      memory->unit_phys[unit] = physical;
++      radv_ps5_slot_set(physical, memory, unit);
++   }
++   return true;
++}
++
++/* The trim, for a granule of managed memory nothing is bound over: it shows the zero block, and the
++ * slots its units showed are free. Returns the bytes given back. */
++static uint64_t
++radv_ps5_compact_trim_granule(struct radv_ps5_memory *memory, uint64_t granule, int64_t zero)
++{
++   const uint32_t first = (uint32_t)(granule * RADV_PS5_COMPACT_UNITS);
++   bool shown = false;
++   for (uint32_t k = 0; k < RADV_PS5_COMPACT_UNITS; ++k)
++      shown |= memory->unit_phys[first + k] >= 0;
++   if (!shown || !radv_ps5_units_map(memory, first, RADV_PS5_COMPACT_UNITS, zero))
++      return 0;
++   uint64_t returned = 0;
++   for (uint32_t k = 0; k < RADV_PS5_COMPACT_UNITS; ++k)
++      returned += radv_ps5_unit_dropped(memory, first + k);
++   return returned;
++}
++
++/* The slots a managed memory shows are held (its buffer retired; the copy upstream keeps of the memory
++ * frees them). */
++static void
++radv_ps5_compact_hold(struct radv_ps5_memory *memory)
++{
++   if (!memory->unit_phys || !radv_ps5_slots)
++      return;
++   const uint32_t units = (uint32_t)(memory->bytes / RADV_PS5_COMPACT_UNIT);
++   for (uint32_t unit = 0; unit < units; ++unit) {
++      const int64_t physical = memory->unit_phys[unit];
++      if (physical >= 0)
++         radv_ps5_slots[radv_ps5_piece_of(physical) * RADV_PS5_COMPACT_UNITS + radv_ps5_slot_of(physical)].memory =
++            RADV_PS5_SLOT_HELD;
++   }
++}
++
++/* Called by radv_ps5_memory_free without the trim lock: true when the memory is managed, and then it
++ * is freed here. Either way none of it is managed from now on. */
++static bool
++radv_ps5_compact_free(struct radv_ps5_memory *memory)
++{
++   radv_ps5_trim_acquire();
++   memory->no_compact = true;
++   int64_t *const phys = memory->unit_phys;
++   radv_ps5_trim_release();
++   if (!phys)
++      return false;
++   const uint32_t units = (uint32_t)(memory->bytes / RADV_PS5_COMPACT_UNIT);
++   radv_ps5_trim_untrack(memory);
++   const int32_t gone = sceKernelMunmap(memory->cpu, memory->bytes);
++   if (gone != 0)
++      fprintf(stderr, "radv/ps5: sceKernelMunmap(%p, %" PRIu64 ") failed: 0x%08x\n", (void *)memory->cpu,
++              memory->bytes, (unsigned)gone);
++   radv_ps5_granules_give(&radv_ps5_region, memory->granule, memory->granules);
++   radv_ps5_trim_acquire();
++   for (uint32_t unit = 0; unit < units; ++unit) {
++      if (phys[unit] >= 0)
++         radv_ps5_slot_clear(phys[unit]);
++   }
++   memory->unit_phys = NULL;
++   radv_ps5_trim_release();
++   free(phys);
++   free(memory->pieces);
++   *memory = (struct radv_ps5_memory){.physical = -1};
++   return true;
++}
++
++/* A sparse bind of managed memory (radv_ps5_vrange_bind), without the trim lock: unit by unit, and the
++ * memory is never moved again, since the sparse range shows its slots by address. */
++bool
++radv_ps5_compact_map_units(struct radv_ps5_memory *memory, void *at, uint64_t bytes, uint64_t offset)
++{
++   radv_ps5_trim_acquire();
++   memory->no_compact = true;
++   bool ok = true;
++   for (uint64_t done = 0; done < bytes && ok;) {
++      const uint64_t inner = (offset + done) % RADV_PS5_COMPACT_UNIT;
++      const uint64_t length = MIN2(bytes - done, RADV_PS5_COMPACT_UNIT - inner);
++      const int64_t physical = memory->unit_phys[(offset + done) / RADV_PS5_COMPACT_UNIT];
++      const int64_t source = physical >= 0 ? physical + (int64_t)inner : radv_ps5_zero_block_for((uint8_t *)at + done);
++      ok = source >= 0 && radv_ps5_map_fixed_sparse((uint8_t *)at + done, length, source);
++      done += length;
++   }
++   radv_ps5_trim_release();
++   return ok;
++}
++
++/* Whether a piece's units may move or go: none of memory that must stay, none in a granule a resource
++ * left lately (recorded work may still use it: the trim's wait). `used`: its slots whose unit has a
++ * resource bound. */
++static bool
++radv_ps5_piece_movable(uint64_t piece, uint32_t now, uint32_t quarantine, uint32_t *used)
++{
++   *used = 0;
++   for (uint32_t mask = radv_ps5_slot_masks[piece]; mask; mask &= mask - 1) {
++      const uint32_t slot = (uint32_t)__builtin_ctz(mask);
++      const struct radv_ps5_slot *const shown = &radv_ps5_slots[piece * RADV_PS5_COMPACT_UNITS + slot];
++      const struct radv_ps5_memory *const memory = shown->memory;
++      if (!memory || memory == RADV_PS5_SLOT_HELD || memory->no_compact || !memory->unit_uses || !memory->released_ms)
++         return false;
++      const uint32_t granule = shown->unit / RADV_PS5_COMPACT_UNITS;
++      if (memory->released_ms[granule] && now - memory->released_ms[granule] < quarantine)
++         return false;
++      if (memory->unit_uses[shown->unit])
++         *used |= 1u << slot;
++   }
++   return true;
++}
++
++/* The units showing a piece's slots that have no resource bound show the zero block; the piece may go
++ * back with them. False: a mapping failed. */
++static bool
++radv_ps5_piece_drop_unused(uint64_t piece, int64_t zero, struct radv_ps5_compact_report *report)
++{
++   for (uint32_t mask = radv_ps5_slot_masks[piece]; mask; mask &= mask - 1) {
++      const uint32_t slot = (uint32_t)__builtin_ctz(mask);
++      const struct radv_ps5_slot shown = radv_ps5_slots[piece * RADV_PS5_COMPACT_UNITS + slot];
++      if (shown.memory->unit_uses[shown.unit])
++         continue;
++      if (!radv_ps5_units_map(shown.memory, shown.unit, 1, zero))
++         return false;
++      report->released += radv_ps5_unit_dropped(shown.memory, shown.unit);
++      report->dropped++;
++   }
++   return true;
++}
++
++/* A CPU view of a piece, for copying into slots no unit shows. */
++static uint8_t *
++radv_ps5_piece_view(uint64_t piece, uint8_t **view, uint64_t *view_piece)
++{
++   if (*view && *view_piece == piece)
++      return *view;
++   if (*view)
++      sceKernelMunmap(*view, RADV_PS5_LARGE_BYTES);
++   *view = NULL;
++   void *at = NULL;
++   if (sceKernelMapDirectMemory(&at, RADV_PS5_LARGE_BYTES, PS5_KERNEL_PROT_CPU_READ | PS5_KERNEL_PROT_CPU_WRITE, 0,
++                                (int64_t)(piece * RADV_PS5_LARGE_BYTES), RADV_PS5_LARGE_BYTES) != 0)
++      return NULL;
++   *view = at;
++   *view_piece = piece;
++   return *view;
++}
++
++#define RADV_PS5_COMPACT_PIECES 64
++#define RADV_PS5_COMPACT_NS UINT64_C(50000000)
++
++/* The CPU page tables a pass leaves free at least: a unit mapped inside what was one 2 MiB mapping
++ * takes a table of the title's 16,384, and past them the kernel refuses mappings with memory still
++ * free. Mario Kart World's Grand Prix ended with 1,996 free (2,654-3,250 before the compaction).
++ * RADV_PS5_COMPACT_TABLES overrides. */
++static int
++radv_ps5_compact_tables_mark(void)
++{
++   static int mark = -1;
++   if (mark < 0) {
++      const char *const text = getenv("RADV_PS5_COMPACT_TABLES");
++      mark = text ? atoi(text) : 2000;
++   }
++   return mark;
++}
++
++/* The pass that moves (radv_ps5_compact_pass): the GPU idle with nothing submitted, the trim lock held. */
++static void
++radv_ps5_compact_move(uint64_t want, struct radv_ps5_compact_report *report)
++{
++   const int64_t zero = radv_ps5_zero_block();
++   if (zero < 0 || radv_ps5_compact_broken)
++      return;
++   report->tables_free = radv_ps5_compact_tables_free();
++   if (report->tables_free >= 0 && report->tables_free < radv_ps5_compact_tables_mark()) {
++      report->tables_low = true;
++      return;
++   }
++   const uint64_t start = radv_ps5_now_ns();
++   for (uint32_t i = 0; i < radv_ps5_trim_count; ++i) {
++      if (!radv_ps5_trim_tracked[i]->unit_phys && radv_ps5_compact_manage(radv_ps5_trim_tracked[i]))
++         report->managed++;
++   }
++   if (!radv_ps5_slots)
++      return;
++   struct radv_ps5_compact_piece *const pieces = malloc(radv_ps5_piece_count * sizeof(*pieces));
++   uint32_t *const order = malloc(radv_ps5_piece_count * sizeof(*order));
++   struct radv_ps5_compact_move *const moves =
++      malloc(RADV_PS5_COMPACT_PIECES * (RADV_PS5_COMPACT_UNITS - 1) * sizeof(*moves));
++   uint8_t *view = NULL;
++   uint64_t view_piece = 0;
++   if (!pieces || !order || !moves)
++      goto done;
++   const uint32_t now = radv_ps5_trim_now_ms(), quarantine = radv_ps5_trim_quarantine_ms();
++   uint32_t count = 0;
++   for (uint64_t piece = 0; piece < radv_ps5_piece_count; ++piece) {
++      uint32_t used;
++      if (!radv_ps5_slot_masks[piece] || !radv_ps5_piece_movable(piece, now, quarantine, &used))
++         continue;
++      if (!used) {
++         /* Nothing bound over any unit showing it: it goes back without a copy. */
++         if (!radv_ps5_piece_drop_unused(piece, zero, report))
++            goto broken;
++         report->emptied++;
++         continue;
++      }
++      if (used == UINT32_MAX)
++         continue;
++      report->partial++;
++      report->partial_free += RADV_PS5_COMPACT_UNITS - (uint32_t)__builtin_popcount(used);
++      pieces[count++] = (struct radv_ps5_compact_piece){.used = used, .granule = (uint32_t)piece};
++   }
++   report->candidates = count;
++   if (!count)
++      goto done;
++   radv_ps5_compact_order(pieces, count, order);
++   uint32_t limit = (uint32_t)MIN2((want + RADV_PS5_LARGE_BYTES - 1) / RADV_PS5_LARGE_BYTES, RADV_PS5_COMPACT_PIECES);
++   if (!limit)
++      limit = 1;
++   uint32_t move_count = 0;
++   radv_ps5_compact_plan(pieces, order, count, limit, moves, &move_count);
++   uint32_t guest = UINT32_MAX;
++   for (uint32_t m = 0; m < move_count; ++m) {
++      const struct radv_ps5_compact_move *const move = &moves[m];
++      if (move->from != guest) {
++         /* A piece emptied: the units left showing it have nothing bound, and go too. */
++         if (guest != UINT32_MAX) {
++            if (!radv_ps5_piece_drop_unused(pieces[guest].granule, zero, report))
++               goto broken;
++            report->emptied++;
++         }
++         if (radv_ps5_now_ns() - start > RADV_PS5_COMPACT_NS) {
++            guest = UINT32_MAX;
++            report->timed_out = true;
++            break;
++         }
++         guest = move->from;
++      }
++      const uint64_t from_piece = pieces[move->from].granule, to_piece = pieces[move->to].granule;
++      const struct radv_ps5_slot from = radv_ps5_slots[from_piece * RADV_PS5_COMPACT_UNITS + move->from_unit];
++      const struct radv_ps5_slot to = radv_ps5_slots[to_piece * RADV_PS5_COMPACT_UNITS + move->to_unit];
++      uint8_t *const target_view = radv_ps5_piece_view(to_piece, &view, &view_piece);
++      if (!from.memory || !target_view)
++         goto broken;
++      if (to.memory) {
++         /* The slot's unit has nothing bound: it shows the zero block, and the slot takes the move. */
++         if (!radv_ps5_units_map(to.memory, to.unit, 1, zero))
++            goto broken;
++         radv_ps5_unit_dropped(to.memory, to.unit);
++         report->dropped++;
++      }
++      uint8_t *const source = radv_ps5_unit_address(from.memory, from.unit);
++      uint8_t *const copy = target_view + (uint64_t)move->to_unit * RADV_PS5_COMPACT_UNIT;
++      radv_ps5_cpu_flush(source, RADV_PS5_COMPACT_UNIT);
++      radv_ps5_compact_copy(copy, source);
++      radv_ps5_cpu_flush(copy, RADV_PS5_COMPACT_UNIT);
++      const int64_t target = radv_ps5_slot_physical(to_piece, move->to_unit);
++      if (!radv_ps5_units_map(from.memory, from.unit, 1, target))
++         goto broken;
++      from.memory->unit_phys[from.unit] = target;
++      radv_ps5_slot_set(target, from.memory, from.unit);
++      report->released += radv_ps5_slot_clear(radv_ps5_slot_physical(from_piece, move->from_unit));
++      report->moved++;
++   }
++   if (guest != UINT32_MAX) {
++      if (!radv_ps5_piece_drop_unused(pieces[guest].granule, zero, report))
++         goto broken;
++      report->emptied++;
++   }
++   goto done;
++broken:
++   radv_ps5_compact_broken = true;
++   fprintf(stderr, "radv/ps5: compaction: a mapping failed; no more passes\n");
++done:
++   if (view)
++      sceKernelMunmap(view, RADV_PS5_LARGE_BYTES);
++   free(pieces);
++   free(order);
++   free(moves);
++}
++
++/* The pass that only plans (radv_ps5_compact_pass's dry run): the granules of memory not yet managed. */
++static void
++radv_ps5_compact_dry(struct radv_ps5_compact_report *report)
++{
++   const uint32_t now = radv_ps5_trim_now_ms(), quarantine = radv_ps5_trim_quarantine_ms();
++   uint64_t total = 0;
++   for (uint32_t i = 0; i < radv_ps5_trim_count; ++i)
++      total += radv_ps5_trim_tracked[i]->bytes / RADV_PS5_LARGE_BYTES;
++   if (!total)
++      return;
++   struct radv_ps5_compact_piece *const pieces = malloc(total * sizeof(*pieces));
++   uint32_t *const order = malloc(total * sizeof(*order));
++   struct radv_ps5_compact_move *const moves = malloc(total * (RADV_PS5_COMPACT_UNITS - 1) * sizeof(*moves));
++   uint32_t count = 0;
++   for (uint32_t i = 0; pieces && order && moves && i < radv_ps5_trim_count; ++i) {
++      struct radv_ps5_memory *const memory = radv_ps5_trim_tracked[i];
++      if (memory->no_compact || !memory->unit_uses || memory->unit_phys)
++         continue;
++      const uint64_t granules = memory->bytes / RADV_PS5_LARGE_BYTES;
++      for (uint64_t g = 0; g < granules; ++g) {
++         if (!memory->uses[g] || (memory->pieces && memory->pieces[g] < 0))
++            continue;
++         uint32_t used = 0;
++         for (uint32_t u = 0; u < RADV_PS5_COMPACT_UNITS; ++u) {
++            if (memory->unit_uses[g * RADV_PS5_COMPACT_UNITS + u])
++               used |= 1u << u;
++         }
++         const uint32_t in_use = (uint32_t)__builtin_popcount(used);
++         if (in_use == 0 || in_use == RADV_PS5_COMPACT_UNITS)
++            continue;
++         report->partial++;
++         report->partial_free += RADV_PS5_COMPACT_UNITS - in_use;
++         if (memory->released_ms[g] && now - memory->released_ms[g] < quarantine)
++            continue;
++         pieces[count++] = (struct radv_ps5_compact_piece){.used = used, .memory = memory, .granule = (uint32_t)g};
++      }
++   }
++   report->candidates = count;
++   if (count) {
++      radv_ps5_compact_order(pieces, count, order);
++      report->emptied = radv_ps5_compact_plan(pieces, order, count, UINT32_MAX, moves, &report->moved);
++   }
++   free(pieces);
++   free(order);
++   free(moves);
++}
++
++/* A compaction pass (radv_ps5_eden_compact holds the submit lock with the GPU idle when it moves).
++ * Never waits for the trim lock: false when it is held. */
++bool
++radv_ps5_compact_pass(uint64_t want, bool dry, struct radv_ps5_compact_report *report)
++{
++   memset(report, 0, sizeof(*report));
++   if (!radv_ps5_trim_trylock())
++      return false;
++   if (dry)
++      radv_ps5_compact_dry(report);
++   else
++      radv_ps5_compact_move(want, report);
++   report->broken = radv_ps5_compact_broken;
++   radv_ps5_trim_release();
++   return true;
++}

@@ -1,0 +1,564 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Phononenom <64574232+Phononenom@users.noreply.github.com>
+Date: Mon, 23 Nov 2026 12:44:59 -0600
+Subject: [PATCH] Playtendoh's Switch 2 side: the JIT's tables split, and its
+ memory waits
+
+The JIT's LocationTable is split in 16 parts for blocks and sites (one table no longer needs one large
+block), its allocator and asserts follow, and its fast paths and aliases are kept in step.
+
+From these commits (oldest first):
+- 2026-11-17 Playtendoh's Switch 2 side: the shared JIT and the fastmem window on Lichii 907d54757b
+- 2026-11-19 Playtendoh's Switch 2 side: the JIT starts its cache over when code memory runs out
+- 2026-11-20 Playtendoh's Switch 2 side: the JIT starts its cache over when its block tables cannot grow
+- 2026-11-22 Playtendoh's Switch 2 side: the shared JIT's block and link tables split in 16
+---
+ headless/dynarmic/fast_paths.cmake |  10 +++
+ headless/dynarmic/jit_group.h      |  65 +++++++++++++-----
+ headless/dynarmic/jit_impl.inc     | 103 +++++++++++++++++++++++++----
+ headless/dynarmic/jit_links.inc    |  16 +++--
+ headless/dynarmic/shared-jit.cmake |  15 ++++-
+ headless/jit-alias.cmake           |   4 +-
+ headless/jit-allocator.h           |  16 +++--
+ headless/jit_assert.inc            |   2 +-
+ tools/check-jit-allocator.py       |   1 +
+ tools/check-jit-assert.py          |   2 +-
+ tools/check-jit-protection.py      |   4 +-
+ 11 files changed, 194 insertions(+), 44 deletions(-)
+
+diff --git a/headless/dynarmic/fast_paths.cmake b/headless/dynarmic/fast_paths.cmake
+index d25a340..c6577bc 100644
+--- a/headless/dynarmic/fast_paths.cmake
++++ b/headless/dynarmic/fast_paths.cmake
+@@ -46,7 +46,13 @@ macro(eden_fast_paths_emitter bits)
+ }
+ " emitter "${emitter}")
+     string(PREPEND emitter "extern \"C\" bool eden_light_dmb;  // fast_paths.cmake\n")
++    # Lichii keeps a CheckBit block's bit in ZF itself (reuse_host_flags: check_bit_in_zf) and omits
++    # the per-block frame (omit_block_frame); the frame RunCode sets once (block_of_code.cpp) stays.
++    set(eden_fp_lichii_blocks -1)
+     if(${bits} EQUAL 64)
++        string(FIND "${emitter}" "check_bit_in_zf" eden_fp_lichii_blocks)
++    endif()
++    if(${bits} EQUAL 64 AND eden_fp_lichii_blocks LESS 0)
+         set(eden_fp_prologue "    code.mov(code.qword[rsp + ABI_SHADOW_SPACE + offsetof(StackLayout, abi_base_pointer)], rbp);\n")
+         set(eden_fp_set_check [==[void A64EmitX64::EmitA64SetCheckBit(A64EmitContext& ctx, IR::Inst* inst) {
+     auto args = ctx.reg_alloc.GetArgumentInfo(inst);
+@@ -158,6 +164,9 @@ void eden_fast_paths_configure() {
+ 
+     # a64_translate.cpp includes this file; CMakeLists.txt points that include at the derived copy.
+     file(READ "${eden_fp_dir}/frontend/A64/translate/impl/system.cpp" eden_fp_system)
++    # Lichii drops DMB *LD and *ST on x86 itself (its port of Lichii #161): its translation stays.
++    string(FIND "${eden_fp_system}" "access == 1U || access == 2U" eden_fp_lichii_dmb)
++    if(eden_fp_lichii_dmb LESS 0)
+     set(eden_fp_dmb_translate [==[bool TranslatorVisitor::DMB(Imm<4> /*CRm*/) {
+     ir.DataMemoryBarrier();
+     return true;
+@@ -178,4 +187,5 @@ void eden_fast_paths_configure() {
+     string(PREPEND eden_fp_system "extern \"C\" bool eden_light_dmb;  // fast_paths.cmake\nextern \"C\" unsigned long long eden_dmb_dropped;\n")
+     write_derived("${PORT_BUILD_DIR}/a64_system.cpp" "${eden_fp_system}")
+     set(EDEN_FAST_PATHS_SYSTEM "${PORT_BUILD_DIR}/a64_system.cpp")
++    endif()
+ endmacro()
+diff --git a/headless/dynarmic/jit_group.h b/headless/dynarmic/jit_group.h
+index 49c3db9..1c4a780 100644
+--- a/headless/dynarmic/jit_group.h
++++ b/headless/dynarmic/jit_group.h
+@@ -21,6 +21,7 @@
+ // EdenPrecompile); `precompile_mutex` keeps the members alive while it does.
+ #pragma once
+ 
++#include <array>
+ #include <atomic>
+ #include <condition_variable>
+ #include <cstdint>
+@@ -64,6 +65,41 @@ private:
+     std::atomic<bool> locked{false};
+ };
+ 
++// A table of blocks or link sites by location, split in 16 (by a mix of the location's hash): one
++// table took 62 MiB in one block in Ocarina of Time (the link sites of ~860,000 targets, 21 Nov), and
++// growing it asked for a 124 MiB block beside it, the pool at its end. Each part grows by itself.
++template <typename Value>
++class LocationTable {
++public:
++    static constexpr std::size_t Parts = 16;
++    [[nodiscard]] const Value* Find(IR::LocationDescriptor key) const {
++        const auto& part = parts[Index(key)];
++        const auto it = part.find(key);
++        return it == part.end() ? nullptr : &it->second;
++    }
++    std::pair<Value*, bool> TryEmplace(IR::LocationDescriptor key, const Value& value) {
++        const auto [it, inserted] = parts[Index(key)].try_emplace(key, value);
++        return {&it->second, inserted};
++    }
++    Value& operator[](IR::LocationDescriptor key) {
++        return parts[Index(key)][key];
++    }
++    std::size_t Erase(IR::LocationDescriptor key) {
++        return parts[Index(key)].erase(key);
++    }
++    void Clear() {
++        for (auto& part : parts)
++            part.clear();
++    }
++
++private:
++    static std::size_t Index(IR::LocationDescriptor key) {
++        const u64 hash = static_cast<u64>(std::hash<IR::LocationDescriptor>{}(key));
++        return static_cast<std::size_t>((hash * 0x9E3779B97F4A7C15ull) >> 60);
++    }
++    std::array<::Common::unordered_map<IR::LocationDescriptor, Value>, Parts> parts;
++};
++
+ class JitGroup {
+ public:
+     struct Block {
+@@ -92,8 +128,7 @@ public:
+     static inline std::atomic<unsigned long long> far_links{0};
+ 
+     const Block* Find(IR::LocationDescriptor location) const {
+-        const auto it = blocks.find(location);
+-        return it == blocks.end() ? nullptr : &it->second;
++        return blocks.Find(location);
+     }
+ 
+     // Points a site at `target`, or at its unlinked destination when `target` is null or out of
+@@ -131,20 +166,20 @@ public:
+     // block is then never entered, so its sites are dropped).
+     bool Register(IR::LocationDescriptor location, Block block, u64 first, u64 last,
+                   const std::vector<PendingSite>& own_sites, Block& result) {
+-        const auto [it, inserted] = blocks.try_emplace(location, block);
+-        result = it->second;
++        const auto [entry, inserted] = blocks.TryEmplace(location, block);
++        result = *entry;
+         if (!inserted)
+             return false;
+         if (history.size() < history_limit)
+             history.push_back(location.Value());
+         ranges.AddRange(boost::icl::discrete_interval<u64>::closed(first, last), location);
+         for (const PendingSite& pending : own_sites) {
+-            if (const auto target = blocks.find(pending.target); target != blocks.end())
+-                Link(pending.site, target->second.entrypoint);
++            if (const Block* const target = blocks.Find(pending.target))
++                Link(pending.site, target->entrypoint);
+             sites[pending.target].push_back(pending.site);
+         }
+-        if (const auto waiting = sites.find(location); waiting != sites.end())
+-            for (const Site& site : waiting->second)
++        if (const auto* const waiting = sites.Find(location))
++            for (const Site& site : *waiting)
+                 Link(site, block.entrypoint);
+         return true;
+     }
+@@ -156,11 +191,11 @@ public:
+         std::vector<u64> invalidated;
+         ++invalidations;
+         for (const auto& location : ranges.InvalidateRanges(invalid)) {
+-            if (blocks.erase(location) == 0)
++            if (blocks.Erase(location) == 0)
+                 continue;
+             invalidated.push_back(location.Value());
+-            if (const auto waiting = sites.find(location); waiting != sites.end())
+-                for (const Site& site : waiting->second)
++            if (const auto* const waiting = sites.Find(location))
++                for (const Site& site : *waiting)
+                     Link(site, nullptr);
+         }
+         return invalidated;
+@@ -169,8 +204,8 @@ public:
+     // With every member quiescent: forget all blocks and sites (their regions are reset too).
+     void Clear() {
+         ++invalidations;
+-        blocks.clear();
+-        sites.clear();
++        blocks.Clear();
++        sites.Clear();
+         ranges.ClearCache();
+     }
+ 
+@@ -196,8 +231,8 @@ public:
+     const void* key = nullptr;
+ 
+ private:
+-    ::Common::unordered_map<IR::LocationDescriptor, Block> blocks;
+-    ::Common::unordered_map<IR::LocationDescriptor, std::vector<Site>> sites;
++    LocationTable<Block> blocks;
++    LocationTable<std::vector<Site>> sites;
+     BlockRangeInformation<u64> ranges;
+ };
+ 
+diff --git a/headless/dynarmic/jit_impl.inc b/headless/dynarmic/jit_impl.inc
+index 29f9f71..3d43eaa 100644
+--- a/headless/dynarmic/jit_impl.inc
++++ b/headless/dynarmic/jit_impl.inc
+@@ -29,18 +29,36 @@ extern "C" __attribute__((weak)) void mkw_native_block(unsigned long long, const
+ //   The core comes first: it announces itself in eden_compile_waiters before it takes the mutex,
+ //   and the precompiler only tries the mutex, and only while no core is announced, so a core
+ //   waits for at most the one block being emitted.
++// Cores share only when they share an address space and link blocks without cycle counting.
++static bool EdenShares(const UserConfig& conf) {
++    return eden_jit_shared && conf.page_table && !conf.enable_cycle_counting;
++}
++
++// Lichii's host call/return (BL/BLR as host calls, RET as a host return) and compact block exits
++// link a block through sites only the emitter that compiled it patches, from its own block list;
++// in a shared group a block's links are the group's (jit_links.inc, JitGroup::Register), which
++// know neither. They stay off while the cores share, until the group links them too.
++static UserConfig EdenGroupConf(UserConfig conf) {
++    if (EdenShares(conf)) {
++        conf.host_call_return = false;
++        conf.compact_block_exits = false;
++    }
++    return conf;
++}
++
+ struct Jit::Impl final {
+ public:
++    // The members are made from the group's configuration (this->conf), not the one passed in.
+     Impl(Jit* jit, UserConfig conf)
+-        : conf(conf)
+-        , block_of_code(EdenRunCodeCallbacks(conf.callbacks, &GetCurrentBlockThunk, this, conf), JitStateInfo{jit_state}, conf.code_cache_size, GenRCP(conf))
+-        , emitter(block_of_code, conf, jit)
++        : conf(EdenGroupConf(conf))
++        , block_of_code(EdenRunCodeCallbacks(this->conf.callbacks, &GetCurrentBlockThunk, this, this->conf),
++                        JitStateInfo{jit_state, RsbPtrMask(this->conf)}, this->conf.code_cache_size, GenRCP(this->conf))
++        , emitter(block_of_code, this->conf, jit)
+         , polyfill_options(GenPolyfillOptions(block_of_code))
+     {
+         ASSERT(conf.page_table_address_space_bits >= 12 && conf.page_table_address_space_bits <= 64);
+-        // Cores share only when they share an address space and link blocks without cycle counting.
+-        const bool shared = eden_jit_shared && conf.page_table && !conf.enable_cycle_counting;
+-        group = EdenJoinGroup(shared ? static_cast<const void*>(conf.page_table) : this, this);
++        const bool shared = EdenShares(this->conf);
++        group = EdenJoinGroup(shared ? static_cast<const void*>(this->conf.page_table) : this, this);
+         emitter.eden_group = group.get();
+         {
+             std::lock_guard lock{group->mutex};
+@@ -69,7 +87,7 @@ public:
+         is_executing = true;
+         const CodePtr current_code_ptr = EdenEnter([this] {
+             // RSB optimization
+-            const u32 new_rsb_ptr = (jit_state.rsb_ptr - 1) & A64JitState::RSB_PTR_MASK;
++            const u32 new_rsb_ptr = (jit_state.rsb_ptr - 1) & u32(RsbPtrMask(conf));
+             if (jit_state.GetUniqueHash() == jit_state.rsb_location_descriptors[new_rsb_ptr]) {
+                 jit_state.rsb_ptr = new_rsb_ptr;
+                 return CodePtr(jit_state.rsb_codeptrs[new_rsb_ptr]);
+@@ -248,6 +266,9 @@ private:
+     };
+ 
+     CodePtr GetCurrentBlock() {
++        if (conf.counters) {
++            ++conf.counters->block_lookups;
++        }
+         return GetBlock(GetCurrentLocation());
+     }
+ 
+@@ -290,7 +311,21 @@ private:
+                     return block->entrypoint;
+                 }
+             }
+-            if (block_of_code.SpaceRemaining() < MINIMUM_REMAINING_CODESIZE) {
++            if (block_of_code.SpaceRemaining() < MINIMUM_REMAINING_CODESIZE || eden_commit_refused) {
++                // Full, or the console had no memory for its next part: the cache starts over within
++                // the memory it holds. A refusal right after a start-over (nothing compiled since)
++                // waits for memory to come back, up to 4 s, as a written guest slot does.
++                if (eden_commit_refused && eden_commit_since_clear) {
++                    if (++eden_commit_waits > 200) {
++                        std::fputs("JIT code cache: no memory for even its first part\n", stderr);
++                        std::abort();
++                    }
++                    std::this_thread::sleep_for(std::chrono::milliseconds(20));
++                } else {
++                    eden_commit_waits = 0;
++                }
++                eden_commit_refused = false;
++                eden_commit_since_clear = true;
+                 EdenReportPressure();
+                 EdenClearGroup();
+                 continue;
+@@ -299,7 +334,15 @@ private:
+             eden_compile_waiters.fetch_add(1, std::memory_order_seq_cst);
+             std::lock_guard compiling{eden_compile_mutex};
+             eden_compile_waiters.fetch_sub(1, std::memory_order_seq_cst);
++            block_of_code.commit_may_fail_ = true;
+             block_of_code.EnsureMemoryCommitted(MINIMUM_REMAINING_CODESIZE);
++            block_of_code.commit_may_fail_ = false;
++            if (block_of_code.commit_refused_) {
++                // Left for the check above, outside the compile lock (a start-over waits for it).
++                eden_commit_refused = true;
++                continue;
++            }
++            eden_commit_since_clear = false;
+ 
+             const u32 previous = eden_state.exchange(EdenCompiling, std::memory_order_seq_cst);
+             if (group->clearing.load(std::memory_order_seq_cst)) {
+@@ -316,6 +359,9 @@ private:
+             Optimization::Optimize(ir_block, conf, polyfill_options);
+             const u64 optimized = EdenClockNs();
+             emitter.eden_pending_sites.clear();
++            if (conf.counters) {
++                ++conf.counters->blocks_compiled;
++            }
+             const auto emitted = emitter.Emit(ir_block, false);
+             mkw_native_block(descriptor.Value(), emitted.entrypoint, emitted.size);
+             eden_state.store(previous, std::memory_order_seq_cst);
+@@ -327,8 +373,20 @@ private:
+             if (group->epoch.load(std::memory_order_seq_cst) != epoch)
+                 continue;  // every region was reset after the emission: compile again
+             JitGroup::Block registered{};
+-            group->Register(descriptor, {emitted.entrypoint, emitted.size}, emitter.eden_range_first,
+-                            emitter.eden_range_last, emitter.eden_pending_sites, registered);
++            try {
++                group->Register(descriptor, {emitted.entrypoint, emitted.size}, emitter.eden_range_first,
++                                emitter.eden_range_last, emitter.eden_pending_sites, registered);
++            } catch (const std::bad_alloc&) {
++                // The group's tables found no host memory to grow into (Ocarina of Time on the PS5:
++                // the block table asked for 62 MiB in one piece, std::terminate): the cache starts
++                // over, as when code memory runs out. Its cleared tables keep their room, so the
++                // block fits then; what this call left half-registered goes with the clear.
++                static std::atomic<unsigned> told{0};
++                if (told.fetch_add(1, std::memory_order_relaxed) < 16)
++                    std::fputs("JIT: no host memory for the block tables; the code cache starts over\n", stderr);
++                eden_commit_refused = true;
++                continue;
++            }
+             return registered.entrypoint;
+         }
+     }
+@@ -362,7 +420,15 @@ private:
+             eden_pre_state.store(EdenOutside, std::memory_order_seq_cst);
+             return 0;
+         }
++        block_of_code.commit_may_fail_ = true;
+         block_of_code.EnsureMemoryCommitted(1 * 1024 * 1024);
++        block_of_code.commit_may_fail_ = false;
++        if (block_of_code.commit_refused_) {
++            // No memory for more code: this precompilation is left out (the block compiler starts
++            // the cache over when it next needs room).
++            eden_pre_state.store(EdenOutside, std::memory_order_seq_cst);
++            return -2;
++        }
+         const auto get_code = [this](u64 vaddr) { return conf.callbacks->MemoryReadCode(vaddr); };
+         auto const arch_descriptor = A64::LocationDescriptor{descriptor};
+         ir_block.Reset(arch_descriptor);
+@@ -458,8 +524,13 @@ private:
+         if (all) {
+             emitter.ClearFastDispatchTable();
+         } else if (emitter.fast_dispatch_table_lookup) {
+-            for (const u64 location : locations)
+-                (*emitter.fast_dispatch_table_lookup)(location) = {};
++            // Lichii's table may be set-associative: every way of the set that holds it.
++            for (const u64 location : locations) {
++                auto* const set = &(*emitter.fast_dispatch_table_lookup)(location);
++                for (size_t way = 0; way < emitter.fast_dispatch_set_size; ++way)
++                    if (set[way].location_descriptor == location)
++                        set[way] = {};
++            }
+         }
+     }
+ 
+@@ -511,6 +582,9 @@ private:
+                 member->invalid_cache_ranges.clear();
+             }
+             for (Impl* member : members) {
++                if (member->conf.counters) {
++                    ++member->conf.counters->cache_clears;
++                }
+                 member->block_of_code.ClearCache();
+                 member->emitter.ClearCache();
+                 member->eden_space.store(member->block_of_code.SpaceRemaining(), std::memory_order_relaxed);
+@@ -588,6 +662,11 @@ private:
+     std::atomic<u32> eden_state{EdenOutside};
+     std::mutex eden_compile_mutex;
+     std::atomic<u32> eden_compile_waiters{0};
++    // GetBlock's start-overs for want of code memory (this core's thread only): a refused commit
++    // seen, nothing compiled since the last start-over, and the waits for memory in a row.
++    bool eden_commit_refused = false;
++    bool eden_commit_since_clear = false;
++    unsigned eden_commit_waits = 0;
+     std::atomic<u32> eden_pre_state{EdenOutside};
+     std::atomic<std::size_t> eden_space{0};
+     std::atomic<bool> eden_flush{false};
+diff --git a/headless/dynarmic/jit_links.inc b/headless/dynarmic/jit_links.inc
+index 1f2b5e7..0300312 100644
+--- a/headless/dynarmic/jit_links.inc
++++ b/headless/dynarmic/jit_links.inc
+@@ -39,10 +39,16 @@ void EdenEmitLink(A64EmitX64& e, IR::LocationDescriptor next, EdenLinkCheck chec
+                                            check == EdenLinkCheck::None ? JitGroup::SiteKind::Rel32At1 : JitGroup::SiteKind::Rel32At2}});
+ }
+ 
+-bool EmitTerminalImpl(A64EmitX64& e, IR::Term::LinkBlock terminal, IR::LocationDescriptor, bool is_single_step) {
++// Lichii's halt_check_on_back_edges: a link to a higher guest PC skips the halt check, and a
++// direct link to the same or a lower one takes it, so every loop still sees a halt request
++// (IsForwardLink is Lichii's).
++bool EmitTerminalImpl(A64EmitX64& e, IR::Term::LinkBlock terminal, IR::LocationDescriptor initial_location, bool is_single_step) {
+     // Used for patches and linking
+     if (e.conf.HasOptimization(OptimizationFlag::BlockLinking) && !is_single_step) {
+-        EdenEmitLink(e, terminal.next, e.conf.enable_cycle_counting ? EdenLinkCheck::Cycles : EdenLinkCheck::Halt);
++        if (IsForwardLink(e, terminal.next, initial_location))
++            EdenEmitLink(e, terminal.next, EdenLinkCheck::None);
++        else
++            EdenEmitLink(e, terminal.next, e.conf.enable_cycle_counting ? EdenLinkCheck::Cycles : EdenLinkCheck::Halt);
+     } else {
+         e.code.mov(rax, A64::LocationDescriptor{terminal.next}.PC());
+         e.code.mov(qword[e.code.ABI_JIT_PTR + offsetof(A64JitState, pc)], rax);
+@@ -51,9 +57,11 @@ bool EmitTerminalImpl(A64EmitX64& e, IR::Term::LinkBlock terminal, IR::LocationD
+     return true;
+ }
+ 
+-bool EmitTerminalImpl(A64EmitX64& e, IR::Term::LinkBlockFast terminal, IR::LocationDescriptor, bool is_single_step) {
++bool EmitTerminalImpl(A64EmitX64& e, IR::Term::LinkBlockFast terminal, IR::LocationDescriptor initial_location, bool is_single_step) {
+     if (e.conf.HasOptimization(OptimizationFlag::BlockLinking) && !is_single_step) {
+-        EdenEmitLink(e, terminal.next, EdenLinkCheck::None);
++        const bool back_edge = e.conf.halt_check_on_back_edges && !e.conf.enable_cycle_counting &&
++                               !IsForwardLink(e, terminal.next, initial_location);
++        EdenEmitLink(e, terminal.next, back_edge ? EdenLinkCheck::Halt : EdenLinkCheck::None);
+     } else {
+         e.code.mov(rax, A64::LocationDescriptor{terminal.next}.PC());
+         e.code.mov(qword[e.code.ABI_JIT_PTR + offsetof(A64JitState, pc)], rax);
+diff --git a/headless/dynarmic/shared-jit.cmake b/headless/dynarmic/shared-jit.cmake
+index ca938d4..fc6e736 100644
+--- a/headless/dynarmic/shared-jit.cmake
++++ b/headless/dynarmic/shared-jit.cmake
+@@ -35,10 +35,17 @@ macro(eden_shared_jit_emitter)
+     set(eden_get_tpidrro "        code.mov(result, u64(conf.tpidrro_el0));")
+     set(eden_set_tpidr "        code.mov(addr, u64(conf.tpidr_el0));")
+     set(eden_push_rsb "    EmitX64::EmitPushRSB(ctx, inst);\n}")
+-    set(eden_links_begin "bool EmitTerminalImpl(A64EmitX64& e, IR::Term::LinkBlock terminal, IR::LocationDescriptor, bool is_single_step) {")
++    # (Lichii's terminals take the block's own location, for its forward links.)
++    set(eden_links_begin "bool EmitTerminalImpl(A64EmitX64& e, IR::Term::LinkBlock terminal, IR::LocationDescriptor initial_location, bool is_single_step) {")
++    set(eden_links_end "bool EmitTerminalImpl(A64EmitX64& e, IR::Term::PopRSBHint, IR::LocationDescriptor initial_location, bool is_single_step) {")
++    # Lichii sends PushRSB to A64EmitX64::EmitPushRSB itself (opcode_branch).
+     set(eden_opcode_call "opcode_branch:\n        (this->*opcode_handlers[size_t(opcode)])(ctx, &inst);")
+-    set(eden_links_end "bool EmitTerminalImpl(A64EmitX64& e, IR::Term::PopRSBHint, IR::LocationDescriptor, bool is_single_step) {")
+-    foreach(anchor eden_register eden_dispatch eden_get_tpidr eden_get_tpidrro eden_set_tpidr eden_push_rsb eden_links_begin eden_links_end eden_opcode_call)
++    string(FIND "${emitter}" "opcode_branch:\n        // PushRSB has an A64 version" eden_lichii_push_rsb)
++    set(eden_emitter_anchors eden_register eden_dispatch eden_get_tpidr eden_get_tpidrro eden_set_tpidr eden_push_rsb eden_links_begin eden_links_end)
++    if(eden_lichii_push_rsb LESS 0)
++        list(APPEND eden_emitter_anchors eden_opcode_call)
++    endif()
++    foreach(anchor IN LISTS eden_emitter_anchors)
+         eden_shared_jit_require("${emitter}" "${${anchor}}" "A64 emitter (${anchor})")
+     endforeach()
+     string(REPLACE "${eden_register}"
+@@ -58,9 +65,11 @@ macro(eden_shared_jit_emitter)
+         emitter "${emitter}")
+     # Common opcodes go through EmitX64 member pointers (the base versions): the return stack
+     # push must use A64EmitX64::EmitPushRSB, whose target is linked through the JitGroup.
++    if(eden_lichii_push_rsb LESS 0)
+     string(REPLACE "${eden_opcode_call}"
+         "opcode_branch:\n        if (opcode == IR::Opcode::PushRSB)\n            A64EmitX64::EmitPushRSB(ctx, &inst);\n        else\n            (this->*opcode_handlers[size_t(opcode)])(ctx, &inst);"
+         emitter "${emitter}")
++    endif()
+     file(READ "${EDEN_SHARED_JIT_DIR}/jit_push_rsb.inc" eden_push_rsb_body)
+     string(REPLACE "${eden_push_rsb}" "${eden_push_rsb_body}" emitter "${emitter}")
+     string(FIND "${emitter}" "${eden_links_begin}" eden_links_at)
+diff --git a/headless/jit-alias.cmake b/headless/jit-alias.cmake
+index 94b7e38..7ead5f3 100644
+--- a/headless/jit-alias.cmake
++++ b/headless/jit-alias.cmake
+@@ -2,7 +2,7 @@
+ set(xbyak_root "${PROJECT_SOURCE_DIR}/.cache/cpm/xbyak/v7.40.1/xbyak")
+ file(READ "${xbyak_root}/xbyak.h" xbyak_header)
+ string(REPLACE "virtual void free(uint8_t *p) { AlignedFree(p); }"
+-    "virtual uint8_t *writableAddress(uint8_t *p) { return p; }\n\tvirtual void commit(uint8_t *, size_t) {}\n\tvirtual void free(uint8_t *p) { AlignedFree(p); }" xbyak_header "${xbyak_header}")
++    "virtual uint8_t *writableAddress(uint8_t *p) { return p; }\n\tvirtual bool commit(uint8_t *, size_t) { return true; }\n\tvirtual void free(uint8_t *p) { AlignedFree(p); }" xbyak_header "${xbyak_header}")
+ string(REPLACE "uint8_t *top_;" "uint8_t *top_;\n\tuint8_t *writeTop_;" xbyak_header "${xbyak_header}")
+ string(REPLACE ", size_(0)" ", writeTop_(type_ == USER_BUF ? top_ : alloc_->writableAddress(top_))\n\t\t, size_(0)" xbyak_header "${xbyak_header}")
+ string(REPLACE "newTop[i] = top_[i]" "alloc_->writableAddress(newTop)[i] = top_[i]" xbyak_header "${xbyak_header}")
+@@ -10,7 +10,7 @@ string(REPLACE "top_ = newTop;" "top_ = newTop;\n\t\twriteTop_ = alloc_->writabl
+ string(REPLACE "top_[size_++] =" "writeTop_[size_++] =" xbyak_header "${xbyak_header}")
+ string(REPLACE "uint8_t *const data = top_ + offset;" "uint8_t *const data = writeTop_ + offset;" xbyak_header "${xbyak_header}")
+ string(REPLACE "const uint8_t *getCode() const { return top_; }"
+-    "bool hasWritableAlias() const { return writeTop_ != top_; }\n\tvoid commitMemory(size_t bytes) { if (type_ != USER_BUF) alloc_->commit(top_, bytes); }\n\tuint8_t *writableAddress(const void *p) const { return writeTop_ + (static_cast<const uint8_t*>(p) - top_); }\n\tconst uint8_t *getCode() const { return top_; }" xbyak_header "${xbyak_header}")
++    "bool hasWritableAlias() const { return writeTop_ != top_; }\n\tbool commit_may_fail_ = false;\n\tbool commit_refused_ = false;\n\tvoid commitMemory(size_t bytes) { if (type_ == USER_BUF) return; commit_refused_ = !alloc_->commit(top_, bytes); if (commit_refused_ && !commit_may_fail_) ::abort(); }\n\tuint8_t *writableAddress(const void *p) const { return writeTop_ + (static_cast<const uint8_t*>(p) - top_); }\n\tconst uint8_t *getCode() const { return top_; }" xbyak_header "${xbyak_header}")
+ write_derived("${PORT_BUILD_DIR}/include/xbyak/xbyak.h" "${xbyak_header}")
+ # xbyak_util includes its sibling header: keep every consumer on the same layout.
+ foreach(sibling xbyak_mnemonic.h xbyak_util.h)
+diff --git a/headless/jit-allocator.h b/headless/jit-allocator.h
+index 6730eab..a5f80c1 100644
+--- a/headless/jit-allocator.h
++++ b/headless/jit-allocator.h
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-3.0-or-later
+ #pragma once
++#include <atomic>
+ #include <cstddef>
+ #include <cstdint>
+ #include <cerrno>
+@@ -107,11 +108,16 @@ inline Xbyak::Allocator* EdenJitAllocator() {
+             const auto entry = mappings.find(pointer);
+             return entry == mappings.end() ? pointer : static_cast<std::uint8_t*>(entry->second.writable);
+         }
+-        // Memory behind the first `bytes` of a cache: asked before the JIT writes that far.
+-        void commit(std::uint8_t* pointer, std::size_t bytes) override {
+-            if (Common::CommitCodeRange(pointer, bytes)) return;
+-            std::fputs("JIT code cache: the console has no memory for its next part\n", stderr);
+-            std::abort();
++        // Memory behind the first `bytes` of a cache: asked before the JIT writes that far. False
++        // when the console has none (even after the guest memory service gave some back): the
++        // block compiler then starts the cache over within what it holds (jit_impl.inc), and any
++        // other asker ends the session as before (Xbyak's commitMemory).
++        bool commit(std::uint8_t* pointer, std::size_t bytes) override {
++            if (Common::CommitCodeRange(pointer, bytes)) return true;
++            static std::atomic<unsigned> told{0};
++            if (told.fetch_add(1, std::memory_order_relaxed) < 16)
++                std::fputs("JIT code cache: the console has no memory for its next part\n", stderr);
++            return false;
+         }
+         void free(std::uint8_t* pointer) override {
+             {
+diff --git a/headless/jit_assert.inc b/headless/jit_assert.inc
+index 123f596..1be4cb5 100644
+--- a/headless/jit_assert.inc
++++ b/headless/jit_assert.inc
+@@ -6,7 +6,7 @@
+     ([&]() {                                                           \
+         auto&& assert_condition = (condition);                         \
+         if (!(assert_condition)) [[unlikely]] {                        \
+-            [&]() YUZU_NO_INLINE {                                     \
++            [&]() LICHII_NO_INLINE {                                     \
+                 LOG_CRITICAL(Debug, __FILE__ ": assert " __VA_ARGS__); \
+                 AssertFailSoftImpl();                                  \
+             }();                                                       \
+diff --git a/tools/check-jit-allocator.py b/tools/check-jit-allocator.py
+index 71f060c..9d23364 100644
+--- a/tools/check-jit-allocator.py
++++ b/tools/check-jit-allocator.py
+@@ -34,6 +34,7 @@ extern "C" int sceKernelEnableDmemAliasing() { enabled=true; return 0; }
+ // The same source file also holds the heap's growing range and the sparse tables; this check
+ // does not use them (tools/check-heap-growth.py and eden-memory-check do).
+ extern "C" int sceKernelDebugOutText(int, const char*) { return 0; }
++extern "C" int sceKernelGetPageTableStats(int*, int*, int*, int*) { return -1; }
+ extern "C" int sceKernelReserveVirtualRange(void** out, size_t size, int, size_t) {
+     if (!reserve_ok) return std::int32_t(0x80020001u);
+     void* at=mmap(reinterpret_cast<void*>(reserve_at),size,PROT_NONE,
+diff --git a/tools/check-jit-assert.py b/tools/check-jit-assert.py
+index d56ab44..37fe8f3 100644
+--- a/tools/check-jit-assert.py
++++ b/tools/check-jit-assert.py
+@@ -8,7 +8,7 @@ root = Path(__file__).resolve().parents[1]
+ macro = (root / 'headless/jit_assert.inc').read_text()
+ source = r'''
+ #include <cassert>
+-#define YUZU_NO_INLINE __attribute__((noinline))
++#define LICHII_NO_INLINE __attribute__((noinline))
+ static int evaluated, formatted, logged, failed;
+ static int argument() { return ++formatted; }
+ static void log(const char*, int) { ++logged; }
+diff --git a/tools/check-jit-protection.py b/tools/check-jit-protection.py
+index 7f0437b..acaa9f1 100644
+--- a/tools/check-jit-protection.py
++++ b/tools/check-jit-protection.py
+@@ -22,7 +22,9 @@ for bits in (32, 64):
+     generated = (cache / f'native-local/headless/a{bits}_emit_x64.cpp').read_text()
+     unpatch = generated[generated.index(f'void A{bits}EmitX64::Unpatch('):]
+     assert 'code.DisableWriting()' not in unpatch and 'code.EnableWriting()' not in unpatch
+-    assert '(*fast_dispatch_table_lookup)(location.Value()) = {};' in unpatch
++    # Lichii's A64 table is set-associative: every way that holds the location is cleared.
++    cleared = '(*fast_dispatch_table_lookup)(location.Value()) = {};' if bits == 32 else 'set[way] = {};'
++    assert cleared in unpatch
+ names = ('EnableWriting', 'DisableWriting', 'ClearCache', 'SetCodePtr')
+ methods = [re.search(r'void BlockOfCode::' + name + r'\([^\n]*\) \{.*?^}', source, re.M | re.S).group() for name in names]
+ protect = re.search(r'void ProtectMemory\([^\n]*\) \{.*?^}', source, re.M | re.S).group()

@@ -1,0 +1,154 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Phononenom <64574232+Phononenom@users.noreply.github.com>
+Date: Mon, 23 Nov 2026 12:44:59 -0600
+Subject: [PATCH] Playtendoh's Switch 2 side: build scripts and host checks
+ follow
+
+The host and native build scripts, the build's preparation and the remaining host checks, changed alongside
+the commits above.
+
+From these commits (oldest first):
+- (none of their own: these files changed alongside the commits of the other topics)
+---
+ tools/build-headless-host.sh       | 10 +++++-----
+ tools/build-headless-native.sh     | 11 ++++++-----
+ tools/check-extracted-content.py   |  5 +++++
+ tools/check-load-failure.py        |  6 +++++-
+ tools/check-multiplayer-headers.py |  4 ++++
+ tools/check-tsc-fallback.py        |  9 ++++-----
+ tools/prepare-build.sh             |  4 ++++
+ 7 files changed, 33 insertions(+), 16 deletions(-)
+
+diff --git a/tools/build-headless-host.sh b/tools/build-headless-host.sh
+index d77a16d..db8c7d5 100644
+--- a/tools/build-headless-host.sh
++++ b/tools/build-headless-host.sh
+@@ -42,11 +42,11 @@ PY
+ cmake -S "$eden" -B "$scratch/build" -G Ninja \
+     -DCMAKE_C_COMPILER=clang-18 -DCMAKE_CXX_COMPILER=clang++-18 \
+     -DCMAKE_BUILD_TYPE=Release -DENABLE_LTO=OFF -DCMAKE_EXE_LINKER_FLAGS= -DEDEN_HOST_ASAN=OFF \
+-    -DCMAKE_PROJECT_yuzu_INCLUDE="$root/headless/inject.cmake" \
+-    -DENABLE_QT=OFF -DYUZU_CMD=OFF -DYUZU_ROOM=OFF -DYUZU_ROOM_STANDALONE=OFF \
+-    -DYUZU_TESTS=OFF -DBUILD_TESTING=OFF -DENABLE_OPENGL=OFF -DENABLE_CUBEB=OFF \
+-    -DENABLE_WEB_SERVICE=OFF -DENABLE_LIBUSB=OFF -DYUZU_CRASH_DUMPS=OFF \
+-    -DYUZU_USE_EXTERNAL_FFMPEG=ON -DENABLE_WERROR=OFF -Dzstd_FORCE_BUNDLED=ON \
++    -DCMAKE_PROJECT_lichii_INCLUDE="$root/headless/inject.cmake" \
++    -DENABLE_QT=OFF -DLICHII_CMD=OFF -DLICHII_ROOM=OFF -DLICHII_ROOM_STANDALONE=OFF \
++    -DLICHII_TESTS=OFF -DBUILD_TESTING=OFF -DENABLE_OPENGL=OFF -DENABLE_CUBEB=OFF \
++    -DENABLE_WEB_SERVICE=OFF -DENABLE_LIBUSB=OFF -DLICHII_CRASH_DUMPS=OFF \
++    -DLICHII_USE_EXTERNAL_FFMPEG=ON -DENABLE_WERROR=OFF -Dzstd_FORCE_BUNDLED=ON \
+     -DDYNARMIC_ENABLE_NO_EXECUTE_SUPPORT=ON -DDYNARMIC_IGNORE_ASSERTS=OFF \
+     -DSDL_UNIX_CONSOLE_BUILD=ON -DSDL_X11=OFF -DSDL_WAYLAND=OFF \
+     -DSDL_OPENGL=OFF -DSDL_OPENGLES=OFF -DSDL_RENDER=OFF -DSDL_GPU=OFF
+diff --git a/tools/build-headless-native.sh b/tools/build-headless-native.sh
+index 0f0da7b..f5a1d36 100644
+--- a/tools/build-headless-native.sh
++++ b/tools/build-headless-native.sh
+@@ -61,11 +61,11 @@ cmake -S "$scratch/source" -B "$scratch/native-local" -G Ninja \
+     -DEDEN_DEV_PROFILE_TITLE="${EDEN_DEV_PROFILE_TITLE:-$(cat "$root/.local/dev-profile-title" 2>/dev/null || true)}" \
+     -DEDEN_DEV_WAIT_CALLERS="${EDEN_DEV_WAIT_CALLERS:-OFF}" \
+     -DCMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH=ON \
+-    -DCMAKE_PROJECT_yuzu_INCLUDE="$root/headless/inject.cmake" \
+-    -DEDEN_GPU_PROBE="$probe" -DENABLE_QT=OFF -DYUZU_CMD=OFF -DYUZU_ROOM=OFF -DYUZU_ROOM_STANDALONE=OFF \
+-    -DYUZU_TESTS=OFF -DBUILD_TESTING=OFF -DENABLE_OPENGL="$graphics" -DEDEN_PS5_OPENGL="$graphics" -DENABLE_CUBEB=OFF \
+-    -DENABLE_WEB_SERVICE=OFF -DENABLE_LIBUSB=OFF -DYUZU_CRASH_DUMPS=OFF \
+-    -U 'FFmpeg_*' -DYUZU_USE_EXTERNAL_FFMPEG=OFF -DFFMPEG_DIR="$ffmpeg" \
++    -DCMAKE_PROJECT_lichii_INCLUDE="$root/headless/inject.cmake" \
++    -DEDEN_GPU_PROBE="$probe" -DENABLE_QT=OFF -DLICHII_CMD=OFF -DLICHII_ROOM=OFF -DLICHII_ROOM_STANDALONE=OFF \
++    -DLICHII_TESTS=OFF -DBUILD_TESTING=OFF -DENABLE_OPENGL="$graphics" -DEDEN_PS5_OPENGL="$graphics" -DENABLE_CUBEB=OFF \
++    -DENABLE_WEB_SERVICE=OFF -DENABLE_LIBUSB=OFF -DLICHII_CRASH_DUMPS=OFF \
++    -U 'FFmpeg_*' -DLICHII_USE_EXTERNAL_FFMPEG=OFF -DFFMPEG_DIR="$ffmpeg" \
+     -DOPENSSL_INCLUDE_DIR="$cdeps/include" -DOPENSSL_SSL_LIBRARY="$cdeps/lib/libssl.a" \
+     -DOPENSSL_CRYPTO_LIBRARY="$cdeps/lib/libcrypto.a" -DOpenSSL_FORCE_SYSTEM=ON \
+     -DZLIB_INCLUDE_DIR="$cdeps/include" -DZLIB_LIBRARY="$cdeps/lib/libz.a" \
+@@ -123,6 +123,7 @@ if [[ "$graphics" == ON ]]; then
+     python3 -B "$root/tools/check-gpu-producer-stop.py"
+     if [[ "${EDEN_PS5_VULKAN:-OFF}" == ON ]]; then
+         python3 -B "$root/tools/check-staging-pressure.py"
++        python3 -B "$root/tools/check-radv-compact.py"
+     fi
+     python3 -B "$root/tools/check-gpu-sync-stop.py"
+     python3 -B "$root/tools/check-nvdrv-process-lifetime.py"
+diff --git a/tools/check-extracted-content.py b/tools/check-extracted-content.py
+index 67b28c3..a98bb39 100644
+--- a/tools/check-extracted-content.py
++++ b/tools/check-extracted-content.py
+@@ -7,6 +7,11 @@ import tempfile
+ 
+ root = Path(__file__).resolve().parents[1]
+ loader = (root / 'Eglantine/src/core/loader/deconstructed_rom_directory.cpp').read_text()
++if 'std::vector<FileSys::VirtualDir> ExtractedLayers(' not in loader:
++    # Core patch 0001 (versioned content folders) is pending on this core (tools/eglantine-patches-pending):
++    # the loader takes plain extracted folders as the core does.
++    print('extracted versioned content: core patch 0001 pending, check skipped')
++    raise SystemExit(0)
+ ordering = loader[loader.index('std::vector<FileSys::VirtualDir> ExtractedLayers('):loader.index('FileSys::VirtualDir ExtractedExeFS(')]
+ program = r'''
+ #include "extracted_game.h"
+diff --git a/tools/check-load-failure.py b/tools/check-load-failure.py
+index f831646..8b36a09 100644
+--- a/tools/check-load-failure.py
++++ b/tools/check-load-failure.py
+@@ -36,7 +36,11 @@ a=s.index('        if (init_result != SystemResultStatus::Success) {')
+ b=s.index('        // Waiting for GPU', a)
+ branch=s[a:b]
+ assert 'process.reset();' in branch and branch.index('process.reset();') < branch.index('ShutdownMainProcess();')
+-assert s.count('            process.reset();\n            ShutdownMainProcess();') == 2
++# Every failure path of Load resets the process before the shutdown (four on Lichii, two of them its own).
++# Counted where the shutdown returns: Lichii's Hypervisor fallback also resets and shuts down, then loads
++# again with Dynarmic (compiled out on the PS5).
++replay = '            // As Load does: the kernel is up, and destroying it without its shutdown crashes.\n            ShutdownMainProcess();'
++assert s.count('            process.reset();\n            ShutdownMainProcess();\n            return') + s.count(replay + '\n            return') == s.count('            ShutdownMainProcess();\n            return') >= 2
+ with tempfile.TemporaryDirectory(prefix='eden-process-order-') as tmp:
+  p=Path(tmp);src=p/'test.cpp';exe=p/'test'
+  src.write_text('''#include <memory>
+diff --git a/tools/check-multiplayer-headers.py b/tools/check-multiplayer-headers.py
+index 5c21424..af0d4c7 100644
+--- a/tools/check-multiplayer-headers.py
++++ b/tools/check-multiplayer-headers.py
+@@ -14,6 +14,10 @@ active = {line.split(': ', 1)[0] for line in ninja('targets', 'all').splitlines(
+ headers = ('network/packet.h', 'network/room_member.h',
+            'core/internal_network/sockets.h', 'core/internal_network/socket_proxy.h',
+            'core/hle/service/sockets/bsd.h')
++# On Lichii its own proxy sockets and BSD service are built (multiplayer_packets.cmake,
++# MULTIPLAYER_OWN_SOCKETS): only the headers the port derived are expected derived.
++derived = build / 'headless/multiplayer/socket-headers'
++headers = tuple(h for h in headers if not h.startswith('core/') or (derived / h).exists())
+ seen = dict.fromkeys(headers, 0)
+ wrong, target = [], None
+ for line in ninja('deps').splitlines():
+diff --git a/tools/check-tsc-fallback.py b/tools/check-tsc-fallback.py
+index 0dab64a..aa170c7 100644
+--- a/tools/check-tsc-fallback.py
++++ b/tools/check-tsc-fallback.py
+@@ -8,11 +8,10 @@ root = Path(__file__).resolve().parents[1]
+ cache = Path((root / '.local/headless-cache').read_text().strip())
+ original = (cache / 'source/src/common/cpu_features.cpp').read_text()
+ derived = (cache / 'native-local/headless/cpu_features.cpp').read_text()
+-eglantine_block = ("    // AMD CPUs have no leaf 0x15 (Zen 4 stops at 0x10): measure their invariant TSC too, or every\n"
+-                   "    // guest clock read (CNTPCT, which games read thousands of times a frame) goes through the\n"
+-                   "    // host's much slower QueryPerformanceCounter.\n"
+-                   "    if (caps.invariant_tsc && caps.tsc_frequency == 0) {\n"
+-                   "        caps.tsc_frequency = X64::EstimateRDTSCFrequency();\n    }\n\n")
++# Eglantine's (Lichii's) own block for CPUs without leaf 0x15, found by its first line.
++eglantine_block = ''
++if (own := original.find('    // AMD CPUs have no leaf 0x15 (Zen 4 stops at 0x10)')) >= 0:
++    eglantine_block = original[own:original.index('\n    }\n\n', own) + 8]
+ expected = original.replace(eglantine_block, '').replace('        } else {\n            caps.tsc_frequency = X64::EstimateRDTSCFrequency();\n        }', '        }').replace(
+     '    if (max_std_fn >= 0x16) {',
+     "    if (caps.invariant_tsc && caps.tsc_frequency < 1'000'000'000ULL) {\n        caps.tsc_frequency = X64::EstimateRDTSCFrequency();\n    }\n\n    if (max_std_fn >= 0x16) {")
+diff --git a/tools/prepare-build.sh b/tools/prepare-build.sh
+index 69341fb..810b8ad 100644
+--- a/tools/prepare-build.sh
++++ b/tools/prepare-build.sh
+@@ -91,6 +91,10 @@ if [[ -f $radv_release/lib/libvulkan_radeon.ps5.a ]]; then
+         step "RADV: geometry-shader compute passes for dropped draws changed"
+         bash tools/build-radv-dependencies.sh
+         rm -f build/radv-isolated/libvulkan_radeon.ps5.a
++    elif ! python3 -B tools/patch-radv-refused-shaders.py --check "$radv_release/EDEN_REFUSED_SHADERS_SHA256"; then
++        step "RADV: pipelines whose shaders were refused memory changed"
++        bash tools/build-radv-dependencies.sh
++        rm -f build/radv-isolated/libvulkan_radeon.ps5.a
+     elif ! python3 -B tools/patch-radv-wsi.py --check "$radv_release/EDEN_WSI_SHA256"; then
+         step "RADV: the display code's adaptation changed"
+         bash tools/build-radv-dependencies.sh

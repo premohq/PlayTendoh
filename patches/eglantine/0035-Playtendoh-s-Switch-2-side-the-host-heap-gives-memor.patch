@@ -1,0 +1,923 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Phononenom <64574232+Phononenom@users.noreply.github.com>
+Date: Mon, 23 Nov 2026 12:44:59 -0600
+Subject: [PATCH] Playtendoh's Switch 2 side: the host heap gives memory back,
+ and the GPU threads wait for it
+
+headless/heap_arenas.inc, heap_pages.cpp, performance.cpp: the heap balloon (inflated while a write waits,
+deflated after 10 s of calm; EDEN_HEAP_BALLOON=0 turns it off), a quiet page-in and a recovery without the
+driver step (both avoided a deadlock in the arena lock), the GPU threads waiting for memory in the new
+handler (EDEN_NEW_WAIT_GPU_MS) and recovering it every 100 ms, the loaded shader programs dropped at the
+first memory wait (EDEN_SHADER_PROGRAMS_KEEP=1 keeps them), the pool's free bytes for the read-through
+window, fiber stacks sized from use.
+
+From these commits (oldest first):
+- 2026-11-19 Playtendoh's Switch 2 side: the heap trim asks the NUP caches first, and the report says what they hold
+- 2026-11-20 Playtendoh's Switch 2 side: where the heap's idle memory sits (a measure)
+- 2026-11-20 Playtendoh's Switch 2 side: smaller fiber stacks and the flexible pool measured (step S1)
+- 2026-11-20 Playtendoh's Switch 2 side: S1's flexible-memory import is a plain one
+- 2026-11-20 Playtendoh's Switch 2 side: the heap trimmed while a write waits; the pool's free pieces measured
+- 2026-11-21 Playtendoh's Switch 2 side: the heap's free runs given back while a game write waits
+- 2026-11-21 Playtendoh's Switch 2 side: the heap give-back takes pages back without the recovery
+- 2026-11-22 Playtendoh's Switch 2 side: the heap give-back's page-in packs cold game memory again
+---
+ headless/check_slab_lifetime.py |   2 +-
+ headless/fiber_stack.h          |  68 ++++++++-
+ headless/heap_arenas.inc        | 186 ++++++++++++++++++++++-
+ headless/heap_pages.cpp         |  13 ++
+ headless/performance.cpp        | 257 +++++++++++++++++++++++++++++++-
+ headless/performance.h          |  53 +++++++
+ tools/check-heap-growth.py      |  34 ++++-
+ 7 files changed, 605 insertions(+), 8 deletions(-)
+
+diff --git a/headless/check_slab_lifetime.py b/headless/check_slab_lifetime.py
+index e0e9ada..53715f8 100644
+--- a/headless/check_slab_lifetime.py
++++ b/headless/check_slab_lifetime.py
+@@ -30,7 +30,7 @@ struct KAutoObject {
+     virtual void Finalize(KernelCore&) = 0;
+     static void Create(KAutoObject*) {}
+ };
+-struct KAutoObjectWithList : KAutoObject { using KAutoObject::KAutoObject; };
++struct KAutoObjectWithList : KAutoObject { using KAutoObject::KAutoObject; bool is_linked() const { return true; } };  // Lichii unregisters linked objects only
+ template<class T> struct Heap { void Free(T* p) { delete p; } };
+ struct Container {
+     void Initialize() {}
+diff --git a/headless/fiber_stack.h b/headless/fiber_stack.h
+index 95f02fb..dce2e37 100644
+--- a/headless/fiber_stack.h
++++ b/headless/fiber_stack.h
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-3.0-or-later
+ #pragma once
+ 
++#include <algorithm>
+ #include <array>
+ #include <atomic>
+ #include <cstring>
+@@ -8,18 +9,32 @@
+ #include <cstdio>
+ #include <cstdlib>
+ #include <memory>
++#include <mutex>
++#include <vector>
+ #include <sys/mman.h>
+ 
+ namespace Eden {
+-// Keep the full guest-callback stack size. Anonymous CPU mappings use the console's
+-// flexible pool, leaving direct memory for guest RAM and GPU resources. Guard pages
+-// surround the usable stack. Exhaustion falls back to the existing heap domain.
++// Anonymous CPU mappings use the console's flexible pool, leaving direct memory for guest RAM
++// and GPU resources. Guard pages surround the usable stack. Exhaustion falls back to the existing
++// heap domain.
++//
++// Size: 512 KiB (StackBytes), the size upstream gives its other PlayStation target (fiber.cpp,
++// __OPENORBIS__), not 2 MiB: a session makes 128 or more and the flexible pool is a few hundred
++// MiB, which the app's own image shares; its free part can become direct memory (param.json).
++// Each stack is painted when made, and the deepest any was used is measured from the paint
++// (DeepestUse, in stderr.log every 10 s), so the size is checked on the console, not assumed. An
++// overflow lands in the guard page below it: a crash at a known address, not in a neighbour.
+ class FiberStack {
+ public:
+     FiberStack() = default;
+     FiberStack(const FiberStack&) = delete;
+     FiberStack& operator=(const FiberStack&) = delete;
+     ~FiberStack() {
++        if (base) {
++            NoteUse(Used());
++            std::lock_guard lock{live_mutex};
++            std::erase(live, this);
++        }
+         if (mapping) {
+             if (munmap(mapping, bytes + 2 * GuardBytes)) std::abort();
+             flexible_bytes.fetch_sub(bytes, std::memory_order_relaxed);
+@@ -51,6 +66,14 @@ public:
+             std::memcpy(base + bytes, Canary.data(), CanaryBytes);
+             fallback_bytes.fetch_add(bytes, std::memory_order_relaxed);
+         }
++        auto* const words = reinterpret_cast<unsigned long long*>(base);
++        for (std::size_t i = 0; i < bytes / sizeof(unsigned long long); ++i) words[i] = Paint;
++        try {
++            std::lock_guard lock{live_mutex};
++            live.push_back(this);
++        } catch (...) {
++            // Not measured while live; still measured when it goes.
++        }
+         const auto count = allocations.fetch_add(1, std::memory_order_relaxed) + 1;
+         if ((count & (count - 1)) == 0) {
+             std::fprintf(stderr, "EDEN_FIBER_STACK allocations=%llu flexible=%llu fallback=%llu stack_bytes=%zu\n",
+@@ -59,9 +82,48 @@ public:
+     }
+     unsigned char* data() noexcept { return base; }
+     std::size_t size() const noexcept { return bytes; }
++    // EDEN_FIBER_STACK_SIZE_KIB (env.txt), 256 to 2048 KiB in whole guard pages, else 512 KiB.
++    // Read at the first fiber: every stack of a run has one size.
++    static std::size_t StackBytes() noexcept {
++        static const std::size_t value = [] {
++            const char* asked = std::getenv("EDEN_FIBER_STACK_SIZE_KIB");
++            const std::size_t kib =
++                std::clamp<std::size_t>(asked ? std::strtoull(asked, nullptr, 10) : 512, 256, 2048);
++            return std::max<std::size_t>(GuardBytes, kib * 1024 / GuardBytes * GuardBytes);
++        }();
++        return value;
++    }
++    // The deepest any stack was used so far, live ones included (bytes, a 4 KiB page at a time),
++    // and how many are live.
++    static std::size_t DeepestUse(std::size_t* live_count = nullptr) noexcept {
++        std::lock_guard lock{live_mutex};
++        for (const FiberStack* stack : live) NoteUse(stack->Used());
++        if (live_count) *live_count = live.size();
++        return deepest.load(std::memory_order_relaxed);
++    }
+     inline static std::atomic<unsigned long long> flexible_bytes{}, fallback_bytes{}, allocations{};
+     static constexpr std::size_t GuardBytes = 16384;
+ private:
++    static constexpr unsigned long long Paint = 0x5f3a91c64be27d08ULL;
++    static constexpr std::size_t ProbePage = 4096;
++    // The stack grows down from base + bytes: the first page from the bottom whose sampled words
++    // are not all paint is the deepest one used.
++    std::size_t Used() const noexcept {
++        for (std::size_t offset = 0; offset < bytes; offset += ProbePage) {
++            const auto* words = reinterpret_cast<const volatile unsigned long long*>(base + offset);
++            for (std::size_t i = 0; i < ProbePage / sizeof(unsigned long long); i += 64)
++                if (words[i] != Paint) return bytes - offset;
++        }
++        return 0;
++    }
++    static void NoteUse(std::size_t used) noexcept {
++        std::size_t seen = deepest.load(std::memory_order_relaxed);
++        while (used > seen && !deepest.compare_exchange_weak(seen, used, std::memory_order_relaxed)) {
++        }
++    }
++    inline static std::mutex live_mutex;
++    inline static std::vector<FiberStack*> live;
++    inline static std::atomic<std::size_t> deepest{};
+     inline static constexpr std::array<unsigned long long, 2> Canary{
+         0x8d569a12e3c047bfULL, 0x729db60f24e1ac83ULL};
+     static constexpr std::size_t CanaryBytes = sizeof(Canary);
+diff --git a/headless/heap_arenas.inc b/headless/heap_arenas.inc
+index 42693e8..4adf4c3 100644
+--- a/headless/heap_arenas.inc
++++ b/headless/heap_arenas.inc
+@@ -116,6 +116,7 @@ int sceLibcMspaceDestroy(void *mspace);
+  * waits here for the next arena (eden_heap_page_in). Both under the creation lock. */
+ int eden_heap_page_out(void *address, size_t size); /* 1 given back, 0 kept as it was */
+ int eden_heap_page_in(void *address, size_t size);  /* 1 memory again, 0 none */
++int eden_heap_page_in_quiet(void *address, size_t size); /* the same, never asking for memory back */
+ static void *eden_heap_parked[EDEN_HEAP_MAX_ARENAS];
+ static unsigned eden_heap_parked_count;
+ static void *_Atomic eden_heap_arena_blocks_probe[EDEN_HEAP_MAX_ARENAS];
+@@ -139,6 +140,7 @@ static atomic_uint eden_heap_space_count;                    /* slots in use, re
+ static atomic_uint eden_heap_space_users[EDEN_HEAP_PIECES];  /* threads in the slot's space now */
+ static atomic_int eden_heap_space_retired[EDEN_HEAP_PIECES]; /* 1: no request uses it */
+ static atomic_long eden_heap_space_blocks[EDEN_HEAP_PIECES]; /* blocks taken from it, not freed */
++static atomic_long eden_heap_space_bytes[EDEN_HEAP_PIECES];  /* their usable bytes (eden_heap_space_detail) */
+ /* A slot's pieces, [first, first + span); span 0: given back (both under the growth lock). */
+ static unsigned eden_heap_space_first[EDEN_HEAP_PIECES], eden_heap_space_span[EDEN_HEAP_PIECES];
+ /* Bumped by every growth: a request that found no room tries again before growing itself. */
+@@ -377,6 +379,47 @@ void eden_heap_slack(size_t *tcache, size_t *arenas, unsigned *threads_with_aren
+   (void)made;
+ }
+ 
++/* Where the heap's memory that no block uses sits, for a request of `request` bytes (a measure for
++ * the heap allocator's next change; on an allocation failure and in the memory report): its spaces
++ * outside the arenas (memory held and blocks' bytes; the largest free in one space, and how many
++ * spaces have at least `request` free, free not being one hole), and its arenas. A snapshot, read
++ * without locks; no allocation (it may run in the new handler). */
++void eden_heap_space_detail(char *line, size_t size, size_t request) {
++  const unsigned count = atomic_load_explicit(&eden_heap_space_count, memory_order_relaxed);
++  size_t held = 0, live = 0, largest = 0;
++  unsigned spaces = 0, room = 0;
++  for (unsigned slot = 0; slot < count && slot < EDEN_HEAP_PIECES; ++slot) {
++    if (atomic_load_explicit(&eden_heap_spaces[slot], memory_order_relaxed) == NULL)
++      continue;
++    const size_t space_held = slot == 0 && eden_heap_space_span[slot] == 0
++                                  ? EDEN_HEAP_PIECE_SIZE
++                                  : (size_t)eden_heap_space_span[slot] << EDEN_HEAP_PIECE_SHIFT;
++    const long bytes = atomic_load_explicit(&eden_heap_space_bytes[slot], memory_order_relaxed);
++    const size_t space_live = bytes > 0 ? (size_t)bytes : 0;
++    const size_t space_free = space_held > space_live ? space_held - space_live : 0;
++    ++spaces;
++    held += space_held;
++    live += space_live;
++    largest = space_free > largest ? space_free : largest;
++    room += space_free >= request;
++  }
++  const unsigned arena_count = atomic_load_explicit(&eden_heap_arena_count, memory_order_relaxed);
++  long arena_live = 0;
++  for (unsigned i = 0; i < arena_count && i < EDEN_HEAP_MAX_ARENAS; ++i)
++    if (eden_heap_arena_list[i] != NULL)
++      arena_live += atomic_load_explicit(&eden_heap_slot_live[eden_heap_slot(eden_heap_arena_list[i])],
++                                         memory_order_relaxed);
++  const size_t arena_held = (size_t)arena_count * EDEN_HEAP_ARENA_SIZE;
++  const size_t arena_used = arena_live > 0 ? (size_t)arena_live : 0;
++  snprintf(line, size,
++           "EDEN_HEAP_SPACES for %zu KiB: %u spaces hold %zu MiB, their blocks %zu MiB (the arenas' own "
++           "%zu MiB among them), free %zu MiB, the most in one %zu MiB, %u with that much free; %u "
++           "arenas %zu MiB, %zu MiB free\n",
++           request >> 10, spaces, held >> 20, live >> 20, arena_held >> 20,
++           held > live ? (held - live) >> 20 : 0, largest >> 20, room, arena_count, arena_held >> 20,
++           arena_held > arena_used ? (arena_held - arena_used) >> 20 : 0);
++}
++
+ /* Memory of the large blocks alive now, and how many there are. */
+ size_t eden_heap_large_held(unsigned *blocks) {
+   if (blocks)
+@@ -559,6 +602,8 @@ enum { EDEN_HEAP_MALLOC, EDEN_HEAP_CALLOC, EDEN_HEAP_ALIGNED };
+ static void eden_heap_space_free(void *address) {
+   const uintptr_t piece = ((uintptr_t)address - (uintptr_t)ps5_heap_base) >> EDEN_HEAP_PIECE_SHIFT;
+   const unsigned slot = atomic_load_explicit(&eden_heap_piece_slot[piece], memory_order_acquire);
++  atomic_fetch_sub_explicit(&eden_heap_space_bytes[slot], (long)sceLibcMspaceMallocUsableSize(address),
++                            memory_order_relaxed);
+   sceLibcMspaceFree(atomic_load_explicit(&eden_heap_piece_space[piece], memory_order_acquire), address);
+   atomic_fetch_sub_explicit(&eden_heap_space_blocks[slot], 1, memory_order_release);
+ }
+@@ -690,6 +735,7 @@ static int eden_heap_grow(size_t bytes, unsigned seen) {
+         eden_heap_space_first[slot] = first;
+         eden_heap_space_span[slot] = (unsigned)pieces;
+         atomic_store_explicit(&eden_heap_space_blocks[slot], 0, memory_order_relaxed);
++        atomic_store_explicit(&eden_heap_space_bytes[slot], 0, memory_order_relaxed);
+         atomic_store_explicit(&eden_heap_spaces[slot], space, memory_order_release);
+         if (slot == count)
+           atomic_store_explicit(&eden_heap_space_count, count + 1, memory_order_release);
+@@ -825,13 +871,138 @@ static void *eden_heap_space_use(unsigned slot, int kind, size_t a, size_t b) {
+   void *address = NULL;
+   if (atomic_load_explicit(&eden_heap_space_retired[slot], memory_order_seq_cst) == 0) {
+     address = eden_heap_space_try(atomic_load_explicit(&eden_heap_spaces[slot], memory_order_acquire), kind, a, b);
+-    if (address != NULL)
++    if (address != NULL) {
+       atomic_fetch_add_explicit(&eden_heap_space_blocks[slot], 1, memory_order_relaxed);
++      atomic_fetch_add_explicit(&eden_heap_space_bytes[slot], (long)sceLibcMspaceMallocUsableSize(address),
++                                memory_order_relaxed);
++    }
+   }
+   atomic_fetch_sub_explicit(&eden_heap_space_users[slot], 1, memory_order_release);
+   return address;
+ }
+ 
++/* ---- free runs inside the spaces, given back while a write of the game's memory waits ----
++ *
++ * A space gives its memory back only once it holds no block (eden_heap_trim), and in a long
++ * session none does: Ocarina of Time's heap held 1.92 GB with 308-324 MiB of it free across 58
++ * spaces (21 Nov) while a write of the game's memory waited 10 s for a free 2 MiB block and the
++ * session ended. While such a write waits, eden_heap_balloon_inflate takes the runs of 4 MiB or
++ * more still free in the spaces as blocks of its own and gives the whole 2 MiB pages inside them
++ * back to the system (eden_heap_page_out). A piece's memory is 2 MiB-aligned blocks, so each such
++ * page is a free 2 MiB block of the pool. The blocks stay taken, counted in their space like any
++ * other (eden_heap_trim leaves the space), until eden_heap_balloon_deflate gives their pages memory
++ * again and frees them: before the heap would grow, and once the pool has had room for a while.
++ * Neither waits for the other: whichever finds the flag set does nothing this time. */
++#define EDEN_HEAP_BALLOONS 1024u
++static struct {
++  void *block;   /* the space's block over the run */
++  uintptr_t out; /* its pages given back: [out, out + size) */
++  size_t size;
++} eden_heap_balloons[EDEN_HEAP_BALLOONS];
++static unsigned eden_heap_balloon_count; /* under eden_heap_balloon_lock */
++static atomic_flag eden_heap_balloon_lock = ATOMIC_FLAG_INIT;
++static atomic_size_t eden_heap_balloon_bytes; /* given back now */
++
++size_t eden_heap_balloon_held(void) {
++  return atomic_load_explicit(&eden_heap_balloon_bytes, memory_order_relaxed);
++}
++
++/* Whether [begin, end) lies in the pieces of one slot's space. */
++static int eden_heap_in_slot(uintptr_t begin, uintptr_t end, unsigned slot) {
++  if (!eden_heap_in_range((const void *)begin) || !eden_heap_in_range((const void *)(end - 1)))
++    return 0;
++  const uintptr_t base = (uintptr_t)ps5_heap_base;
++  return atomic_load_explicit(&eden_heap_piece_slot[(begin - base) >> EDEN_HEAP_PIECE_SHIFT], memory_order_acquire) == slot &&
++         atomic_load_explicit(&eden_heap_piece_slot[(end - 1 - base) >> EDEN_HEAP_PIECE_SHIFT], memory_order_acquire) == slot;
++}
++
++size_t eden_heap_balloon_inflate(size_t want) {
++  if (atomic_load_explicit(&ps5_heap_state, memory_order_acquire) != 2 || !eden_heap_grows)
++    return 0;
++  if (atomic_flag_test_and_set_explicit(&eden_heap_balloon_lock, memory_order_acquire))
++    return 0;
++  static const size_t sizes[] = {(size_t)16 << 20, (size_t)12 << 20, (size_t)8 << 20, (size_t)6 << 20,
++                                 (size_t)4 << 20};
++  const uintptr_t large_page = (uintptr_t)2 << 20;
++  size_t given = 0;
++  const unsigned count = atomic_load_explicit(&eden_heap_space_count, memory_order_acquire);
++  for (unsigned slot = 0; slot < count && slot < EDEN_HEAP_PIECES && given < want; ++slot) {
++    if (atomic_load_explicit(&eden_heap_spaces[slot], memory_order_acquire) == NULL)
++      continue;
++    unsigned s = 0;
++    while (s < sizeof(sizes) / sizeof(sizes[0]) && given < want && eden_heap_balloon_count < EDEN_HEAP_BALLOONS) {
++      void *block = eden_heap_space_use(slot, EDEN_HEAP_MALLOC, sizes[s], 0);
++      if (block == NULL) {
++        ++s;
++        continue;
++      }
++      const uintptr_t begin = (uintptr_t)block, end = begin + sceLibcMspaceMallocUsableSize(block);
++      const uintptr_t out = (begin + large_page - 1) & ~(large_page - 1), last = end & ~(large_page - 1);
++      size_t size = 0;
++      if (last > out && eden_heap_in_slot(begin, end, slot)) {
++        if (eden_heap_page_out((void *)out, last - out) == 1) {
++          size = last - out;
++        } else {
++          /* Over more than one of the piece's blocks: a page at a time, as far as it goes. */
++          while (out + size < last && eden_heap_page_out((void *)(out + size), large_page) == 1)
++            size += large_page;
++        }
++      }
++      if (size == 0) {
++        eden_heap_space_free(block);
++        ++s;
++        continue;
++      }
++      eden_heap_balloons[eden_heap_balloon_count].block = block;
++      eden_heap_balloons[eden_heap_balloon_count].out = out;
++      eden_heap_balloons[eden_heap_balloon_count].size = size;
++      ++eden_heap_balloon_count;
++      given += size;
++    }
++  }
++  atomic_fetch_add_explicit(&eden_heap_balloon_bytes, given, memory_order_relaxed);
++  atomic_flag_clear_explicit(&eden_heap_balloon_lock, memory_order_release);
++  return given;
++}
++
++/* `want` bytes of the runs back in the spaces (0: all of them), the last taken first. A page the
++ * pool has no memory for now stays given back, and so does its block. */
++size_t eden_heap_balloon_deflate(size_t want) {
++  if (atomic_load_explicit(&eden_heap_balloon_bytes, memory_order_relaxed) == 0)
++    return 0;
++  if (atomic_flag_test_and_set_explicit(&eden_heap_balloon_lock, memory_order_acquire))
++    return 0;
++  const size_t large_page = (size_t)2 << 20, part = (size_t)512 << 10;
++  size_t back = 0;
++  while (eden_heap_balloon_count != 0 && (want == 0 || back < want)) {
++    void *block = eden_heap_balloons[eden_heap_balloon_count - 1].block;
++    const uintptr_t out = eden_heap_balloons[eden_heap_balloon_count - 1].out;
++    size_t size = eden_heap_balloons[eden_heap_balloon_count - 1].size;
++    while (size != 0) {
++      /* 2 MiB at once, else in 512 KiB parts (the pool may have no 2 MiB in one piece). */
++      /* Without the recovery (eden_heap_page_in_quiet): this runs inside the heap, maybe under its
++       * arena-creation lock, and the recovery's driver compaction allocates from the heap. */
++      const size_t step = size >= large_page && size % large_page == 0 &&
++                                  eden_heap_page_in_quiet((void *)(out + size - large_page), large_page) == 1
++                              ? large_page
++                          : eden_heap_page_in_quiet((void *)(out + size - part), part) == 1 ? part
++                                                                                             : 0;
++      if (step == 0)
++        break;
++      size -= step;
++      back += step;
++      atomic_fetch_sub_explicit(&eden_heap_balloon_bytes, step, memory_order_relaxed);
++    }
++    eden_heap_balloons[eden_heap_balloon_count - 1].size = size;
++    if (size != 0)
++      break;
++    eden_heap_space_free(block);
++    --eden_heap_balloon_count;
++  }
++  atomic_flag_clear_explicit(&eden_heap_balloon_lock, memory_order_release);
++  return back;
++}
++
+ static void *eden_heap_main(int kind, size_t a, size_t b) {
+   const size_t bytes = kind == EDEN_HEAP_MALLOC ? a : kind == EDEN_HEAP_CALLOC ? a * b : a + b;
+   for (;;) {
+@@ -848,7 +1019,12 @@ static void *eden_heap_main(int kind, size_t a, size_t b) {
+         return address;
+       }
+     }
+-    if (bytes == 0 || !eden_heap_grow(bytes, generation))
++    if (bytes == 0)
++      return NULL;
++    /* Runs given back while a write waited come back before the heap takes a new piece. */
++    if (eden_heap_balloon_deflate(bytes + ((size_t)1 << 20)) != 0)
++      continue;
++    if (!eden_heap_grow(bytes, generation))
+       return NULL;
+   }
+ }
+@@ -1423,6 +1599,12 @@ static void *eden_realloc_inner(void *address, size_t size) {
+     if (in_arena) {
+       eden_heap_slot_count(result != NULL ? result : address, 1);
+       eden_heap_arena_leave(address);
++    } else if (result != NULL) {
++      /* In its space still (the same mspace): its bytes there change by the difference. */
++      const uintptr_t piece = ((uintptr_t)address - (uintptr_t)ps5_heap_base) >> EDEN_HEAP_PIECE_SHIFT;
++      const unsigned slot = atomic_load_explicit(&eden_heap_piece_slot[piece], memory_order_acquire);
++      atomic_fetch_add_explicit(&eden_heap_space_bytes[slot],
++                                (long)sceLibcMspaceMallocUsableSize(result) - (long)before, memory_order_relaxed);
+     }
+     if (result) {
+       eden_heap_account((long)sceLibcMspaceMallocUsableSize(result) - (long)before, 0);
+diff --git a/headless/heap_pages.cpp b/headless/heap_pages.cpp
+index ed1612b..c86ff30 100644
+--- a/headless/heap_pages.cpp
++++ b/headless/heap_pages.cpp
+@@ -52,6 +52,19 @@ extern "C" int eden_heap_page_out(void* address, std::size_t size) {
+ extern "C" int eden_heap_page_in(void* address, std::size_t size) {
+     return WithRecovery(size, [&] { return Common::PageInRange(address, size) == 1; }) ? 1 : 0;
+ }
++// The same for the free runs the heap gave back (headless/heap_arenas.inc, eden_heap_balloon_deflate),
++// with only the part of the recovery that never allocates from the heap: cold game memory packed and
++// idle blocks given back (eden_memory_recover_heap). This runs inside the heap, under its
++// arena-creation lock, and the driver's compaction allocates from the heap: a shader thread that
++// needed an arena there waited for the lock it held itself (Ocarina of Time, 21 Nov 22:59). With no
++// recovery at all the game's memory was packed less (23,700-26,300 packs a run against 35,800) and
++// the runs met their wall at the Hyrule Field load instead of Kakariko (22 Nov).
++extern "C" [[gnu::weak]] std::size_t eden_memory_recover_heap(std::size_t bytes) noexcept;
++extern "C" int eden_heap_page_in_quiet(void* address, std::size_t size) {
++    if (Common::PageInRange(address, size) == 1) return 1;
++    if (&eden_memory_recover_heap == nullptr || eden_memory_recover_heap(size + (std::size_t{8} << 20)) == 0) return 0;
++    return Common::PageInRange(address, size) == 1 ? 1 : 0;
++}
+ // A large block whose memory the pool has in no single free block: address space of its own,
+ // with memory behind it in blocks of whatever size the pool has (zeroed), given back whole.
+ extern "C" void* eden_heap_split_pages(std::size_t size) {
+diff --git a/headless/performance.cpp b/headless/performance.cpp
+index 3f83d0f..f673fd4 100644
+--- a/headless/performance.cpp
++++ b/headless/performance.cpp
+@@ -4,6 +4,7 @@
+ #include "crash_report.h"
+ #include "hud.h"
+ #include "stall_watchdog.h"
++#include "fiber_stack.h"
+ #include "../src/fastmem.h"
+ #include "common/cpu_features.h"
+ #include "common/sparse_large_vector.h"
+@@ -18,6 +19,8 @@
+ #include <cstring>
+ #include <map>
+ #include <mutex>
++#include <condition_variable>
++#include <cstdio>
+ #include <pthread.h>
+ #include <sched.h>
+ #include <semaphore>
+@@ -33,7 +36,10 @@
+ #ifdef PS5_NATIVE
+ #include <sys/param.h>
+ #include "common/fs/file.h"
++#if __has_include("core/hle/kernel/svc/svc_memory_stats.h")  // the SVC memory counters (pending on Lichii)
+ #include "core/hle/kernel/svc/svc_memory_stats.h"
++#define EDEN_SVC_MEMORY_STATS 1
++#endif
+ #include <sys/stat.h>
+ #include <fcntl.h>
+ #include <unistd.h>
+@@ -517,14 +523,29 @@ extern "C" std::size_t eden_heap_trim(void) __attribute__((weak));
+ extern "C" void eden_heap_sites_report(void) __attribute__((weak));
+ extern "C" void eden_heap_usage(std::size_t* held, std::size_t* in_use, std::size_t* returned) __attribute__((weak));
+ extern "C" void eden_heap_slack(std::size_t*, std::size_t*, unsigned*, unsigned*) __attribute__((weak));
++extern "C" void eden_heap_space_detail(char*, std::size_t, std::size_t) __attribute__((weak));
+ extern "C" std::size_t eden_heap_arena_live __attribute__((weak));
+ extern "C" unsigned eden_heap_arena_empty __attribute__((weak)), eden_heap_arena_quarter __attribute__((weak));
+ extern "C" unsigned eden_guest_memory_wanted(void) __attribute__((weak));
++extern "C" int eden_guest_memory_room(std::size_t bytes) __attribute__((weak));
++extern "C" void eden_guest_memory_graphics_thread(void) __attribute__((weak));
++// Who holds the graphics allocator's memory (tools/prepare-vulkan-port.py), with EDEN_NX2_MEM_TRACE.
++extern "C" void eden_vma_owners_report(unsigned long long seconds) __attribute__((weak));
+ extern "C" void eden_guest_memory_reserve(std::size_t* held, std::size_t* target) __attribute__((weak));
+ #ifdef PS5_NATIVE
+ extern "C" std::int64_t sceKernelGetDirectMemorySize();
+ extern "C" std::int32_t sceKernelAvailableDirectMemorySize(std::int64_t, std::int64_t, std::size_t, std::int64_t*,
+                                                            std::size_t*);
++extern "C" int sceKernelGetPageTableStats(int*, int*, int*, int*);
++static bool PageTableStats(int* cpu_tables, int* cpu_free, int* gpu_tables, int* gpu_free) {
++    return sceKernelGetPageTableStats(cpu_tables, cpu_free, gpu_tables, gpu_free) == 0;
++}
++// The flexible pool's free part (headless/fiber_stack.h). A plain import: check_package.py refuses
++// weak ones the link leaves unresolved, and the configured size has no import the console is known
++// to export (its use, flexibleMemorySize in param.json, is read from the free part and what uses it).
++extern "C" std::int32_t sceKernelAvailableFlexibleMemorySize(std::size_t*);
++[[maybe_unused]] static const bool page_table_stats_installed =
++    (page_table_stats.store(&PageTableStats, std::memory_order_relaxed), true);
+ // The allocated region at or after an offset (flag 1: find the next one).
+ struct DirectMemoryRegion { std::int64_t start; std::int64_t end; std::int32_t type; };
+ extern "C" std::int32_t sceKernelDirectMemoryQuery(std::int64_t, int, DirectMemoryRegion*, std::size_t);
+@@ -591,9 +612,64 @@ static void RefreshFreeMemory() {
+                      &eden_radv_private_radv_ps5_allocated_bytes != nullptr
+                          ? __atomic_load_n(&eden_radv_private_radv_ps5_allocated_bytes, __ATOMIC_RELAXED) >> 20 : 0ULL,
+                      guest_held >> 20, guest_span >> 20);
++        static int cpu_free_lowest = -1;
++        if (int cpu_tables = 0, cpu_free = 0, gpu_tables = 0, gpu_free = 0;
++            PageTableStats(&cpu_tables, &cpu_free, &gpu_tables, &gpu_free)) {
++            if (cpu_free_lowest < 0 || cpu_free < cpu_free_lowest) cpu_free_lowest = cpu_free;
++            std::fprintf(stderr, "EDEN_PAGE_TABLES t=%lld cpu_free=%d of %d gpu_free=%d of %d\n", now / 1'000'000'000,
++                         cpu_free, cpu_tables, gpu_free, gpu_tables);
++        }
++        // The pool's free memory by the size of its pieces: a wall can be holes, not a full pool
++        // (another PS5 port had 430 to 1,340 MiB free in pieces under 2 MiB at its walls, which no
++        // guest slot, heap piece or graphics block can take). Log only.
++        {
++            std::uint64_t pieces = 0, under_2 = 0, to_32 = 0, over_32 = 0, biggest = 0;
++            const auto gap = [&](std::int64_t from, std::int64_t to) {
++                if (to <= from) return;
++                const auto bytes = static_cast<std::uint64_t>(to - from);
++                ++pieces;
++                (bytes < (2u << 20) ? under_2 : bytes < (32u << 20) ? to_32 : over_32) += bytes;
++                biggest = std::max(biggest, bytes);
++            };
++            std::int64_t at = 0, last_end = 0;
++            DirectMemoryRegion range{};
++            for (unsigned n = 0; n < 65536 && sceKernelDirectMemoryQuery(at, 1, &range, sizeof(range)) == 0 &&
++                                 range.end > at;
++                 ++n) {
++                gap(last_end, range.start);
++                last_end = std::max(last_end, range.end);
++                at = range.end;
++            }
++            gap(last_end, total);
++            std::fprintf(stderr, "EDEN_POOL_FREE t=%lld free_mib=%llu in %llu pieces: under 2 MiB %llu MiB, 2 to 32 "
++                                 "MiB %llu MiB, 32 MiB and up %llu MiB; largest %llu MiB\n",
++                         now / 1'000'000'000, static_cast<unsigned long long>((under_2 + to_32 + over_32) >> 20),
++                         static_cast<unsigned long long>(pieces), static_cast<unsigned long long>(under_2 >> 20),
++                         static_cast<unsigned long long>(to_32 >> 20), static_cast<unsigned long long>(over_32 >> 20),
++                         static_cast<unsigned long long>(biggest >> 20));
++        }
++        // What the flexible pool holds and could give up (param.json flexibleMemorySize): its free
++        // part beside the direct pool's size, the fiber stacks in it (and
++        // the deepest any was used), and the CPU page tables at their lowest so far.
++        {
++            std::size_t flexible_free = 0, live_fibers = 0;
++            const bool free_known = sceKernelAvailableFlexibleMemorySize(&flexible_free) == 0;
++            const std::size_t deepest = ::Eden::FiberStack::DeepestUse(&live_fibers);
++            std::fprintf(stderr, "EDEN_FLEXIBLE t=%lld free_mib=%lld direct_mib=%lld fibers=%zu "
++                                 "of %zu KiB, deepest %zu KiB, %llu MiB in flexible, %llu MiB in the heap; "
++                                 "cpu page tables free at least %d\n",
++                         now / 1'000'000'000, free_known ? static_cast<long long>(flexible_free >> 20) : -1LL,
++                         static_cast<long long>(total >> 20), live_fibers, ::Eden::FiberStack::StackBytes() >> 10,
++                         deepest >> 10, ::Eden::FiberStack::flexible_bytes.load() >> 20,
++                         ::Eden::FiberStack::fallback_bytes.load() >> 20, cpu_free_lowest);
++        }
+         ReportHeap("every 20 s");
+         ReportFileHandles();
++        static const bool owners = std::getenv("EDEN_NX2_MEM_TRACE") != nullptr;
++        if (owners && eden_vma_owners_report) eden_vma_owners_report(static_cast<unsigned long long>(now / 1'000'000'000));
++#ifdef EDEN_SVC_MEMORY_STATS
+         ::Kernel::Svc::MemoryStats::Report(stderr);
++#endif
+         if (const auto pools = guest_pool_report.load(std::memory_order_relaxed)) pools();
+     }
+     // The heap's empty spaces go back to the pool while it is short (every 2 s at most).
+@@ -620,10 +696,171 @@ static unsigned long long GraphicsMemoryFree() {
+     RefreshFreeMemory();
+     return largest_free_block.load(std::memory_order_relaxed);
+ }
++static bool GuestMemoryRoom(std::size_t bytes) {
++    return !eden_guest_memory_room || eden_guest_memory_room(bytes) != 0;
++}
+ [[maybe_unused]] static const bool graphics_memory_probe_installed =
+     (graphics_memory_probe.store(&GraphicsMemoryShort, std::memory_order_relaxed),
+-     graphics_memory_free.store(&GraphicsMemoryFree, std::memory_order_relaxed), true);
++     graphics_memory_free.store(&GraphicsMemoryFree, std::memory_order_relaxed),
++     guest_memory_room.store(&GuestMemoryRoom, std::memory_order_relaxed), true);
++#endif
++
++// The give-back of the graphics caches' memory (performance.h, graphics_give_back), queued from a
++// thread of its own. The caches give memory back at the end of each frame, and a game stopped on a
++// write waiting for a block makes no frames: Mario Kart World's write waited 6 s between races with
++// every GPU thread idle and 1.3 GiB of textures held, then found no block. So the guest memory
++// service's keeper asks every 100 ms while a write has waited 100 ms or more (and once a second while
++// its reserve stays under half full), and a refused graphics allocation asks through
++// graphics_give_back_wanted. Queueing GPU work can wait for room in the GPU
++// thread's queue, and the keeper goes on refilling the reserve meanwhile (the GPU threads may need
++// it), hence the thread. One pass is queued at a time; after it the driver gives back what nothing
++// uses any more (radv/ps5's trim, as the guest memory service's own give-back asks).
++extern "C" std::uint64_t eden_radv_private_radv_ps5_eden_trim(std::uint64_t want) __attribute__((weak));
++namespace {
++std::mutex give_back_mutex;
++std::condition_variable give_back_wake;
++bool give_back_asked = false;
++std::atomic<bool> give_back_queued{false};
++std::atomic<long long> give_back_queued_ns{0};
++std::atomic<unsigned> give_back_lines{0};
++
++// On the thread that draws, after the caches let go of `bytes`.
++void GiveBackDone(unsigned long long bytes) {
++    std::uint64_t trimmed = 0;
++    if (&eden_radv_private_radv_ps5_eden_trim != nullptr)
++        trimmed = eden_radv_private_radv_ps5_eden_trim(std::uint64_t{512} << 20);
++    if (give_back_lines.fetch_add(1, std::memory_order_relaxed) < 200)
++        std::fprintf(stderr, "EDEN_GRAPHICS_GIVE_BACK the caches let go %llu MiB, the driver %llu MiB; %lld ms after "
++                     "it was asked\n", bytes >> 20, static_cast<unsigned long long>(trimmed >> 20),
++                     (GraphicsMemoryClockNs() - give_back_queued_ns.load(std::memory_order_relaxed)) / 1'000'000);
++    give_back_queued.store(false, std::memory_order_release);
++}
++
++// A pass is queued and has not run yet. One queued 10 s ago went with a session that ended (its
++// GPU thread stopped before it ran) or is stuck behind work that will not finish: ask again.
++bool GiveBackPending() {
++    return give_back_queued.load(std::memory_order_acquire) &&
++           GraphicsMemoryClockNs() - give_back_queued_ns.load(std::memory_order_relaxed) < 10'000'000'000LL;
++}
++
++void GiveBackLoop() {
++    Eden::Crash::NameThread("GraphicsGiveBack");
++    std::unique_lock lock{give_back_mutex};
++    for (;;) {
++        give_back_wake.wait(lock, [] { return give_back_asked; });
++        give_back_asked = false;
++        lock.unlock();
++        const auto give_back = graphics_give_back.load(std::memory_order_acquire);
++        if (give_back != nullptr && !GiveBackPending()) {
++            give_back_queued_ns.store(GraphicsMemoryClockNs(), std::memory_order_relaxed);
++            give_back_queued.store(true, std::memory_order_release);
++            if (!give_back(&GiveBackDone)) give_back_queued.store(false, std::memory_order_release);
++        }
++        lock.lock();
++    }
++}
++} // namespace
++
++// The guest memory service's keeper, every 100 ms (src/guest_memory_service.inc, ReserveKeeper):
++// `writer_waiting` while a write of the game's memory has waited 100 ms or more for a block, or
++// (once a second at most) while its reserve stays under half its target.
++extern "C" std::size_t eden_heap_balloon_inflate(std::size_t) __attribute__((weak));
++extern "C" std::size_t eden_heap_balloon_deflate(std::size_t) __attribute__((weak));
++extern "C" std::size_t eden_heap_balloon_held(void) __attribute__((weak));
++extern "C" std::size_t eden_shader_programs_drop(std::size_t* count) __attribute__((weak));
++// The pool's free memory in all, by a walk of its regions (the guest memory service's read-through
++// window, every 500 ms: src/guest_memory_service.inc). Its largest free block says little: the pool is
++// in pieces of a few MiB all session.
++extern "C" std::uint64_t eden_pool_free_bytes(void) noexcept {
++#ifdef PS5_NATIVE
++    const auto total = static_cast<std::int64_t>(sceKernelGetDirectMemorySize());
++    std::uint64_t free_bytes = 0;
++    std::int64_t at = 0, last_end = 0;
++    DirectMemoryRegion range{};
++    for (unsigned n = 0; n < 65536 && sceKernelDirectMemoryQuery(at, 1, &range, sizeof(range)) == 0 && range.end > at; ++n) {
++        if (range.start > last_end) free_bytes += static_cast<std::uint64_t>(range.start - last_end);
++        last_end = std::max(last_end, range.end);
++        at = range.end;
++    }
++    if (total > last_end) free_bytes += static_cast<std::uint64_t>(total - last_end);
++    return free_bytes;
++#else
++    return ~std::uint64_t{0};
+ #endif
++}
++// The core's refusals outside the memory allocator (a descriptor pool: vk_descriptor_pool.cpp):
++// the caches' collectors evict hard for a while and give back between the GPU back thread's entries.
++extern "C" void eden_graphics_memory_refused() noexcept {
++    NoteGraphicsMemoryRefused();
++    WantGraphicsGiveBack();
++}
++extern "C" void eden_graphics_give_back_poll(int writer_waiting) noexcept {
++    // The free runs inside the heap's spaces (headless/heap_arenas.inc, eden_heap_balloon_*): given
++    // back while a write waits, every 500 ms with the trim, up to 128 MiB a time; and back in the
++    // heap once the pool has had room for 10 s. EDEN_HEAP_BALLOON=0 leaves them.
++    static const bool balloon = [] {
++        const char* value = std::getenv("EDEN_HEAP_BALLOON");
++        return eden_heap_balloon_inflate != nullptr && (value == nullptr || value[0] != '0');
++    }();
++    static std::atomic<long long> waited_ns{0};
++    if (balloon && writer_waiting == 0 && eden_heap_balloon_held() != 0) {
++        const long long now = GraphicsMemoryClockNs();
++        if (now - waited_ns.load(std::memory_order_relaxed) >= 10'000'000'000LL && !GraphicsMemoryIsShort()) {
++            const std::size_t back = eden_heap_balloon_deflate(0);
++            if (back != 0)
++                std::fprintf(stderr, "EDEN_HEAP_BALLOON %zu MiB back in the heap (%zu MiB still given back): the pool has room\n",
++                             back >> 20, eden_heap_balloon_held() >> 20);
++        }
++    }
++    // While a write of the game's memory waits for a block, the heap's empty spaces go back
++    // first and every 500 ms (on the keeper's thread, not the fault handler): GPUBack faulted at
++    // Castle Town on another PS5 port with the pool at 1 MiB and 26 MiB of empty heap pages.
++    if (writer_waiting != 0) {
++        static std::atomic<long long> trimmed_ns{0};
++        const long long now = GraphicsMemoryClockNs();
++        if (now - trimmed_ns.load(std::memory_order_relaxed) >= 500'000'000) {
++            trimmed_ns.store(now, std::memory_order_relaxed);
++            // The shader cache's programs read at boot (video_core/shader_cache_v2/cache.cpp) go first:
++            // about 220 MiB in Ocarina of Time, in the arenas of the thread that read them, which the
++            // trim below gives back once empty. A shader that needs one later is lowered again.
++            // EDEN_SHADER_PROGRAMS_KEEP=1 keeps them.
++            static const bool keep_programs = [] {
++                const char* value = std::getenv("EDEN_SHADER_PROGRAMS_KEEP");
++                return value != nullptr && value[0] == '1';
++            }();
++            if (!keep_programs && eden_shader_programs_drop != nullptr) {
++                std::size_t programs = 0;
++                const std::size_t bytes = eden_shader_programs_drop(&programs);
++                if (programs != 0)
++                    std::fprintf(stderr, "EDEN_SHADER_PROGRAMS let go %zu programs read at boot (%zu MiB): a write waits for a block\n",
++                                 programs, bytes >> 20);
++            }
++            TrimHeap("a write waits for a block");
++            if (balloon) {
++                const std::size_t given = eden_heap_balloon_inflate(std::size_t{128} << 20);
++                if (given != 0)
++                    std::fprintf(stderr, "EDEN_HEAP_BALLOON gave back %zu MiB of free runs inside the heap (%zu MiB now): a write waits for a block\n",
++                                 given >> 20, eden_heap_balloon_held() >> 20);
++            }
++        }
++        waited_ns.store(now, std::memory_order_relaxed);
++    }
++    const bool refused = graphics_give_back_wanted.exchange(false, std::memory_order_acq_rel);
++    if (writer_waiting == 0 && !refused) return;
++    if (GiveBackPending()) return;
++    if (graphics_give_back.load(std::memory_order_acquire) == nullptr) return;
++    static std::once_flag started;
++    try {
++        std::call_once(started, [] { std::thread(GiveBackLoop).detach(); });
++        {
++            std::lock_guard lock{give_back_mutex};
++            give_back_asked = true;
++        }
++    } catch (...) {
++        return;
++    }
++    give_back_wake.notify_one();
++}
+ 
+ namespace {
+ std::mutex hle_mutex;
+@@ -638,6 +875,10 @@ void RecordHle(const char* service, unsigned command, long long ns) {
+     entry.second += static_cast<unsigned long long>(ns > 0 ? ns : 0);
+ }
+ 
++// The core's NUP caches (core patch 0096): decompressed game files kept in the heap, up to 512 MiB.
++extern "C" std::size_t eden_nup_cache_held() __attribute__((weak));
++extern "C" std::size_t eden_nup_cache_trim(std::size_t want) __attribute__((weak));
++
+ void ReportHeap(const char* why) {
+     if (!eden_heap_usage) return;
+     std::size_t held = 0, in_use = 0, returned = 0;
+@@ -656,11 +897,22 @@ void ReportHeap(const char* why) {
+                      eden_heap_arena_empty, eden_heap_arena_quarter,
+                      ((held - large) > arenas ? (held - large) - arenas : 0) >> 20);
+     }
++    if (eden_heap_space_detail) {
++        char line[384];
++        eden_heap_space_detail(line, sizeof(line), std::size_t{4} << 20);
++        std::fputs(line, stderr);
++    }
++    if (eden_nup_cache_held) std::fprintf(stderr, "EDEN_NUP_CACHE holds %zu MiB\n", eden_nup_cache_held() >> 20);
+     if (eden_heap_sites_report) eden_heap_sites_report();
+ }
+ 
+ std::size_t TrimHeap(const char* why) {
+     if (!eden_heap_trim) return 0;
++    // Decompressed game files no open file reads go first (read again, they are decoded again):
++    // what they free goes back to the heap's spaces, which the trim then gives back when empty.
++    std::size_t nup = 0;
++    if (eden_nup_cache_trim) nup = eden_nup_cache_trim(SIZE_MAX);
++    if (nup != 0) std::fprintf(stderr, "EDEN_NUP_CACHE gave back %zu MiB: %s\n", nup >> 20, why);
+     const std::size_t returned = eden_heap_trim();
+     if (returned != 0) {
+         char text[160];
+@@ -951,6 +1203,9 @@ void RegisterWorker(const char* name) {
+     MkwNativeSample::Register(name);
+ #endif
+     Eden::Crash::NameThread(name);  // a crash report names the thread
++    // GPU, GPUBack, GPUFencingThread, GPUSnapshot: they free the graphics caches' memory, which the
++    // game's waiting writes depend on, so the last of the guest's reserve is theirs.
++    if (eden_guest_memory_graphics_thread && std::strncmp(name, "GPU", 3) == 0) eden_guest_memory_graphics_thread();
+ #if defined(EDEN_DEV_PROFILE) && defined(PS5_NATIVE)
+     Eden::Stall::NoteThread(name);
+ #endif
+diff --git a/headless/performance.h b/headless/performance.h
+index 0908bb5..11d4d81 100644
+--- a/headless/performance.h
++++ b/headless/performance.h
+@@ -553,6 +553,34 @@ inline std::atomic<bool> texture_budget_log{false};
+ // header is compiled into libraries with and without PS5_NATIVE, so the function below must read
+ // the same in all of them: the platform part is behind this pointer, not behind an #ifdef.
+ inline std::atomic<bool (*)()> graphics_memory_probe{nullptr};
++// Whether the guest's memory has room for `bytes` more written by a graphics thread without the
++// guest memory service's graphics floor, installed by the PS5 build (performance.cpp; the service's
++// eden_guest_memory_room). The texture collector keeps a GPU-written image while there is none.
++inline std::atomic<bool (*)(std::size_t)> guest_memory_room{nullptr};
++inline bool GuestMemoryHasRoom(std::size_t bytes) {
++    const auto room = guest_memory_room.load(std::memory_order_relaxed);
++    return !room || room(bytes);
++}
++// What the renderer holds idle and gives back when the allocator is out of device memory (idle
++// staging buffers, spare decode images): installed by the texture cache runtime while the
++// rasterizer lives (vk_texture_cache). Returns the bytes it let go; 0 on a thread that doesn't own
++// the Vulkan scheduler.
++inline std::atomic<unsigned long long (*)()> graphics_memory_recover{nullptr};
++// Everything the graphics caches can let go, now rather than at the end of a frame: queues
++// RasterizerInterface::ReleaseMemoryNow on the thread that draws, between command lists (main.cpp,
++// GPU::RunInOrder), never waited for; `done` runs there after it with the bytes let go. Installed
++// while a game runs; false if nothing was queued. Asked by performance.cpp's give-back thread.
++inline std::atomic<bool (*)(void (*done)(unsigned long long bytes))> graphics_give_back{nullptr};
++// A graphics allocation was refused and nothing given back answered it (EdenRecoverAndRetry): the
++// give-back above is queued for it, from performance.cpp's own thread. A graphics thread must not
++// queue GPU work itself: the GPU thread's queue may be full, and would wait for that thread.
++inline std::atomic<bool> graphics_give_back_wanted{false};
++inline void WantGraphicsGiveBack() {
++    graphics_give_back_wanted.store(true, std::memory_order_release);
++}
++// The title's page tables (sceKernelGetPageTableStats: CPU total and free, GPU total and free),
++// installed by the PS5 build: past them the kernel refuses mappings with memory still free.
++inline std::atomic<bool (*)(int*, int*, int*, int*)> page_table_stats{nullptr};
+ // The kernel's count of the guest's mapped physical memory, installed while a game runs (main.cpp):
+ // the memory report tells it from the slots the sparse backing committed.
+ inline std::atomic<unsigned long long (*)()> guest_kernel_memory{nullptr};
+@@ -592,6 +620,31 @@ inline bool GraphicsMemoryIsCritical() {
+     const auto free = graphics_memory_free.load(std::memory_order_relaxed);
+     return free && free() < kCriticalMemory;
+ }
++// The texture cache counts its own images on the console (TickFrame), not the pool-based usage
++// above: the pool is full whenever the guest's memory, the heap and the driver fill it (Ocarina
++// of Time: 4.8 GB of game memory), so that figure kept the collector past its critical mark with
++// 1.5-2 GB of textures, and it let the scene go after 10 frames of a pause menu. dev-settings
++// graphics_usage=driver restores the driver's count.
++inline bool TextureCacheCountsOwnImages() {
++    return graphics_memory_free.load(std::memory_order_relaxed) != nullptr &&
++           graphics_usage_from_pool.load(std::memory_order_relaxed);
++}
++// When the allocator last had a graphics allocation refused (an image, buffer or memory commit
++// that needed memory back: vulkan_memory_allocator.cpp, EdenRecoverAndRetry), in steady-clock
++// nanoseconds. The caches' collectors evict hard for a second after one, instead of whenever the
++// pool reads short: memory the pool needs comes back through them then, and not otherwise.
++inline std::atomic<long long> graphics_memory_refused_ns{0};
++inline long long GraphicsMemoryClockNs() {
++    return std::chrono::duration_cast<std::chrono::nanoseconds>(
++               std::chrono::steady_clock::now().time_since_epoch()).count();
++}
++inline void NoteGraphicsMemoryRefused() {
++    graphics_memory_refused_ns.store(GraphicsMemoryClockNs(), std::memory_order_relaxed);
++}
++inline bool GraphicsMemoryRefusedRecently() {
++    const long long at = graphics_memory_refused_ns.load(std::memory_order_relaxed);
++    return at != 0 && GraphicsMemoryClockNs() - at < 1'000'000'000;
++}
+ // GPU thread only (the collector).
+ inline bool KeepDirtyTextures() {
+     if (!gc_keep_dirty.load(std::memory_order_relaxed)) return false;
+diff --git a/tools/check-heap-growth.py b/tools/check-heap-growth.py
+index cf3d72e..d476159 100644
+--- a/tools/check-heap-growth.py
++++ b/tools/check-heap-growth.py
+@@ -248,6 +248,15 @@ int eden_heap_page_in(void *address, size_t size) {
+     atomic_fetch_add(&committed_bytes, size);
+     return 1;
+ }
++// The free runs' pages back (the balloon): never through the recovery, which allocates from the heap.
++static atomic_uint paged_in_quiet;
++int eden_heap_page_in_quiet(void *address, size_t size) {
++    assert(((uintptr_t)address & 0x3fff) == 0 && (size & 0x3fff) == 0);
++    atomic_fetch_add(&paged_in_quiet, 1);
++    if (mprotect(address, size, PROT_READ | PROT_WRITE) != 0) return 0;
++    atomic_fetch_add(&committed_bytes, size);
++    return 1;
++}
+ // A large block in pieces of memory (the pool has no one piece for it): here simply a mapping.
+ static int refuse_split;   // nor in pieces
+ static atomic_uint split_blocks;
+@@ -318,10 +327,22 @@ static void keep_and_free(int threads, unsigned char *(*kept)[KEPT]) {
+ // of it, or a space given back while a block was in it, faults or damages a pattern.
+ static atomic_int trimming;
+ static atomic_size_t trimmed_total;
++// The free runs inside the spaces given back and taken again around the other threads' blocks, and
++// before the heap grows: a run's page used while given back faults (the stand-in's page-out), a
++// block handed out twice or over a run damages a pattern.
++size_t eden_heap_balloon_inflate(size_t want);
++size_t eden_heap_balloon_deflate(size_t want);
++size_t eden_heap_balloon_held(void);
++static atomic_size_t ballooned_total, unballooned_total;
+ static void *trimmer(void *argument) {
+     (void)argument;
++    unsigned turn = 0;
+     while (atomic_load(&trimming)) {
+         atomic_fetch_add(&trimmed_total, eden_heap_trim());
++        if (++turn % 2 != 0)
++            atomic_fetch_add(&ballooned_total, eden_heap_balloon_inflate((size_t)64 << 20));
++        else
++            atomic_fetch_add(&unballooned_total, eden_heap_balloon_deflate(turn % 8 == 0 ? 0 : (size_t)8 << 20));
+         usleep(100);
+     }
+     return NULL;
+@@ -496,6 +517,14 @@ int main(int argc, char **argv) {
+         for (int i = 0; i < 6; ++i) pthread_join(churners[i], NULL);
+         atomic_store(&trimming, 0);
+         pthread_join(trim_thread, NULL);
++        // The runs given back come back, all of them, and the spaces they were in can go back too.
++        atomic_fetch_add(&unballooned_total, eden_heap_balloon_deflate(0));
++        if (eden_heap_balloon_held() != 0 || (!refuse_range && (atomic_load(&ballooned_total) == 0 || atomic_load(&paged_in_quiet) == 0))) {
++            fprintf(stderr, "free runs inside the spaces: %zu MiB given back, %zu MiB back, %zu MiB still out\n",
++                    atomic_load(&ballooned_total) >> 20, atomic_load(&unballooned_total) >> 20,
++                    eden_heap_balloon_held() >> 20);
++            abort();
++        }
+         // Everything the churners took is free again: the spaces that held it go back.
+         atomic_fetch_add(&trimmed_total, eden_heap_trim());
+         if (!refuse_range && atomic_load(&trimmed_total) == 0) {
+@@ -511,6 +540,9 @@ int main(int argc, char **argv) {
+     if (!refuse_range)
+         fprintf(stderr, "arenas given back: %zu MiB paged out, %u taken again\n",
+                 atomic_load(&paged_out_bytes) >> 20, atomic_load(&paged_in));
++    if (!refuse_range)
++        printf("free runs inside the spaces: %zu MiB given back, %zu MiB back\n",
++               atomic_load(&ballooned_total) >> 20, atomic_load(&unballooned_total) >> 20);
+     const size_t after_threads = eden_heap_committed();
+     const size_t peak = atomic_load(&ps5_heap_peak_bytes);
+     assert(eden_heap_arenas_created() >= 8);
+@@ -654,5 +686,5 @@ with tempfile.TemporaryDirectory(prefix='eden-heap-') as work:
+ print('Heap by pieces: growth on demand, owners by address, requests larger than a piece, the 6 GiB limit, '
+       'the 3 GiB whole-heap fallback, threads keeping more than an arena in arenas of their own (used again by '
+       'the next threads), empty spaces given back while six threads take and free blocks and taken again in the '
+-      'same range, a large block in pieces of memory when the pool has no one piece for it, and eight threads '
++      'same range, free runs inside the spaces given back and taken again around them, a large block in pieces of memory when the pool has no one piece for it, and eight threads '
+       'under the thread sanitizer PASS')

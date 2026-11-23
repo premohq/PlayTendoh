@@ -1,0 +1,54 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Phononenom <64574232+Phononenom@users.noreply.github.com>
+Date: Mon, 23 Nov 2026 12:44:59 -0600
+Subject: [PATCH] Playtendoh's Switch 2 side: sound for the games that play
+ through the Switch 2's sysmix streams
+
+A Switch 2 sysmix stream opens only on a ready host stream, and the PS5's AudioOut stream never said it was
+ready: every open failed and those games (Star Fox) had no sound. It is ready while its port is open and has
+not failed, as Lichii's PC sinks are.
+
+From these commits (oldest first):
+- 2026-11-23 Playtendoh's Switch 2 side: sound for the games that play through the Switch 2's sysmix streams
+---
+ headless/check_audio_shutdown.py | 4 ++--
+ headless/devices.h               | 4 ++++
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/headless/check_audio_shutdown.py b/headless/check_audio_shutdown.py
+index 1573339..b729ec6 100644
+--- a/headless/check_audio_shutdown.py
++++ b/headless/check_audio_shutdown.py
+@@ -14,7 +14,7 @@ def check(text):
+     offsets = [body.index(step) for step in steps]
+     assert offsets == sorted(offsets), 'Audio callbacks outlive service owners'
+     # The cheat engine's timer callback asks the service manager for HID: it is destroyed first.
+-    assert body.index('cheat_engine.reset();') < body.index('kernel.CloseServices();'), \
++    assert 'cheat_engine.reset();' in body and body.index('cheat_engine.reset();') < body.index('kernel.CloseServices();'), \
+         'The cheat engine outlives the services'
+ 
+ if __name__ == '__main__':
+@@ -23,7 +23,7 @@ if __name__ == '__main__':
+     for bad in (original, fixed.replace('GameSettings::LoadOverrides(params.program_id,',
+             'GameSettings::LoadOverrides(program_id,'), fixed.replace('if (audio_core) audio_core->Shutdown();', '').replace(
+             'services.reset();', 'services.reset();\nif (audio_core) audio_core->Shutdown();'),
+-            fixed.replace('        cheat_engine.reset();\n', '', 1)):
++            fixed.replace('        cheat_engine.reset();\n', '')):  # every one (Lichii resets it early too)
+         try:
+             check(bad)
+         except AssertionError:
+diff --git a/headless/devices.h b/headless/devices.h
+index 960f544..cb4d9c1 100644
+--- a/headless/devices.h
++++ b/headless/devices.h
+@@ -155,6 +155,10 @@ public:
+     void Finalize() override;
+     void AppendBuffer(AudioCore::Sink::SinkBuffer&, std::span<s16>) override;
+     bool Healthy() const { return !failed; }
++    /// A Switch 2 sysmix stream opens only on a ready host stream (SysmixOutput::Open), and a
++    /// SinkStream is not ready unless its sink says so: without this every sysmix open failed
++    /// (0x499) and the games that play through it had no sound (Star Fox, 23 Nov).
++    bool IsReady() const override { return handle >= 0 && !failed && !SinkStream::failed; }
+ private:
+     int handle = -1;
+     std::atomic<bool> failed = false;
