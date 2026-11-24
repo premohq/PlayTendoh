@@ -20,6 +20,7 @@
 #include "app/game_archives.h"
 #include "app/lang.h"
 #include "app/mods.h"
+#include "app/new_file.h"
 #include "app/netfs.h"
 #include "app/pack_updates.h"
 #include "app/paths.h"
@@ -424,9 +425,11 @@ int main(int argc, char* argv[])
 			std::filesystem::create_directories(directory, ec);
 			if (ec) ps5log::Line("[paths] could not create {}: {}", directory, ec.message());
 		}
-		// Only a comment, never a supplied key. Do not create an empty 3DS aes_keys.txt: that
-		// would override Azahar's built-in keys. DS BIOS and Switch keys are supplied by the user.
-		if (FILE* keys = std::fopen(ps5paths::DiscKeys().c_str(), "wx"))
+		// Only a comment, never a supplied key, and only where there is no keys.txt: CreateNew, as the
+		// console's fopen reads "wx" as "w" and emptied the player's keys at every start (5.1.0). Do not
+		// create an empty 3DS aes_keys.txt: that would override Azahar's built-in keys. DS BIOS and
+		// Switch keys are supplied by the user.
+		if (FILE* keys = ps5files::CreateNew(ps5paths::DiscKeys().c_str()))
 		{
 			std::fputs("# Add your Wii U disc keys here, one per line.\n", keys);
 			std::fclose(keys);

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
+#include "app/new_file.h"
 #include "app/paths.h"
 #include "frontend/settings.h"
 #include <filesystem>
@@ -86,4 +87,17 @@ int main(int argc, char** argv) {
     const auto installs = ps5paths::InstallFolders();
     Check(installs.front() == ps5paths::kInstallDir && std::find(installs.begin(), installs.end(), "/mnt/usb0/homebrew/PPSA99360") != installs.end() &&
               std::find(installs.begin(), installs.end(), "/mnt/ext1/homebrew/PPSA99360") != installs.end(), "the usual install folder first, then the drives'");
+
+    // the start's keys.txt comment: made where there is none, a player's keys never emptied (5.1.0)
+    const fs::path keys = base / "keys/keys.txt";
+    fs::create_directories(keys.parent_path());
+    FILE* made = ps5files::CreateNew(keys.string().c_str());
+    Check(made != nullptr, "a missing keys.txt is made");
+    std::fputs("# comment\n", made);
+    std::fclose(made);
+    Put(keys, "0123456789abcdef0123456789abcdef\n");
+    const auto size = fs::file_size(keys);
+    Check(ps5files::CreateNew(keys.string().c_str()) == nullptr && fs::file_size(keys) == size, "a keys.txt that is there is left as it is");
+    Check(ps5files::CreateNew((base / "keys").string().c_str()) == nullptr && fs::is_directory(base / "keys"), "a folder in the file's place is left alone");
+    Check(ps5files::CreateNew((base / "no-such-folder/keys.txt").string().c_str()) == nullptr, "nothing is made in a folder that is not there");
 }

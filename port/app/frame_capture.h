@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Bounded, single-producer frame-interval capture. No disk writes or allocations in Record().
 #pragma once
+#include "new_file.h"
 #include <cstdint>
 #include <cstdio>
 #include <string>
@@ -30,7 +31,7 @@ namespace ps5capture
 		const char* Reason() const { return m_reason; }
 		bool WriteCsv(const std::string& file) const
 		{
-			FILE* out = std::fopen(file.c_str(), "wx");
+			FILE* out = ps5files::CreateNew(file.c_str());
 			if (!out) return false;
 			bool ok = std::fprintf(out, "elapsed_s,frame_ms\n") > 0;
 			for (const auto& sample : m_samples)

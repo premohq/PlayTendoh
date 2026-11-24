@@ -1,0 +1,33 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: premohq <48417750+premohq@users.noreply.github.com>
+Date: Tue, 24 Nov 2026 16:00:00 +0000
+Subject: [PATCH] PS5: a keys.txt that cannot be read is never emptied
+
+KeyCache_Prepare made keys.txt afresh whenever it could not open it, and making it truncates: a
+player's keys.txt that is there but unreadable to the app (another user's, copied over FTP) would
+lose every key. Now an existing file is left as it is, with a line in log.txt, and only a missing
+one is made.
+---
+ src/Cafe/Filesystem/FST/KeyCache.cpp | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/src/Cafe/Filesystem/FST/KeyCache.cpp b/src/Cafe/Filesystem/FST/KeyCache.cpp
+index f85d2b5..423d8d6 100644
+--- a/src/Cafe/Filesystem/FST/KeyCache.cpp
++++ b/src/Cafe/Filesystem/FST/KeyCache.cpp
+@@ -64,6 +64,15 @@ void KeyCache_Prepare()
+ 	FileStream* fs_keys = FileStream::openFile2(keysPath);
+ 	if( !fs_keys )
+ 	{
++		// PS5: a keys.txt that is there but cannot be read (another user's, copied over FTP) is left
++		// as it is: createFile2 truncates, and would empty the player's keys
++		std::error_code ec;
++		if (fs::exists(keysPath, ec) || (ec && ec != std::errc::no_such_file_or_directory))
++		{
++			cemuLog_log(LogType::Force, "keys.txt could not be read, and is left as it is: {}", _pathToUtf8(keysPath));
++			mtxKeyCache.unlock();
++			return;
++		}
+ 		fs_keys = FileStream::createFile2(keysPath);
+ 		if(fs_keys)
+ 		{

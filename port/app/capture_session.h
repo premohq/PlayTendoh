@@ -70,7 +70,7 @@ namespace ps5capture
 	}
 	inline bool WriteSession(const std::string& file, const std::string& json)
 	{
-		FILE* output = std::fopen(file.c_str(), "wx");
+		FILE* output = ps5files::CreateNew(file.c_str());
 		if (!output) return false;
 		const bool ok = std::fwrite(json.data(), 1, json.size(), output) == json.size();
 		return std::fclose(output) == 0 && ok;
