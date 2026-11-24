@@ -331,7 +331,8 @@ says where the app is going and how to fit in.
 - [libsmb2](https://github.com/sahlberg/libsmb2) and [libnfs](https://github.com/sahlberg/libnfs) by
   Ronnie Sahlberg for the network shares, and [rcheevos](https://github.com/RetroAchievements/rcheevos)
   by RetroAchievements
-- **Swordpdf** for the etaHEN jailbreak request from PS5SX2
+- **Swordpdf** for the etaHEN jailbreak request from PS5SX2, and for the crash, hang and no-start triage
+  guide the project's report triage follows ([docs/CRASH-TRIAGE.md](docs/CRASH-TRIAGE.md))
 - **Dimok** for the Wii U Homebrew Launcher's background, and the authors of the 3DS Homebrew
   Launcher, which inspired the 3DS side's
 - The [Lexend](https://github.com/googlefonts/lexend) authors for the launcher's font (SIL OFL 1.1)
