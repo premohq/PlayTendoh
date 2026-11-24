@@ -3,7 +3,8 @@
 What is left for Playtendoh to do, and nothing that is done: first what stands between **6.0** and its
 release, then the console checks and stability work still open from the October rebuild, a release that
 gives each emulator a folder of its own, and the longer list of ideas to pick from. Written 23 October
-2026; on 9 November 2026 brought up to 6.0, and what was done taken out.
+2026; on 9 November 2026 brought up to 6.0, and what was done taken out; on 24 November 2026 the
+problems players still report added ([Players' reports still open](#players-reports-still-open)).
 
 ## 6.0: Playtendoh
 
@@ -111,13 +112,78 @@ checked by reading and compiling. Before a release:
   take each once it is merged or tested on a console.
 - **Switch games on 8.60** ([#72](https://github.com/premohq/PlayTendoh/issues/72)): one report that
   they did not start on an earlier version; no log yet.
-- **Wii U unpacked games found but not listed** (Discord: meundies 5 games in the folder, 2 listed;
-  Sanji, Sx): no log yet. `patches/cemu/0046` makes Cemu's log say why each title it leaves out was
-  refused; a likely cause is `Code`/`Content`/`Meta` named with capitals, which the scan accepts and
-  the PS5's storage then does not find.
-- **Wii U account names in games** (Discord, Lycnus): Rename now writes the name into the Mii data
-  games read (`patches/cemu/0045`). Tekken Tag Tournament 2 showed `player1:default`, Cemu's first
-  account's name, even with a new account: check on a console which account it ran on.
+
+### Players' reports still open
+
+What players report on the Discord server and GitHub, checked on 24 November 2026 against `Playtendoh`
+at `f896fc1`: only what no commit fixes yet, the most players and the most harm first. Players are
+counted, never named ([CRASH-TRIAGE.md](CRASH-TRIAGE.md)). Versions are the build each report was
+made on: 5.1.0 is the public release, the 6.0 test build is 13 November's. For logs, ask for
+**Settings > Diagnostics > Copy logs to USB**. Pick one up and say so in its issue, or open one.
+
+1. **Wii U keys emptied after updating to 5.1.0** (3 players; data loss). `keys.txt` is 0 bytes after
+   every start, a copy put back is emptied again, and the encrypted Wii U games leave the library; one
+   player's Switch `keys` folder was gone after the update. Start at the start's own write of the
+   keys file's comment (`port/main_ps5.cpp`, `fopen(..., "wx")`, from `3cb8349`): check that the
+   console's libc honours `x`. Then Cemu's key cache, which writes `keys.txt` when it cannot open it
+   (a file owned by another user, copied over FTP). Wanted: `boot.log` and `cemu.log` of a start that
+   empties it, and the file's size and owner before and after.
+2. **Wii U games found but not listed** (6 players). Unpacked games (`code`, `content`, `meta`) are
+   seen but never listed, where a `.wua` in the same folder is (5 players, 5.0.1 to 5.1.0); on the 6.0
+   test build, `.wux` games on the extended storage are counted and the library stays empty (1).
+   `patches/cemu/0046` makes Cemu's log say why it left a title out; a likely cause is `Code`,
+   `Content` or `Meta` named with capitals, which the scan accepts and the PS5's storage then does not
+   find. Wanted: that log line and a listing of one game's folder.
+3. **Switch games that start in standalone ProsperoEden but not here** (5 players):
+   - Mario Kart 8 Deluxe goes back to its loading screen right after the title's voice line, again and
+     again (2 players, still on 5.1.0: #77's fix was the mods folder, not this); with CTGP-DX v1.1.1 it
+     does not start at all (1).
+   - Games on a USB drive or a folder of the player's own start to a black screen on a 13.42 fat,
+     where the same file plays from the internal storage (5.1.0 and the 6.0 test build).
+   - After rest mode no game starts, on any side (a player, and the owner has seen it; 6.0 test build).
+   - With Switch firmware 23 and its keys, the games are counted and none is listed (5.1.0).
+4. **Network shares** (6.0 test build): a share with ES-DE's `covers`, `manuals` or `videos` folders
+   beside the games is looked through forever and freezes the app; a share can be added only on the
+   Wii U, DS and 3DS pages; the list of shares stops at seven and neither scrolls nor lets L1/R1 reach
+   the rest. Goes with moving shares to the system-wide settings, and [N0](#n0) for the Switch.
+5. **Breath of the Wild closes on entering a Champions' Ballad shrine** (Kamia Omuna; 2 players,
+   5.1.0). Wanted: `cemu.log` from it.
+6. **3DS games that never get going:** Inazuma Eleven 3 loads forever and Yo-kai Watch loops on a
+   data-corruption error (one player, 5.0.1, logs in the Discord post); A Link Between Worlds closes
+   after a random time ([#119](https://github.com/premohq/PlayTendoh/issues/119), logs in the issue);
+   Metroid: Samus Returns and Dragon Quest VII ([#90](https://github.com/premohq/PlayTendoh/issues/90):
+   "Permission denied" under `/data/azahar`).
+7. **Small ones, a good start for a new contributor:**
+   - The Game Boy and the Game Boy Color take no `.zip` or `.7z`, where the GBA and the NES do:
+     `Formats()` in `port/retro/library.cpp` (the Super NES, Super Game Boy and Virtual Boy neither).
+   - The 3DS's fast forward does nothing (5.1.0 and the 6.0 test build).
+   - Orbit leaves the 3DS's games out where Classic shows them (one player; not seen by the owner).
+   - Copy logs to USB says it copied 18 files that cannot be found, and the first start never asked
+     about reports (6.0 test build).
+   - Breath of the Wild on the 6.0 test build has no resolution, FPS or graphic pack choices; most
+     likely the community packs were never downloaded.
+   - A large library takes a minute to scroll from its first game to its thousandth.
+   - A renamed Wii U account's name in games: Tekken Tag Tournament 2 still showed `player1:default`
+     after `patches/cemu/0045`, Cemu's first account's name, even with a new account: check on a
+     console which account it ran on.
+8. **One game each, no log yet:** on the Wii U, Devil's Third (characters as shadows, blue blood), Need
+   for Speed Most Wanted U (white trees), Hyrule Warriors (loads forever), Mario & Sonic at the Rio 2016
+   Olympic Games (campaign mode stops); on the Switch, This War of Mine (the scavenger screen blurred,
+   nothing to pick), OpenBOR (back to the library at once), Mario & Luigi: Brothership (a minute of low
+   frames at a time), Yo-kai Watch (crackle); on the 3DS, Majora's Mask 3D (cutscenes at 17 to 20 fps),
+   Pokémon Ultra Sun and Ultra Moon (blur, wrong models).
+9. **Switch 2, Phononenom's side** (send changes their way): new on the 6.0 test build and the 23
+   November testers alpha, Pokopia ignores the controller at its title; Yoshi and the Mysterious Book
+   closes after the first world's introduction; Kirby Air Riders freezes when the menu opens; Donkey
+   Kong Bananza freezes at the mine shaft's gem (perhaps the memory wall); a game's start asks for keys
+   and names Cemu. The rest matches the side's known issues (Mario Kart World's memory, Ocarina's speed).
+10. **A page that says where each file goes** (18 players asked): keys, firmware, updates, DLC, the
+    Switch's mods, cheats and saves to import, covers, and the Switch 2's dumps, in 6.0's folders.
+
+**Fixed in code, in no public build yet:** the Wii U installs stuck at 0% (#96; six players hit it on
+the Discord), the crash on reaching Settings > Play time (`724f692`), and the Switch 2's own settings
+(`59f7245`). A release with them answers those players.
+
 ### On GitHub
 
 **The open issues on 9 November 2026**, each with what is left:
@@ -136,6 +202,8 @@ checked by reading and compiling. Before a release:
   Joy-Con: the Controller type is one for every player, `headless/controller_applet.h`), #95 (the second
   screen's transparency).
 - **Waiting on their reporters:** #90 (3DS games' errors), #72.
+- **Opened since:** #119 (A Link Between Worlds closes after a random time: above), #117 (6.0's
+  download, which comes with its release).
 
 ### Launcher 6.0: what is left of its pictures
 
