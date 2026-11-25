@@ -1,0 +1,61 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: premohq <48417750+premohq@users.noreply.github.com>
+Date: Tue, 24 Nov 2026 20:00:00 +0000
+Subject: [PATCH] PS5: folders and files anyone can write, whatever the umask
+
+0028 made Azahar's folders with mkdir(0777), the app's umask being 0 then. The app no longer sets one
+(on the PS5 umask is a raw system call in the app's own code), so the console's took the others' write
+bits away: the 3DS's folders came out 0755 and its files 0644. A folder or save a root session made
+(the HEN's jailbreak) shut out a later session as the app's own user, which then could not make a
+game's save folder or write its shader cache, and the game stopped on a fatal error (#90: Permission
+denied under /data/azahar). The folder's mode is now set again after mkdir, and a file opened for
+writing is made 0666 where the process may change it.
+---
+ src/common/file_util.cpp | 22 +++++++++++++++++-----
+ 1 file changed, 17 insertions(+), 5 deletions(-)
+
+diff --git a/src/common/file_util.cpp b/src/common/file_util.cpp
+index efe7a48..d586179 100644
+--- a/src/common/file_util.cpp
++++ b/src/common/file_util.cpp
+@@ -329,16 +329,21 @@ bool CreateDir(const std::string& path) {
+ 
+ #else
+ #ifdef __PROSPERO__
+-    // Anyone's to write, as the port's own folders are (its umask is 0): the app runs as root with
+-    // the HEN's jailbreak and as its own user without, and the console's FTP service as another,
+-    // and a folder one of them made 0755 kept the others out: a game's saves and shader cache
+-    // (#55), installed titles no file manager could delete (#58)
++    // Anyone's to write: the app runs as root with the HEN's jailbreak and as its own user without,
++    // and the console's FTP service as another, and a folder one of them made 0755 kept the others
++    // out: a game's saves and shader cache (#55, #90), installed titles no file manager could delete
++    // (#58). The app keeps the console's umask (it cannot set its own: port/main_ps5.cpp), which takes
++    // mkdir's write bits for the others away, so the mode is set again after
+     constexpr mode_t mode = 0777;
+ #else
+     constexpr mode_t mode = 0755;
+ #endif
+-    if (mkdir(path.c_str(), mode) == 0)
++    if (mkdir(path.c_str(), mode) == 0) {
++#ifdef __PROSPERO__
++        chmod(path.c_str(), mode);
++#endif
+         return true;
++    }
+ 
+     int err = errno;
+ 
+@@ -1404,6 +1409,13 @@ bool IOFile::Open() {
+ #else
+     m_file = FOPEN(filename.c_str(), openmode.c_str());
+     m_good = m_file != nullptr;
++#ifdef __PROSPERO__
++    // PS5: a file written here is anyone's to write too, as CreateDir's folders (the umask made it
++    // 0644): a save a root session wrote, a session as the app's own user could not (#90). Only the
++    // file's owner, or root, may change it; else it stays as it is
++    if (m_good && openmode.find_first_of("wa+") != std::string::npos)
++        fchmod(fileno(m_file), 0666);
++#endif
+ #endif
+ 
+     return m_good;
