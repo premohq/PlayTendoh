@@ -164,6 +164,17 @@ int main(int argc, char** argv)
 	Check(!ps5retro::Launch(8, gb[0].path.string(), error) && !ps5retro::Launch(9, gbc[0].path.string(), error) &&
 			  !ps5retro::Launch(10, (root / "handhelds/Advance.gba").string(), error) && !ps5retro::LaunchLibrary(10, error) && called.empty(),
 		"stale Game Boy programs are never the sides' (no core linked here: refused before any handoff)");
+	// the launcher's music, the player's own as chosen, after a start (#120), and nothing else
+	for (const char* music : {"file:My song.mp3", "shuffle", "setup", "off"})
+	{
+		settings.music = music; ps5settings::Save(settings);
+		Check(ps5settings::Load().music == music, "the launcher's music, the player's own too, kept from one start to the next");
+	}
+	for (const char* music : {"file:", "radio", "shop"})
+	{
+		settings.music = music; ps5settings::Save(settings);
+		Check(ps5settings::Load().music == (std::string(music) == "shop" ? "setup" : "off"), "a music the app does not have is off; the shop theme's players get the setup theme");
+	}
 	settings.ui.sides = 2047; settings.ui.librarySort[10] = 2; settings.retro[6].gamesFolder = "/games/gba"; settings.retro[4].gamesFolder = "/games/gb"; ps5settings::Save(settings);
 	const auto eleven = ps5settings::Load();
 	Check(eleven.ui.sides == 2047 && eleven.ui.librarySort[10] == 2 && eleven.retro[6].gamesFolder == "/games/gba" && eleven.retro[4].gamesFolder == "/games/gb", "eleven-side visibility and independent handheld settings persist");

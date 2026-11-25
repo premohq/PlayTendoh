@@ -459,10 +459,14 @@ namespace ps5settings
 					settings.gameCoreOptions[game.name.GetString()] = std::move(options);
 			}
 		ReadString(json, "music", settings.music);
-		// the setup theme is the launcher's only music now: the shop theme's players get it
+		// the setup theme is the launcher's only music now: the shop theme's players get it. The player's
+		// own (frontend/sound.h: a file of theirs, or every one shuffled) stays as chosen: read as off, it
+		// went quiet after every game that starts the app again (#120). A file gone since plays the setup
+		// theme (music.cpp)
+		const bool own = (settings.music.rfind("file:", 0) == 0 && settings.music.size() > 5) || settings.music == "shuffle";
 		if (settings.music == "shop")
 			settings.music = "setup";
-		else if (settings.music != "setup")
+		else if (settings.music != "setup" && !own)
 			settings.music = "off";
 		ReadInt(json, "musicVolume", settings.musicVolume, 0, 100);
 		ReadBool(json, "boxArt", settings.boxArt);
