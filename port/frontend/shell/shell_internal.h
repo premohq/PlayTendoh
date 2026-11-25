@@ -709,6 +709,7 @@ namespace ps5shell
 			std::vector<ps5netfs::Share> list;
 			std::vector<std::string> status; // each share's last test, in words
 			int selected = 0;				 // in list, and Add a share after it
+			float scroll = 0;				 // the list's, when it is longer than the page
 			ScreenId from = ScreenId::Settings;
 			bool editing = false;			 // the sheet is open
 			int index = -1;					 // the share it changes; -1 a new one

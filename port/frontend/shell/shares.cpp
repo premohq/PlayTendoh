@@ -36,7 +36,9 @@ namespace ps5shell
 
 	namespace
 	{
-		constexpr float kListX = 96, kListW = 760, kTop = 330, kRowH = 104;
+		constexpr float kListX = 96, kListW = 760, kTop = 330, kRowH = 104, kBottom = 1000;
+		// the rows the page shows at once, for L1 and R1
+		constexpr int kPageRows = (int)((kBottom - kTop) / kRowH);
 		constexpr float kSheetX = 900, kSheetW = 924, kSheetY = 96, kSheetH = 888;
 		constexpr float kFieldH = 58, kFieldGap = 6;
 
@@ -129,6 +131,7 @@ namespace ps5shell
 		m_shares.list = ps5netfs::shares();
 		m_shares.status.assign(m_shares.list.size(), std::string());
 		m_shares.selected = 0;
+		m_shares.scroll = 0;
 		m_shares.editing = false;
 		Show(ScreenId::Shares);
 		m_feedback.Play(ui::Cue::Select);
@@ -342,8 +345,12 @@ namespace ps5shell
 			{
 			case Button::Up:
 			case Button::Down:
+			case Button::L1:
+			case Button::R1:
 			{
-				const int next = std::clamp(m_shares.selected + (b == Button::Down ? 1 : -1), 0, count - 1);
+				// L1 and R1 a page at a time, as the other lists
+				const int step = b == Button::Down ? 1 : b == Button::Up ? -1 : b == Button::R1 ? kPageRows : -kPageRows;
+				const int next = std::clamp(m_shares.selected + step, 0, count - 1);
 				m_feedback.Play(next == m_shares.selected ? ui::Cue::Edge : ui::Cue::Focus, press.repeat);
 				m_shares.selected = next;
 				break;
@@ -540,9 +547,16 @@ namespace ps5shell
 		// the shares, then Add a share
 		canvas.PushAlpha(Enter(1) * (m_shares.editing ? 0.45f : 1.0f));
 		const int count = (int)m_shares.list.size() + 1;
+		// longer than the page: it scrolls to keep the focused row in sight (installs.cpp's way)
+		const float view = kBottom - kTop;
+		const float target = std::clamp(m_shares.selected * kRowH - view * 0.4f, 0.0f, std::max(0.0f, count * kRowH - view));
+		m_shares.scroll += (target - m_shares.scroll) * std::min(1.0f, m_dt * (m_settings.ui.reduceMotion ? 60.0f : 14.0f));
+		canvas.PushClip({kListX - 16, kTop - 12, kListW + 32, view + 24});
 		for (int i = 0; i < count; i++)
 		{
-			const Box box{kListX, kTop + i * kRowH, kListW, kRowH - 14};
+			const Box box{kListX, kTop + i * kRowH - m_shares.scroll, kListW, kRowH - 14};
+			if (box.y > kBottom + 10 || box.y + box.h < kTop - 10)
+				continue;
 			const bool focused = !m_shares.editing && i == m_shares.selected;
 			Glass(canvas, box, kRadiusCard, focused ? Surface2() : Surface());
 			if (focused)
@@ -561,6 +575,7 @@ namespace ps5shell
 				canvas.Text(Style({20, ui::Weight::Medium, 1.0f}), box.Right() - 226, box.CentreY() - 12, m_shares.status[i], kGood, 200, 1,
 					ui::Align::Right);
 		}
+		canvas.PopClip();
 		canvas.PopAlpha();
 		if (!m_shares.editing)
 		{
