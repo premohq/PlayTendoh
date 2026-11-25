@@ -97,6 +97,14 @@ namespace ps5actions
 		return folder == "/" ? "/" + name : folder + "/" + name;
 	}
 
+	// A drive mounted at path: a folder on a file system of its own, not /mnt's. An empty mount point
+	// (/mnt/usb0 with the drive in another port) is /mnt's, and what is written there never reaches a drive
+	static bool MountedDrive(const std::string& path)
+	{
+		struct stat info{}, mnt{};
+		return stat(path.c_str(), &info) == 0 && S_ISDIR(info.st_mode) && (stat("/mnt", &mnt) != 0 || info.st_dev != mnt.st_dev);
+	}
+
 	// The drives plugged in (USB, and the PS5's extended storage), for the folder browser to list
 	// first: otherwise reached only by climbing to / and into /mnt
 	std::vector<std::string> ConnectedDrives()
@@ -106,21 +114,34 @@ namespace ps5actions
 			drives.push_back(fmt::format("/mnt/usb{}", i));
 		drives.push_back("/mnt/ext0");
 		drives.push_back("/mnt/ext1");
-		std::erase_if(drives, [](const std::string& drive) {
-			struct stat info{};
-			return stat(drive.c_str(), &info) != 0 || !S_ISDIR(info.st_mode);
-		});
+		std::erase_if(drives, [](const std::string& drive) { return !MountedDrive(drive); });
 		return drives;
 	}
 
+	// from copied to to, and on the drive when it returns true: written out (fsync) and closed, so a drive
+	// taken out after the row says so has the file
 	static bool CopyFile(const std::string& from, const std::string& to)
 	{
 		std::ifstream in(from, std::ios::binary);
 		if (!in)
 			return false;
-		std::ofstream out(to, std::ios::binary | std::ios::trunc);
-		out << in.rdbuf();
-		return (bool)out;
+		const int out = open(to.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0666);
+		if (out < 0)
+			return false;
+		bool ok = true;
+		char buffer[1 << 16];
+		while (ok && in)
+		{
+			in.read(buffer, sizeof(buffer));
+			for (std::streamsize done = 0, got = in.gcount(); ok && done < got;)
+			{
+				const ssize_t wrote = write(out, buffer + done, (size_t)(got - done));
+				ok = wrote > 0;
+				done += ok ? wrote : 0;
+			}
+		}
+		ok = ok && !in.bad() && fsync(out) == 0;
+		return close(out) == 0 && ok;
 	}
 
 	// Diagnostics > Copy logs to USB: what a report needs, in a folder of its own on the first
@@ -146,8 +167,8 @@ namespace ps5actions
 		}
 		for (int drive = 0; drive < 8; drive++)
 		{
-			const std::string folder = fmt::format("/mnt/usb{}/PS5-ECAM-logs-{}", drive, stamp);
-			if (!IsFolder(fmt::format("/mnt/usb{}", drive)) || mkdir(folder.c_str(), 0777) != 0)
+			const std::string name = fmt::format("PS5-ECAM-logs-{}", stamp), folder = fmt::format("/mnt/usb{}/{}", drive, name);
+			if (!MountedDrive(fmt::format("/mnt/usb{}", drive)) || mkdir(folder.c_str(), 0777) != 0)
 				continue;
 			int copied = 0;
 			for (const std::string& file : files)
@@ -175,9 +196,17 @@ namespace ps5actions
 					 porpoiseLogs + "/core.prev.log", sandbox + "/" + ps5porpoise::kSandboxTrace})
 				if (IsFile(file) && CopyFile(file, folder + "/porpoise-" + file.substr(file.find_last_of('/') + 1)))
 					copied++;
+			// the folder's entry on the drive too
+			if (const int entry = open(folder.c_str(), O_RDONLY); entry >= 0)
+			{
+				fsync(entry);
+				close(entry);
+			}
+			sync();
 			ps5log::Line("[launcher] {} log files copied to {}", copied, folder);
+			// the folder's name with the count, to find it on the drive
 			// tr: {1} is the USB drive's number
-			return TrP(copied, "{0} file to USB drive {1}", "{0} files to USB drive {1}", drive + 1);
+			return TrP(copied, "{0} file to USB drive {1}", "{0} files to USB drive {1}", drive + 1) + " · " + name;
 		}
 		ps5log::Line("[launcher] no USB drive took the logs");
 		return Tr("No USB drive found");
