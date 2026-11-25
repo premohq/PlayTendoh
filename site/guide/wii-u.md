@@ -79,4 +79,4 @@ With the game closed, copy `mlc01/usr/save/00050000/<title ID>/user/<account>` f
 
 ## Mods {#mods}
 
-Graphic packs and mods have their own section in the [full user guide](https://github.com/premohq/PlayTendoh/blob/main/docs/GUIDE.md#mods).
+Graphic packs and mods have their own section in the [full user guide](https://github.com/premohq/PlayTendoh/blob/Playtendoh/docs/GUIDE.md#mods).

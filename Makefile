@@ -40,10 +40,10 @@ core = $(filter $(1),$(CORES_LIST))
 # release (port/CMakeLists.txt's PLAYTENDOH_DEBUG). Its ZIP and ELF are named -debug.
 DEBUG ?= 0
 export PLAYTENDOH_DEBUG := $(if $(filter 1 on ON yes,$(DEBUG)),ON,OFF)
-# Which build this is (docs/REPORTS.md): a release, made from a release's tag (v6.0.0) or the main branch, or a
+# Which build this is (docs/REPORTS.md): a release, made from a release's tag (v6.0.0) or the main branch (Playtendoh), or a
 # nightly, made from anything else (the nightly branch's work). A nightly sends reports from its first start
 # until the player says no in one; a release asks first. make release CHANNEL=release (or nightly) says so.
-CHANNEL ?= $(if $(or $(shell git describe --exact-match --tags --match 'v[0-9]*' HEAD 2>/dev/null),$(filter main,$(shell git rev-parse --abbrev-ref HEAD 2>/dev/null))),release,nightly)
+CHANNEL ?= $(if $(or $(shell git describe --exact-match --tags --match 'v[0-9]*' HEAD 2>/dev/null),$(filter Playtendoh,$(shell git rev-parse --abbrev-ref HEAD 2>/dev/null))),release,nightly)
 $(if $(filter-out release nightly,$(CHANNEL)),$(error CHANNEL: release or nightly, not $(CHANNEL)))
 $(if $(and $(filter nightly,$(CHANNEL)),$(filter-out A B C D E F G H I J K L M N O P Q R S T U V W X Y Z,$(PRERELEASE))),$(error PRERELEASE: one letter, A to Z, not '$(PRERELEASE)'))
 export PLAYTENDOH_CHANNEL := $(CHANNEL)

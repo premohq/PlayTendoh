@@ -43,7 +43,7 @@ options=(
     -DPLAYTENDOH_REPORT_URL="$report_url"
     # a debug build (make DEBUG=1, port/CMakeLists.txt): here too, so a change of it configures again
     -DPLAYTENDOH_DEBUG="${PLAYTENDOH_DEBUG:-OFF}"
-    # a nightly (make's CHANNEL, the default for anything not made from a release's tag or main): reports
+    # a nightly (make's CHANNEL, the default for anything not made from a release's tag or Playtendoh): reports
     # from the first start, until the player says no in one
     -DPLAYTENDOH_PRERELEASE="$([[ ${PLAYTENDOH_CHANNEL:-nightly} == release ]] && echo OFF || echo ON)"
     # and its letter, on its watermark (make's PRERELEASE)

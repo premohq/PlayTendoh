@@ -173,7 +173,7 @@ export async function rebuildSite(env, fetcher = fetch) {
 			'user-agent': 'playtendoh-reports',
 			'x-github-api-version': '2022-11-28',
 		},
-		body: JSON.stringify({ ref: env.PAGES_BRANCH || 'main' }),
+		body: JSON.stringify({ ref: env.PAGES_BRANCH || 'Playtendoh' }),
 	});
 	if (response.status !== 204) console.log('pages dispatch', response.status);
 	return response.status === 204;

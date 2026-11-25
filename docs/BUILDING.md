@@ -46,7 +46,7 @@ The names are `azahar`, `melonds`, `eden`, `eglantine`, `porpoise` and the libre
 on their own too. An emulator left out is not linked or packaged even when an earlier build left it in
 `build/`, and its sides say it is not in this copy.
 
-**A pre-release or a release.** A build from a release's tag (`v6.0.0`) or from `main` is a release; any other,
+**A pre-release or a release.** A build from a release's tag (`v6.0.0`) or from `Playtendoh`, the main branch, is a release; any other,
 from `nightly`, is a pre-release (`make release CHANNEL=release` or `CHANNEL=nightly` says which). A pre-release
 has a letter, A to Z, the pre-releases of a version counted: the Makefile's `PRERELEASE`, beside `VERSION`; move
 it on for each one given to testers. It shows "Pre-release 6.0.0 C" in the screen's bottom-left corner at all

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Playtendoh: a pre-release says so on the screen at all times, a release never. A pre-release is a nightly
-// (make's CHANNEL: a build not made from a release's tag or main) with its letter, A to Z, the pre-releases
+// (make's CHANNEL: a build not made from a release's tag or Playtendoh, the main branch) with its letter, A to Z, the pre-releases
 // of a version counted (make's PRERELEASE: 6.0.0 C is 6.0.0's third). Its watermark is its words in the
 // screen's bottom-left corner, small and faint, over everything: the launcher's (shell.cpp), the in-game
 // layers' (ps5menu::DrawWatermark: the Wii U's, the 3DS's, the DS's and the classics', and the Switch's and

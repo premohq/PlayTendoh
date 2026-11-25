@@ -294,7 +294,7 @@ def template(page, title, body, description):
     <h1>{html.escape(title)}</h1>
 {body}
     {pager}
-    <p class="guide-foot">Something on this page wrong, out of date or unclear? <a href="{REPO}/edit/main/site/guide/{page}.md">Fix it on GitHub</a>, or tell us on the <a href="{DISCORD}">Discord</a>.</p>
+    <p class="guide-foot">Something on this page wrong, out of date or unclear? <a href="{REPO}/edit/Playtendoh/site/guide/{page}.md">Fix it on GitHub</a>, or tell us on the <a href="{DISCORD}">Discord</a>.</p>
   </main>
 </div>
 <footer class="footer">

@@ -5,7 +5,7 @@ run by the app's own libretro frontend (port/libretro); no new standalone progra
 Keep the owner's look and voice: colours, sizes, type and motion only from port/ui/tokens.json, new
 options as rows on existing pages or in the in-game sheet (port/app/side_menu.h), player-facing words
 plain and short like the strings around them; a new screen or layout needs the owner's yes first.
-Start from the newest nightly branch (all pre-release work; main is what is released), work in a fork, rebase
+Start from the newest nightly branch (all pre-release work; Playtendoh is the main branch, what is released), work in a fork, rebase
 and squash fix-ups before a pull request against nightly.
 Side counts come from ps5retro::kSystems, never hard-coded. Files through ps5files::OwnStatus. Strings
 through Tr/TrF/TrP, translated in every port/lang/*.po. Build what you change (make release, or the
