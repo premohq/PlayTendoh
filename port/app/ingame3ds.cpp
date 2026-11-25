@@ -7,6 +7,7 @@
 #include "loading_screen.h"
 #include "paths.h"
 #include "menu_canvas.h"
+#include "prerelease.h"
 #include "remote_menu.h"
 #include "side_menu.h"
 #include "tga.h"
@@ -1541,7 +1542,9 @@ namespace ps5ingame3ds
 				if (fade <= 0)
 					s_loadingFades = false;
 			}
-			if (!open && !performance && !keyboard && !border && !loading && fade <= 0)
+			// a pre-release's watermark (app/prerelease.h): every frame, so the layer draws every frame
+			static const std::string watermark = ps5prerelease::Words();
+			if (!open && !performance && !keyboard && !border && !loading && fade <= 0 && watermark.empty())
 			{
 				s_buttons = 0; // the menu sees a fresh controller when it next opens
 				return;
@@ -1644,6 +1647,7 @@ namespace ps5ingame3ds
 				if (fade > 0)
 					DrawLoading(scale, fade);
 			}
+			ps5menu::DrawWatermark(ImGui::GetForegroundDrawList(), g.chip, scale, watermark);
 			ImGui::Render();
 			g.pending = true;
 			return;

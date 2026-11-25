@@ -3042,6 +3042,12 @@ msgstr "Kurulamadı: {0}"
 msgid "The new packs could not replace the old ones"
 msgstr "Yeni paketler eskilerin yerini alamadı"
 
+#. the watermark a pre-release (a test build) shows in a corner at all times: {0} is its version and letter, as "6.0.0 C"
+#: port/app/prerelease.cpp:35
+#, menu
+msgid "Pre-release {0}"
+msgstr "Ön sürüm {0}"
+
 #: port/app/quotes.h:31
 #, menu
 msgid "On my business card, I am a corporate president. In my mind, I am a game developer. But in my heart, I am a gamer."

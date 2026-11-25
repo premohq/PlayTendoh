@@ -10,6 +10,10 @@ MAKEFLAGS += --no-print-directory
 
 # The release's version, set here only: port/CMakeLists.txt and tools/package.sh (param.json) read it
 VERSION := 6.0.0
+# A pre-release's letter, A to Z: the pre-releases of VERSION given to testers, counted (6.0.0's: the 13
+# November test build A, the 23 November testers' alpha B). Each nightly shown to testers takes the next;
+# its watermark says "Pre-release 6.0.0 C" (app/prerelease.h). A release (CHANNEL=release) has none.
+PRERELEASE := C
 APP := build/app/PPSA99360
 JOBS ?= $(shell nproc)
 export JOBS
@@ -41,8 +45,10 @@ export PLAYTENDOH_DEBUG := $(if $(filter 1 on ON yes,$(DEBUG)),ON,OFF)
 # until the player says no in one; a release asks first. make release CHANNEL=release (or nightly) says so.
 CHANNEL ?= $(if $(or $(shell git describe --exact-match --tags --match 'v[0-9]*' HEAD 2>/dev/null),$(filter main,$(shell git rev-parse --abbrev-ref HEAD 2>/dev/null))),release,nightly)
 $(if $(filter-out release nightly,$(CHANNEL)),$(error CHANNEL: release or nightly, not $(CHANNEL)))
+$(if $(and $(filter nightly,$(CHANNEL)),$(filter-out A B C D E F G H I J K L M N O P Q R S T U V W X Y Z,$(PRERELEASE))),$(error PRERELEASE: one letter, A to Z, not '$(PRERELEASE)'))
 export PLAYTENDOH_CHANNEL := $(CHANNEL)
-DIST_NAME := v$(VERSION)$(if $(filter nightly,$(CHANNEL)),-nightly)$(if $(filter ON,$(PLAYTENDOH_DEBUG)),-debug)
+export PLAYTENDOH_PRERELEASE_LETTER := $(if $(filter nightly,$(CHANNEL)),$(PRERELEASE))
+DIST_NAME := v$(VERSION)$(if $(filter nightly,$(CHANNEL)),-pre-$(PRERELEASE))$(if $(filter ON,$(PLAYTENDOH_DEBUG)),-debug)
 
 .PHONY: mupen64plus fceumm gameboy retro-upgrades retro test-retro help deps deps-status radv azahar melonds libretro eden eglantine porpoise build check package release clean distclean test-contribution esde esde-zip
 

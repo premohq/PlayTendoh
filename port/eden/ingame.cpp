@@ -40,6 +40,7 @@ namespace ps5ingamenx
 		std::string s_root;		// the app's data folder (its amiibo/)
 		std::string s_game;		// the title ID the launcher keeps the game's settings under
 		bool s_session = false; // a session file was there: this side's screens are drawn
+		std::string s_watermark;  // a pre-release's words, drawn in the corner every frame (ps5menu::DrawWatermark)
 		Settings s_settings;	// under s_mutex
 		bool s_changed = false;
 		bool s_everChanged = false; // for the result file: the launcher keeps what the menu changed
@@ -401,7 +402,7 @@ namespace ps5ingamenx
 			std::string title;
 			{
 				std::lock_guard lock(s_mutex);
-				title = s_title;
+				title = s_title + s_watermark; // the watermark's letters too
 			}
 			const ImWchar* ranges = ps5menu::GlyphRanges(title);
 			int mergeFace = 0;
@@ -854,7 +855,7 @@ namespace ps5ingamenx
 	void Start(const Settings& settings)
 	{
 		std::ifstream in(SessionFile());
-		std::string title, details, cover, language, font, game, root = ps5paths::kDefaultRoot;
+		std::string title, details, cover, language, font, game, watermark, root = ps5paths::kDefaultRoot;
 		int face = 0;
 		bool exitAfterGame = false;
 		for (std::string line; std::getline(in, line);)
@@ -881,6 +882,8 @@ namespace ps5ingamenx
 				game = value;
 			else if (key == "root" && !value.empty())
 				root = value;
+			else if (key == "watermark")
+				watermark = value; // a pre-release's (app/prerelease.h), in the menus' language; none in a release
 		}
 		const bool session = in.is_open() && !title.empty();
 		in.close();
@@ -894,6 +897,7 @@ namespace ps5ingamenx
 			s_coverPath = cover;
 			s_game = game;
 			s_root = root;
+			s_watermark = watermark;
 			s_session = session;
 			s_settings = settings;
 			s_everChanged = false;
@@ -1101,7 +1105,12 @@ namespace ps5ingamenx
 			}
 			if (!g.picturesTried)
 				MakePictures(target.commandBuffer);
-			if (!loading && !open && !fading)
+			std::string watermark;
+			{
+				std::lock_guard lock(s_mutex);
+				watermark = s_watermark;
+			}
+			if (!loading && !open && !fading && watermark.empty())
 				return; // made ready for the menu, nothing to draw
 			ImGuiIO& io = ImGui::GetIO();
 			io.DisplaySize = {(float)target.width, (float)target.height};
@@ -1121,8 +1130,9 @@ namespace ps5ingamenx
 			}
 			else if (open)
 				DrawMenu(drawScale);
-			else
+			else if (fading)
 				DrawLoading(drawScale, (now - first) / 1e6f, ps5menu::LoadingFadeAlpha(sinceEnd));
+			ps5menu::DrawWatermark(ImGui::GetForegroundDrawList(), g.chip, drawScale, watermark);
 			ImGui::Render();
 			g.pending = true;
 			return;

@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "ingame.h"
 #include "amiibo_list.h"
+#include "prerelease.h"
 #include "boxart.h"
 #include "buttons_menu.h"
 #include "emulator.h"
@@ -613,6 +614,14 @@ namespace
 		return fonts.heading && fonts.body && fonts.label && fonts.caption && fonts.chip;
 	}
 
+	// A pre-release's watermark (app/prerelease.h), over everything Cemu's ImGui draws in the TV's frame
+	void DrawWatermark(float scale)
+	{
+		static const std::string words = ps5prerelease::Words();
+		if (!words.empty())
+			ps5menu::DrawWatermark(ImGui::GetForegroundDrawList(), ImGui_GetFontFace((int)ps5menu::Weight::SemiBold, ps5menu::kChip * scale), scale, words);
+	}
+
 	// The loading screen, as every side draws it; alpha falls as it fades into the game
 	void DrawLoading(const std::string& step, float progress, float alpha)
 	{
@@ -947,6 +956,7 @@ bool PS5Cemu_DrawLoading(sint32 stage, uint32 done, uint32 of)
 	if (g_renderer->ImguiBegin(true))
 	{
 		DrawLoading(step, progress, 1.0f);
+		DrawWatermark(UiScale());
 		g_renderer->ImguiEnd();
 	}
 	if (stage >= 3)
@@ -1004,6 +1014,7 @@ void PS5Cemu_SetGamePadArea(bool visible, sint32 x, sint32 y, sint32 width, sint
 void PS5Cemu_RenderOverlay()
 {
 	const float scale = UiScale();
+	DrawWatermark(scale); // over the menu too: the foreground's
 	if (s_menuOpen)
 	{
 		DrawMenu(scale);

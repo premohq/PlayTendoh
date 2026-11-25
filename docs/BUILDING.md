@@ -46,6 +46,13 @@ The names are `azahar`, `melonds`, `eden`, `eglantine`, `porpoise` and the libre
 on their own too. An emulator left out is not linked or packaged even when an earlier build left it in
 `build/`, and its sides say it is not in this copy.
 
+**A pre-release or a release.** A build from a release's tag (`v6.0.0`) or from `main` is a release; any other,
+from `nightly`, is a pre-release (`make release CHANNEL=release` or `CHANNEL=nightly` says which). A pre-release
+has a letter, A to Z, the pre-releases of a version counted: the Makefile's `PRERELEASE`, beside `VERSION`; move
+it on for each one given to testers. It shows "Pre-release 6.0.0 C" in the screen's bottom-left corner at all
+times, the launcher and every game (`port/app/prerelease.h`), sends reports from its first start until the
+player says no in one (`docs/REPORTS.md`), and its ZIP and ELFs are named `-pre-C`. A release has none of that.
+
 **A debug build.** `make release DEBUG=1` builds the same app with what helps develop and test it on a
 console (`PLAYTENDOH_DEBUG` in `port/CMakeLists.txt`), and names its ZIP and ELFs `-debug`. Now that is
 [PS5_DevLoop](https://github.com/griches/PS5_DevLoop)'s `grab`: the frame shown, on request, as a PNG.

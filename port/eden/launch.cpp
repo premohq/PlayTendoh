@@ -5,6 +5,7 @@
 #include "load_status.h"
 #include "../app/lang.h"
 #include "../app/netfs.h"
+#include "../app/prerelease.h"
 #include "../app/paths.h"
 #include "../app/tga.h"
 #include "../ps5/log.h"
@@ -185,6 +186,7 @@ namespace ps5eden
 			line(out, "exit", ps5emu::ExitAfterGame() ? "1" : "0"); // a home screen tile's game: its menu quits to the home screen
 			line(out, "game", fmt::format("{:016x}", session.titleId)); // what the menu changes is kept under it (TakeResult)
 			line(out, "root", ps5paths::Root());						 // the data folder, for its amiibo/
+			line(out, "watermark", ps5prerelease::Words());			 // a pre-release's, drawn at all times; none in a release
 			if (!out)
 			{
 				ps5log::Line("[switch] {} could not be written: Eden shows its own loading screen", staged);

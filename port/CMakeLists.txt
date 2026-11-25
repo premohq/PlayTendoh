@@ -126,6 +126,8 @@ add_library(CemuPS5 STATIC
 	app/reports.cpp
 	app/reports.h
 	app/report_send.cpp
+	app/prerelease.cpp
+	app/prerelease.h
 	app/compatibility.cpp
 	app/compatibility.h
 	app/compat_fetch.cpp
@@ -342,6 +344,7 @@ set_source_files_properties(
 	app/reorganize.cpp
 	app/catalog.cpp
 	app/compatibility.cpp
+	app/prerelease.cpp
 	app/gameinfo.cpp
 	azahar/controls.cpp
 	azahar/library.cpp
@@ -448,10 +451,15 @@ if(PLAYTENDOH_REPORT_URL)
 endif()
 # A nightly (make's CHANNEL=nightly): reports from the first start, until the player says no in one
 # (app/reports.h, Prerelease). Read in reports.cpp alone, as the intake's address is.
+# And its letter, A to Z (make's PRERELEASE), on its watermark (app/prerelease.h)
 option(PLAYTENDOH_PRERELEASE "a pre-release (nightly) build: reports on until the player says no in one" OFF)
+set(PLAYTENDOH_PRERELEASE_LETTER "" CACHE STRING "a pre-release's letter, A to Z (make's PRERELEASE)")
 if(PLAYTENDOH_PRERELEASE)
-	target_compile_definitions(CemuPS5 PRIVATE PLAYTENDOH_PRERELEASE=1)
-	message(STATUS "Playtendoh: a nightly: reports on from the first start, until the player says no")
+	if(NOT PLAYTENDOH_PRERELEASE_LETTER MATCHES "^[A-Z]$")
+		message(FATAL_ERROR "a pre-release needs its letter, A to Z (make's PRERELEASE), not '${PLAYTENDOH_PRERELEASE_LETTER}'")
+	endif()
+	target_compile_definitions(CemuPS5 PRIVATE PLAYTENDOH_PRERELEASE=1 PLAYTENDOH_PRERELEASE_LETTER="${PLAYTENDOH_PRERELEASE_LETTER}")
+	message(STATUS "Playtendoh: pre-release ${PLAYTENDOH_PRERELEASE_LETTER}: its watermark, and reports on until the player says no")
 endif()
 # the commit a report names; PUBLIC, for main_ps5.cpp (CemuBin) sends it
 execute_process(COMMAND git -C "${CMAKE_CURRENT_LIST_DIR}/.." rev-parse --short=7 HEAD OUTPUT_VARIABLE PLAYTENDOH_COMMIT

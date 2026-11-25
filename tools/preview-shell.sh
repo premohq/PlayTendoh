@@ -7,7 +7,7 @@
 #
 # PREVIEW_FIRST=1 starts it as on a first start, PREVIEW_REMOTE=1 with the remote touch screen on,
 # PREVIEW_UPDATE=1 with a newer release found, PREVIEW_NO_DATA=1 with /data out of reach,
-# PREVIEW_LAYOUT=1 in Orbit, PREVIEW_BOXART3D=1 with 3D box art, PREVIEW_NO_BADGES=1 with How games run off, PREVIEW_LAUNCH_ERROR=1 after a game that did not start; PREVIEW_LANGUAGE=de (a code of app/lang.cpp's, or
+# PREVIEW_LAYOUT=1 in Orbit, PREVIEW_PRERELEASE=C as pre-release C (its watermark), PREVIEW_BOXART3D=1 with 3D box art, PREVIEW_NO_BADGES=1 with How games run off, PREVIEW_LAUNCH_ERROR=1 after a game that did not start; PREVIEW_LANGUAGE=de (a code of app/lang.cpp's, or
 # qps, tools/lang.py pseudo's longer text) in that language, PREVIEW_SYSTEM_LANGUAGE=4 with the PS5 set to
 # its language number.
 #
@@ -122,11 +122,20 @@ flags=(-std=c++20 -O1 -g -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-
     -DPS5CEMU_LAUNCHER_PREVIEW "-DPS5CEMU_VERSION=\"$version\"" "-DPS5CEMU_DATA=\"$out/data\"" "-DPLAYTENDOH_REPORT_URL=\"https://reports.example.invalid/v1/report\""
     -I "$out/include" -I "$PS5CEMU_SYSROOT/include" -I port -I port/app -I tools/launcher-preview
     -I "$PS5CEMU_ROOT/.deps/reshade/deps/stb" $(pkg-config --cflags freetype2))
+# as a pre-release (PREVIEW_PRERELEASE=C): its watermark in the corner (app/prerelease.h); every object again,
+# as the flags changed
+if [[ -n ${PREVIEW_PRERELEASE:-} ]]; then
+    flags+=(-DPLAYTENDOH_PRERELEASE=1 "-DPLAYTENDOH_PRERELEASE_LETTER=\"$PREVIEW_PRERELEASE\"")
+fi
+if [[ $(cat "$out/obj/flags" 2>/dev/null) != "${flags[*]}" ]]; then
+    rm -f "$out"/obj/*.o
+    echo "${flags[*]}" >"$out/obj/flags"
+fi
 sources=(tools/launcher-preview/shell.cpp tools/launcher-preview/console.cpp
     port/frontend/shell/hub.cpp port/frontend/shell/installs.cpp port/frontend/shell/library.cpp port/frontend/shell/pages.cpp
     port/frontend/shell/settings.cpp port/frontend/shell/consoles.cpp port/frontend/shell/orbit.cpp port/frontend/shell/timeline.cpp port/frontend/shell/porpoise_rows.cpp port/frontend/shell/switch_extras.cpp port/frontend/shell/setup.cpp port/frontend/shell/shares.cpp port/frontend/shell/shell.cpp port/frontend/shell/welcome.cpp port/frontend/shell/firststart.cpp port/frontend/shell/reports.cpp port/frontend/shell/whatsnew.cpp port/frontend/shell/widgets.cpp port/frontend/shell/cheat_rows.cpp
     port/ui/canvas.cpp port/ui/feedback.cpp port/ui/gfx.cpp port/ui/images.cpp port/ui/input.cpp port/ui/qr.cpp port/ui/text.cpp port/ui/theme.cpp
-    port/ui/vkfn.cpp port/app/catalog.cpp port/app/cheats.cpp port/app/reports.cpp port/app/saves.cpp port/app/reorganize.cpp port/app/gameinfo.cpp port/app/lang.cpp port/app/compatibility.cpp port/app/keyboard.cpp port/frontend/actions.cpp
+    port/ui/vkfn.cpp port/app/catalog.cpp port/app/cheats.cpp port/app/reports.cpp port/app/prerelease.cpp port/app/saves.cpp port/app/reorganize.cpp port/app/gameinfo.cpp port/app/lang.cpp port/app/compatibility.cpp port/app/keyboard.cpp port/frontend/actions.cpp
     port/frontend/settings.cpp port/azahar/library.cpp port/azahar/controls.cpp port/azahar/unavailable.cpp
     port/retro/library.cpp port/retro/launch.cpp port/retro/porpoise_settings.cpp port/retro/porpoise_saves.cpp port/retro/porpoise_game.cpp port/retro/porpoise_banner.cpp port/retro/porpoise_disc.cpp port/melonds/library.cpp port/melonds/unavailable.cpp port/eden/library.cpp port/eden/nx_files.cpp port/eden/controls.cpp port/eden/extras.cpp port/eden/save_transfer.cpp)
 

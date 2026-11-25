@@ -50,6 +50,7 @@ MENU_FILES = {
     "port/app/usb_devices.cpp",
     "port/ps5/display.h",
     "port/app/lang.cpp",
+    "port/app/prerelease.cpp",
 }
 
 # code: (nplurals, plural expression), as lang.cpp's PluralIndex numbers the forms

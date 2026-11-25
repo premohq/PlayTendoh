@@ -16,6 +16,7 @@
 #include "../../app/mods.h"
 #include "../../app/pack_updates.h"
 #include "../../app/reports.h"
+#include "../../app/prerelease.h"
 #include "../../app/paths.h"
 #include "../../app/quotes.h"
 #include "../../app/updates.h"
@@ -351,7 +352,7 @@ namespace ps5shell
 					quotes.emplace_back(ps5quotes::Words(quote), ps5quotes::Credit(quote));
 				}
 				ps5porpoise::WriteSession(SystemName(m_side), m_choice->game.name, details, cover,
-					ps5boxart::TitleArtPath(std::filesystem::path(m_choice->game.path).stem().string()), quotes);
+					ps5boxart::TitleArtPath(std::filesystem::path(m_choice->game.path).stem().string()), quotes, ps5prerelease::Words());
 				{
 					// every game's Auto Boost: this one's, the first time
 					ps5porpoise::Pick pick;
@@ -651,6 +652,16 @@ namespace ps5shell
 		if (overlay)
 			GlassBackdrop(canvas, 1);
 		DrawOverlays(canvas);
+		// a pre-release says so at all times (app/prerelease.h): its words on the scrim in the corner, over
+		// everything, as the in-game layers draw them (ps5menu::DrawWatermark); a release never
+		if (static const std::string words = ps5prerelease::Words(); !words.empty())
+		{
+			using namespace ps5prerelease;
+			const ui::TextBlock block = m_fonts.Layout(kOverlineStyle, words);
+			const Box box{kMargin, 1080 - kMargin - block.height - 2 * kPadY, block.width + 2 * kPadX, block.height + 2 * kPadY};
+			canvas.Rect(box, kRadiusChip, kScrimDefault);
+			canvas.Text(block, box.x + kPadX, box.y + kPadY, kText2Default);
+		}
 		m_drawing = nullptr;
 	}
 

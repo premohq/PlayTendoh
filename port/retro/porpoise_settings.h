@@ -36,9 +36,11 @@ namespace ps5porpoise
 	// <data>/playtendoh-session.txt, a line each; banner: a full-screen picture of the game (ps5boxart's title
 	// art) for its ground, in place of its cover's colours. Then quotes: what every side's loading screen shows
 	// while it waits (app/quotes.h), the one to show first first, each its words and who said it: a quote= line
-	// each and a quote_by= after it (a reader that knows neither skips them)
+	// each and a quote_by= after it (a reader that knows neither skips them). And a pre-release's watermark
+	// (app/prerelease.h: none in a release), for Porpoise X to draw at all times, as the other sides' in-game
+	// layers do (ps5menu::DrawWatermark: bottom left, 18 SemiBold capitals in text-2 on the scrim)
 	void WriteSession(const std::string& side, const std::string& title, const std::string& details, const std::string& cover, const std::string& banner = {},
-		const std::vector<std::pair<std::string, std::string>>& quotes = {});
+		const std::vector<std::pair<std::string, std::string>>& quotes = {}, const std::string& watermark = {});
 
 	// Porpoise's own logs: its trace.txt and Dolphin's core.log, each start's own with the last one's beside it
 	// (trace.prev.txt, core.prev.log; Porpoise-X's porpoise_paths.hpp). Its trace is in the sandbox

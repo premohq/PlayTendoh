@@ -10,6 +10,7 @@
 #include "keyboard.h"
 #include "lang.h"
 #include "paths.h"
+#include "prerelease.h"
 #include "../ui/text.h"
 
 #include <imgui.h>
@@ -137,6 +138,22 @@ namespace ps5menu
 	constexpr Palette kRed = Side(0xf2434f, 0x2e0508);   // the Switch side's (port/eden/ingame.h)
 
 	// The type styles the menus use, each a font made at its size
+	// A pre-release's watermark (app/prerelease.h), every frame, over everything: its words in capitals, in the
+	// badges' type (18 SemiBold, the launcher's overline) and text-2, on the scrim with a chip's corners, in the
+	// screen's bottom-left corner, as the launcher draws it. No words (a release): nothing.
+	inline void DrawWatermark(ImDrawList* draw, ImFont* font, float scale, const std::string& words)
+	{
+		if (!draw || !font || words.empty())
+			return;
+		const std::string text = ui::Upper(words, ps5lang::Current() == "tr");
+		const ImVec2 size = font->CalcTextSizeA(18 * scale, FLT_MAX, 0.0f, text.c_str());
+		const float height = ImGui::GetIO().DisplaySize.y, margin = ps5prerelease::kMargin * scale;
+		const float padX = ps5prerelease::kPadX * scale, padY = ps5prerelease::kPadY * scale;
+		const ImVec2 corner{margin, height - margin - size.y - 2 * padY};
+		draw->AddRectFilled(corner, {corner.x + size.x + 2 * padX, height - margin}, Colour(0x03050a, 0x9e), 12 * scale);
+		draw->AddText(font, 18 * scale, {corner.x + padX, corner.y + padY}, Colour(0xf5f7fb, 0xb3), text.c_str());
+	}
+
 	struct Fonts
 	{
 		ImFont* heading; // 32 SemiBold: the game's name, a sheet's title

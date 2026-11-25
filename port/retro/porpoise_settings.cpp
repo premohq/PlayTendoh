@@ -139,7 +139,7 @@ namespace ps5porpoise
 	}
 
 	void WriteSession(const std::string& side, const std::string& title, const std::string& details, const std::string& cover, const std::string& banner,
-		const std::vector<std::pair<std::string, std::string>>& quotes)
+		const std::vector<std::pair<std::string, std::string>>& quotes, const std::string& watermark)
 	{
 		const std::string file = Data() + "/playtendoh-session.txt", staged = file + ".new";
 		{
@@ -153,6 +153,7 @@ namespace ps5porpoise
 			line("details", details);
 			line("cover", cover);
 			line("banner", banner);
+			line("watermark", watermark);
 			for (const auto& [words, by] : quotes)
 			{
 				line("quote", words);

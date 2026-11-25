@@ -46,6 +46,8 @@ options=(
     # a nightly (make's CHANNEL, the default for anything not made from a release's tag or main): reports
     # from the first start, until the player says no in one
     -DPLAYTENDOH_PRERELEASE="$([[ ${PLAYTENDOH_CHANNEL:-nightly} == release ]] && echo OFF || echo ON)"
+    # and its letter, on its watermark (make's PRERELEASE)
+    -DPLAYTENDOH_PRERELEASE_LETTER="${PLAYTENDOH_PRERELEASE_LETTER:-}"
     -DENABLE_VCPKG=OFF -DENABLE_WXWIDGETS=OFF -DENABLE_OPENGL=OFF -DENABLE_METAL=OFF -DENABLE_VULKAN=ON
     -DENABLE_DISCORD_RPC=OFF -DENABLE_HIDAPI=OFF -DENABLE_SDL=OFF -DENABLE_LIBUSB=OFF -DENABLE_CUBEB=OFF
     -DALLOW_PORTABLE=OFF -DBoost_USE_STATIC_LIBS=ON -DBoost_ROOT="$PS5CEMU_SYSROOT"
