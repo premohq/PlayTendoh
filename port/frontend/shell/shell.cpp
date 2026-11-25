@@ -1266,38 +1266,25 @@ namespace ps5shell
 			return;
 		ps5reports::Session session;
 		session.side = SideName(m_side);
+		// where the emulator keeps logs of its own: app/log_places.h's, as Copy logs to USB takes them
+		auto logsOf = [&session](const std::string& emulator) {
+			for (const ps5logplaces::Place& place : ps5logplaces::For(emulator, LogRoots()))
+				session.logs.push_back(place.path);
+		};
 		if (IsWiiU())
-		{
 			session.emulator = "cemu";
-			session.logs = {ps5paths::Logs() + "/cemu.prev.txt", ps5paths::CemuRoot() + "/log.txt"};
-		}
 		else if (Is3ds())
-		{
 			session.emulator = "azahar";
-			session.logs = {ps5paths::Azahar() + "/log"};
-		}
 		else if (m_side == System::Nds)
 			session.emulator = "melonds";
 		else if (IsSwitch())
-		{
-			// Eden's program, or Lichii's for the Switch 2, laid out alike (their storage_paths.h): logs/ (stderr,
-			// and the crash, hang, thread and stop reports), the core's own log in user/log/ (eden_log.txt), and
-			// what they keep in the app's sandbox until they reach /data. Not Lichii's whole data folder: its
-			// firmware, games and shader cache used up the walk before it came to the logs, and Eden's core
-			// log was never looked for
-			const bool switch2 = m_side == System::Switch2;
-			session.emulator = switch2 ? "eglantine" : "eden";
-			const std::string data = switch2 ? ps5eden::Switch2FilesFolder() : ps5eden::DataFolder(), sandbox = ps5paths::SandboxDownload();
-			session.logs = {data + "/logs", data + "/user/log", sandbox + "/boot-trace.txt", sandbox + "/eden-headless-g7"};
-		}
+			// Eden's program, or Lichii's for the Switch 2, laid out alike: logs/ (stderr, and the crash, hang,
+			// thread and stop reports), the core's own log in user/log/, and what they keep in the app's sandbox
+			session.emulator = m_side == System::Switch2 ? "eglantine" : "eden";
 		else if (IsPorpoise())
-		{
 			// its trace and Dolphin's log (the sandbox's trace while /data can't be reached), and its debug
 			// folder's app, crash and each game's logs when that is on
 			session.emulator = "porpoise";
-			session.logs = {ps5porpoise::LogsFolder(), ps5paths::SandboxDownload() + "/" + ps5porpoise::kSandboxTrace,
-				std::string(ps5retro::Of(SideIndex()).data) + "/debug"};
-		}
 		else if (IsRetro())
 		{
 			// the side's libretro core in the app, or a program of its own (the side's, or its alternative),
@@ -1311,9 +1298,10 @@ namespace ps5shell
 				const std::string runtime = program.runtime;
 				const size_t end = runtime.rfind('/'), start = end == std::string::npos ? std::string::npos : runtime.rfind('/', end - 1);
 				session.emulator = start == std::string::npos ? "program" : runtime.substr(start + 1, end - start - 1);
-				session.logs = {program.data};
 			}
 		}
+		// melonDS and the libretro cores have none: they write into the boot log, which every report has
+		logsOf(session.emulator);
 		session.titleId = game.titleId;
 		session.name = game.name;
 		session.started = std::time(nullptr);

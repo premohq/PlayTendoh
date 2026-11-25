@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "reports.h"
+#include "log_places.h"
 #include "own_status.h"
 
 #include <rapidjson/document.h>
@@ -446,23 +447,10 @@ namespace ps5reports
 			return scrubbed;
 		}
 
-		// whether a file in an emulator's log folder is a log, .log or .txt: *log*, *crash* or *trace*, and the
-		// hang, thread and stop reports Eden's and Lichii's programs leave in their logs/ (hang-*.txt,
-		// threads-*.txt, stop-limit.txt), which those words missed
-		bool IsLogName(std::string name)
-		{
-			std::transform(name.begin(), name.end(), name.begin(), Lower);
-			const bool text = name.size() > 4 && (name.compare(name.size() - 4, 4, ".log") == 0 || name.compare(name.size() - 4, 4, ".txt") == 0);
-			return text && (name.find("log") != std::string::npos || name.find("crash") != std::string::npos || name.find("trace") != std::string::npos ||
-							   name.find("hang") != std::string::npos || name.find("thread") != std::string::npos || name.find("stop-limit") != std::string::npos);
-		}
-
-		// a log that says what went wrong, which goes first: a crash's or a hang's
-		bool IsProblemLog(std::string name)
-		{
-			std::transform(name.begin(), name.end(), name.begin(), Lower);
-			return name.find("crash") != std::string::npos || name.find("hang") != std::string::npos;
-		}
+		// a log's name, a crash's or a hang's, and the folders that hold games: as Copy logs to USB has them
+		// (app/log_places.h)
+		bool IsLogName(const std::string& name) { return ps5logplaces::IsLogName(name); }
+		bool IsProblemLog(const std::string& name) { return ps5logplaces::IsProblemLog(name); }
 
 		struct LogFile
 		{
@@ -471,13 +459,7 @@ namespace ps5reports
 			bool crash = false; // a crash's or a hang's (IsProblemLog)
 		};
 
-		// the folders of a data folder that hold no logs and can hold thousands of files: a library of games
-		// used up the walk's budget before it came to the logs
-		bool HoldsNoLogs(std::string name)
-		{
-			std::transform(name.begin(), name.end(), name.begin(), Lower);
-			return name == "games" || name == "roms" || name == "covers" || name == "firmware";
-		}
+		bool HoldsNoLogs(const std::string& name) { return ps5logplaces::HoldsNoLogs(name); }
 
 		// a log folder's logs, three deep, at most so many entries looked at (a data folder can hold games)
 		void FindLogs(const std::string& folder, int depth, int& budget, std::vector<LogFile>& found)

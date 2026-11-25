@@ -7,6 +7,7 @@
 #pragma once
 
 #include "../app/emulator.h"
+#include "../app/log_places.h"
 #include "../ps5/pad.h"
 
 #include <array>
@@ -55,6 +56,9 @@ namespace ps5actions
 
 	// Diagnostics: what each did, as its row shows it
 	std::string CopyLogsToUsb();
+	// Where every emulator keeps its logs on this console (app/log_places.h), for Copy logs to USB and the
+	// reports
+	ps5logplaces::Roots LogRoots();
 	std::string ClearShaderCaches(bool n3ds);
 
 	// Artic Base: an IPv4 address's four numbers; the PS5's own, as a first guess

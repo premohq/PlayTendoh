@@ -4,8 +4,10 @@
 #include "actions.h"
 #include "../app/game_archives.h"
 #include "../app/lang.h"
+#include "../app/log_places.h"
 #include "../app/netfs.h"
 #include "../app/paths.h"
+#include "../eglantine/launch.h"
 #include "../retro/porpoise_settings.h"
 #include "../retro/registry.h"
 #include "../ps5/kernel.h"
@@ -24,6 +26,7 @@
 #include <filesystem>
 #include <fstream>
 #include <netinet/in.h>
+#include <set>
 #include <sys/socket.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -144,6 +147,36 @@ namespace ps5actions
 		return close(out) == 0 && ok;
 	}
 
+	ps5logplaces::Roots LogRoots()
+	{
+		ps5logplaces::Roots roots;
+		roots.logs = ps5paths::Logs();
+		roots.cemu = ps5paths::CemuRoot();
+		roots.azahar = ps5paths::Azahar();
+		roots.eden = ps5paths::Eden();
+		roots.eglantine = ps5eglantine::DataFolder();
+		roots.porpoise = ps5porpoise::Data();
+		roots.esde = ps5paths::Root() + "/es-de"; // its program's home (port/esde/ps5/main_ecam.cpp)
+		roots.sandbox = ps5paths::SandboxDownload();
+		// the sides' programs of their own, but Porpoise (above): by their folder's name, as a report names them
+		auto program = [&](const ps5retro::Backend& backend) {
+			const std::string runtime = backend.runtime;
+			const size_t end = runtime.rfind('/'), start = end == std::string::npos || end == 0 ? std::string::npos : runtime.rfind('/', end - 1);
+			if (start == std::string::npos || !*backend.data || std::string(backend.data) == ps5porpoise::Data())
+				return;
+			const std::string name = runtime.substr(start + 1, end - start - 1);
+			if (std::none_of(roots.programs.begin(), roots.programs.end(), [&](const auto& one) { return one.first == name; }))
+				roots.programs.emplace_back(name, backend.data);
+		};
+		for (int side = ps5retro::kFirst; side < ps5retro::kSideCount; side++)
+		{
+			program(ps5retro::BackendFor(side, 0));
+			if (ps5retro::AlternativeOf(side))
+				program(ps5retro::BackendFor(side, 1));
+		}
+		return roots;
+	}
+
 	// Diagnostics > Copy logs to USB: what a report needs, in a folder of its own on the first
 	// USB drive that takes one. What it did, as the row shows it.
 	std::string CopyLogsToUsb()
@@ -154,47 +187,35 @@ namespace ps5actions
 		if (const std::tm* local = std::localtime(&now))
 			std::strftime(stamp, sizeof(stamp), "%Y-%m-%d-%H%M%S", local);
 		const std::string logs = ps5paths::Logs();
-		// Azahar's log of the session before too: Azahar renames its log .old.txt as it starts, which the
-		// 3DS side's Settings and Setup check make it do (their Home Menu row), so after a 3DS game failed
-		// and the app started over, its log is that one by the time this runs (#45)
-		std::vector<std::string> files = {logs + "/boot.log", ps5paths::CemuRoot() + "/log.txt", ps5paths::Azahar() + "/log/azahar_log.txt",
-			ps5paths::Azahar() + "/log/azahar_log.old.txt", ps5paths::LauncherSettings(), ps5paths::CemuRoot() + "/settings.xml"};
-		// the sessions before, each with Cemu's log of it (port/ps5/log.cpp)
+		// the launcher's: its boot log and the sessions' before (port/ps5/log.cpp), each with Cemu's log of it,
+		// and the settings
+		std::vector<std::string> files = {logs + "/boot.log", ps5paths::LauncherSettings(), ps5paths::CemuRoot() + "/settings.xml"};
 		for (const char* age : {"prev", "2", "3", "4"})
 		{
 			files.push_back(fmt::format("{}/boot.{}.log", logs, age));
 			files.push_back(fmt::format("{}/cemu.{}.txt", logs, age));
 		}
+		// and every emulator's own (app/log_places.h): Cemu's, Azahar's (its log of the session before too:
+		// Azahar renames it .old.txt as it starts, #45), Eden's and Lichii's logs/ and core logs, Porpoise's,
+		// EmulationStation's, the N64's and the NES's programs', and what they keep in the app's sandbox
+		std::vector<ps5logplaces::Place> places;
+		const ps5logplaces::Roots roots = LogRoots();
+		for (const std::string& emulator : ps5logplaces::Emulators(roots))
+			for (const ps5logplaces::Place& place : ps5logplaces::For(emulator, roots))
+				places.push_back(place);
+		const std::vector<ps5logplaces::Found> found = ps5logplaces::Find(places);
 		for (int drive = 0; drive < 8; drive++)
 		{
 			const std::string name = fmt::format("PS5-ECAM-logs-{}", stamp), folder = fmt::format("/mnt/usb{}/{}", drive, name);
 			if (!MountedDrive(fmt::format("/mnt/usb{}", drive)) || mkdir(folder.c_str(), 0777) != 0)
 				continue;
 			int copied = 0;
+			std::set<std::string> done;
 			for (const std::string& file : files)
-				if (IsFile(file) && CopyFile(file, folder + file.substr(file.find_last_of('/'))))
+				if (IsFile(file) && done.insert(file).second && CopyFile(file, folder + file.substr(file.find_last_of('/'))))
 					copied++;
-			// the Switch side's: Eden's program keeps logs of its own, and its crash reports, in its folder
-			bool listed = false;
-			const std::string edenLogs = ps5paths::Eden() + "/logs";
-			for (const std::string& name : ListEntries(edenLogs, false, listed))
-				if (CopyFile(edenLogs + "/" + name, folder + "/eden-" + name))
-					copied++;
-			// and what it keeps in the app's sandbox until it reaches /data, all it has when it never does:
-			// its trace from its first line (the session before too) and its logs
-			const std::string sandbox = ps5paths::SandboxDownload();
-			std::vector<std::string> sandboxFiles = {sandbox + "/boot-trace.txt", sandbox + "/boot-trace.prev.txt"};
-			for (const std::string& name : ListEntries(sandbox + "/eden-headless-g7", false, listed))
-				sandboxFiles.push_back(sandbox + "/eden-headless-g7/" + name);
-			for (const std::string& file : sandboxFiles)
-				if (IsFile(file) && CopyFile(file, folder + "/eden-sandbox-" + file.substr(file.find_last_of('/') + 1)))
-					copied++;
-			// the GameCube and Wii sides': Porpoise's trace and Dolphin's log, of its last two starts, and its
-			// trace in the sandbox when it could not reach /data
-			const std::string porpoiseLogs = ps5porpoise::LogsFolder();
-			for (const std::string& file : {porpoiseLogs + "/trace.txt", porpoiseLogs + "/trace.prev.txt", porpoiseLogs + "/core.log",
-					 porpoiseLogs + "/core.prev.log", sandbox + "/" + ps5porpoise::kSandboxTrace})
-				if (IsFile(file) && CopyFile(file, folder + "/porpoise-" + file.substr(file.find_last_of('/') + 1)))
+			for (const ps5logplaces::Found& log : found)
+				if (done.insert(log.path).second && CopyFile(log.path, folder + "/" + log.copy))
 					copied++;
 			// the folder's entry on the drive too
 			if (const int entry = open(folder.c_str(), O_RDONLY); entry >= 0)

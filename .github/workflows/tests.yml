@@ -103,6 +103,9 @@ jobs:
           bash tools/tests/test-reports.sh
           python3 -B tools/tests/test-fetch-reports.py
 
+      - name: Every emulator's logs, for Copy logs to USB and the reports
+        run: bash tools/tests/test-log-places.sh
+
       - name: A pre-release's watermark, and none in a release
         run: CXX=clang++-18 bash tools/tests/test-prerelease.sh
 
