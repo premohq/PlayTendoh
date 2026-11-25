@@ -140,7 +140,8 @@ What 6.0 waits on: data lost, the app hung, several players, the 6.0 test build'
    **Fix written:** the start's `fopen(..., "wx")` (`port/main_ps5.cpp`, from `3cb8349`) emptied it, the
    console's libc reading `"wx"` as `"w"`; the file is made with `O_CREAT | O_EXCL` now, and Cemu's key
    cache leaves a `keys.txt` it cannot read as it is (`patches/cemu` 0052). Still open: one player's
-   Switch `keys` folder was gone after the update. Wanted: the boot log's `[paths]` and `[reorganize]`
+   Switch `keys` folder was gone after the update. 5.1.0 kept an existing `/data/ps5cemu/eden` in use
+   and deletes nothing, so the code shows no cause. Wanted: the boot log's `[paths]` and `[reorganize]`
    lines, which of `/data/ps5cemu/eden/keys`, `/data/eden/keys` and `/data/ProsperoEden/keys` were there,
    and where the app is installed.
 2. **Wii U games found but not listed** (6 players). Unpacked games (`code`, `content`, `meta`) are seen
@@ -151,13 +152,18 @@ What 6.0 waits on: data lost, the app hung, several players, the 6.0 test build'
    check them again with that fix.
 3. **Switch games that start in standalone ProsperoEden but not here** (5 players):
    - After rest mode no game starts, on any side (a player, and the owner has seen it; 6.0 test build).
+     The app does nothing at rest mode but ask the HEN again (`port/ps5/privilege.cpp`). Wanted: the boot
+     log of a start after rest mode, its HEN and JIT lines and the game's own.
    - Games on a USB drive or a folder of the player's own start to a black screen on a 13.42 fat, where
      the same file plays from the internal storage (5.1.0, and again on the 6.0 test build).
    - Mario Kart 8 Deluxe goes back to its loading screen right after the title's voice line, again and
      again (2 players, 5.0.1 and 5.1.0: #77's fix was the mods folder, not this); with CTGP-DX v1.1.1 it
-     does not start at all (1). Wanted: the logs right after a loop.
+     does not start at all (1). Nothing in Playtendoh starts a Switch game again once Eden has it: the
+     loop is Eden's. Wanted: Eden's log right after a loop.
    - With Switch firmware 23 and its keys, the NCAs and keys are found and the games counted, and none
-     is listed (5.1.0; older firmware works).
+     is listed (5.1.0; older firmware works). Not what the code does: a file the keys cannot read is
+     listed by its name, and 5.1.0 read them as 6.0 does. Wanted: the boot log's `[switch]` lines (files
+     read, files that could not be, games listed) and the reason given for each file.
 4. **Network shares** (6.0 test build). **Fix written** for three: a share with ES-DE's `covers`,
    `manuals` or `videos` folders beside the games was looked through forever and froze the app; a share
    could be added only on the Wii U, DS and 3DS pages; the list of shares stopped at seven, with no
@@ -168,7 +174,9 @@ What 6.0 waits on: data lost, the app hung, several players, the 6.0 test build'
    one got past it with a save backup). Wanted: `cemu.log` from it.
 6. **Games that stop, with their logs already posted:**
    - 3DS: A Link Between Worlds closes after 40 seconds to 16 minutes
-     ([#119](https://github.com/premohq/PlayTendoh/issues/119), logs in the issue).
+     ([#119](https://github.com/premohq/PlayTendoh/issues/119), logs in the issue). Its addresses need
+     5.1.0's unstripped program to name. Its cheats file held a web page, which is not the app's: 5.1.0
+     downloads no cheats, and 6.0's download writes only an answer of 200.
    - 3DS: Inazuma Eleven 3 loads forever (`.3ds` and `.cci`), and Yo-kai Watch loops from a
      data-corruption error back to its logo (one player, 5.0.1, logs in the Discord post).
    - Wii U: Hyrule Warriors loads forever (crash logs in the Discord's #logs, 19 November).
@@ -180,17 +188,16 @@ What 6.0 waits on: data lost, the app hung, several players, the 6.0 test build'
    - Breath of the Wild has no resolution, FPS or graphic pack choices and stays at 720p and 30 fps; most
      likely the community packs never downloaded. Wanted: `cemu.log` and the `graphicPacks` folder.
    - Orbit leaves the 3DS's games out where Classic shows them (one player; not seen by the owner).
-   - A large library takes a minute to scroll from its first game to its thousandth, with about five
-     games on the screen (4.0's grid was faster; Triangle's search meanwhile).
-   - Wii U mods stuck at 0% (Breath of the Wild, 5.1.0, boot logs posted): most likely the copy #96
-     fixed; check on a console with 6.0.
+     Orbit draws the same list, and the same messages in its place, as Classic. Wanted: a photo and the
+     boot log.
    - **Fix written:** the Game Boy, Game Boy Color, Super NES, Super Game Boy and Virtual Boy take `.zip`
      and `.7z`; the 3DS's fast forward goes past the TV's refresh (`patches/azahar` 0037); Copy logs to
      USB writes the files out to the drive (it said 18 were copied that were not there); the reports
      question is asked on a console whose start goes to the Setup check; a Switch 2 game started by its
      path goes to the Switch 2 side, where a `.nup` went to Cemu, which asked for keys.
 8. **Switch 2, Phononenom's side** (12 players; send findings their way). New on the 6.0 test build and
-   the 23 November alpha: Pokopia ignores the controller at its title; Yoshi and the Mysterious Book draws
+   the 23 November alpha: Pokopia ignores the controller at its title (the controller type the launcher
+   sends is the one Lichii reads: checked); Yoshi and the Mysterious Book draws
    wrongly, then closes after the first world's introduction; Kirby Air Riders, a black screen, choppy
    picture and sound, and opening the menu to quit freezes (logs in its #tested-games post); Donkey Kong
    Bananza freezes with sound playing at the mine shaft's gem (logs; perhaps the memory wall), and stops
@@ -259,7 +266,10 @@ plays Nintendo's.
 **Fixed in code, in no public build yet:** the Wii U installs stuck at 0% (#96; six players hit it on the
 Discord, its most common Wii U complaint), the crash on reaching Settings > Play time (`724f692`; 2), the
 Switch 2's own settings (`59f7245`; 2), Switch updates and DLC on an external drive (#106) and the
-Switch's shaders built again at every start (#105). A release with them answers those players.
+Switch's shaders built again at every start (#105), Wii U mods stuck at 0% (`b171274`, #96's fix,
+which rewrote the mods copier too, a day after 5.1.0), and a large library's scrolling: a held direction
+goes faster the longer it is held, a thousand games ten seconds away, not ninety (`11d9948`). A release
+with them answers those players.
 
 **Answered by the setup guide** (`471f65d`), the questions behind most of the server's help threads:
 where each file goes (18 players), an app that won't start or isn't on the home screen (5), an old
