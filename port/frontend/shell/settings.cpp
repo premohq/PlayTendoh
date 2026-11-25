@@ -555,6 +555,20 @@ namespace ps5shell
 			{
 				Row folder; folder.id = "folder"; folder.kind = Kind::Link; folder.label = Tr("Games folder"); folder.value = GamesFolder(m_side); folder.description = Tr("Where this system's games are. Changing it doesn't move any games or saves."); rows.push_back(folder);
 				Row scan; scan.id = "rescan"; scan.kind = Kind::Action; scan.label = Tr("Look for games now"); rows.push_back(scan);
+				// network shares, added from this side's page as from the Wii U's, DS's and 3DS's: the folder
+				// browser has a tab for each on every side
+				if (!ps5netfs::shares().empty())
+				{
+					Row look; look.id = "lookonshares"; look.kind = Kind::Toggle; look.label = Tr("Look on network shares at every start"); look.on = settings.lookOnShares;
+					look.value = look.on ? Tr("On") : Tr("Off"); look.description = Tr("Off shows the games found last time, at once.");
+					look.help = Tr("Searching a network share each time can be slow with a large library. Off shows the games found last time right away; use Look for games now after adding some. Folders on the PS5 or USB are always searched.");
+					rows.push_back(look);
+				}
+				const size_t count = ps5netfs::shares().size();
+				Row shares; shares.id = "shares"; shares.kind = Kind::Link; shares.label = Tr("Network shares");
+				shares.value = count ? TrP((long long)count, "{0} share", "{0} shares") : std::string(); shares.description = Tr("Games on a computer or a NAS, over SMB or NFS.");
+				shares.help = Tr("Add a folder shared by a computer or NAS, then choose a games folder on it in the folder browser. Nothing is written to it; saves and installs stay on the PS5. Wired is better than Wi-Fi.");
+				rows.push_back(shares);
 			}
 			// a side on its core in the app has no emulator of its own to open: the in-game menu is its
 			else if (!ps5libretro::Plays(SideIndex()))
