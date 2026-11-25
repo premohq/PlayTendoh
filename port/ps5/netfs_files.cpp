@@ -15,6 +15,11 @@
 // fclose and fflush are wrapped by the platform layer already (its open_memstream): tools/link.sh
 // renames those of its wraps to ps5_memstream_fclose and ps5_memstream_fflush, called here for every
 // other FILE.
+//
+// And on the console's own storage, what these calls make is anyone's to write (folders 0777, files
+// 0666), as the start's walk leaves /data (app/file_modes.h): the app keeps the console's umask, which it
+// cannot set, and a folder or save one session made as root shut out the next as the app's own user
+// (#55, #90). mkdir is wrapped for it alone.
 
 #include "../app/netfs.h"
 
@@ -41,6 +46,8 @@
 extern "C"
 {
 	int __real_open(const char* path, int flags, ...);
+	// weak: a link without tools/link.sh's --wrap=mkdir never calls __wrap_mkdir
+	int __real_mkdir(const char* path, mode_t mode) __attribute__((weak));
 	ssize_t __real_read(int fd, void* buffer, size_t size);
 	ssize_t __real_pread(int fd, void* buffer, size_t size, off_t offset);
 	off_t __real_lseek(int fd, off_t offset, int whence);
@@ -238,6 +245,16 @@ namespace
 		return (flags & O_ACCMODE) != O_RDONLY || (flags & (O_CREAT | O_TRUNC | O_APPEND));
 	}
 
+	// On the console's storage (/data), where owners and modes are kept: a USB drive's exFAT has none
+	// (a test gives its own folder)
+#ifndef ECAM_OWN_STORAGE
+#define ECAM_OWN_STORAGE "/data/"
+#endif
+	bool OwnStorage(const char* path)
+	{
+		return path && std::strncmp(path, ECAM_OWN_STORAGE, std::strlen(ECAM_OWN_STORAGE)) == 0;
+	}
+
 	bool OpenNet(File& file, const char* path)
 	{
 		file.path = Normal(path);
@@ -289,7 +306,13 @@ extern "C"
 			va_end(args);
 		}
 		if (!Net(path))
-			return __real_open(path, flags, mode);
+		{
+			const int fd = __real_open(path, flags, mode);
+			// a file made here: anyone's to write (above); only its owner, or root, may change it
+			if (fd >= 0 && (flags & O_CREAT) && OwnStorage(path))
+				fchmod(fd, 0666);
+			return fd;
+		}
 		if (Writes(flags))
 		{
 			errno = EROFS;
@@ -523,10 +546,25 @@ extern "C"
 		return out;
 	}
 
+	int __wrap_mkdir(const char* path, mode_t mode)
+	{
+		const int made = __real_mkdir(path, mode);
+		// the umask took the others' write bits: put back (above)
+		if (made == 0 && OwnStorage(path))
+			chmod(path, 0777);
+		return made;
+	}
+
 	FILE* __wrap_fopen(const char* path, const char* mode)
 	{
 		if (!Net(path))
-			return __real_fopen(path, mode);
+		{
+			FILE* stream = __real_fopen(path, mode);
+			// written to, so perhaps made: anyone's to write (above)
+			if (stream && std::strpbrk(mode, "wa+") && OwnStorage(path))
+				fchmod(__real_fileno(stream), 0666);
+			return stream;
+		}
 		if (std::strpbrk(mode, "wa+"))
 		{
 			errno = EROFS;

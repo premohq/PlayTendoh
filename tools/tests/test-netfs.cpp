@@ -244,5 +244,27 @@ int main()
 		CHECK(access(local.c_str(), R_OK) == 0);
 	}
 	std::puts("ok");
+	// what the app makes on the console's storage is anyone's to write, whatever the umask: folders 0777,
+	// files 0666 (#55, #90); elsewhere the umask stands
+	{
+		umask(022);
+		const std::string own = std::getenv("OWN_ROOT"), other = std::getenv("OTHER_ROOT");
+		auto mode = [](const std::string& path) {
+			struct stat st{};
+			return ::stat(path.c_str(), &st) == 0 ? st.st_mode & 0777 : 0;
+		};
+		CHECK(mkdir((own + "made").c_str(), 0777) == 0 && mode(own + "made") == 0777);
+		fs::create_directories(own + "made/saves/game");
+		CHECK(mode(own + "made/saves") == 0777 && mode(own + "made/saves/game") == 0777);
+		FILE* save = std::fopen((own + "made/saves/game/save.bin").c_str(), "wb");
+		CHECK(save && std::fputs("save", save) >= 0 && std::fclose(save) == 0);
+		CHECK(mode(own + "made/saves/game/save.bin") == 0666);
+		const int cache = open((own + "made/cache.bin").c_str(), O_WRONLY | O_CREAT, 0644);
+		CHECK(cache >= 0 && close(cache) == 0 && mode(own + "made/cache.bin") == 0666);
+		// (a C++ stream too on the console, whose libc++ opens with fopen; a PC's libstdc++ uses fopen64)
+		CHECK(mkdir((other + "made").c_str(), 0777) == 0 && mode(other + "made") == 0755);
+		FILE* elsewhere = std::fopen((other + "made/file").c_str(), "w");
+		CHECK(elsewhere && std::fclose(elsewhere) == 0 && mode(other + "made/file") == 0644);
+	}
 	return 0;
 }

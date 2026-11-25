@@ -9,10 +9,11 @@ work=$(mktemp -d)
 trap 'rm -rf "$work"' EXIT
 wraps=()
 for name in open read pread lseek close fstat stat lstat realpath fopen fclose fflush fread fwrite fseek fseeko ftell ftello \
-        rewind feof ferror clearerr fgetc getc ungetc fgets fileno access opendir readdir closedir; do
+        rewind feof ferror clearerr fgetc getc ungetc fgets fileno access opendir readdir closedir mkdir; do
     wraps+=("-Wl,--wrap=$name")
 done
-mkdir -p "$work/share"
-clang++-18 -std=c++20 -O1 -g -Wall -o "$work/test-netfs" "$root/tools/tests/test-netfs.cpp" \
+mkdir -p "$work/share" "$work/own" "$work/other"
+# $work/own stands for the console's /data, where what the app makes is anyone's to write
+clang++-18 -std=c++20 -O1 -g -Wall -DECAM_OWN_STORAGE="\"$work/own/\"" -o "$work/test-netfs" "$root/tools/tests/test-netfs.cpp" \
     "$root/port/ps5/netfs_files.cpp" -static-libstdc++ -static-libgcc "${wraps[@]}"
-NETFS_ROOT=$work/share "$work/test-netfs"
+NETFS_ROOT=$work/share OWN_ROOT=$work/own/ OTHER_ROOT=$work/other/ "$work/test-netfs"

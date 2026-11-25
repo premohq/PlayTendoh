@@ -172,6 +172,8 @@ fi
 
 # fcntl (port/ps5/fcntl.cpp): the console refuses F_SETFD on a socket, which curl's connections need
 netfs_wraps+=(--wrap=fcntl)
+# mkdir (port/ps5/netfs_files.cpp): a folder made on /data anyone's to write, whatever the umask
+netfs_wraps+=(--wrap=mkdir)
 
 # The system modules a title imports from: all the SDK names, but the web process's (WebKit's POSIX
 # layer and its libkernel, which a title does not load; the SDK's libc.a below has what they would
