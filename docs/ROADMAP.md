@@ -199,7 +199,8 @@ What 6.0 waits on: data lost, the app hung, several players, the 6.0 test build'
    the 23 November alpha: Pokopia ignores the controller at its title (the controller type the launcher
    sends is the one Lichii reads: checked); Yoshi and the Mysterious Book draws
    wrongly, then closes after the first world's introduction; Kirby Air Riders, a black screen, choppy
-   picture and sound, and opening the menu to quit freezes (logs in its #tested-games post); Donkey Kong
+   picture and sound, and opening the menu to quit freezes (logs in its #tested-games post; L1 and a
+   touchpad click leave a game whose menu won't come, as on the Switch, now in the guide); Donkey Kong
    Bananza freezes with sound playing at the mine shaft's gem (logs; perhaps the memory wall), and stops
    at launch for another player (2 players); "barely boots anything past the menus" (one player: retest
    on Lichii's newest, step 1 above). Known to the side: Mario Kart World freezes the whole console or
@@ -252,7 +253,9 @@ it, the link.
 - **A European Wii U game in a language of the player's choosing** (1), as the Switch has.
 - **The PS Move and PS Navigation controllers** (1): the owner will look.
 - **Breath of the Wild in split screen** (1): needs an example of how it is done elsewhere.
-- **The app closed when it stops answering** (1): with [S3](#s3).
+- **The app closed when it stops answering** (1): the Switch and the Switch 2 have it (L1 and a touchpad
+  click leave a game, and a stop that hangs starts the app again: Eden's `stop_limit.h`), now in the
+  guide; the other sides with [S3](#s3).
 - **A check that a game's files are not damaged** (1).
 - **GBA link through Porpoise's own mGBA** (the team: Phononenom has a patch): for Porpoise X.
 - **The Persona-style launcher back** (1): 5.1.0 made themes skins of one layout; as a theme,

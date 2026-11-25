@@ -49,6 +49,8 @@ nor Lichii includes them.
 - **The first start of a game** can sit on a black screen for a long time while its shaders are made.
 - **A game's settings** are on its page and in its in-game menu (touchpad click + Options), like every
   other side's.
+- **A game that stops answering**, its menu too: hold **L1** and click the touchpad. That leaves the
+  game, and if it won't stop, Playtendoh starts again by itself within half a minute.
 
 The Switch 2 side is [Phononenom](https://github.com/Phononenom)'s work. Reports help most with the
 game, your firmware, your settings and the logs: see [Getting help](help.md).

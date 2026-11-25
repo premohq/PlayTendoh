@@ -106,6 +106,10 @@ the app again: it opens the drive through it.
 Look the game up on the [compatibility list](../compatibility.html): someone may have found the
 setting that fixes it. If not, report it with its logs ([Getting help](help.md)).
 
+A Switch or Switch 2 game that froze, its menu too: hold **L1** and click the touchpad's left side. That
+leaves the game, and if it won't stop, Playtendoh starts again by itself within half a minute. On the
+other consoles, close Playtendoh from the PS button's menu.
+
 ### The app freezes looking through a network share {#network-share}
 
 A share that holds ES-DE's `covers`, `manuals` or `videos` folders beside the games can make the search

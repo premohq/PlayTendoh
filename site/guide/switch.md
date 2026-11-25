@@ -71,3 +71,6 @@ These are being worked on. Until then:
   same file plays from the internal storage. Play from `/data/eden/roms` for now.
 - **After rest mode, no game starts.** Close Playtendoh and start it again.
 - **With firmware 23 and its keys, games are counted but not listed.** Being looked at.
+
+**A game that stops answering**, its menu too: hold **L1** and click the touchpad's left side. That
+leaves the game, and if it won't stop, Playtendoh starts again by itself within half a minute.
