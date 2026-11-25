@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // PS5-ECAM's UI kit: the DualSense as actions. Any connected
 // controller drives the UI; the left stick moves as the D-pad does; the directions, the shoulders
-// and the triggers repeat while held (400 ms, then every 90 ms on a steady beat, as the classic launcher's); every
+// and the triggers repeat while held (400 ms, then every 90 ms on a steady beat, as the classic launcher's), and a
+// list's held direction goes further a step the longer it is held (Stride); every
 // button's hold is timed, for what is held to confirm. Nothing counts as pressed until it has been
 // let go once, and while the system has the controller (its menu) the UI sees nothing.
 
@@ -36,8 +37,16 @@ namespace ui
 	struct Press
 	{
 		Button button;
-		bool repeat; // a held button's repeat, not its first press
+		bool repeat;	  // a held button's repeat, not its first press
+		float held = 0; // a repeat's: how long the button has been held, in seconds
 	};
+
+	// How many places a held direction moves in a long list (a library of a thousand games): one at a time,
+	// then four, then twelve, the longer it is held, so its end is seconds away and a tap still moves one
+	inline int Stride(const Press& press)
+	{
+		return !press.repeat || press.held < 1.2f ? 1 : press.held < 2.5f ? 4 : 12;
+	}
 
 	struct Actions
 	{

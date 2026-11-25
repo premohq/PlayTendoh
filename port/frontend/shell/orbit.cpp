@@ -215,8 +215,10 @@ namespace ps5shell
 		case Button::Left:
 		case Button::Right:
 		{
-			const int next = m_libraryIndex + (b == Button::Right ? 1 : -1);
-			if (next < 0 || next >= total)
+			// held, faster the longer it is held (ui::Stride); a step past either end stops at it
+			const int step = b == Button::Right ? ui::Stride(press) : -ui::Stride(press);
+			const int next = total > 0 ? std::clamp(m_libraryIndex + step, 0, total - 1) : -1;
+			if (next < 0 || next == m_libraryIndex)
 				m_feedback.Play(ui::Cue::Edge, press.repeat);
 			else
 			{

@@ -106,7 +106,7 @@ namespace ui
 			}
 			else if (mapping.repeats && now >= m_repeatAt[slot])
 			{
-				actions.presses.push_back({mapping.button, true});
+				actions.presses.push_back({mapping.button, true, (float)(now - m_since[slot])});
 				// on a steady beat from the first press, not from the frame that saw it, so the steps come
 				// evenly; a late frame catches up with one step, not a burst
 				m_repeatAt[slot] = std::max(m_repeatAt[slot] + kRepeatRate, now + kRepeatRate * 0.5);

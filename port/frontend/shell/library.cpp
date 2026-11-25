@@ -583,17 +583,18 @@ namespace ps5shell
 					m_feedback.Play(ui::Cue::Focus);
 				}
 			};
+			// held, it goes faster the longer it is held (ui::Stride): a thousand games are seconds away
 			switch (b)
 			{
 			case Button::Up:
 				if (at > 0)
-					move(at - 1);
+					move(at - ui::Stride(press));
 				else if (top < 2)
 					zone(filters ? 1 : 0);
 				else
 					FocusBar();
 				break;
-			case Button::Down: move(at + 1); break;
+			case Button::Down: move(at + ui::Stride(press)); break;
 			default: break;
 			}
 		}
