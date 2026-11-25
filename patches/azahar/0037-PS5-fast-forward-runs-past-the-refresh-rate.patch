@@ -1,0 +1,70 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: premohq <48417750+premohq@users.noreply.github.com>
+Date: Tue, 24 Nov 2026 19:00:00 +0000
+Subject: [PATCH] PS5: fast forward runs past the refresh rate
+
+Fast forward takes the frame limit away, and the game still ran at the TV's refresh: the PS5's display
+offers FIFO alone (where Azahar takes mailbox to go faster), so drawing a frame waited for one the
+display had let go of, and the emulation with it; a speed limit over 100% the same. Now, with no limit
+or one over 100%, a frame for the TV that would wait is not drawn: the picture keeps the refresh rate
+and the game goes at its speed.
+---
+ src/video_core/renderer_vulkan/renderer_vulkan.cpp   | 9 +++++++++
+ src/video_core/renderer_vulkan/vk_present_window.cpp | 7 +++++++
+ src/video_core/renderer_vulkan/vk_present_window.h   | 5 +++++
+ 3 files changed, 21 insertions(+)
+
+diff --git a/src/video_core/renderer_vulkan/renderer_vulkan.cpp b/src/video_core/renderer_vulkan/renderer_vulkan.cpp
+index 2b3b812..7608da7 100644
+--- a/src/video_core/renderer_vulkan/renderer_vulkan.cpp
++++ b/src/video_core/renderer_vulkan/renderer_vulkan.cpp
+@@ -291,6 +291,15 @@ void RendererVulkan::PrepareDraw(Frame* frame, const Layout::FramebufferLayout&
+ 
+ void RendererVulkan::RenderToWindow(PresentWindow& window, const Layout::FramebufferLayout& layout,
+                                     bool flipped) {
++#ifdef __PROSPERO__
++    // PS5: fast forward, or a speed limit over 100%, on a display whose only present mode is FIFO
++    // (where Azahar takes mailbox, vk_swapchain.cpp): a frame for the TV that would wait for one the
++    // display has not let go of yet is not drawn, so the game runs past the refresh rate, not at it
++    if (const double limit = Settings::GetFrameLimit();
++        (limit == 0 || limit > 100) && &window == &main_present_window && !window.FrameFree()) {
++        return;
++    }
++#endif
+     if (!Settings::values.use_skip_duplicate_frames.GetValue() ||
+         Core::PerfStats::game_frames_updated) {
+         Frame* frame = window.GetRenderFrame();
+diff --git a/src/video_core/renderer_vulkan/vk_present_window.cpp b/src/video_core/renderer_vulkan/vk_present_window.cpp
+index 14349dd..c63735f 100644
+--- a/src/video_core/renderer_vulkan/vk_present_window.cpp
++++ b/src/video_core/renderer_vulkan/vk_present_window.cpp
+@@ -252,6 +252,13 @@ void PresentWindow::RecreateFrame(Frame* frame, u32 width, u32 height) {
+     frame->height = height;
+ }
+ 
++#ifdef __PROSPERO__
++bool PresentWindow::FrameFree() {
++    std::scoped_lock lock{free_mutex};
++    return !free_queue.empty();
++}
++#endif
++
+ Frame* PresentWindow::GetRenderFrame() {
+     MICROPROFILE_SCOPE(Vulkan_WaitPresent);
+ 
+diff --git a/src/video_core/renderer_vulkan/vk_present_window.h b/src/video_core/renderer_vulkan/vk_present_window.h
+index 6a03db9..310c605 100644
+--- a/src/video_core/renderer_vulkan/vk_present_window.h
++++ b/src/video_core/renderer_vulkan/vk_present_window.h
+@@ -49,6 +49,11 @@ public:
+     /// Returns the last used render frame.
+     Frame* GetRenderFrame();
+ 
++#ifdef __PROSPERO__
++    /// PS5: whether a frame is free to draw into now, without waiting for the display
++    bool FrameFree();
++#endif
++
+     /// Recreates the render frame to match provided parameters.
+     void RecreateFrame(Frame* frame, u32 width, u32 height);
+ 
