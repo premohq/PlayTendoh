@@ -155,7 +155,12 @@ What 6.0 waits on: data lost, the app hung, several players, the 6.0 test build'
      The app does nothing at rest mode but ask the HEN again (`port/ps5/privilege.cpp`). Wanted: the boot
      log of a start after rest mode, its HEN and JIT lines and the game's own.
    - Games on a USB drive or a folder of the player's own start to a black screen on a 13.42 fat, where
-     the same file plays from the internal storage (5.1.0, and again on the 6.0 test build).
+     the same file plays from the internal storage (5.1.0, and again on the 6.0 test build). Eden's
+     program asks for its own access (etaHEN's app jailbreak first) and proves it on `/data` and the
+     system fonts alone, where the launcher asks the elevation helper again for a drive the HEN left out
+     (#16); a game Eden could not see would say it could not find the file, not go black. Wanted: Eden's
+     boot trace (`filesystem access returned status=`, `forwarded game:`), its `user/log/eden_log.txt`
+     from the black screen, and the launcher's `[privilege]` line for the drive.
    - Mario Kart 8 Deluxe goes back to its loading screen right after the title's voice line, again and
      again (2 players, 5.0.1 and 5.1.0: #77's fix was the mods folder, not this); with CTGP-DX v1.1.1 it
      does not start at all (1). Nothing in Playtendoh starts a Switch game again once Eden has it: the
