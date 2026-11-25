@@ -130,15 +130,15 @@
         </dl>
       </article>
       <article class="system nx reveal">
-        <header><svg class="pane" aria-hidden="true"><use href="#pane-switch"/></svg><div><h3>Switch 2 <small>experimental</small></h3><p class="emu"><a href="https://github.com/heydemoura/EglantinePS5">EglantinePS5</a> (<a href="https://github.com/Djihads80/Eglantine">Eglantine</a>), Vulkan</p></div></header>
+        <header><svg class="pane" aria-hidden="true"><use href="#pane-switch"/></svg><div><h3>Switch 2 <small>experimental</small></h3><p class="emu"><a href="https://github.com/heydemoura/EglantinePS5">EglantinePS5</a> on <a href="https://github.com/zortos293/Lichii">Lichii</a>, brought to the PS5 by <a href="https://github.com/Phononenom">Phononenom</a>, Vulkan</p></div></header>
         <dl>
-          <dt>Plays</dt><dd>Game folders with ExeFS and RomFS</dd>
+          <dt>Plays</dt><dd>Game folders with ExeFS and RomFS, NUP</dd>
           <dt>Picture</dt><dd>Resolution, FSR 1, output size, 120 Hz, frame generation</dd>
           <dt>Extras</dt><dd>Its own side, keys and firmware, and Playtendoh's in-game menu</dd>
         </dl>
       </article>
       <article class="system wiiu reveal">
-        <header><svg class="pane" aria-hidden="true"><use href="#pane-wiiu"/></svg><div><h3>GameCube and Wii</h3><p class="emu">Dolphin (<a href="https://github.com/premohq/Porpoise-X">Porpoise X</a>)</p></div></header>
+        <header><svg class="pane" aria-hidden="true"><use href="#pane-wiiu"/></svg><div><h3>GameCube and Wii</h3><p class="emu">Dolphin (<a href="https://github.com/premohq/Porpoise-X">Porpoise X</a>, ported by <a href="https://github.com/Phononenom">Phononenom</a>)</p></div></header>
         <dl>
           <dt>Plays</dt><dd><code>.iso</code> <code>.gcm</code> <code>.rvz</code> <code>.ciso</code> <code>.gcz</code> <code>.wia</code>; Wii <code>.wbfs</code> <code>.wad</code></dd>
           <dt>Extras</dt><dd>Its settings on the sides' own pages</dd>
@@ -303,15 +303,18 @@
         <div><h3><a href="https://github.com/premohq">premohq</a></h3><p class="role">Creator</p><p>Started the app as PS5CEMU-HAR.</p></div>
       </article>
       <article class="person founder reveal">
-        <img src="https://github.com/JMUtechnologies.png?size=128" width="64" height="64" alt="" loading="lazy">
-        <div><h3><a href="https://github.com/JMUtechnologies">JMUtechnologies</a></h3><p class="role">Co-founder</p><p>Gave every system a folder of its own, and built much of the Switch and DS sides.</p>
+        <img src="https://github.com/Phononenom.png?size=128" width="64" height="64" alt="" loading="lazy">
+        <div><h3><a href="https://github.com/Phononenom">Phononenom</a></h3><p class="role">Co-founder</p><p>Brought Playtendoh the Switch 2 and the GameCube and Wii, two of 6.0's biggest sides.</p>
           <ul class="bio">
-            <li>A folder for each system, Eden's included, and the PC tool that separates an older install</li>
-            <li>Switch mods, cheats, ReShade presets and players</li>
-            <li>Switch saves to and from a USB drive, Ryujinx's too</li>
-            <li>DS: a GBA cartridge in Slot-2, a recorded microphone and touch screen calibration</li>
-            <li>Tools that compare performance captures (<a href="https://github.com/premohq/PlayTendoh/pull/86">#86</a>, <a href="https://github.com/premohq/PlayTendoh/pull/84">#84</a>)</li>
+            <li>The Switch 2 on Lichii's newest core, brought to the PS5: its Vulkan port, the game's memory packed and read back when the console runs short, memory given back by the host heap and the JIT, the RADV driver with memory compaction, sound for the games that play through the Switch 2's sysmix, and every Switch 2 setting working</li>
+            <li>Porpoise ported into Playtendoh as Porpoise X: the GameCube and Wii with Playtendoh's in-game menu, settings, memory cards and saves per game, cheats and patches, and Wii banners and title screens (<a href="https://github.com/premohq/PlayTendoh/pull/114">#114</a>)</li>
+            <li>The Game Boy Advance on the link cable</li>
+            <li>The build's choice of emulators, its debug build, and more memory for every side</li>
           </ul></div>
+      </article>
+      <article class="person reveal">
+        <img src="https://github.com/JMUtechnologies.png?size=96" width="48" height="48" alt="" loading="lazy">
+        <div><h4><a href="https://github.com/JMUtechnologies">JMUtechnologies</a></h4><p>A folder for each system and the PC tool that separates an older install; the Switch side's mods, cheats, ReShade presets, players and USB saves; the DS's Slot-2 GBA cartridge, recorded microphone and touch calibration; performance capture tools (<a href="https://github.com/premohq/PlayTendoh/pull/86">#86</a>, <a href="https://github.com/premohq/PlayTendoh/pull/84">#84</a>); and the Switch 2 side's first hookup, its NUP games and folders (<a href="https://github.com/premohq/PlayTendoh/pull/109">#109</a>, <a href="https://github.com/premohq/PlayTendoh/pull/112">#112</a>).</p></div>
       </article>
     </div>
 
@@ -361,7 +364,7 @@
   <div class="wrap">
     <div class="footer-top">
       <a class="brand" href="#top"><svg class="brand-mark" aria-hidden="true"><use href="#mark"/></svg><span>Playtendoh</span></a>
-      <p>Made by <a href="https://github.com/premohq">premohq</a>, its creator, and <a href="https://github.com/JMUtechnologies">JMUtechnologies</a>, its co-founder. It was called PS5CEMU-HAR until 5.0.0.</p>
+      <p>Made by <a href="https://github.com/premohq">premohq</a>, its creator, and <a href="https://github.com/Phononenom">Phononenom</a>, its co-founder. It was called PS5CEMU-HAR until 5.0.0.</p>
       <nav class="footer-links" aria-label="Links">
         <a href="https://github.com/premohq/PlayTendoh">GitHub</a>
         <a href="https://github.com/premohq/PlayTendoh/releases">Releases</a>

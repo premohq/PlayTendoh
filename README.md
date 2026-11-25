@@ -20,7 +20,8 @@
   DS on <a href="https://github.com/melonDS-emu/melonDS">melonDS</a>, Switch on <a href="https://github.com/eden-emu/mirror">Eden</a>,
   Switch 2 on <a href="https://github.com/heydemoura/EglantinePS5">EglantinePS5</a>, GameCube and Wii on Dolphin, and the classics on
   libretro cores behind the app's own menus.<br>
-  Made by its co-founders, <a href="https://github.com/premohq">premohq</a>, <a href="https://github.com/JMUtechnologies">JMUtechnologies</a> and <a href="https://github.com/Phononenom">Phononenom</a>.
+  Made by <a href="https://github.com/premohq">premohq</a>, its creator, and <a href="https://github.com/Phononenom">Phononenom</a>, its
+  co-founder, who brought it the Switch 2 and the GameCube and Wii; with help from <a href="https://github.com/JMUtechnologies">JMUtechnologies</a>.
   It was PS5CEMU-HAR until 5.0.0 and PS5-ECAM until 6.0.
 </p>
 
@@ -46,12 +47,16 @@
   thirteen classics on libretro cores inside the app (the NES, SNES, Game Boys, N64, Virtual Boy, Pokémon
   mini, Famicom Disk System, Super Game Boy, Game &amp; Watch, Satellaview and VS. System), each a side of
   its own with its colour, its controller and its backdrop.
-- **Switch 2 (experimental):** a side of its own on [EglantinePS5](https://github.com/heydemoura/EglantinePS5)
-  with [Lichii](https://github.com/zortos293/Lichii)'s core, from JMUtechnologies
-  ([#109](https://github.com/premohq/PlayTendoh/pull/109), [#112](https://github.com/premohq/PlayTendoh/pull/112)):
-  Playtendoh's in-game menu and loading screen, NUP games, and folders of its own for games, updates, DLC,
-  keys and firmware.
-- **GameCube and Wii, Phononenom's** ([#114](https://github.com/premohq/PlayTendoh/pull/114)): Porpoise's
+- **Switch 2 (experimental), Phononenom's:** a side of its own on [EglantinePS5](https://github.com/heydemoura/EglantinePS5)
+  with [Lichii](https://github.com/zortos293/Lichii)'s newest core, which [Phononenom](https://github.com/Phononenom)
+  brought to the PS5 for Playtendoh: Lichii nx2 with its Vulkan port, the game's memory packed and read back
+  when the console runs short, the host heap and the JIT's tables giving memory back, the RADV driver with
+  memory compaction, sound for the games that play through the Switch 2's sysmix, fuller crash and thread
+  reports, and every one of the side's settings working, Performance > Memory among them. With Playtendoh's
+  in-game menu and loading screen, NUP games, and folders of its own for games, updates, DLC, keys and
+  firmware ([#109](https://github.com/premohq/PlayTendoh/pull/109), [#112](https://github.com/premohq/PlayTendoh/pull/112)).
+- **GameCube and Wii, Phononenom's** ([#114](https://github.com/premohq/PlayTendoh/pull/114)): Porpoise,
+  Dolphin on the PS5, ported into Playtendoh as Porpoise X by [Phononenom](https://github.com/Phononenom), with its
   in-game menu as Playtendoh's, with its Buttons page and loading screen; controls by player, any player in
   any port and each GBA's own page; memory cards and saves per game, a game's setups, cheats and patches, Auto
   Boost; a Wii game's banner and title screen in the launcher; GameTDB's titles and descriptions, a WBFS
@@ -242,23 +247,32 @@ Bugs still go in [GitHub issues](https://github.com/premohq/PlayTendoh/issues/ne
 
 ## Credits
 
-### Founders
+### Creators
 
-- **[premohq](https://github.com/premohq)**, co-founder, who started the app as PS5CEMU-HAR
-- **[JMUtechnologies](https://github.com/JMUtechnologies)**, co-founder: a folder for each system (the
-  Wii U's, 3DS's, DS's and Switch's files in folders of their own, Eden's side of it, an install from
-  before still found, and the PC tool that separates one); the Switch side's mods, cheats, ReShade
-  presets and players, and its saves to and from a USB drive, Ryujinx's too; the DS's GBA cartridge in
-  Slot-2, its recorded microphone and touch screen calibration; and the tools that compare
-  performance captures ([#86](https://github.com/premohq/PlayTendoh/pull/86), [#84](https://github.com/premohq/PlayTendoh/pull/84));
-  the Switch 2 side on EglantinePS5 with the shared in-game menu, its NUP games and folders, and a game's own
-  performance switches ([#109](https://github.com/premohq/PlayTendoh/pull/109), [#112](https://github.com/premohq/PlayTendoh/pull/112));
-  and the first retro sides, the GameCube, Wii, N64, NES and Game Boys, found on their own
-  ([#87](https://github.com/premohq/PlayTendoh/pull/87), [#91](https://github.com/premohq/PlayTendoh/pull/91))
-- **[Phononenom](https://github.com/Phononenom)**, co-founder: the GameCube and Wii sides as they are in 6.0
-  (Porpoise's in-game menu as Playtendoh's, its settings, memory cards and saves per game, a game's setups,
-  cheats and patches, Wii banners and title screens in the launcher,
-  [#114](https://github.com/premohq/PlayTendoh/pull/114)), and the Game Boy Advance on the link cable
+- **[premohq](https://github.com/premohq)**, creator, who started the app as PS5CEMU-HAR
+- **[Phononenom](https://github.com/Phononenom)**, co-founder, behind two of 6.0's biggest sides:
+  - **The Switch 2**, on Lichii's newest core, brought to the PS5 for Playtendoh (`patches/eglantine` 0032 to
+    0041): Lichii nx2 with its Vulkan port, the game's memory packed and read back when the console runs
+    short, the host heap and the JIT's tables giving memory back, the RADV driver on mihawk's PS5_Mesa with
+    memory compaction, sound for the games that play through the Switch 2's sysmix, fuller crash and thread
+    reports, the session taking Playtendoh's settings, and every Switch 2 setting working (Performance >
+    Memory among them), its words in every language
+  - **The GameCube and Wii**: Porpoise ported into Playtendoh as Porpoise X
+    ([#114](https://github.com/premohq/PlayTendoh/pull/114)), with its in-game menu as Playtendoh's, its settings,
+    memory cards and saves per game, a game's setups, cheats and patches, Wii banners and title screens in the
+    launcher; and the Game Boy Advance on the link cable
+  - **And across the app:** the build's choice of emulators (`CORES`) and its debug build with PS5_DevLoop's
+    frame grab, more memory for every side (the flexible pool and the CPU page tables) and the 3DS's and
+    N64's big buffers from the heap, and Settings > Play time naming every side
+- **[JMUtechnologies](https://github.com/JMUtechnologies)**: a folder for each system (the Wii U's, 3DS's,
+  DS's and Switch's files in folders of their own, an install from before still found, and the PC tool that
+  separates one); the Switch side's mods, cheats, ReShade presets and players, and its saves to and from a
+  USB drive, Ryujinx's too; the DS's GBA cartridge in Slot-2, its recorded microphone and touch screen
+  calibration; the tools that compare performance captures ([#86](https://github.com/premohq/PlayTendoh/pull/86),
+  [#84](https://github.com/premohq/PlayTendoh/pull/84)); the Switch 2 side's first hookup to EglantinePS5, its
+  NUP games and folders and a game's own performance switches ([#109](https://github.com/premohq/PlayTendoh/pull/109),
+  [#112](https://github.com/premohq/PlayTendoh/pull/112)); and the first launches of the N64, NES and Game Boy
+  programs ([#87](https://github.com/premohq/PlayTendoh/pull/87), [#91](https://github.com/premohq/PlayTendoh/pull/91))
 
 ### Contributors
 
@@ -301,12 +315,12 @@ says where the app is going and how to fit in.
   Switch 2 support, and [Lichii](https://github.com/zortos293/Lichii), its continuation by **zortos293** and
   its contributors, the Switch 2 side's core (GPL-3.0-or-later), in [EglantinePS5](https://github.com/heydemoura/EglantinePS5), its
   PS5 port by **heydemoura** (**Heyde Moura**) with **darkxex** and **swizard** (GPL-3.0-or-later): the
-  Switch 2 side's child runtime (`patches/eglantine`), brought in with the shared in-game menu by
-  **JMUtechnologies** ([#109](https://github.com/premohq/PlayTendoh/pull/109))
+  Switch 2 side's own program (`patches/eglantine`), on Lichii's newest core by **[Phononenom](https://github.com/Phononenom)**
+  (0032 to 0041), first brought in with the shared in-game menu by JMUtechnologies ([#109](https://github.com/premohq/PlayTendoh/pull/109))
 - [Dolphin](https://github.com/dolphin-emu/dolphin) by the Dolphin team (GPL-2.0-or-later), in
   [Porpoise](https://github.com/elripalda/Porpoise-Dolphin-Emulator-for-PS5), its PS5 port by **elripalda**,
-  as [Porpoise X](https://github.com/premohq/Porpoise-X): the GameCube and the Wii, with the Game Boy Advance
-  on the link cable by **[Phononenom](https://github.com/Phononenom)**; its USB layer for real Wii Remotes through a
+  as [Porpoise X](https://github.com/premohq/Porpoise-X), ported into Playtendoh by **[Phononenom](https://github.com/Phononenom)**:
+  the GameCube and the Wii, with the Game Boy Advance on the link cable; its USB layer for real Wii Remotes through a
   DolphinBar, by **CroCop86** (GPL-3.0-or-later), on the Wii U side too (`port/ps5/porpoise_usbhid.cpp`)
 - Orbit's screenshots: [libretro's thumbnails](https://github.com/libretro-thumbnails/libretro-thumbnails) and,
   for the Switch and Switch 2, the eShop's, by way of [blawar/titledb](https://github.com/blawar/titledb)

@@ -369,6 +369,8 @@ code { font-size: 0.86em; background: var(--code); border-radius: 6px; padding: 
 /* Credits */
 .founders { display: grid; gap: 16px; grid-template-columns: 1fr; }
 @media (min-width: 860px) { .founders { grid-template-columns: 1fr 1.6fr; } }
+/* a creator's card that is not a founder's: the whole row, under the founders' */
+.founders .person:not(.founder) { grid-column: 1 / -1; }
 .person { display: flex; gap: 16px; align-items: flex-start; padding: 20px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line); }
 .person img { flex: none; width: 48px; height: 48px; border-radius: 50%; background: var(--surface-2); border: 1px solid var(--line); }
 .founder { padding: 24px; box-shadow: var(--shadow); }
