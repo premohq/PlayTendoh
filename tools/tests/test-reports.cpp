@@ -351,6 +351,78 @@ static void EmulatorLogs(const std::string& root)
 	SetEnabled(false);
 }
 
+// The Switch's and the Switch 2's programs (Eden, Lichii): their logs/ with a hang report, which goes first
+// as a crash does, and the core's own user/log/eden_log.txt; and a data folder walked whole, whose games
+// folder is passed by so its thousands of files leave the walk for the logs
+static void SwitchLogs(const std::string& root)
+{
+	const std::string folder = root + "/switch", data = folder + "/eglantineps5", program = folder + "/PS5N64";
+	SetFolder(folder + "/reports");
+	SetEnabled(true);
+	for (const char* sub : {"/logs", "/user/log", "/firmware"})
+		fs::create_directories(data + sub);
+	fs::create_directories(program + "/games");
+	fs::create_directories(program + "/log");
+	const int64_t now = (int64_t)std::time(nullptr);
+	auto write = [](const std::string& path, const std::string& text, int64_t when) {
+		std::ofstream(path) << text;
+		struct utimbuf at{(time_t)when, (time_t)when};
+		utime(path.c_str(), &at);
+	};
+	write(data + "/logs/hang-20261125-120000.txt", "[hang] the GPU thread waits on fence 42 for 10 s\n", now - 5);
+	write(data + "/user/log/eden_log.txt", "[core] Kirby Air Riders: the menu opens\n", now - 1);
+	write(data + "/logs/stderr.log", "[stderr] the game's session starts\n", now - 10);
+	write(data + "/logs/threads-20261125-120000.txt", "[threads] GPU: waiting\n", now - 20);
+	write(data + "/firmware/0123.nca", "not a log\n", now - 2);
+
+	Session session = Game(now - 30);
+	session.side = "switch2";
+	session.emulator = "eglantine";
+	session.logs = {data + "/logs", data + "/user/log", folder + "/sandbox/boot-trace.txt"};
+	Begin(session);
+	Check(Close({"", "", ""}, now + 5), "a Switch 2 game closed under the player");
+	std::vector<std::string> pending = Pending(now + 5);
+	Check(pending.size() == 1, "its report in the outbox");
+	if (pending.size() == 1)
+	{
+		const rapidjson::Document json = Parse(pending[0]);
+		const bool listed = json.HasMember("logs") && json["logs"].IsArray() && json["logs"].Size() == kEmulatorLogs;
+		Check(listed, "three of Lichii's logs");
+		if (listed)
+		{
+			const auto& logs = json["logs"];
+			Check(std::string(logs[0]["file"].GetString()) == "hang-20261125-120000.txt", "the hang report first");
+			Check(std::string(logs[1]["file"].GetString()) == "eden_log.txt" && Has(logs[1]["text"].GetString(), "the menu opens"),
+				"then the core's own log, from user/log");
+			Check(std::string(logs[2]["file"].GetString()) == "stderr.log", "then the newest of the rest");
+		}
+		Remove(pending[0]);
+	}
+
+	// a program's whole data folder: a library of games first in it, its log after
+	for (int i = 0; i < 2500; i++)
+		std::ofstream(program + "/games/game" + std::to_string(i) + ".z64") << "";
+	write(program + "/log/core.log", "[n64] the core's own log\n", now - 1);
+	session = Game(now - 30);
+	session.side = "n64";
+	session.emulator = "mupen64plus";
+	session.logs = {program};
+	Begin(session);
+	Check(Close({"", "", ""}, now + 5), "a game in a program with its games in its data folder");
+	pending = Pending(now + 5);
+	Check(pending.size() == 1, "its report in the outbox");
+	if (pending.size() == 1)
+	{
+		const rapidjson::Document json = Parse(pending[0]);
+		Check(json.HasMember("logs") && json["logs"].IsArray() && json["logs"].Size() == 1 &&
+				  std::string(json["logs"][0]["file"].GetString()) == "core.log",
+			"its log found past 2,500 games");
+		Remove(pending[0]);
+	}
+	SetEnabled(false);
+}
+
+
 int main(int argc, char* argv[])
 {
 	if (argc != 2)
@@ -358,6 +430,7 @@ int main(int argc, char* argv[])
 	Scrubbing();
 	Sessions(argv[1]);
 	EmulatorLogs(argv[1]);
+	SwitchLogs(argv[1]);
 	std::printf("%s\n", failures ? "FAILED" : "all passed");
 	return failures ? 1 : 0;
 }

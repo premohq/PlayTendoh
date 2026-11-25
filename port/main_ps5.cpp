@@ -675,10 +675,14 @@ int main(int argc, char* argv[])
 			(settings.side == "switch2" ? status.launchErrorSwitch2 : status.launchErrorSwitch) = why;
 	// what the Switch side's last game came to in Eden's program (port/eden/eden.h): why it did not start
 	// or stopped, said once on the Switch side, never in ProsperoEden's launcher; and what its in-game
-	// menu changed, kept as the other sides' menus keep theirs
+	// menu changed, kept as the other sides' menus keep theirs. A program that left a crash report crashed:
+	// its game's report says so (crashed, not failed), as the app's own crash does
+	std::string programCrash;
 	if (privileges.filesystem)
 		if (const ps5eden::Result result = ps5eden::TakeResult(); result.found)
 		{
+			if (result.state == "failed" && result.error.rfind("crash-report:", 0) == 0)
+				programCrash = fmt::format("{} crashed ({})", settings.side == "switch2" ? "Lichii" : "Eden", result.error);
 			if (std::string why = ps5eden::ResultMessage(result, settings.side == "switch2"); !why.empty())
 				(settings.side == "switch2" ? status.launchErrorSwitch2 : status.launchErrorSwitch) = why;
 			// to when the game ended or was being left; a crash leaves "running", written as it started
@@ -828,7 +832,7 @@ int main(int argc, char* argv[])
 		// sent while the launcher is up
 		{
 			ps5reports::Outcome ended;
-			ended.crash = reportsFirstLook ? status.lastCrash : std::string();
+			ended.crash = !reportsFirstLook ? std::string() : !status.lastCrash.empty() ? status.lastCrash : programCrash;
 			for (const std::string* why : {&status.launchError, &status.launchError3ds, &status.launchErrorDs, &status.launchErrorSwitch, &status.launchErrorSwitch2})
 				if (ended.error.empty() && !why->empty())
 					ended.error = *why;

@@ -1261,17 +1261,17 @@ namespace ps5shell
 		}
 		else if (m_side == System::Nds)
 			session.emulator = "melonds";
-		else if (m_side == System::Switch2)
-		{
-			session.emulator = "eglantine";
-			session.logs = {ps5eden::Switch2FilesFolder()};
-		}
 		else if (IsSwitch())
 		{
-			// Eden's program: its logs, and what it keeps in the app's sandbox until it reaches /data
-			session.emulator = "eden";
-			const std::string sandbox = ps5paths::SandboxDownload();
-			session.logs = {ps5eden::DataFolder() + "/logs", sandbox + "/boot-trace.txt", sandbox + "/eden-headless-g7"};
+			// Eden's program, or Lichii's for the Switch 2, laid out alike (their storage_paths.h): logs/ (stderr,
+			// and the crash, hang, thread and stop reports), the core's own log in user/log/ (eden_log.txt), and
+			// what they keep in the app's sandbox until they reach /data. Not Lichii's whole data folder: its
+			// firmware, games and shader cache used up the walk before it came to the logs, and Eden's core
+			// log was never looked for
+			const bool switch2 = m_side == System::Switch2;
+			session.emulator = switch2 ? "eglantine" : "eden";
+			const std::string data = switch2 ? ps5eden::Switch2FilesFolder() : ps5eden::DataFolder(), sandbox = ps5paths::SandboxDownload();
+			session.logs = {data + "/logs", data + "/user/log", sandbox + "/boot-trace.txt", sandbox + "/eden-headless-g7"};
 		}
 		else if (IsPorpoise())
 		{

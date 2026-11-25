@@ -17,16 +17,16 @@
 #include <utility>
 #include <vector>
 
-// The intake's address (tools/log-intake), given to the build as PLAYTENDOH_REPORT_URL. None: the app
-// asks nothing, keeps nothing and sends nothing.
-#ifndef PLAYTENDOH_REPORT_URL
-#define PLAYTENDOH_REPORT_URL ""
-#endif
-
 namespace ps5reports
 {
-	constexpr const char* kUrl = PLAYTENDOH_REPORT_URL;
-	constexpr bool Available() { return kUrl[0] != 0; }
+	// The intake's address (tools/log-intake), given to the build as PLAYTENDOH_REPORT_URL. None: the app
+	// asks nothing, keeps nothing and sends nothing. Read from reports.cpp, which the build gives it, never
+	// from this header: main_ps5.cpp is built in another target (CemuBin) that was not given it, so it read
+	// none, and its start turned reports off, which deletes the game noted and every report waiting. Every
+	// game that starts the app again after it (the Wii U's, the Switch's, the Switch 2's, the GameCube's and
+	// Wii's, the systems' own programs) lost its report, and each start made a new install ID.
+	const char* Url();
+	bool Available();
 	// docs/REPORTS.md, field by field what a report holds: the question and Settings point to it
 	constexpr const char* kExplained = "https://github.com/premohq/PlayTendoh/blob/HEAD/docs/REPORTS.md";
 	constexpr int kSchema = 1;
@@ -106,7 +106,7 @@ namespace ps5reports
 	std::string Read(const std::string& path);
 	void Remove(const std::string& path);
 
-	// The sender (report_send.cpp): the outbox posted to kUrl a few seconds after the launcher is up, on a
+	// The sender (report_send.cpp): the outbox posted to Url() a few seconds after the launcher is up, on a
 	// thread of its own; Stop before a game, as ps5update::Stop. A report the intake turns away (400, 413)
 	// is deleted; one it cannot take now stays for the next time.
 	void StartSending();

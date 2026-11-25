@@ -34,7 +34,7 @@ scrubbed), `port/app/report_send.cpp` (sending) and `tools/log-intake` (where it
 | `firmware`, `model` | `11.60`, `pro` | the PS5's firmware, and `base`, `slim`, `pro` or `unknown` |
 | `jit`, `hen` | `true`, `true` | whether the app got JIT memory and reached `/data` |
 | `log` | | the last 120 lines (16 KB at most) of Playtendoh's own boot log for that session, scrubbed |
-| `logs` | `[{"file": "core.log", "text": "…"}]` | the emulator's own logs of that session, for those that keep logs of their own (Cemu, Azahar, Eden, Lichii, Porpoise and the systems' own programs): at most three, a crash's first, each its last lines (8 KB at most), scrubbed as the boot log. Only files the emulator wrote while the game ran, and only their names, never their folders |
+| `logs` | `[{"file": "core.log", "text": "…"}]` | the emulator's own logs of that session, for those that keep logs of their own (Cemu, Azahar, Eden, Lichii, Porpoise and the systems' own programs): at most three, a crash's or a hang's first, each its last lines (8 KB at most), scrubbed as the boot log. Eden's and Lichii's are their `logs/` (stderr, crash, hang, thread and stop reports) and their core's `eden_log.txt`. Only files the emulator wrote while the game ran, and only their names, never their folders |
 
 ## What a report never holds
 

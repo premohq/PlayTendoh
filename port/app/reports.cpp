@@ -446,20 +446,38 @@ namespace ps5reports
 			return scrubbed;
 		}
 
-		// whether a file in an emulator's log folder is a log: *log*, *crash* or *trace*, .log or .txt
+		// whether a file in an emulator's log folder is a log, .log or .txt: *log*, *crash* or *trace*, and the
+		// hang, thread and stop reports Eden's and Lichii's programs leave in their logs/ (hang-*.txt,
+		// threads-*.txt, stop-limit.txt), which those words missed
 		bool IsLogName(std::string name)
 		{
 			std::transform(name.begin(), name.end(), name.begin(), Lower);
 			const bool text = name.size() > 4 && (name.compare(name.size() - 4, 4, ".log") == 0 || name.compare(name.size() - 4, 4, ".txt") == 0);
-			return text && (name.find("log") != std::string::npos || name.find("crash") != std::string::npos || name.find("trace") != std::string::npos);
+			return text && (name.find("log") != std::string::npos || name.find("crash") != std::string::npos || name.find("trace") != std::string::npos ||
+							   name.find("hang") != std::string::npos || name.find("thread") != std::string::npos || name.find("stop-limit") != std::string::npos);
+		}
+
+		// a log that says what went wrong, which goes first: a crash's or a hang's
+		bool IsProblemLog(std::string name)
+		{
+			std::transform(name.begin(), name.end(), name.begin(), Lower);
+			return name.find("crash") != std::string::npos || name.find("hang") != std::string::npos;
 		}
 
 		struct LogFile
 		{
 			std::string path;
 			int64_t changed = 0;
-			bool crash = false;
+			bool crash = false; // a crash's or a hang's (IsProblemLog)
 		};
+
+		// the folders of a data folder that hold no logs and can hold thousands of files: a library of games
+		// used up the walk's budget before it came to the logs
+		bool HoldsNoLogs(std::string name)
+		{
+			std::transform(name.begin(), name.end(), name.begin(), Lower);
+			return name == "games" || name == "roms" || name == "covers" || name == "firmware";
+		}
 
 		// a log folder's logs, three deep, at most so many entries looked at (a data folder can hold games)
 		void FindLogs(const std::string& folder, int depth, int& budget, std::vector<LogFile>& found)
@@ -472,20 +490,19 @@ namespace ps5reports
 				// a link's own status (a linked folder is not walked into), where /data refuses lstat
 				if (fs::is_directory(ps5files::OwnStatus(path, ec)))
 				{
-					if (depth > 1)
+					if (depth > 1 && !HoldsNoLogs(it->path().filename().string()))
 						FindLogs(path, depth - 1, budget, found);
 					continue;
 				}
-				std::string name = it->path().filename().string();
+				const std::string name = it->path().filename().string();
 				if (!IsLogName(name))
 					continue;
-				std::transform(name.begin(), name.end(), name.begin(), Lower);
-				found.push_back({path, 0, name.find("crash") != std::string::npos});
+				found.push_back({path, 0, IsProblemLog(name)});
 			}
 		}
 
 		// The emulator's own logs of a session, as {file name, last lines}: the places a session named
-		// (Session::logs), the files changed between its start and now, a crash first, then the newest
+		// (Session::logs), the files changed between its start and now, a crash or a hang first, then the newest
 		std::vector<std::pair<std::string, std::string>> EmulatorLogs(const std::vector<std::string>& places, int64_t started, int64_t now,
 			const std::vector<std::string>& secrets)
 		{
@@ -500,11 +517,7 @@ namespace ps5reports
 				if (fs::is_directory(status))
 					FindLogs(place, 3, budget, found);
 				else if (fs::is_regular_file(status))
-				{
-					std::string name = fs::path(place).filename().string();
-					std::transform(name.begin(), name.end(), name.begin(), Lower);
-					found.push_back({place, 0, name.find("crash") != std::string::npos});
-				}
+					found.push_back({place, 0, IsProblemLog(fs::path(place).filename().string())});
 			}
 			std::vector<LogFile> changed;
 			for (LogFile& log : found)
@@ -579,6 +592,20 @@ namespace ps5reports
 			fs::remove(IdPath(), ec);
 			fs::remove_all(Outbox(), ec);
 		}
+	}
+
+	const char* Url()
+	{
+#ifdef PLAYTENDOH_REPORT_URL
+		return PLAYTENDOH_REPORT_URL;
+#else
+		return "";
+#endif
+	}
+
+	bool Available()
+	{
+		return Url()[0] != 0;
 	}
 
 	std::string Scrub(std::string_view text, const std::vector<std::string>& secrets)

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Playtendoh: the reports' sender (reports.h). A few seconds after the launcher is up, the outbox is
-// posted to the intake (ps5reports::kUrl), one report at a time, on a thread of its own; a game stops it
+// posted to the intake (ps5reports::Url()), one report at a time, on a thread of its own; a game stops it
 // first (StopSending, beside ps5update::Stop), so nothing is sent while one runs. Answers: 2xx sent, and
 // deleted; 400 or 413 turned away for good, and deleted; anything else (no network, 429, 5xx) kept for
 // the next time the launcher is up. Only the report's own JSON goes: no cookie, no user name, the app's
@@ -53,7 +53,7 @@ namespace ps5reports
 				return 0;
 			ps5curl::Setup(curl);
 			static const std::string ca = ps5paths::Assets() + "/cacert.pem"; // the console has no store of its own
-			curl_easy_setopt(curl, CURLOPT_URL, kUrl);
+			curl_easy_setopt(curl, CURLOPT_URL, Url());
 			if (resolve)
 				curl_easy_setopt(curl, CURLOPT_RESOLVE, resolve);
 			curl_easy_setopt(curl, CURLOPT_USERAGENT, "Playtendoh/" PS5CEMU_VERSION);
@@ -95,7 +95,7 @@ namespace ps5reports
 				return;
 			sceNetInit();
 			curl_global_init(CURL_GLOBAL_DEFAULT);
-			curl_slist* resolve = ps5net::AddResolve(nullptr, Host(kUrl), 443);
+			curl_slist* resolve = ps5net::AddResolve(nullptr, Host(Url()), 443);
 			if (!resolve)
 			{
 				ps5log::Line("[reports] the intake could not be found: {} kept for later", pending.size());
