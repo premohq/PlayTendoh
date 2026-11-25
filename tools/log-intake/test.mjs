@@ -4,7 +4,7 @@
 // itself (src/index.js) over a stand-in for D1, given a report the app wrote when there is one (argv).
 import { readFileSync } from 'node:fs';
 import { scrub, validate, compatibility } from './src/report.js';
-import worker, { rebuildSite } from './src/index.js';
+import worker, { rebuildSite, readQuery, READ_MOST } from './src/index.js';
 
 let failures = 0;
 const check = (ok, what) => {
@@ -75,16 +75,24 @@ check(!published.includes('a'.repeat(32)) && !published.includes('"log"') && !pu
 	!published.includes('emulator log') && !published.includes('core.log'), "the table has no install ID and no log, the emulator's neither");
 
 // -- the Worker, over a stand-in for D1 that keeps the rows INSERT gives it ------------------------------
-const stored = [];
+const stored = [], read = [];
 const env = {
 	DB: {
 		prepare(sql) {
 			return {
 				bind(...values) {
-					return { async run() {
-						const columns = sql.match(/\(([^)]*)\) VALUES/)[1].split(',').map((c) => c.trim());
-						stored.push(Object.fromEntries(columns.map((c, i) => [c, values[i]])));
-					} };
+					return {
+						async run() {
+							const columns = sql.match(/\(([^)]*)\) VALUES/)[1].split(',').map((c) => c.trim());
+							stored.push({ id: stored.length + 1, ...Object.fromEntries(columns.map((c, i) => [c, values[i]])) });
+						},
+						// the reports read back (GET /v1/reports): every row, its columns as SELECT names them
+						async all() {
+							read.push({ sql, values });
+							const columns = sql.match(/^SELECT (.*) FROM/)[1].split(',').map((c) => c.trim());
+							return { results: stored.map((r) => Object.fromEntries(columns.map((c) => [c, r[c]]))) };
+						},
+					};
 				},
 				async all() { return { results: stored.map((r) => ({ ...r })) }; },
 			};
@@ -116,6 +124,43 @@ const servedText = JSON.stringify(served);
 check(served.games.length === 1 && served.games[0].crashed === 1 && !servedText.includes(saved.install) && !servedText.includes('number 1999') && !servedText.includes('<path>'),
 	'Worker: the table, with no install ID and no log');
 check((await worker.fetch(new Request('https://intake.test/v1/reports'), env, ctx)).status === 404, 'Worker: nothing else is served');
+check((await worker.fetch(new Request('https://intake.test/v1/reports', { headers: { authorization: 'Bearer x' } }), env, ctx)).status === 404,
+	'Worker: no READ_TOKEN: the reports are not served at all');
+
+// -- the reports read back, for the owner's triage (GET /v1/reports, READ_TOKEN) -------------------------
+const q = (text) => readQuery(new URLSearchParams(text));
+const newest = q('');
+check(newest.sql.endsWith('ORDER BY id DESC LIMIT ?') && newest.values.join() === '50' && newest.sql.includes('emulator_logs'),
+	'read: the newest 50 first, with their logs');
+const since = q('after=41&side=switch2&result=crashed,failed&title=0100f2c0115b6000&commit=76f7fd&limit=999&logs=0');
+check(since.sql.includes('id > ?') && since.sql.includes('side = ?') && since.sql.includes('result IN (?, ?)') && since.sql.includes('title_id = ?') &&
+	since.sql.includes('commit_id LIKE ?') && since.sql.endsWith('ORDER BY id ASC LIMIT ?') && !since.sql.includes('log') &&
+	since.values.join() === `41,switch2,0100f2c0115b6000,76f7fd%,crashed,failed,${READ_MOST}`,
+	'read: after an id, oldest first; side, results, title and commit; at most 200; logs=0 leaves them out');
+for (const [what, text] of [['a word for a number', 'after=x'], ['an unknown result', 'result=great'], ['SQL in a side', "side=x' OR 1=1"],
+	['a bad title', 'title=../etc'], ['a bad commit', 'commit=zz']])
+	check(!!q(text).error, `read: turned away: ${what}`);
+const token = 't'.repeat(40);
+const reading = { ...env, READ_TOKEN: token };
+const get = (path, auth) => worker.fetch(new Request(`https://intake.test${path}`, { headers: auth ? { authorization: auth } : {} }), reading, ctx);
+check((await get('/v1/reports')).status === 401 && (await get('/v1/reports', 'Bearer wrong')).status === 401, 'read: no token or a wrong one: 401');
+check((await get('/v1/reports?result=great', `Bearer ${token}`)).status === 400, 'read: a bad filter: 400');
+await post(app);
+const answer = await get('/v1/reports?after=0', `Bearer ${token}`);
+const body = await answer.json(), text = JSON.stringify(body);
+check(answer.status === 200 && answer.headers.get('cache-control') === 'no-store' && body.reports.length === stored.length && body.next === stored.length,
+	'read: the reports, never cached, and where to go on from');
+check(!text.includes(saved.install) && !('install' in body.reports[0]) && /^[0-9a-f]{12}$/.test(body.reports[0].console) &&
+	body.reports[0].console === body.reports[1].console, 'read: no install ID, a console the same for the same one');
+check(Array.isArray(body.reports[0].logs) && typeof body.reports[0].settings === 'object' && body.reports[0].jit === true,
+	"read: the emulator's logs and the settings as JSON");
+const empty = await (await worker.fetch(new Request('https://intake.test/v1/reports?after=99', { headers: { authorization: `Bearer ${token}` } }),
+	{ ...reading, DB: { prepare() { return { bind() { return { async all() { return { results: [] }; } }; } }; } } }, ctx)).json();
+check(empty.reports.length === 0 && empty.next === 99 && empty.more === false, 'read: nothing new: the same place, no more');
+const older = q('before=500&limit=10');
+check(older.sql.includes('id < ?') && older.sql.endsWith('ORDER BY id DESC LIMIT ?') && older.values.join() === '500,10', 'read: before an id, newest first');
+check((await worker.fetch(new Request('https://intake.test/v1/reports', { headers: { authorization: `Bearer ${token}`, 'cf-connecting-ip': '203.0.113.9' } }),
+	reading, ctx)).status === 429, 'read: over the limit: 429');
 
 
 // -- every hour: the site built again, only with a token -------------------------------------------------

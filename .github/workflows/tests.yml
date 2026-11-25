@@ -99,7 +99,9 @@ jobs:
       - name: Cheats' files
         run: bash tools/tests/test-cheats.sh
       - name: Reports (scrubber, queue, intake)
-        run: bash tools/tests/test-reports.sh
+        run: |
+          bash tools/tests/test-reports.sh
+          python3 -B tools/tests/test-fetch-reports.py
 
       - name: How games run (the feed, its fetch's copy, the site's status.json)
         run: bash tools/tests/test-compat.sh

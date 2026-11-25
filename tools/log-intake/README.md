@@ -9,13 +9,19 @@ D1 database:
 - `GET /v1/compatibility.json`: one row a game, no install ID, no log, rebuilt at most once an hour (Cloudflare's
   cache). `compatibility.html` reads it live; GitHub Pages also bakes a copy in every hour (`.github/workflows/pages.yml`)
   for when the intake can't be reached.
+- `GET /v1/reports`: the reports themselves, logs and all, for the owner's triage (`tools/triage/fetch_reports.py`),
+  only with the `READ_TOKEN` secret (none set: 404, as if it were not there). Never cached. No install ID: each report
+  has a `console`, a hash of it keyed by the token, the same for one console, to count them. Filters: `after` (an id:
+  what came since, oldest first), `before` (the page after the newest), `since`, `side`, `emulator`, `title`, `app`,
+  `commit` (its first characters), `result` (a comma between), `limit` (200 at most) and `logs=0`.
 - Once a day, reports older than 180 days are deleted.
 - Every hour, the site is built again (the Pages workflow started on `Playtendoh`), so the console's
   `status.json` and the table baked into the site are never more than an hour old. GitHub's own hourly
   schedule in `pages.yml` stays, but GitHub runs it only every few hours.
 
-The app holds no secret: only the intake's address, given at build time. The Worker holds one, if you
-give it: `PAGES_TOKEN`, which can do nothing but start this repository's workflows.
+The app holds no secret: only the intake's address, given at build time. The Worker holds two, if you
+give them: `PAGES_TOKEN`, which can do nothing but start this repository's workflows, and `READ_TOKEN`, which
+reads the reports back.
 
 ## Setting it up (about ten minutes, free)
 
@@ -50,7 +56,28 @@ Then:
    (paste it) and `npx wrangler deploy`. Without it the intake starts nothing, and the site waits for
    GitHub's schedule.
 
+4. **The reports, for you and your agent:** make a long random token (`openssl rand -hex 32`), then
+   `npx wrangler secret put READ_TOKEN` (paste it) and `npx wrangler deploy`. Keep it as you would a password:
+   it reads every report. Then see *Reading the reports*.
+
 ## Reading the reports
+
+**With `tools/triage/fetch_reports.py`**, from the repository's folder, anywhere (`docs/CRASH-TRIAGE.md` says
+how to triage them):
+
+```bash
+export PLAYTENDOH_REPORTS_TOKEN=...   # READ_TOKEN's value
+python3 -B tools/triage/fetch_reports.py --new                       # what came since the last fetch
+python3 -B tools/triage/fetch_reports.py --since 2d --side switch2 --result crashed,failed
+python3 -B tools/triage/fetch_reports.py --since 2026-11-20 --match 6.0.0 --index-only
+```
+
+Each report goes into `build/triage/reports` (git ignores it: never commit one) with its logs, and the tool
+prints what came in: each side's endings and the games that crash or fail the most, with how many consoles.
+**A Claude Code session in the cloud** needs no token in its environment: add `READ_TOKEN`'s value as the
+environment's network secret for `playtendoh-reports.pixelnet321.workers.dev` (Authorization, Bearer), and the
+session's requests to the intake carry it; tell the session to run `fetch_reports.py --new` before it works on
+a fix.
 
 The table on the site covers most questions. For the rest, SQL on the private database (from
 `tools/log-intake`). What fails, grouped by game and by why, the most frequent first:

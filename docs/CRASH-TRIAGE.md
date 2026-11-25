@@ -49,7 +49,11 @@ the crash handler's address; ProsperoEdenX's and EglantinePS5's own `tools/symbo
 ### The tools
 
 The guide's tools go in `tools/triage/`, built in the order of its section 11, with the intake as
-`fetch_reports`' source. The catalog, `tools/triage/signatures.json`, is committed. What the tools fetch
+`fetch_reports`' source. **`fetch_reports` is there** (`tools/triage/fetch_reports.py`): the intake's reports,
+logs and all, into `build/triage/reports`, `--new` for what came since the last fetch, with `--since`,
+`--match` (a version or commit), `--game`, `--side`, `--result`, `--index-only`, `--store-gz`,
+`--sample-closed` and `--min-free-gb`; it needs the intake's `READ_TOKEN` (`tools/log-intake/README.md`). Its
+reports carry a `console`, a hash, never an install ID. The catalog, `tools/triage/signatures.json`, is committed. What the tools fetch
 and write (reports, facts, summaries) stays local and is never committed (AGENTS.md 10).
 
 ---
