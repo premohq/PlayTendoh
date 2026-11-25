@@ -16,7 +16,11 @@
 #include "../../ps5/privilege.h"
 
 #include <algorithm>
+#include <cctype>
 #include <cmath>
+#include <cstdio>
+#include <cstring>
+#include <sys/stat.h>
 #include <sys/statvfs.h>
 
 namespace ps5shell
@@ -28,8 +32,59 @@ namespace ps5shell
 	{
 		constexpr float kListTop = 300, kListWidth = 1000, kRowHeight = 82, kRowGap = 8;
 		constexpr float kAsideX = 1196, kAsideWidth = 628, kAsidePad = 36;
-		constexpr const char* kSite = "github.com/premohq/PlayTendoh";
-		constexpr const char* kRepository = "https://github.com/premohq/PlayTendoh";
+		constexpr const char* kSite = "premohq.github.io/PlayTendoh";
+
+		// a page of the step-by-step guide on the project's site (site/guide), as the QR code beside a check
+		// opens it: "wii-u#disc-keys"
+		std::string Guide(const char* page)
+		{
+			return std::string("https://premohq.github.io/PlayTendoh/guide/") + page;
+		}
+
+		// how many disc keys a keys.txt holds: the lines that start with 32 hex digits, as Cemu reads them
+		// (a comment may follow); -1 when it cannot be read. Opened to read only, so it is never emptied.
+		int DiscKeyCount(const std::string& file)
+		{
+			std::FILE* f = std::fopen(file.c_str(), "r");
+			if (!f)
+				return -1;
+			int keys = 0;
+			char line[512];
+			while (std::fgets(line, sizeof line, f))
+			{
+				const char* p = line;
+				while (*p == ' ' || *p == '\t')
+					p++;
+				int hex = 0;
+				while (hex < 32 && std::isxdigit((unsigned char)p[hex]))
+					hex++;
+				keys += hex == 32;
+			}
+			std::fclose(f);
+			return keys;
+		}
+
+		// another copy of the app's version, from its sce_sys/param.json (tools/package.sh's contentVersion:
+		// 05.001.000 is 5.1.0, the patch in hundreds and a letter after it); empty when it cannot be read
+		std::string CopyVersion(const std::string& folder)
+		{
+			std::FILE* f = std::fopen((folder + "/sce_sys/param.json").c_str(), "r");
+			if (!f)
+				return {};
+			char text[8192];
+			const size_t length = std::fread(text, 1, sizeof text - 1, f);
+			std::fclose(f);
+			text[length] = 0;
+			const char* at = std::strstr(text, "\"contentVersion\"");
+			int major = 0, minor = 0, patch = 0;
+			if (!at || !(at = std::strchr(at + 16, ':')) || !(at = std::strchr(at, '"')) ||
+				std::sscanf(at + 1, "%d.%d.%d", &major, &minor, &patch) != 3)
+				return {};
+			std::string version = std::to_string(major) + "." + std::to_string(minor) + "." + std::to_string(patch / 100);
+			if (patch % 100 > 0 && patch % 100 <= 26)
+				version += (char)('a' + patch % 100 - 1);
+			return version;
+		}
 
 		std::string FreeSpace(const char* path)
 		{
@@ -117,7 +172,7 @@ namespace ps5shell
 	{
 		m_checks.clear();
 		const ps5privilege::Result& privileges = ps5privilege::Current();
-		const std::string henGuide = std::string(kRepository) + "/blob/HEAD/docs/HEN-SETUP.md";
+		const std::string henGuide = Guide("jailbreak#app-jailbreak");
 
 		// where everything is kept
 		Check storage{"storage", Tr("Storage")};
@@ -147,7 +202,7 @@ namespace ps5shell
 
 		// what runs the games' code
 		Check recompilers{"recompilers", Tr("Game speed")};
-		recompilers.guide = henGuide;
+		recompilers.guide = Guide("jailbreak#game-speed");
 		recompilers.guideTitle = Tr("the HEN setup guide");
 		recompilers.aboutTitle = Tr("Whether games can run at full speed");
 		if (privileges.jit || privileges.executable)
@@ -195,6 +250,10 @@ namespace ps5shell
 				games.games = runtime ? count : 0;
 				games.aboutTitle = TrF("{0} games", SystemName(side));
 				games.about = TrF("Put this system's games in {0}, or choose any folder, such as one on a USB drive. Subfolders are searched too.", folder);
+				const bool porpoise = ps5retro::Is(index, "gamecube") || ps5retro::Is(index, "wii");
+				games.guide = Guide(porpoise ? "gamecube-wii#games" : "classics#games");
+				// tr: what the QR code opens: "Scan it for the GameCube and Wii page"
+				games.guideTitle = porpoise ? Tr("the GameCube and Wii page") : Tr("the classic consoles page");
 				m_checks.push_back(games);
 				continue;
 			}
@@ -235,29 +294,37 @@ namespace ps5shell
 				nds			   ? std::vector<std::string>{".nds", ".srl", ".7z", ".zip"} :
 				nx			   ? std::vector<std::string>{".nsp", ".xci"} :
 								 std::vector<std::string>{".wua", ".wud", ".wux", Tr("code · content · meta"), ".rpx", ".7z", ".zip"};
-			games.guide = std::string(kRepository) + (n3ds ? "#nintendo-3ds" : nds ? "#nintendo-ds-melonds" : nx ? "#nintendo-switch-eden" : "#wii-u");
+			games.guide = Guide(n3ds ? "3ds#games" : nds ? "ds#games" : nx ? "switch#games" : "wii-u#games");
+			// tr: what the QR code opens: "Scan it for the Wii U page"
+			games.guideTitle = n3ds ? Tr("the 3DS page") : nds ? Tr("the DS page") : nx ? Tr("the Switch page") : Tr("the Wii U page");
 			if (nx2)
 			{
 				games.aboutTitle = Tr("Where your Switch 2 games go");
 				games.about = TrF("Put them in {0}, or choose any folder, such as one on a USB drive. Subfolders are searched too.", folder);
 				games.chips = {"exefs/main", "romfs/", "base/", "updates/", "dlc/", "firmware/"};
-				games.guide = std::string(kRepository) + "#switch-2";
+				games.guide = Guide("switch-2#games");
+				games.guideTitle = Tr("the Switch 2 page");
 			}
-			games.guideTitle = Tr("the game files page");
 			m_checks.push_back(games);
 		}
 
 		// the keys encrypted dumps need
+		// a keys.txt with no keys in it (an empty one: players saw 5.1.0 empty theirs) says so, rather than "found"
 		const bool discKeys = IsFile(ps5paths::DiscKeys());
+		const int discKeyCount = discKeys ? DiscKeyCount(ps5paths::DiscKeys()) : 0;
 		Check wiiuKeys{"wiiu-keys", Tr("Wii U disc keys")};
-		wiiuKeys.state = discKeys ? 0 : 1;
-		wiiuKeys.detail = discKeys ? Tr("keys.txt found") : Tr("keys.txt is missing: only encrypted .wud and .wux need it");
-		wiiuKeys.action = discKeys ? "" : Tr("How to");
+		wiiuKeys.state = !discKeys ? 1 : discKeyCount == 0 ? 2 : 0;
+		// tr: the Setup check, Wii U disc keys: {0} is how many keys keys.txt holds
+		wiiuKeys.detail = !discKeys	   ? std::string(Tr("keys.txt is missing: only encrypted .wud and .wux need it")) :
+			discKeyCount == 0		   ? std::string(Tr("keys.txt has no keys: only encrypted .wud and .wux need them")) :
+			discKeyCount > 0		   ? TrP(discKeyCount, "keys.txt found · {0} key", "keys.txt found · {0} keys") :
+										 std::string(Tr("keys.txt found"));
+		wiiuKeys.action = discKeyCount > 0 ? "" : Tr("How to");
 		wiiuKeys.aboutTitle = Tr("Keys for encrypted discs");
 		wiiuKeys.about = TrF("Encrypted .wud and .wux need their disc keys in {0}/keys.txt, one per line. Other formats need none.",
 			ps5paths::CemuRoot());
-		wiiuKeys.guide = std::string(kRepository) + "#wii-u";
-		wiiuKeys.guideTitle = Tr("the game files page");
+		wiiuKeys.guide = Guide("wii-u#disc-keys");
+		wiiuKeys.guideTitle = Tr("the Wii U page");
 		if (SideShown(System::WiiU))
 			m_checks.push_back(wiiuKeys);
 		// no 3DS keys to check: Azahar's own are built in (tools/build-azahar.sh), and it plays only
@@ -275,7 +342,7 @@ namespace ps5shell
 		system.action = systemFiles || !ps5azahar::Available() ? "" : Tr("Artic Base");
 		system.aboutTitle = Tr("Your 3DS's own files");
 		system.about = Tr("The 3DS Home Menu and a few games need your 3DS's system files. Start the Artic Setup Tool on your 3DS, then Artic Base here.");
-		system.guide = std::string(kRepository) + "#nintendo-3ds-azahar";
+		system.guide = Guide("3ds#system-files");
 		system.guideTitle = Tr("the 3DS page");
 		if (SideShown(System::N3ds))
 			m_checks.push_back(system);
@@ -289,7 +356,7 @@ namespace ps5shell
 		nds.aboutTitle = Tr("Your DS's own BIOS and firmware");
 		nds.about = TrF("DS games run on a built-in BIOS and firmware, which most games are fine with. For the few that aren't, put bios7.bin, bios9.bin and firmware.bin from your own DS in {0}/bios. Playtendoh does not include a BIOS.",
 			ps5melonds::Root());
-		nds.guide = std::string(kRepository) + "#nintendo-ds-melonds";
+		nds.guide = Guide("ds#bios");
 		nds.guideTitle = Tr("the DS page");
 		if (SideShown(System::Nds))
 			m_checks.push_back(nds);
@@ -340,21 +407,28 @@ namespace ps5shell
 				TrF("{0} games need the console's BIOS: put {1} from your own console in {2}. Playtendoh does not include a BIOS.", name, bios.file, folder.string()) :
 				TrF("{0} games run on a built-in BIOS, which most games are fine with. To use the console's own, put {1} in {2}. Playtendoh does not include a BIOS.",
 					name, bios.file, folder.string());
+			check.guide = Guide("classics#bios");
+			check.guideTitle = Tr("the classic consoles page");
 			m_checks.push_back(check);
 		}
 
 		// the Switch's keys and firmware, which Eden needs and none of which come with the app: dumped from
 		// the player's own Switch
 		const std::string edenFiles = ps5eden::GameFilesFolder();
-		const bool nxKeys = ps5eden::KeysFound(), nxFirmware = ps5eden::FirmwareFound();
+		const bool nxKeysFile = ps5eden::KeysFound(), nxFirmware = ps5eden::FirmwareFound();
+		struct stat keysInfo{};
+		const bool nxKeysEmpty = nxKeysFile && stat((edenFiles + "/keys/prod.keys").c_str(), &keysInfo) == 0 && keysInfo.st_size == 0;
+		const bool nxKeys = nxKeysFile && !nxKeysEmpty;
 		Check switchKeys{"switch-keys", Tr("Switch keys")};
 		switchKeys.state = nxKeys ? 0 : 1;
-		switchKeys.detail = nxKeys ? Tr("prod.keys found") : Tr("prod.keys is missing: Switch games need it");
+		switchKeys.detail = nxKeys ? Tr("prod.keys found") :
+			nxKeysEmpty			   ? Tr("prod.keys is empty: Switch games need your keys in it") :
+									 Tr("prod.keys is missing: Switch games need it");
 		switchKeys.action = nxKeys ? "" : Tr("How to");
 		switchKeys.aboutTitle = Tr("Your Switch's keys");
 		switchKeys.about = TrF("Switch games need your own console's keys: prod.keys (and title.keys) from your Switch, in {0}/keys. Playtendoh does not include keys.",
 			edenFiles);
-		switchKeys.guide = std::string(kRepository) + "#nintendo-switch-eden";
+		switchKeys.guide = Guide("switch#keys-and-firmware");
 		switchKeys.guideTitle = Tr("the Switch page");
 		Check switchFirmware{"switch-firmware", Tr("Switch firmware")};
 		switchFirmware.state = nxFirmware ? 0 : 1;
@@ -377,7 +451,7 @@ namespace ps5shell
 		switch2Keys.action = ps5eglantine::KeysFound() ? "" : Tr("How to");
 		switch2Keys.aboutTitle = Tr("Your Switch 2 keys");
 		switch2Keys.about = TrF("Put your own prod.keys in {0}/keys. Playtendoh and Lichii do not include keys.", ps5eglantine::DataFolder());
-		switch2Keys.guide = std::string(kRepository) + "#switch-2";
+		switch2Keys.guide = Guide("switch-2#keys-and-firmware");
 		switch2Keys.guideTitle = Tr("the Switch 2 page");
 		Check switch2Firmware{"switch2-firmware", Tr("Switch 2 firmware")};
 		switch2Firmware.state = ps5eglantine::FirmwareFound() ? 0 : 1;
@@ -395,7 +469,7 @@ namespace ps5shell
 
 		// covers
 		Check boxArt{"boxart", Tr("Box art")};
-		boxArt.guide = std::string(kRepository) + "#online";
+		boxArt.guide = Guide("setup-check#box-art");
 		boxArt.guideTitle = Tr("what Playtendoh fetches online");
 		boxArt.aboutTitle = Tr("Covers from GameTDB");
 		boxArt.about = Tr("Covers for new games come from GameTDB. Offline, game icons are shown and Playtendoh tries again next time.");
@@ -434,7 +508,42 @@ namespace ps5shell
 			folders.about = TrF("Saves, BIOS files and settings for every system are kept together in {0}. You can give the Wii U, 3DS, DS or "
 								"Switch a folder of its own instead. Cross shows them, each with its own switch.",
 				ps5paths::Root());
+			folders.guide = Guide("files");
+			// tr: what the QR code opens: "Scan it for where your files go"
+			folders.guideTitle = Tr("where your files go");
 			m_checks.push_back(folders);
+		}
+
+		// another copy of the app in /data/homebrew or a drive's homebrew folder, beside the one running: the
+		// home screen's tile can start that one instead, so an older version seems to come back after a
+		// restart. Told apart by their eboot.bin, as updates are (ps5paths::RunsFrom: none when the running
+		// one cannot be read).
+		{
+			std::vector<std::string> others;
+			for (const std::string& folder : ps5paths::InstallFolders())
+				if (IsFile(folder + "/eboot.bin") && !ps5paths::RunsFrom(folder))
+					others.push_back(folder);
+			if (!others.empty())
+			{
+				std::string places;
+				for (const std::string& folder : others)
+					places += (places.empty() ? "" : ", ") + Place(folder);
+				const std::string version = CopyVersion(others.front());
+				const std::string where = ShortPath(Place(others.front()), 40);
+				Check copies{"copies", Tr("Another copy of Playtendoh")};
+				copies.state = 1;
+				// tr: the Setup check, another copy of the app: {0} is its version, {1} where it is
+				copies.detail = version.empty() ? TrF("In {0}: the home screen may start it instead", where) :
+												  TrF("{0} in {1}: the home screen may start it instead", version, where);
+				copies.aboutTitle = Tr("Why an old version comes back");
+				// tr: {0} is where the other copies are
+				copies.about = TrF("Playtendoh is also in {0}. The PS5's home screen can start that copy instead of this one, so an older "
+								   "version seems to come back after a restart. Keep one: delete the copy you don't use, with FTP or a file manager.",
+					places);
+				copies.guide = Guide("troubleshooting#old-version");
+				copies.guideTitle = Tr("the troubleshooting page");
+				m_checks.push_back(copies);
+			}
 		}
 		// 6.0: what needs a look first, then what is optional, then what is ready, each in the order made
 		std::stable_sort(m_checks.begin(), m_checks.end(), [](const Check& a, const Check& b) {

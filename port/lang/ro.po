@@ -1748,7 +1748,7 @@ msgid "Running"
 msgstr "Rulează"
 
 #. the first start's setup: Cross on its last step
-#: port/app/ingame.cpp:710 port/app/ingame3ds.cpp:1147 port/eden/ingame.cpp:831 port/frontend/shell/firststart.cpp:264 port/frontend/shell/orbit.cpp:461 port/frontend/shell/orbit.cpp:821 port/frontend/shell/reports.cpp:155 port/frontend/shell/setup.cpp:432 port/frontend/shell/shares.cpp:524 port/frontend/shell/shell.cpp:1881 port/frontend/shell/shell.cpp:1885 port/frontend/shell/shell.cpp:1920 port/frontend/shell/shell.cpp:1929 port/frontend/shell/shell.cpp:1937 port/frontend/shell/shell.cpp:1945 port/frontend/shell/shell.cpp:1948 port/frontend/shell/shell.cpp:3070 port/frontend/shell/shell.cpp:3108
+#: port/app/ingame.cpp:710 port/app/ingame3ds.cpp:1147 port/eden/ingame.cpp:831 port/frontend/shell/firststart.cpp:264 port/frontend/shell/orbit.cpp:461 port/frontend/shell/orbit.cpp:821 port/frontend/shell/reports.cpp:155 port/frontend/shell/setup.cpp:506 port/frontend/shell/shares.cpp:524 port/frontend/shell/shell.cpp:1881 port/frontend/shell/shell.cpp:1885 port/frontend/shell/shell.cpp:1920 port/frontend/shell/shell.cpp:1929 port/frontend/shell/shell.cpp:1937 port/frontend/shell/shell.cpp:1945 port/frontend/shell/shell.cpp:1948 port/frontend/shell/shell.cpp:3070 port/frontend/shell/shell.cpp:3108
 #, menu
 msgid "Choose"
 msgstr "Alege"
@@ -3835,11 +3835,11 @@ msgstr "Lichii nu a găsit fișierul jocului. Unitatea pe care se află este con
 msgid "Eden could not find the game's file. Is the drive with it plugged in?"
 msgstr "Eden nu a găsit fișierul jocului. Unitatea pe care se află este conectată?"
 
-#: port/eden/launch.cpp:311 port/frontend/shell/settings.cpp:1190 port/frontend/shell/setup.cpp:376
+#: port/eden/launch.cpp:311 port/frontend/shell/settings.cpp:1190 port/frontend/shell/setup.cpp:450
 msgid "prod.keys is missing: Lichii needs your own Switch keys"
 msgstr "Lipsește prod.keys: Lichii are nevoie de propriile tale chei Switch"
 
-#: port/eden/launch.cpp:311 port/frontend/shell/settings.cpp:1207 port/frontend/shell/setup.cpp:352
+#: port/eden/launch.cpp:311 port/frontend/shell/settings.cpp:1207 port/frontend/shell/setup.cpp:426
 msgid "prod.keys is missing: Switch games need it"
 msgstr "Lipsește prod.keys: fără el, Eden nu poate citi jocuri de Switch"
 
@@ -4077,7 +4077,7 @@ msgid "The cheat could not be saved: {0}"
 msgstr ""
 
 #. the first start's steps, as the bar at the top right names them
-#: port/frontend/shell/firststart.cpp:27 port/frontend/shell/settings.cpp:215 port/frontend/shell/settings.cpp:680 port/frontend/shell/settings.cpp:1005 port/frontend/shell/settings.cpp:1045 port/frontend/shell/settings.cpp:1145 port/frontend/shell/settings.cpp:2328 port/frontend/shell/setup.cpp:691
+#: port/frontend/shell/firststart.cpp:27 port/frontend/shell/settings.cpp:215 port/frontend/shell/settings.cpp:680 port/frontend/shell/settings.cpp:1005 port/frontend/shell/settings.cpp:1045 port/frontend/shell/settings.cpp:1145 port/frontend/shell/settings.cpp:2328 port/frontend/shell/setup.cpp:800
 msgid "Language"
 msgstr "Limbă"
 
@@ -4527,7 +4527,7 @@ msgstr "Instalare"
 msgid "Install every new one ({0})"
 msgstr "Instalează toate noutățile ({0})"
 
-#: port/frontend/shell/installs.cpp:329 port/frontend/shell/library.cpp:198 port/frontend/shell/pages.cpp:1305 port/frontend/shell/setup.cpp:188 port/frontend/shell/setup.cpp:214
+#: port/frontend/shell/installs.cpp:329 port/frontend/shell/library.cpp:198 port/frontend/shell/pages.cpp:1305 port/frontend/shell/setup.cpp:243 port/frontend/shell/setup.cpp:273
 msgid "Choose a folder"
 msgstr "Alege un folder"
 
@@ -4663,7 +4663,7 @@ msgstr "Anul lansării"
 msgid "How it runs"
 msgstr "Cum rulează"
 
-#: port/frontend/shell/library.cpp:157 port/frontend/shell/setup.cpp:487
+#: port/frontend/shell/library.cpp:157 port/frontend/shell/setup.cpp:596
 msgid "Setup"
 msgstr "Configurare"
 
@@ -4705,7 +4705,7 @@ msgstr "Aici vor apărea jocurile tale"
 
 #. {0} is the games folder
 #. {1} is Eden's game files folder, which has keys/ and firmware/ in it
-#: port/frontend/shell/library.cpp:184 port/frontend/shell/library.cpp:193 port/frontend/shell/setup.cpp:197
+#: port/frontend/shell/library.cpp:184 port/frontend/shell/library.cpp:193 port/frontend/shell/setup.cpp:252
 msgid "Put this system's games in {0}, or choose any folder, such as one on a USB drive. Subfolders are searched too."
 msgstr "Pune jocurile acestui sistem în {0} sau alege orice folder pe care PS5 îl poate citi, de exemplu pe o unitate USB. Se caută și în subfoldere, până la patru niveluri."
 
@@ -4722,11 +4722,11 @@ msgstr "Pune-ți jocurile DS (.nds, separat sau în arhive .zip, .7z ori .rar) �
 msgid "Put Switch 2 game folders in {0}. Each needs exefs/main and romfs/ (or base/exefs/main and romfs/). Keep updates in the game's folder."
 msgstr "Pune dosarele jocurilor Switch 2 în {0}; fiecare are nevoie de exefs/main și romfs/ (sau base/exefs/main și romfs/). Păstrează actualizările în dosarul jocului."
 
-#: port/frontend/shell/library.cpp:190 port/frontend/shell/setup.cpp:379 port/main_ps5.cpp:592
+#: port/frontend/shell/library.cpp:190 port/frontend/shell/setup.cpp:453 port/main_ps5.cpp:592
 msgid "Put your own prod.keys in {0}/keys. Playtendoh and Lichii do not include keys."
 msgstr "Pune propriul tău prod.keys în {0}/keys. Playtendoh și Lichii nu includ chei."
 
-#: port/frontend/shell/library.cpp:191 port/frontend/shell/setup.cpp:387 port/main_ps5.cpp:594
+#: port/frontend/shell/library.cpp:191 port/frontend/shell/setup.cpp:461 port/main_ps5.cpp:594
 msgid "Put your own Switch firmware files in {0}/firmware. Playtendoh and Lichii do not include firmware."
 msgstr "Pune propriile tale fișiere de firmware Switch în {0}/firmware. Playtendoh și Lichii nu vin cu firmware."
 
@@ -5295,23 +5295,23 @@ msgstr "Anulat. Ce s-a copiat a fost șters, împreună cu orice copie anterioar
 msgid "Cancelled. The previous install is unchanged."
 msgstr "Anulat. Ce era instalat înainte e cum era."
 
-#: port/frontend/shell/pages.cpp:1299 port/frontend/shell/pages.cpp:1300 port/frontend/shell/setup.cpp:187 port/frontend/shell/setup.cpp:196
+#: port/frontend/shell/pages.cpp:1299 port/frontend/shell/pages.cpp:1300 port/frontend/shell/setup.cpp:242 port/frontend/shell/setup.cpp:251
 msgid "{0} games"
 msgstr "Jocuri {0}"
 
-#: port/frontend/shell/pages.cpp:1301 port/frontend/shell/settings.cpp:1166 port/frontend/shell/setup.cpp:212
+#: port/frontend/shell/pages.cpp:1301 port/frontend/shell/settings.cpp:1166 port/frontend/shell/setup.cpp:271
 msgid "3DS games"
 msgstr "Jocuri 3DS"
 
-#: port/frontend/shell/pages.cpp:1302 port/frontend/shell/settings.cpp:1166 port/frontend/shell/setup.cpp:212
+#: port/frontend/shell/pages.cpp:1302 port/frontend/shell/settings.cpp:1166 port/frontend/shell/setup.cpp:271
 msgid "DS games"
 msgstr "Jocuri DS"
 
-#: port/frontend/shell/pages.cpp:1303 port/frontend/shell/settings.cpp:1166 port/frontend/shell/setup.cpp:212
+#: port/frontend/shell/pages.cpp:1303 port/frontend/shell/settings.cpp:1166 port/frontend/shell/setup.cpp:271
 msgid "Switch games"
 msgstr "Jocuri de Switch"
 
-#: port/frontend/shell/pages.cpp:1304 port/frontend/shell/settings.cpp:1166 port/frontend/shell/setup.cpp:212
+#: port/frontend/shell/pages.cpp:1304 port/frontend/shell/settings.cpp:1166 port/frontend/shell/setup.cpp:271
 msgid "Wii U games"
 msgstr "Jocuri Wii U"
 
@@ -5479,7 +5479,7 @@ msgstr "Conectare la {0}"
 msgid "Artic Setup Tool"
 msgstr "Artic Setup Tool"
 
-#: port/frontend/shell/pages.cpp:1630 port/frontend/shell/pages.cpp:1641 port/frontend/shell/settings.cpp:1446 port/frontend/shell/setup.cpp:275
+#: port/frontend/shell/pages.cpp:1630 port/frontend/shell/pages.cpp:1641 port/frontend/shell/settings.cpp:1446 port/frontend/shell/setup.cpp:342
 msgid "Artic Base"
 msgstr "Artic Base"
 
@@ -8864,7 +8864,7 @@ msgstr "Pentru jocurile DS care citesc un joc GBA în al doilea slot, cum face P
 msgid "Put the GBA game in {0}/slot2 named like the DS game, ending .gba, with its .sav if it has one. Its save is then kept in {0}/slot2-saves; your files are not changed. Applies to the next game."
 msgstr "Pune jocul GBA în {0}/slot2 cu numele fișierului jocului DS, terminat în .gba, și .sav-ul lui alături, dacă are. Salvarea cartușului e apoi păstrată în {0}/slot2-saves, iar fișierele pe care le pui acolo nu sunt schimbate niciodată. Un joc DS fără cartuș acolo pornește cu slotul gol. Se aplică de la următorul joc."
 
-#: port/frontend/shell/settings.cpp:1166 port/frontend/shell/setup.cpp:212 port/main_ps5.cpp:586 port/main_ps5.cpp:589 port/main_ps5.cpp:590
+#: port/frontend/shell/settings.cpp:1166 port/frontend/shell/setup.cpp:271 port/main_ps5.cpp:586 port/main_ps5.cpp:589 port/main_ps5.cpp:590
 msgid "Switch 2 games"
 msgstr "Jocuri Switch 2"
 
@@ -8933,7 +8933,7 @@ msgstr "Lipsește"
 msgid "Keys and firmware"
 msgstr "Chei și firmware"
 
-#: port/frontend/shell/settings.cpp:1191 port/frontend/shell/setup.cpp:384
+#: port/frontend/shell/settings.cpp:1191 port/frontend/shell/setup.cpp:458
 msgid "Firmware is missing: some games need it"
 msgstr "Lipsește firmware-ul: unele jocuri au nevoie de el"
 
@@ -8949,7 +8949,7 @@ msgstr "Pune propriul tău prod.keys în {0}/keys. Nici Playtendoh, nici Lichii 
 msgid "Put your own Switch firmware files in {0}/firmware. Neither app includes firmware."
 msgstr "Pune propriile fișiere firmware Switch în {0}/firmware. Niciuna dintre aplicații nu include firmware."
 
-#: port/frontend/shell/settings.cpp:1208 port/frontend/shell/setup.cpp:362
+#: port/frontend/shell/settings.cpp:1208 port/frontend/shell/setup.cpp:436
 msgid "No firmware yet: many games need it to start"
 msgstr "Încă nu există firmware: multe jocuri au nevoie de el ca să pornească"
 
@@ -8957,11 +8957,11 @@ msgstr "Încă nu există firmware: multe jocuri au nevoie de el ca să porneasc
 msgid "Your keys are ready."
 msgstr "Eden îți poate citi jocurile."
 
-#: port/frontend/shell/settings.cpp:1210 port/frontend/shell/setup.cpp:355
+#: port/frontend/shell/settings.cpp:1210 port/frontend/shell/setup.cpp:429
 msgid "Switch games need your own console's keys: prod.keys (and title.keys) from your Switch, in {0}/keys. Playtendoh does not include keys."
 msgstr "Eden citește jocurile de Switch cu cheile propriei tale console: prod.keys (și title.keys), extrase din Switch-ul tău, în {0}/keys. Playtendoh nu include chei."
 
-#: port/frontend/shell/settings.cpp:1213 port/frontend/shell/setup.cpp:365
+#: port/frontend/shell/settings.cpp:1213 port/frontend/shell/setup.cpp:439
 msgid "Many Switch games need firmware: the .nca files from your Switch, in {0}/firmware. Playtendoh does not include firmware."
 msgstr "Multe jocuri de Switch au nevoie de fișierele de sistem ale consolei: fișierele .nca ale firmware-ului ei, extrase din Switch-ul tău, în {0}/firmware. Playtendoh nu include firmware."
 
@@ -8984,11 +8984,11 @@ msgstr "Jocuri pe un computer sau NAS, prin SMB sau NFS."
 msgid "Add a folder shared by a computer or NAS, then choose a games folder on it in the folder browser. Nothing is written to it; saves and installs stay on the PS5. Wired is better than Wi-Fi."
 msgstr "Un folder partajat de un computer cu Windows, macOS sau Linux ori de un NAS, citit acolo unde e: adaugă-l aici, apoi alege pe el un folder de jocuri cu navigatorul de foldere, unde fiecare partajare e o filă. Nu se scrie niciodată nimic pe el; salvările și instalările rămân pe PS5. Pentru jocurile Wii U, un cablu merge mai bine decât Wi-Fi."
 
-#: port/frontend/shell/settings.cpp:1228 port/frontend/shell/setup.cpp:252
+#: port/frontend/shell/settings.cpp:1228 port/frontend/shell/setup.cpp:315
 msgid "Wii U disc keys"
 msgstr "Chei de disc Wii U"
 
-#: port/frontend/shell/settings.cpp:1228 port/frontend/shell/setup.cpp:254
+#: port/frontend/shell/settings.cpp:1228 port/frontend/shell/setup.cpp:321
 msgid "keys.txt found"
 msgstr "keys.txt găsit"
 
@@ -8996,12 +8996,13 @@ msgstr "keys.txt găsit"
 msgid "Only encrypted .wud and .wux need them."
 msgstr "Doar .wud și .wux criptate au nevoie de ele."
 
-#: port/frontend/shell/settings.cpp:1229 port/frontend/shell/setup.cpp:254
+#. the Setup check, Wii U disc keys: {0} is how many keys keys.txt holds
+#: port/frontend/shell/settings.cpp:1229 port/frontend/shell/setup.cpp:318
 msgid "keys.txt is missing: only encrypted .wud and .wux need it"
 msgstr "keys.txt lipsește: doar .wud și .wux criptate au nevoie de el"
 
 #. {0} is the app's data folder: /data/ps5cemu, or the PS5CEMU-HAR-data folder on the drive the app is installed on
-#: port/frontend/shell/settings.cpp:1231 port/frontend/shell/setup.cpp:257
+#: port/frontend/shell/settings.cpp:1231 port/frontend/shell/setup.cpp:324
 msgid "Encrypted .wud and .wux need their disc keys in {0}/keys.txt, one per line. Other formats need none."
 msgstr "Dump-urile .wud și .wux criptate au nevoie de cheile lor de disc în {0}/keys.txt, câte una pe linie. Dump-urile decriptate, fișierele .wua și folderele cu code, content și meta nu au nevoie."
 
@@ -9241,7 +9242,7 @@ msgid "Restores the chosen backup's saves and settings. Current saves are moved 
 msgstr "Pune salvările din copia aleasă înapoi de unde au venit. Salvările de acolo de acum sunt mutate întâi în {0}/saves-before, deci nu se pierde nimic; salvările pe care copia nu le are rămân cum sunt. Se întorc și setările ei, iar Playtendoh pornește din nou ca să le folosească."
 
 #. Settings > Online: a row that opens the box art's settings (GameTDB on or off, downloading the covers again)
-#: port/frontend/shell/settings.cpp:1425 port/frontend/shell/settings.cpp:1433 port/frontend/shell/setup.cpp:397
+#: port/frontend/shell/settings.cpp:1425 port/frontend/shell/settings.cpp:1433 port/frontend/shell/setup.cpp:471
 msgid "Box art"
 msgstr "Coperte"
 
@@ -10393,353 +10394,413 @@ msgid "{0} settings"
 msgstr "Setări {0}"
 
 #. free space on the PS5's storage, as in 412 GB free
-#: port/frontend/shell/setup.cpp:41
+#: port/frontend/shell/setup.cpp:96
 msgid "{0} GB free"
 msgstr "{0} GB liberi"
 
-#: port/frontend/shell/setup.cpp:123
+#: port/frontend/shell/setup.cpp:178
 msgid "Storage"
 msgstr "Stocare"
 
 #. what the QR code opens: "Scan it for the HEN setup guide"
-#: port/frontend/shell/setup.cpp:126 port/frontend/shell/setup.cpp:151
+#: port/frontend/shell/setup.cpp:181 port/frontend/shell/setup.cpp:206
 msgid "the HEN setup guide"
 msgstr "ghidul de configurare HEN"
 
-#: port/frontend/shell/setup.cpp:132
+#: port/frontend/shell/setup.cpp:187
 msgid "/data is reachable"
 msgstr "/data e accesibil"
 
-#: port/frontend/shell/setup.cpp:133
+#: port/frontend/shell/setup.cpp:188
 msgid "Where everything is kept"
 msgstr "Unde se păstrează totul"
 
-#: port/frontend/shell/setup.cpp:134
+#: port/frontend/shell/setup.cpp:189
 msgid "Settings, saves, caches and logs are kept in {0}, which your HEN unlocks for Playtendoh."
 msgstr "Setările, salvările, cache-urile și jurnalele stau în {0}, pe care HEN-ul tău îl deschide pentru Playtendoh: jailbreak-ul lui de aplicații sau elfldr cu ajutorul care vine cu aplicația."
 
-#: port/frontend/shell/setup.cpp:140
+#: port/frontend/shell/setup.cpp:195
 msgid "/data can't be reached: nothing can be saved"
 msgstr "/data nu e accesibil: nu se poate păstra nimic"
 
-#: port/frontend/shell/setup.cpp:141
+#: port/frontend/shell/setup.cpp:196
 msgid "Give Playtendoh access to /data"
 msgstr "Scoate Playtendoh din sandbox"
 
-#: port/frontend/shell/setup.cpp:142
+#: port/frontend/shell/setup.cpp:197
 msgid "Add PPSA99360 to your HEN's app jailbreak list (etaHEN: its app jailbreak list; OnionHEN: the end of exact_title_ids in config.ini, with no comma after it), or have elfldr listening on port 9021. Then start Playtendoh again."
 msgstr "Adaugă PPSA99360 în lista de jailbreak de aplicații a HEN-ului tău (etaHEN: lista lui de jailbreak de aplicații; OnionHEN: la finalul exact_title_ids din config.ini, fără virgulă după), sau pornește elfldr ascultând pe portul 9021. Apoi repornește Playtendoh."
 
-#: port/frontend/shell/setup.cpp:149
+#: port/frontend/shell/setup.cpp:204
 msgid "Game speed"
 msgstr "Recompilatoare"
 
-#: port/frontend/shell/setup.cpp:152
+#: port/frontend/shell/setup.cpp:207
 msgid "Whether games can run at full speed"
 msgstr "Ce rulează codul jocurilor"
 
-#: port/frontend/shell/setup.cpp:156
+#: port/frontend/shell/setup.cpp:211
 msgid "JIT memory from your HEN: games run at full speed"
 msgstr "Memorie JIT de la HEN-ul tău: jocurile rulează la viteză maximă"
 
-#: port/frontend/shell/setup.cpp:157
+#: port/frontend/shell/setup.cpp:212
 msgid "Executable memory: games run at full speed, no HEN grant needed"
 msgstr "Memorie executabilă: jocurile rulează la viteză maximă, fără permisiune HEN"
 
-#: port/frontend/shell/setup.cpp:158
+#: port/frontend/shell/setup.cpp:213
 msgid "Wii U and 3DS games need special memory from your HEN, or that Playtendoh makes itself, to run at full speed."
 msgstr "Recompilatoarele Cemu și Azahar transformă codul jocurilor în cel al PS5 pe măsură ce rulează. Au nevoie de memorie în care pot scrie cod și din care îl pot rula: memoria JIT a HEN-ului tău sau memorie executabilă pe care Playtendoh o creează singur."
 
-#: port/frontend/shell/setup.cpp:163
+#: port/frontend/shell/setup.cpp:218
 msgid "No JIT memory: Wii U games will run much slower"
 msgstr "Fără memorie JIT sau executabilă: jocurile Wii U rulează pe interpretorul mult mai lent"
 
-#: port/frontend/shell/setup.cpp:164
+#: port/frontend/shell/setup.cpp:219
 msgid "Wii U games will run much slower. Add PPSA99360 to your HEN's app jailbreak list, then start Playtendoh again. Settings > Diagnostics shows what it got."
 msgstr "Nu s-a putut obține nici memoria JIT a HEN-ului tău, nici memorie executabilă, așa că jocurile Wii U trec pe interpretorul Cemu. Adaugă PPSA99360 în lista de jailbreak de aplicații a HEN-ului tău, apoi repornește Playtendoh; Setări > Diagnosticare spune ce a obținut."
 
-#: port/frontend/shell/setup.cpp:191 port/frontend/shell/shell.cpp:905 port/libretro/game.cpp:1078 port/main_ps5.cpp:762 port/retro/launch.cpp:38 port/retro/launch.cpp:48
+#: port/frontend/shell/setup.cpp:246 port/frontend/shell/shell.cpp:905 port/libretro/game.cpp:1078 port/main_ps5.cpp:762 port/retro/launch.cpp:38 port/retro/launch.cpp:48
 msgid "This system's emulator is not in this copy of Playtendoh."
 msgstr "Emulatorul acestei părți nu e în această copie a Playtendoh."
 
 #. {1} is a folder
-#: port/frontend/shell/setup.cpp:192 port/frontend/shell/setup.cpp:219
+#: port/frontend/shell/setup.cpp:247 port/frontend/shell/setup.cpp:278
 msgid "{0} game in {1}"
 msgid_plural "{0} games in {1}"
 msgstr[0] "{0} joc în {1}"
 msgstr[1] "{0} jocuri în {1}"
 msgstr[2] "{0} de jocuri în {1}"
 
-#: port/frontend/shell/setup.cpp:193 port/frontend/shell/setup.cpp:220
+#: port/frontend/shell/setup.cpp:248 port/frontend/shell/setup.cpp:279
 msgid "None in {0} yet"
 msgstr "Încă niciunul în {0}"
 
-#: port/frontend/shell/setup.cpp:194 port/frontend/shell/setup.cpp:221 port/retro/library.cpp:354
+#: port/frontend/shell/setup.cpp:249 port/frontend/shell/setup.cpp:280 port/retro/library.cpp:354
 msgid "{0} cannot be read"
 msgstr "{0} nu poate fi citit"
 
-#: port/frontend/shell/setup.cpp:222
+#. what the QR code opens: "Scan it for the GameCube and Wii page"
+#: port/frontend/shell/setup.cpp:256
+msgid "the GameCube and Wii page"
+msgstr ""
+
+#. what the QR code opens: "Scan it for the GameCube and Wii page"
+#: port/frontend/shell/setup.cpp:256 port/frontend/shell/setup.cpp:411
+msgid "the classic consoles page"
+msgstr ""
+
+#: port/frontend/shell/setup.cpp:281
 msgid "Where your 3DS games go"
 msgstr "Unde merg jocurile tale 3DS"
 
-#: port/frontend/shell/setup.cpp:223
+#: port/frontend/shell/setup.cpp:282
 msgid "Where your DS games go"
 msgstr "Unde se pun jocurile tale DS"
 
-#: port/frontend/shell/setup.cpp:224
+#: port/frontend/shell/setup.cpp:283
 msgid "Where your Switch games go"
 msgstr "Unde se pun jocurile tale de Switch"
 
-#: port/frontend/shell/setup.cpp:225
+#: port/frontend/shell/setup.cpp:284
 msgid "Where your Wii U games go"
 msgstr "Unde merg jocurile tale Wii U"
 
-#: port/frontend/shell/setup.cpp:226
+#: port/frontend/shell/setup.cpp:285
 msgid "Put them in {0}, or choose any folder, such as one on a USB drive. Subfolders are searched too. Install CIA files from Settings > Game files."
 msgstr "Pune-le în {0} sau alege orice folder pe care PS5 îl poate citi, de exemplu pe o unitate USB. Se caută și în subfoldere. Fișierele CIA se instalează din Setări > Fișiere de joc, pe partea 3DS."
 
-#: port/frontend/shell/setup.cpp:228 port/frontend/shell/setup.cpp:242
+#: port/frontend/shell/setup.cpp:287 port/frontend/shell/setup.cpp:303
 msgid "Put them in {0}, or choose any folder, such as one on a USB drive. Subfolders are searched too."
 msgstr "Pune-le în {0} sau alege orice folder pe care PS5 îl poate citi, de exemplu pe o unitate USB. Se caută și în subfoldere."
 
-#: port/frontend/shell/setup.cpp:230
+#: port/frontend/shell/setup.cpp:289
 msgid "Put .nsp and .xci files in {0}, each alone or in a folder with its update and DLC. You also need your Switch's keys and firmware."
 msgstr "Pune-le în {0}: fișiere .nsp și .xci, separat sau fiecare în folderul lui cu actualizarea și DLC-urile lui. Eden are nevoie și de cheile și firmware-ul Switch-ului tău."
 
-#: port/frontend/shell/setup.cpp:232
+#: port/frontend/shell/setup.cpp:291
 msgid "Put them in {0}, or choose any folder, such as one on a USB drive. Install updates and DLC from Settings > Game files (a .wua already has them)."
 msgstr "Pune-le în {0} sau alege orice folder pe care PS5 îl poate citi, de exemplu pe o unitate USB. Actualizările și DLC-urile se instalează din Setări > Fișiere de joc sau vin cu un .wua."
 
-#: port/frontend/shell/setup.cpp:237
+#: port/frontend/shell/setup.cpp:296
 msgid "code · content · meta"
 msgstr "code · content · meta"
 
-#: port/frontend/shell/setup.cpp:241
-msgid "Where your Switch 2 games go"
-msgstr "Unde se pun jocurile Switch 2"
-
-#: port/frontend/shell/setup.cpp:246 port/frontend/shell/setup.cpp:260
-msgid "the game files page"
-msgstr "pagina despre fișierele jocurilor"
-
-#: port/frontend/shell/setup.cpp:255 port/frontend/shell/setup.cpp:288 port/frontend/shell/setup.cpp:335 port/frontend/shell/setup.cpp:353 port/frontend/shell/setup.cpp:363 port/frontend/shell/setup.cpp:377 port/frontend/shell/setup.cpp:385
-msgid "How to"
-msgstr "Cum se face"
-
-#: port/frontend/shell/setup.cpp:256
-msgid "Keys for encrypted discs"
-msgstr "Chei pentru discuri criptate"
-
-#: port/frontend/shell/setup.cpp:272
-msgid "3DS system files"
-msgstr "Fișiere de sistem 3DS"
-
-#: port/frontend/shell/setup.cpp:274
-msgid "Artic Setup is done: the Home Menu can start"
-msgstr "Artic Setup a rulat: meniul HOME poate porni"
-
-#: port/frontend/shell/setup.cpp:274
-msgid "Artic Setup copies them from your 3DS, for the Home Menu"
-msgstr "Artic Setup le copiază de pe 3DS-ul tău, pentru meniul HOME"
-
-#: port/frontend/shell/setup.cpp:276
-msgid "Your 3DS's own files"
-msgstr "Fișierele proprii ale 3DS-ului tău"
-
-#: port/frontend/shell/setup.cpp:277
-msgid "The 3DS Home Menu and a few games need your 3DS's system files. Start the Artic Setup Tool on your 3DS, then Artic Base here."
-msgstr "Meniul HOME al 3DS-ului și puținele jocuri care au nevoie de fișierele de sistem ale consolei rulează după ce Artic Setup le copiază prin rețea de pe propriul tău 3DS: pornește Artic Setup Tool pe 3DS, apoi Artic Base aici."
-
-#: port/frontend/shell/setup.cpp:279
+#. what the QR code opens: "Scan it for the Wii U page"
+#: port/frontend/shell/setup.cpp:299 port/frontend/shell/setup.cpp:346
 msgid "the 3DS page"
 msgstr "pagina despre 3DS"
 
-#: port/frontend/shell/setup.cpp:287
-msgid "Your DS BIOS was found and is used"
-msgstr "BIOS-ul DS-ului tău găsit: jocurile DS rulează pe el"
-
-#: port/frontend/shell/setup.cpp:287
-msgid "Using the built-in BIOS. Your own DS BIOS is optional"
-msgstr "Jocurile DS le rulează BIOS-ul integrat al melonDS; al DS-ului tău e opțional"
-
-#: port/frontend/shell/setup.cpp:289
-msgid "Your DS's own BIOS and firmware"
-msgstr "BIOS-ul și firmware-ul propriului tău DS"
-
-#: port/frontend/shell/setup.cpp:290
-msgid "DS games run on a built-in BIOS and firmware, which most games are fine with. For the few that aren't, put bios7.bin, bios9.bin and firmware.bin from your own DS in {0}/bios. Playtendoh does not include a BIOS."
-msgstr "melonDS rulează jocurile DS pe propriul BIOS (FreeBIOS) și firmware, cu care se descurcă majoritatea jocurilor. Puținele care nu rulează pe ale DS-ului tău: bios7.bin, bios9.bin și firmware.bin, extrase de pe el, în {0}/bios. Niciun BIOS nu vine cu Playtendoh."
-
-#: port/frontend/shell/setup.cpp:293
+#. what the QR code opens: "Scan it for the Wii U page"
+#: port/frontend/shell/setup.cpp:299 port/frontend/shell/setup.cpp:360
 msgid "the DS page"
 msgstr "pagina DS"
 
+#. what the QR code opens: "Scan it for the Wii U page"
+#: port/frontend/shell/setup.cpp:299 port/frontend/shell/setup.cpp:432
+msgid "the Switch page"
+msgstr "pagina Switch"
+
+#. what the QR code opens: "Scan it for the Wii U page"
+#: port/frontend/shell/setup.cpp:299 port/frontend/shell/setup.cpp:327
+msgid "the Wii U page"
+msgstr ""
+
+#: port/frontend/shell/setup.cpp:302
+msgid "Where your Switch 2 games go"
+msgstr "Unde se pun jocurile Switch 2"
+
+#: port/frontend/shell/setup.cpp:306 port/frontend/shell/setup.cpp:455
+msgid "the Switch 2 page"
+msgstr "pagina Switch 2"
+
+#: port/frontend/shell/setup.cpp:319
+msgid "keys.txt has no keys: only encrypted .wud and .wux need them"
+msgstr ""
+
+#: port/frontend/shell/setup.cpp:320
+msgid "keys.txt found · {0} key"
+msgid_plural "keys.txt found · {0} keys"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: port/frontend/shell/setup.cpp:322 port/frontend/shell/setup.cpp:355 port/frontend/shell/setup.cpp:402 port/frontend/shell/setup.cpp:427 port/frontend/shell/setup.cpp:437 port/frontend/shell/setup.cpp:451 port/frontend/shell/setup.cpp:459
+msgid "How to"
+msgstr "Cum se face"
+
+#: port/frontend/shell/setup.cpp:323
+msgid "Keys for encrypted discs"
+msgstr "Chei pentru discuri criptate"
+
+#: port/frontend/shell/setup.cpp:339
+msgid "3DS system files"
+msgstr "Fișiere de sistem 3DS"
+
+#: port/frontend/shell/setup.cpp:341
+msgid "Artic Setup is done: the Home Menu can start"
+msgstr "Artic Setup a rulat: meniul HOME poate porni"
+
+#: port/frontend/shell/setup.cpp:341
+msgid "Artic Setup copies them from your 3DS, for the Home Menu"
+msgstr "Artic Setup le copiază de pe 3DS-ul tău, pentru meniul HOME"
+
+#: port/frontend/shell/setup.cpp:343
+msgid "Your 3DS's own files"
+msgstr "Fișierele proprii ale 3DS-ului tău"
+
+#: port/frontend/shell/setup.cpp:344
+msgid "The 3DS Home Menu and a few games need your 3DS's system files. Start the Artic Setup Tool on your 3DS, then Artic Base here."
+msgstr "Meniul HOME al 3DS-ului și puținele jocuri care au nevoie de fișierele de sistem ale consolei rulează după ce Artic Setup le copiază prin rețea de pe propriul tău 3DS: pornește Artic Setup Tool pe 3DS, apoi Artic Base aici."
+
+#: port/frontend/shell/setup.cpp:354
+msgid "Your DS BIOS was found and is used"
+msgstr "BIOS-ul DS-ului tău găsit: jocurile DS rulează pe el"
+
+#: port/frontend/shell/setup.cpp:354
+msgid "Using the built-in BIOS. Your own DS BIOS is optional"
+msgstr "Jocurile DS le rulează BIOS-ul integrat al melonDS; al DS-ului tău e opțional"
+
+#: port/frontend/shell/setup.cpp:356
+msgid "Your DS's own BIOS and firmware"
+msgstr "BIOS-ul și firmware-ul propriului tău DS"
+
+#: port/frontend/shell/setup.cpp:357
+msgid "DS games run on a built-in BIOS and firmware, which most games are fine with. For the few that aren't, put bios7.bin, bios9.bin and firmware.bin from your own DS in {0}/bios. Playtendoh does not include a BIOS."
+msgstr "melonDS rulează jocurile DS pe propriul BIOS (FreeBIOS) și firmware, cu care se descurcă majoritatea jocurilor. Puținele care nu rulează pe ale DS-ului tău: bios7.bin, bios9.bin și firmware.bin, extrase de pe el, în {0}/bios. Niciun BIOS nu vine cu Playtendoh."
+
 #. the Setup check, a console's BIOS file: {0} is the file's name, {1} the console
-#: port/frontend/shell/setup.cpp:332
+#: port/frontend/shell/setup.cpp:399
 msgid "{0} found"
 msgstr ""
 
-#: port/frontend/shell/setup.cpp:333
+#: port/frontend/shell/setup.cpp:400
 msgid "{0} is missing: {1} games need it"
 msgstr ""
 
-#: port/frontend/shell/setup.cpp:334
+#: port/frontend/shell/setup.cpp:401
 msgid "Using the built-in BIOS. {0} is optional"
 msgstr ""
 
 #. the Setup check's panel for a console's BIOS file
-#: port/frontend/shell/setup.cpp:337
+#: port/frontend/shell/setup.cpp:404
 msgid "The console's own BIOS"
 msgstr ""
 
-#: port/frontend/shell/setup.cpp:340
+#: port/frontend/shell/setup.cpp:407
 msgid "{0} games need the console's BIOS: put {1} from your own console in {2}. Playtendoh does not include a BIOS."
 msgstr ""
 
-#: port/frontend/shell/setup.cpp:341
+#: port/frontend/shell/setup.cpp:408
 msgid "{0} games run on a built-in BIOS, which most games are fine with. To use the console's own, put {1} in {2}. Playtendoh does not include a BIOS."
 msgstr ""
 
-#: port/frontend/shell/setup.cpp:350
+#: port/frontend/shell/setup.cpp:422
 msgid "Switch keys"
 msgstr "Chei Switch"
 
-#: port/frontend/shell/setup.cpp:352
+#: port/frontend/shell/setup.cpp:424
 msgid "prod.keys found"
 msgstr "prod.keys găsit: Eden îți poate citi jocurile"
 
-#: port/frontend/shell/setup.cpp:354
+#: port/frontend/shell/setup.cpp:425
+msgid "prod.keys is empty: Switch games need your keys in it"
+msgstr ""
+
+#: port/frontend/shell/setup.cpp:428
 msgid "Your Switch's keys"
 msgstr "Cheile Switch-ului tău"
 
-#: port/frontend/shell/setup.cpp:358
-msgid "the Switch page"
-msgstr "pagina Switch"
-
-#: port/frontend/shell/setup.cpp:359
+#: port/frontend/shell/setup.cpp:433
 msgid "Switch firmware"
 msgstr "Firmware Switch"
 
-#: port/frontend/shell/setup.cpp:361
+#: port/frontend/shell/setup.cpp:435
 msgid "Firmware found"
 msgstr "Firmware găsit: jocurile care au nevoie de fișierele de sistem pornesc"
 
-#: port/frontend/shell/setup.cpp:364
+#: port/frontend/shell/setup.cpp:438
 msgid "Your Switch's firmware"
 msgstr "Firmware-ul Switch-ului tău"
 
-#: port/frontend/shell/setup.cpp:374 port/main_ps5.cpp:591
+#: port/frontend/shell/setup.cpp:448 port/main_ps5.cpp:591
 msgid "Switch 2 keys"
 msgstr "Chei Switch 2"
 
-#: port/frontend/shell/setup.cpp:376
+#: port/frontend/shell/setup.cpp:450
 msgid "prod.keys found for Lichii"
 msgstr "prod.keys găsit pentru Lichii"
 
-#: port/frontend/shell/setup.cpp:378
+#: port/frontend/shell/setup.cpp:452
 msgid "Your Switch 2 keys"
 msgstr "Cheile emulatorului tău Switch 2"
 
-#: port/frontend/shell/setup.cpp:381
-msgid "the Switch 2 page"
-msgstr "pagina Switch 2"
-
-#: port/frontend/shell/setup.cpp:382 port/main_ps5.cpp:593
+#: port/frontend/shell/setup.cpp:456 port/main_ps5.cpp:593
 msgid "Switch 2 firmware"
 msgstr "Firmware Switch 2"
 
-#: port/frontend/shell/setup.cpp:384
+#: port/frontend/shell/setup.cpp:458
 msgid "Firmware found for Lichii"
 msgstr "Firmware găsit pentru Lichii"
 
-#: port/frontend/shell/setup.cpp:386
+#: port/frontend/shell/setup.cpp:460
 msgid "Your Switch 2 firmware"
 msgstr "Firmware-ul emulatorului tău Switch 2"
 
-#: port/frontend/shell/setup.cpp:399
+#: port/frontend/shell/setup.cpp:473
 msgid "what Playtendoh fetches online"
 msgstr "ce descarcă Playtendoh online"
 
-#: port/frontend/shell/setup.cpp:400
+#: port/frontend/shell/setup.cpp:474
 msgid "Covers from GameTDB"
 msgstr "Coperte de la GameTDB"
 
-#: port/frontend/shell/setup.cpp:401
+#: port/frontend/shell/setup.cpp:475
 msgid "Covers for new games come from GameTDB. Offline, game icons are shown and Playtendoh tries again next time."
 msgstr "Prima dată când apare un joc, coperta lui vine de la GameTDB (art.gametdb.com), după ID-ul de pe cutie. Fără conexiune se arată pictogramele jocurilor, iar următoarea pornire încearcă din nou."
 
-#: port/frontend/shell/setup.cpp:406
+#: port/frontend/shell/setup.cpp:480
 msgid "Off: the games' icons are shown instead"
 msgstr "Dezactivat: se arată în schimb pictogramele jocurilor"
 
-#: port/frontend/shell/setup.cpp:407
+#: port/frontend/shell/setup.cpp:481
 msgid "Turn on"
 msgstr "Activează"
 
-#: port/frontend/shell/setup.cpp:412
+#: port/frontend/shell/setup.cpp:486
 msgid "GameTDB did not answer: the games' icons are shown instead"
 msgstr "GameTDB nu a răspuns: se arată în schimb pictogramele jocurilor"
 
-#: port/frontend/shell/setup.cpp:417
+#: port/frontend/shell/setup.cpp:491
 msgid "GameTDB is reachable · {0} cover"
 msgid_plural "GameTDB is reachable · {0} covers"
 msgstr[0] "GameTDB e accesibil · {0} copertă"
 msgstr[1] "GameTDB e accesibil · {0} coperte"
 msgstr[2] "GameTDB e accesibil · {0} de coperte"
 
-#: port/frontend/shell/setup.cpp:418
+#: port/frontend/shell/setup.cpp:492
 msgid "On · {0} cover"
 msgid_plural "On · {0} covers"
 msgstr[0] "Activat · {0} copertă"
 msgstr[1] "Activat · {0} coperte"
 msgstr[2] "Activat · {0} de coperte"
 
-#: port/frontend/shell/setup.cpp:419
+#: port/frontend/shell/setup.cpp:493
 msgid "On: covers download as games are added"
 msgstr "Activat: copertele vin pe măsură ce apar jocurile tale"
 
-#: port/frontend/shell/setup.cpp:426
+#: port/frontend/shell/setup.cpp:500
 msgid "System folders"
 msgstr ""
 
-#: port/frontend/shell/setup.cpp:429
+#: port/frontend/shell/setup.cpp:503
 msgid "Together in {0}"
 msgstr ""
 
 #. the Setup check: how many of the systems that can move have a folder of their own
-#: port/frontend/shell/setup.cpp:431
+#: port/frontend/shell/setup.cpp:505
 msgid "{0} system in its own folder"
 msgid_plural "{0} systems in their own folders"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: port/frontend/shell/setup.cpp:433
+#: port/frontend/shell/setup.cpp:507
 msgid "Where each system's files go"
 msgstr ""
 
-#: port/frontend/shell/setup.cpp:434
+#: port/frontend/shell/setup.cpp:508
 msgid "Saves, BIOS files and settings for every system are kept together in {0}. You can give the Wii U, 3DS, DS or Switch a folder of its own instead. Cross shows them, each with its own switch."
 msgstr ""
 
-#: port/frontend/shell/setup.cpp:531
+#. what the QR code opens: "Scan it for where your files go"
+#: port/frontend/shell/setup.cpp:513
+msgid "where your files go"
+msgstr ""
+
+#: port/frontend/shell/setup.cpp:533
+msgid "Another copy of Playtendoh"
+msgstr ""
+
+#. the Setup check, another copy of the app: {0} is its version, {1} where it is
+#: port/frontend/shell/setup.cpp:536
+msgid "In {0}: the home screen may start it instead"
+msgstr ""
+
+#: port/frontend/shell/setup.cpp:537
+msgid "{0} in {1}: the home screen may start it instead"
+msgstr ""
+
+#: port/frontend/shell/setup.cpp:538
+msgid "Why an old version comes back"
+msgstr ""
+
+#. {0} is where the other copies are
+#: port/frontend/shell/setup.cpp:540
+msgid "Playtendoh is also in {0}. The PS5's home screen can start that copy instead of this one, so an older version seems to come back after a restart. Keep one: delete the copy you don't use, with FTP or a file manager."
+msgstr ""
+
+#: port/frontend/shell/setup.cpp:544
+msgid "the troubleshooting page"
+msgstr ""
+
+#: port/frontend/shell/setup.cpp:640
 msgid "Checked again"
 msgstr "Verificat din nou"
 
-#: port/frontend/shell/setup.cpp:555
+#: port/frontend/shell/setup.cpp:664
 msgid "Welcome to Playtendoh"
 msgstr "Bun venit în Playtendoh"
 
-#: port/frontend/shell/setup.cpp:555
+#: port/frontend/shell/setup.cpp:664
 msgid "Help"
 msgstr "Ajutor"
 
-#: port/frontend/shell/setup.cpp:556
+#: port/frontend/shell/setup.cpp:665
 msgid "Let’s check your setup"
 msgstr "Hai să-ți verificăm configurarea"
 
 #. the Setup check's summary: how many checks need the player, or that every one is ready
-#: port/frontend/shell/setup.cpp:567
+#: port/frontend/shell/setup.cpp:676
 msgid "{0} thing needs you"
 msgid_plural "{0} things need you"
 msgstr[0] ""
@@ -10747,47 +10808,47 @@ msgstr[1] ""
 msgstr[2] ""
 
 #. the Setup check's summary: how many checks need the player, or that every one is ready
-#: port/frontend/shell/setup.cpp:567
+#: port/frontend/shell/setup.cpp:676
 msgid "Everything is ready"
 msgstr ""
 
 #. the Setup check's summary: {0} checks ready of {1}
-#: port/frontend/shell/setup.cpp:570
+#: port/frontend/shell/setup.cpp:679
 msgid "{0} of {1} ready"
 msgstr ""
 
-#: port/frontend/shell/setup.cpp:584
+#: port/frontend/shell/setup.cpp:693
 msgid "{0} · same as the PS5"
 msgstr "{0} · ca PS5"
 
 #. the Setup check's groups: what needs the player, what is optional, what is ready; {0} how many
-#: port/frontend/shell/setup.cpp:639
+#: port/frontend/shell/setup.cpp:748
 msgid "Needs you · {0}"
 msgstr ""
 
 #. the Setup check's groups: what needs the player, what is optional, what is ready; {0} how many
-#: port/frontend/shell/setup.cpp:639
+#: port/frontend/shell/setup.cpp:748
 msgid "Optional · {0}"
 msgstr ""
 
 #. the Setup check's groups: what needs the player, what is optional, what is ready; {0} how many
-#: port/frontend/shell/setup.cpp:639
+#: port/frontend/shell/setup.cpp:748
 msgid "Ready · {0}"
 msgstr ""
 
-#: port/frontend/shell/setup.cpp:692
+#: port/frontend/shell/setup.cpp:801
 msgid "The menus' language"
 msgstr "Limba meniurilor"
 
-#: port/frontend/shell/setup.cpp:693
+#: port/frontend/shell/setup.cpp:802
 msgid "Playtendoh uses your PS5's language. Cross chooses another; you can change it any time in Settings > Language."
 msgstr "Playtendoh vorbește limba setată pe PS5-ul tău. Crucea alege alta; Setări > Limbă o schimbă oricând."
 
-#: port/frontend/shell/setup.cpp:760
+#: port/frontend/shell/setup.cpp:869
 msgid "The guide, on your phone"
 msgstr "Ghidul, pe telefonul tău"
 
-#: port/frontend/shell/setup.cpp:763
+#: port/frontend/shell/setup.cpp:872
 msgid "Scan it for {0}: {1}"
 msgstr "Scanează-l pentru {0}: {1}"
 

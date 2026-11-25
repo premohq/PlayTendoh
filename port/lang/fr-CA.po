@@ -280,19 +280,19 @@ msgstr "Activé, un QR code ici ouvre le second écran du jeu dans le navigateur
 msgid "{0} deleted. Its saves are kept."
 msgstr "{0} est supprimé; ses sauvegardes restent"
 
-#: port/frontend/shell/setup.cpp:142
+#: port/frontend/shell/setup.cpp:197
 msgid "Add PPSA99360 to your HEN's app jailbreak list (etaHEN: its app jailbreak list; OnionHEN: the end of exact_title_ids in config.ini, with no comma after it), or have elfldr listening on port 9021. Then start Playtendoh again."
 msgstr "Ajoutez PPSA99360 à la liste de jailbreak d’applis de votre HEN (etaHEN : sa liste de jailbreak d’applis; OnionHEN : à la fin de exact_title_ids dans config.ini, sans virgule après), ou faites écouter elfldr sur le port 9021. Puis relancez Playtendoh."
 
-#: port/frontend/shell/setup.cpp:164
+#: port/frontend/shell/setup.cpp:219
 msgid "Wii U games will run much slower. Add PPSA99360 to your HEN's app jailbreak list, then start Playtendoh again. Settings > Diagnostics shows what it got."
 msgstr "Ni la mémoire JIT de votre HEN ni une mémoire exécutable n’ont pu être obtenues, les jeux Wii U se rabattent donc sur l’interpréteur de Cemu. Ajoutez PPSA99360 à la liste de jailbreak d’applis de votre HEN, puis relancez Playtendoh; Paramètres > Diagnostic indique ce qu’il a obtenu."
 
-#: port/frontend/shell/setup.cpp:287
+#: port/frontend/shell/setup.cpp:354
 msgid "Using the built-in BIOS. Your own DS BIOS is optional"
 msgstr "Le BIOS intégré de melonDS fait tourner les jeux DS; celui de votre DS est facultatif"
 
-#: port/frontend/shell/setup.cpp:693
+#: port/frontend/shell/setup.cpp:802
 msgid "Playtendoh uses your PS5's language. Cross chooses another; you can change it any time in Settings > Language."
 msgstr "Playtendoh parle la langue de votre PS5. Croix en choisit une autre; Paramètres > Langue la change à tout moment."
 

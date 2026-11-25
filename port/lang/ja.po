@@ -1738,7 +1738,7 @@ msgid "Running"
 msgstr "実行中"
 
 #. the first start's setup: Cross on its last step
-#: port/app/ingame.cpp:710 port/app/ingame3ds.cpp:1147 port/eden/ingame.cpp:831 port/frontend/shell/firststart.cpp:264 port/frontend/shell/orbit.cpp:461 port/frontend/shell/orbit.cpp:821 port/frontend/shell/reports.cpp:155 port/frontend/shell/setup.cpp:432 port/frontend/shell/shares.cpp:524 port/frontend/shell/shell.cpp:1881 port/frontend/shell/shell.cpp:1885 port/frontend/shell/shell.cpp:1920 port/frontend/shell/shell.cpp:1929 port/frontend/shell/shell.cpp:1937 port/frontend/shell/shell.cpp:1945 port/frontend/shell/shell.cpp:1948 port/frontend/shell/shell.cpp:3070 port/frontend/shell/shell.cpp:3108
+#: port/app/ingame.cpp:710 port/app/ingame3ds.cpp:1147 port/eden/ingame.cpp:831 port/frontend/shell/firststart.cpp:264 port/frontend/shell/orbit.cpp:461 port/frontend/shell/orbit.cpp:821 port/frontend/shell/reports.cpp:155 port/frontend/shell/setup.cpp:506 port/frontend/shell/shares.cpp:524 port/frontend/shell/shell.cpp:1881 port/frontend/shell/shell.cpp:1885 port/frontend/shell/shell.cpp:1920 port/frontend/shell/shell.cpp:1929 port/frontend/shell/shell.cpp:1937 port/frontend/shell/shell.cpp:1945 port/frontend/shell/shell.cpp:1948 port/frontend/shell/shell.cpp:3070 port/frontend/shell/shell.cpp:3108
 #, menu
 msgid "Choose"
 msgstr "選択"
@@ -3819,11 +3819,11 @@ msgstr "Lichiiがゲームのファイルを見つけられませんでした。
 msgid "Eden could not find the game's file. Is the drive with it plugged in?"
 msgstr "Edenがゲームのファイルを見つけられませんでした。ファイルのあるドライブはつながっていますか？"
 
-#: port/eden/launch.cpp:311 port/frontend/shell/settings.cpp:1190 port/frontend/shell/setup.cpp:376
+#: port/eden/launch.cpp:311 port/frontend/shell/settings.cpp:1190 port/frontend/shell/setup.cpp:450
 msgid "prod.keys is missing: Lichii needs your own Switch keys"
 msgstr "prod.keysがありません: Lichiiにはご自身のSwitchキーが必要です"
 
-#: port/eden/launch.cpp:311 port/frontend/shell/settings.cpp:1207 port/frontend/shell/setup.cpp:352
+#: port/eden/launch.cpp:311 port/frontend/shell/settings.cpp:1207 port/frontend/shell/setup.cpp:426
 msgid "prod.keys is missing: Switch games need it"
 msgstr "prod.keysがありません：これがないとEdenはSwitchのゲームを読めません"
 
@@ -4053,7 +4053,7 @@ msgid "The cheat could not be saved: {0}"
 msgstr ""
 
 #. the first start's steps, as the bar at the top right names them
-#: port/frontend/shell/firststart.cpp:27 port/frontend/shell/settings.cpp:215 port/frontend/shell/settings.cpp:680 port/frontend/shell/settings.cpp:1005 port/frontend/shell/settings.cpp:1045 port/frontend/shell/settings.cpp:1145 port/frontend/shell/settings.cpp:2328 port/frontend/shell/setup.cpp:691
+#: port/frontend/shell/firststart.cpp:27 port/frontend/shell/settings.cpp:215 port/frontend/shell/settings.cpp:680 port/frontend/shell/settings.cpp:1005 port/frontend/shell/settings.cpp:1045 port/frontend/shell/settings.cpp:1145 port/frontend/shell/settings.cpp:2328 port/frontend/shell/setup.cpp:800
 msgid "Language"
 msgstr "言語"
 
@@ -4489,7 +4489,7 @@ msgstr "インストール"
 msgid "Install every new one ({0})"
 msgstr "新しいものをすべてインストール（{0}）"
 
-#: port/frontend/shell/installs.cpp:329 port/frontend/shell/library.cpp:198 port/frontend/shell/pages.cpp:1305 port/frontend/shell/setup.cpp:188 port/frontend/shell/setup.cpp:214
+#: port/frontend/shell/installs.cpp:329 port/frontend/shell/library.cpp:198 port/frontend/shell/pages.cpp:1305 port/frontend/shell/setup.cpp:243 port/frontend/shell/setup.cpp:273
 msgid "Choose a folder"
 msgstr "フォルダーを選ぶ"
 
@@ -4619,7 +4619,7 @@ msgstr "発売年順"
 msgid "How it runs"
 msgstr "動作状況順"
 
-#: port/frontend/shell/library.cpp:157 port/frontend/shell/setup.cpp:487
+#: port/frontend/shell/library.cpp:157 port/frontend/shell/setup.cpp:596
 msgid "Setup"
 msgstr "セットアップ"
 
@@ -4661,7 +4661,7 @@ msgstr "ここにゲームが並びます"
 
 #. {0} is the games folder
 #. {1} is Eden's game files folder, which has keys/ and firmware/ in it
-#: port/frontend/shell/library.cpp:184 port/frontend/shell/library.cpp:193 port/frontend/shell/setup.cpp:197
+#: port/frontend/shell/library.cpp:184 port/frontend/shell/library.cpp:193 port/frontend/shell/setup.cpp:252
 msgid "Put this system's games in {0}, or choose any folder, such as one on a USB drive. Subfolders are searched too."
 msgstr "このシステムのゲームを{0}に入れるか、USBドライブ上など、PS5が読み込める任意のフォルダーを選んでください。中のフォルダーも4階層まで探します。"
 
@@ -4678,11 +4678,11 @@ msgstr "DSのゲーム（.nds、そのままか.zip・.7z・.rarアーカイブ�
 msgid "Put Switch 2 game folders in {0}. Each needs exefs/main and romfs/ (or base/exefs/main and romfs/). Keep updates in the game's folder."
 msgstr "Switch 2のゲームフォルダーを{0}に置いてください。各フォルダーにはexefs/mainとromfs/（またはbase/exefs/mainとromfs/）が必要です。更新データはゲームフォルダー内に置いてください。"
 
-#: port/frontend/shell/library.cpp:190 port/frontend/shell/setup.cpp:379 port/main_ps5.cpp:592
+#: port/frontend/shell/library.cpp:190 port/frontend/shell/setup.cpp:453 port/main_ps5.cpp:592
 msgid "Put your own prod.keys in {0}/keys. Playtendoh and Lichii do not include keys."
 msgstr "ご自身のprod.keysを{0}/keysに入れてください。PlaytendohとLichiiにはキーは含まれていません。"
 
-#: port/frontend/shell/library.cpp:191 port/frontend/shell/setup.cpp:387 port/main_ps5.cpp:594
+#: port/frontend/shell/library.cpp:191 port/frontend/shell/setup.cpp:461 port/main_ps5.cpp:594
 msgid "Put your own Switch firmware files in {0}/firmware. Playtendoh and Lichii do not include firmware."
 msgstr "ご自身のSwitchのファームウェアファイルを{0}/firmwareに入れてください。PlaytendohにもLichiiにもファームウェアは付属しません。"
 
@@ -5251,23 +5251,23 @@ msgstr "キャンセルしました。コピーしたものは、同じタイト
 msgid "Cancelled. The previous install is unchanged."
 msgstr "キャンセルしました。前にインストールされていたものはそのままです。"
 
-#: port/frontend/shell/pages.cpp:1299 port/frontend/shell/pages.cpp:1300 port/frontend/shell/setup.cpp:187 port/frontend/shell/setup.cpp:196
+#: port/frontend/shell/pages.cpp:1299 port/frontend/shell/pages.cpp:1300 port/frontend/shell/setup.cpp:242 port/frontend/shell/setup.cpp:251
 msgid "{0} games"
 msgstr "{0}のゲーム"
 
-#: port/frontend/shell/pages.cpp:1301 port/frontend/shell/settings.cpp:1166 port/frontend/shell/setup.cpp:212
+#: port/frontend/shell/pages.cpp:1301 port/frontend/shell/settings.cpp:1166 port/frontend/shell/setup.cpp:271
 msgid "3DS games"
 msgstr "3DSのゲーム"
 
-#: port/frontend/shell/pages.cpp:1302 port/frontend/shell/settings.cpp:1166 port/frontend/shell/setup.cpp:212
+#: port/frontend/shell/pages.cpp:1302 port/frontend/shell/settings.cpp:1166 port/frontend/shell/setup.cpp:271
 msgid "DS games"
 msgstr "DSのゲーム"
 
-#: port/frontend/shell/pages.cpp:1303 port/frontend/shell/settings.cpp:1166 port/frontend/shell/setup.cpp:212
+#: port/frontend/shell/pages.cpp:1303 port/frontend/shell/settings.cpp:1166 port/frontend/shell/setup.cpp:271
 msgid "Switch games"
 msgstr "Switchのゲーム"
 
-#: port/frontend/shell/pages.cpp:1304 port/frontend/shell/settings.cpp:1166 port/frontend/shell/setup.cpp:212
+#: port/frontend/shell/pages.cpp:1304 port/frontend/shell/settings.cpp:1166 port/frontend/shell/setup.cpp:271
 msgid "Wii U games"
 msgstr "Wii Uのゲーム"
 
@@ -5435,7 +5435,7 @@ msgstr "{0}に接続中"
 msgid "Artic Setup Tool"
 msgstr "Artic Setup Tool"
 
-#: port/frontend/shell/pages.cpp:1630 port/frontend/shell/pages.cpp:1641 port/frontend/shell/settings.cpp:1446 port/frontend/shell/setup.cpp:275
+#: port/frontend/shell/pages.cpp:1630 port/frontend/shell/pages.cpp:1641 port/frontend/shell/settings.cpp:1446 port/frontend/shell/setup.cpp:342
 msgid "Artic Base"
 msgstr "Artic Base"
 
@@ -8802,7 +8802,7 @@ msgstr "ポケモンのパルパークのように、2番目のスロットのGB
 msgid "Put the GBA game in {0}/slot2 named like the DS game, ending .gba, with its .sav if it has one. Its save is then kept in {0}/slot2-saves; your files are not changed. Applies to the next game."
 msgstr "GBAのゲームを、DSのゲームと同じファイル名で拡張子を.gbaにして{0}/slot2に入れ、.savがあれば横に置いてください。カートリッジのセーブデータはその後{0}/slot2-savesに保存され、入れたファイルは変更されません。そこにカートリッジのないDSのゲームは、スロットが空のまま起動します。次のゲームから反映されます。"
 
-#: port/frontend/shell/settings.cpp:1166 port/frontend/shell/setup.cpp:212 port/main_ps5.cpp:586 port/main_ps5.cpp:589 port/main_ps5.cpp:590
+#: port/frontend/shell/settings.cpp:1166 port/frontend/shell/setup.cpp:271 port/main_ps5.cpp:586 port/main_ps5.cpp:589 port/main_ps5.cpp:590
 msgid "Switch 2 games"
 msgstr "Switch 2のゲーム"
 
@@ -8871,7 +8871,7 @@ msgstr "ありません"
 msgid "Keys and firmware"
 msgstr "キーとファームウェア"
 
-#: port/frontend/shell/settings.cpp:1191 port/frontend/shell/setup.cpp:384
+#: port/frontend/shell/settings.cpp:1191 port/frontend/shell/setup.cpp:458
 msgid "Firmware is missing: some games need it"
 msgstr "ファームウェアがありません: 一部のゲームで必要です"
 
@@ -8887,7 +8887,7 @@ msgstr "ご自身のprod.keysを{0}/keysに入れてください。Playtendohに
 msgid "Put your own Switch firmware files in {0}/firmware. Neither app includes firmware."
 msgstr "ご自身のSwitchファームウェアファイルを{0}/firmwareに置いてください。どちらのアプリにもファームウェアは含まれていません。"
 
-#: port/frontend/shell/settings.cpp:1208 port/frontend/shell/setup.cpp:362
+#: port/frontend/shell/settings.cpp:1208 port/frontend/shell/setup.cpp:436
 msgid "No firmware yet: many games need it to start"
 msgstr "ファームウェアがまだありません：多くのゲームは起動に必要です"
 
@@ -8895,11 +8895,11 @@ msgstr "ファームウェアがまだありません：多くのゲームは起
 msgid "Your keys are ready."
 msgstr "Edenはゲームを読めます。"
 
-#: port/frontend/shell/settings.cpp:1210 port/frontend/shell/setup.cpp:355
+#: port/frontend/shell/settings.cpp:1210 port/frontend/shell/setup.cpp:429
 msgid "Switch games need your own console's keys: prod.keys (and title.keys) from your Switch, in {0}/keys. Playtendoh does not include keys."
 msgstr "EdenはSwitchのゲームを自分の本体のキーで読みます：Switchから吸い出したprod.keys（とtitle.keys）を{0}/keysに。Playtendohにキーは含まれていません。"
 
-#: port/frontend/shell/settings.cpp:1213 port/frontend/shell/setup.cpp:365
+#: port/frontend/shell/settings.cpp:1213 port/frontend/shell/setup.cpp:439
 msgid "Many Switch games need firmware: the .nca files from your Switch, in {0}/firmware. Playtendoh does not include firmware."
 msgstr "多くのSwitchのゲームには本体のシステムファイルが必要です：Switchから吸い出したファームウェアの.ncaファイルを{0}/firmwareに。Playtendohにファームウェアは含まれていません。"
 
@@ -8920,11 +8920,11 @@ msgstr "パソコンやNASにあるゲームを、SMBかNFSで読み込みます
 msgid "Add a folder shared by a computer or NAS, then choose a games folder on it in the folder browser. Nothing is written to it; saves and installs stay on the PS5. Wired is better than Wi-Fi."
 msgstr "Windows、macOS、LinuxのパソコンやNASが共有するフォルダーを、その場所のまま読み込みます。ここで追加してから、フォルダー選択画面でその中のゲームフォルダーを選びます（共有フォルダーはそれぞれタブになります）。共有フォルダーには何も書き込まず、セーブデータやインストールしたものはPS5に残ります。Wii Uのゲームには、Wi-Fiより有線接続が適しています。"
 
-#: port/frontend/shell/settings.cpp:1228 port/frontend/shell/setup.cpp:252
+#: port/frontend/shell/settings.cpp:1228 port/frontend/shell/setup.cpp:315
 msgid "Wii U disc keys"
 msgstr "Wii Uのディスクキー"
 
-#: port/frontend/shell/settings.cpp:1228 port/frontend/shell/setup.cpp:254
+#: port/frontend/shell/settings.cpp:1228 port/frontend/shell/setup.cpp:321
 msgid "keys.txt found"
 msgstr "keys.txtがあります"
 
@@ -8932,12 +8932,13 @@ msgstr "keys.txtがあります"
 msgid "Only encrypted .wud and .wux need them."
 msgstr "暗号化された.wudと.wuxにのみ必要です。"
 
-#: port/frontend/shell/settings.cpp:1229 port/frontend/shell/setup.cpp:254
+#. the Setup check, Wii U disc keys: {0} is how many keys keys.txt holds
+#: port/frontend/shell/settings.cpp:1229 port/frontend/shell/setup.cpp:318
 msgid "keys.txt is missing: only encrypted .wud and .wux need it"
 msgstr "keys.txtがありません：暗号化された.wudと.wuxにのみ必要です"
 
 #. {0} is the app's data folder: /data/ps5cemu, or the PS5CEMU-HAR-data folder on the drive the app is installed on
-#: port/frontend/shell/settings.cpp:1231 port/frontend/shell/setup.cpp:257
+#: port/frontend/shell/settings.cpp:1231 port/frontend/shell/setup.cpp:324
 msgid "Encrypted .wud and .wux need their disc keys in {0}/keys.txt, one per line. Other formats need none."
 msgstr "暗号化された.wudと.wuxのダンプには、{0}/keys.txtにディスクキーが1行に1つずつ必要です。復号済みのダンプ、.wuaファイル、code、content、metaを含むフォルダーには不要です。"
 
@@ -9175,7 +9176,7 @@ msgid "Restores the chosen backup's saves and settings. Current saves are moved 
 msgstr "選んだバックアップのセーブデータを元の場所に戻します。今あるセーブデータは先に{0}/saves-beforeに移すので、何も失われません。バックアップにないセーブデータはそのままです。バックアップの設定も戻り、それを使うためにPlaytendohが再起動します。"
 
 #. Settings > Online: a row that opens the box art's settings (GameTDB on or off, downloading the covers again)
-#: port/frontend/shell/settings.cpp:1425 port/frontend/shell/settings.cpp:1433 port/frontend/shell/setup.cpp:397
+#: port/frontend/shell/settings.cpp:1425 port/frontend/shell/settings.cpp:1433 port/frontend/shell/setup.cpp:471
 msgid "Box art"
 msgstr "パッケージ画像"
 
@@ -10315,391 +10316,449 @@ msgid "{0} settings"
 msgstr "{0}の設定"
 
 #. free space on the PS5's storage, as in 412 GB free
-#: port/frontend/shell/setup.cpp:41
+#: port/frontend/shell/setup.cpp:96
 msgid "{0} GB free"
 msgstr "空き{0} GB"
 
-#: port/frontend/shell/setup.cpp:123
+#: port/frontend/shell/setup.cpp:178
 msgid "Storage"
 msgstr "ストレージ"
 
 #. what the QR code opens: "Scan it for the HEN setup guide"
-#: port/frontend/shell/setup.cpp:126 port/frontend/shell/setup.cpp:151
+#: port/frontend/shell/setup.cpp:181 port/frontend/shell/setup.cpp:206
 msgid "the HEN setup guide"
 msgstr "HENのセットアップガイド"
 
-#: port/frontend/shell/setup.cpp:132
+#: port/frontend/shell/setup.cpp:187
 msgid "/data is reachable"
 msgstr "/dataにアクセスできます"
 
-#: port/frontend/shell/setup.cpp:133
+#: port/frontend/shell/setup.cpp:188
 msgid "Where everything is kept"
 msgstr "すべての保存場所"
 
-#: port/frontend/shell/setup.cpp:134
+#: port/frontend/shell/setup.cpp:189
 msgid "Settings, saves, caches and logs are kept in {0}, which your HEN unlocks for Playtendoh."
 msgstr "設定、セーブデータ、キャッシュ、ログは{0}にあり、HENがPlaytendohに開放します：アプリのジェイルブレイク、またはアプリに同梱のヘルパーとelfldrで。"
 
-#: port/frontend/shell/setup.cpp:140
+#: port/frontend/shell/setup.cpp:195
 msgid "/data can't be reached: nothing can be saved"
 msgstr "/dataにアクセスできません：何も保存できません"
 
-#: port/frontend/shell/setup.cpp:141
+#: port/frontend/shell/setup.cpp:196
 msgid "Give Playtendoh access to /data"
 msgstr "Playtendohをサンドボックスの外へ"
 
-#: port/frontend/shell/setup.cpp:142
+#: port/frontend/shell/setup.cpp:197
 msgid "Add PPSA99360 to your HEN's app jailbreak list (etaHEN: its app jailbreak list; OnionHEN: the end of exact_title_ids in config.ini, with no comma after it), or have elfldr listening on port 9021. Then start Playtendoh again."
 msgstr "HENのアプリのジェイルブレイクリストにPPSA99360を追加するか（etaHEN：アプリのジェイルブレイクリスト、OnionHEN：config.iniのexact_title_idsの末尾に、後ろにカンマを付けずに）、elfldrをポート9021で待ち受けさせてください。そのあとPlaytendohを起動し直します。"
 
-#: port/frontend/shell/setup.cpp:149
+#: port/frontend/shell/setup.cpp:204
 msgid "Game speed"
 msgstr "リコンパイラー"
 
-#: port/frontend/shell/setup.cpp:152
+#: port/frontend/shell/setup.cpp:207
 msgid "Whether games can run at full speed"
 msgstr "ゲームのコードを動かすもの"
 
-#: port/frontend/shell/setup.cpp:156
+#: port/frontend/shell/setup.cpp:211
 msgid "JIT memory from your HEN: games run at full speed"
 msgstr "HENのJITメモリー：ゲームは等速で動作します"
 
-#: port/frontend/shell/setup.cpp:157
+#: port/frontend/shell/setup.cpp:212
 msgid "Executable memory: games run at full speed, no HEN grant needed"
 msgstr "実行可能メモリー：ゲームは等速で動作し、HENの許可は不要です"
 
-#: port/frontend/shell/setup.cpp:158
+#: port/frontend/shell/setup.cpp:213
 msgid "Wii U and 3DS games need special memory from your HEN, or that Playtendoh makes itself, to run at full speed."
 msgstr "CemuとAzaharのリコンパイラーは、ゲームのコードを動かしながらPS5のコードに変換します。そのため、コードを書き込んで実行できるメモリーが必要です：HENのJITメモリー、またはPlaytendohが自分で用意する実行可能メモリー。"
 
-#: port/frontend/shell/setup.cpp:163
+#: port/frontend/shell/setup.cpp:218
 msgid "No JIT memory: Wii U games will run much slower"
 msgstr "JITメモリーも実行可能メモリーもありません：Wii Uのゲームはずっと遅いインタープリターで動作します"
 
-#: port/frontend/shell/setup.cpp:164
+#: port/frontend/shell/setup.cpp:219
 msgid "Wii U games will run much slower. Add PPSA99360 to your HEN's app jailbreak list, then start Playtendoh again. Settings > Diagnostics shows what it got."
 msgstr "HENのJITメモリーも実行可能メモリーも用意できなかったため、Wii UのゲームはCemuのインタープリターで動作します。HENのアプリのジェイルブレイクリストにPPSA99360を追加して、Playtendohを起動し直してください。「設定 > 診断」で何を得られたかがわかります。"
 
-#: port/frontend/shell/setup.cpp:191 port/frontend/shell/shell.cpp:905 port/libretro/game.cpp:1078 port/main_ps5.cpp:762 port/retro/launch.cpp:38 port/retro/launch.cpp:48
+#: port/frontend/shell/setup.cpp:246 port/frontend/shell/shell.cpp:905 port/libretro/game.cpp:1078 port/main_ps5.cpp:762 port/retro/launch.cpp:38 port/retro/launch.cpp:48
 msgid "This system's emulator is not in this copy of Playtendoh."
 msgstr "この側のエミュレーターは、このPlaytendohに入っていません。"
 
 #. {1} is a folder
-#: port/frontend/shell/setup.cpp:192 port/frontend/shell/setup.cpp:219
+#: port/frontend/shell/setup.cpp:247 port/frontend/shell/setup.cpp:278
 msgid "{0} game in {1}"
 msgid_plural "{0} games in {1}"
 msgstr[0] "{1}に{0}本のゲーム"
 
-#: port/frontend/shell/setup.cpp:193 port/frontend/shell/setup.cpp:220
+#: port/frontend/shell/setup.cpp:248 port/frontend/shell/setup.cpp:279
 msgid "None in {0} yet"
 msgstr "{0}にはまだありません"
 
-#: port/frontend/shell/setup.cpp:194 port/frontend/shell/setup.cpp:221 port/retro/library.cpp:354
+#: port/frontend/shell/setup.cpp:249 port/frontend/shell/setup.cpp:280 port/retro/library.cpp:354
 msgid "{0} cannot be read"
 msgstr "{0}を読み込めません"
 
-#: port/frontend/shell/setup.cpp:222
+#. what the QR code opens: "Scan it for the GameCube and Wii page"
+#: port/frontend/shell/setup.cpp:256
+msgid "the GameCube and Wii page"
+msgstr ""
+
+#. what the QR code opens: "Scan it for the GameCube and Wii page"
+#: port/frontend/shell/setup.cpp:256 port/frontend/shell/setup.cpp:411
+msgid "the classic consoles page"
+msgstr ""
+
+#: port/frontend/shell/setup.cpp:281
 msgid "Where your 3DS games go"
 msgstr "3DSのゲームの置き場所"
 
-#: port/frontend/shell/setup.cpp:223
+#: port/frontend/shell/setup.cpp:282
 msgid "Where your DS games go"
 msgstr "DSのゲームの置き場所"
 
-#: port/frontend/shell/setup.cpp:224
+#: port/frontend/shell/setup.cpp:283
 msgid "Where your Switch games go"
 msgstr "Switchのゲームの置き場所"
 
-#: port/frontend/shell/setup.cpp:225
+#: port/frontend/shell/setup.cpp:284
 msgid "Where your Wii U games go"
 msgstr "Wii Uのゲームの置き場所"
 
-#: port/frontend/shell/setup.cpp:226
+#: port/frontend/shell/setup.cpp:285
 msgid "Put them in {0}, or choose any folder, such as one on a USB drive. Subfolders are searched too. Install CIA files from Settings > Game files."
 msgstr "{0}に入れるか、USBドライブ上など、PS5が読み込める任意のフォルダーを選んでください。中のフォルダーも探します。CIAファイルは、3DS側の「設定 > ゲームファイル」からインストールします。"
 
-#: port/frontend/shell/setup.cpp:228 port/frontend/shell/setup.cpp:242
+#: port/frontend/shell/setup.cpp:287 port/frontend/shell/setup.cpp:303
 msgid "Put them in {0}, or choose any folder, such as one on a USB drive. Subfolders are searched too."
 msgstr "{0}に入れるか、USBドライブ上など、PS5が読み込める任意のフォルダーを選んでください。中のフォルダーも探します。"
 
-#: port/frontend/shell/setup.cpp:230
+#: port/frontend/shell/setup.cpp:289
 msgid "Put .nsp and .xci files in {0}, each alone or in a folder with its update and DLC. You also need your Switch's keys and firmware."
 msgstr "{0}に置いてください：.nspと.xciファイル。そのままか、更新データと追加コンテンツと一緒にゲームごとのフォルダーに。EdenにはSwitchのキーとファームウェアも必要です。"
 
-#: port/frontend/shell/setup.cpp:232
+#: port/frontend/shell/setup.cpp:291
 msgid "Put them in {0}, or choose any folder, such as one on a USB drive. Install updates and DLC from Settings > Game files (a .wua already has them)."
 msgstr "{0}に入れるか、USBドライブ上など、PS5が読み込める任意のフォルダーを選んでください。更新データと追加コンテンツは「設定 > ゲームファイル」から入れるか、.wuaに含めます。"
 
-#: port/frontend/shell/setup.cpp:237
+#: port/frontend/shell/setup.cpp:296
 msgid "code · content · meta"
 msgstr "code · content · meta"
 
-#: port/frontend/shell/setup.cpp:241
-msgid "Where your Switch 2 games go"
-msgstr "Switch 2のゲームの保存場所"
-
-#: port/frontend/shell/setup.cpp:246 port/frontend/shell/setup.cpp:260
-msgid "the game files page"
-msgstr "ゲームファイルのページ"
-
-#: port/frontend/shell/setup.cpp:255 port/frontend/shell/setup.cpp:288 port/frontend/shell/setup.cpp:335 port/frontend/shell/setup.cpp:353 port/frontend/shell/setup.cpp:363 port/frontend/shell/setup.cpp:377 port/frontend/shell/setup.cpp:385
-msgid "How to"
-msgstr "手順"
-
-#: port/frontend/shell/setup.cpp:256
-msgid "Keys for encrypted discs"
-msgstr "暗号化されたディスクのキー"
-
-#: port/frontend/shell/setup.cpp:272
-msgid "3DS system files"
-msgstr "3DSのシステムファイル"
-
-#: port/frontend/shell/setup.cpp:274
-msgid "Artic Setup is done: the Home Menu can start"
-msgstr "Artic Setupを実行済み：HOMEメニューを起動できます"
-
-#: port/frontend/shell/setup.cpp:274
-msgid "Artic Setup copies them from your 3DS, for the Home Menu"
-msgstr "HOMEメニューのために、Artic Setupで3DSからコピーします"
-
-#: port/frontend/shell/setup.cpp:276
-msgid "Your 3DS's own files"
-msgstr "3DS本体のファイル"
-
-#: port/frontend/shell/setup.cpp:277
-msgid "The 3DS Home Menu and a few games need your 3DS's system files. Start the Artic Setup Tool on your 3DS, then Artic Base here."
-msgstr "3DSのHOMEメニューと、本体のシステムファイルが必要な一部のゲームは、Artic Setupでネットワーク経由で自分の3DSからコピーすると動きます：3DSでArtic Setup Toolを起動してから、ここでArtic Baseを使います。"
-
-#: port/frontend/shell/setup.cpp:279
+#. what the QR code opens: "Scan it for the Wii U page"
+#: port/frontend/shell/setup.cpp:299 port/frontend/shell/setup.cpp:346
 msgid "the 3DS page"
 msgstr "3DSのページ"
 
-#: port/frontend/shell/setup.cpp:287
-msgid "Your DS BIOS was found and is used"
-msgstr "DSのBIOSがあります：DSのゲームはそれで動きます"
-
-#: port/frontend/shell/setup.cpp:287
-msgid "Using the built-in BIOS. Your own DS BIOS is optional"
-msgstr "DSのゲームはmelonDS内蔵のBIOSで動きます。自分のDSのものは任意です"
-
-#: port/frontend/shell/setup.cpp:289
-msgid "Your DS's own BIOS and firmware"
-msgstr "DS本体のBIOSとファームウェア"
-
-#: port/frontend/shell/setup.cpp:290
-msgid "DS games run on a built-in BIOS and firmware, which most games are fine with. For the few that aren't, put bios7.bin, bios9.bin and firmware.bin from your own DS in {0}/bios. Playtendoh does not include a BIOS."
-msgstr "melonDSは独自のBIOS（FreeBIOS）とファームウェアでDSのゲームを動かし、ほとんどのゲームはそれで問題ありません。そうでない一部のゲームは、自分のDSから吸い出したbios7.bin、bios9.bin、firmware.binを{0}/biosに入れると動きます。PlaytendohにBIOSは付属しません。"
-
-#: port/frontend/shell/setup.cpp:293
+#. what the QR code opens: "Scan it for the Wii U page"
+#: port/frontend/shell/setup.cpp:299 port/frontend/shell/setup.cpp:360
 msgid "the DS page"
 msgstr "DSのページ"
 
+#. what the QR code opens: "Scan it for the Wii U page"
+#: port/frontend/shell/setup.cpp:299 port/frontend/shell/setup.cpp:432
+msgid "the Switch page"
+msgstr "Switchのページ"
+
+#. what the QR code opens: "Scan it for the Wii U page"
+#: port/frontend/shell/setup.cpp:299 port/frontend/shell/setup.cpp:327
+msgid "the Wii U page"
+msgstr ""
+
+#: port/frontend/shell/setup.cpp:302
+msgid "Where your Switch 2 games go"
+msgstr "Switch 2のゲームの保存場所"
+
+#: port/frontend/shell/setup.cpp:306 port/frontend/shell/setup.cpp:455
+msgid "the Switch 2 page"
+msgstr "Switch 2のページ"
+
+#: port/frontend/shell/setup.cpp:319
+msgid "keys.txt has no keys: only encrypted .wud and .wux need them"
+msgstr ""
+
+#: port/frontend/shell/setup.cpp:320
+msgid "keys.txt found · {0} key"
+msgid_plural "keys.txt found · {0} keys"
+msgstr[0] ""
+
+#: port/frontend/shell/setup.cpp:322 port/frontend/shell/setup.cpp:355 port/frontend/shell/setup.cpp:402 port/frontend/shell/setup.cpp:427 port/frontend/shell/setup.cpp:437 port/frontend/shell/setup.cpp:451 port/frontend/shell/setup.cpp:459
+msgid "How to"
+msgstr "手順"
+
+#: port/frontend/shell/setup.cpp:323
+msgid "Keys for encrypted discs"
+msgstr "暗号化されたディスクのキー"
+
+#: port/frontend/shell/setup.cpp:339
+msgid "3DS system files"
+msgstr "3DSのシステムファイル"
+
+#: port/frontend/shell/setup.cpp:341
+msgid "Artic Setup is done: the Home Menu can start"
+msgstr "Artic Setupを実行済み：HOMEメニューを起動できます"
+
+#: port/frontend/shell/setup.cpp:341
+msgid "Artic Setup copies them from your 3DS, for the Home Menu"
+msgstr "HOMEメニューのために、Artic Setupで3DSからコピーします"
+
+#: port/frontend/shell/setup.cpp:343
+msgid "Your 3DS's own files"
+msgstr "3DS本体のファイル"
+
+#: port/frontend/shell/setup.cpp:344
+msgid "The 3DS Home Menu and a few games need your 3DS's system files. Start the Artic Setup Tool on your 3DS, then Artic Base here."
+msgstr "3DSのHOMEメニューと、本体のシステムファイルが必要な一部のゲームは、Artic Setupでネットワーク経由で自分の3DSからコピーすると動きます：3DSでArtic Setup Toolを起動してから、ここでArtic Baseを使います。"
+
+#: port/frontend/shell/setup.cpp:354
+msgid "Your DS BIOS was found and is used"
+msgstr "DSのBIOSがあります：DSのゲームはそれで動きます"
+
+#: port/frontend/shell/setup.cpp:354
+msgid "Using the built-in BIOS. Your own DS BIOS is optional"
+msgstr "DSのゲームはmelonDS内蔵のBIOSで動きます。自分のDSのものは任意です"
+
+#: port/frontend/shell/setup.cpp:356
+msgid "Your DS's own BIOS and firmware"
+msgstr "DS本体のBIOSとファームウェア"
+
+#: port/frontend/shell/setup.cpp:357
+msgid "DS games run on a built-in BIOS and firmware, which most games are fine with. For the few that aren't, put bios7.bin, bios9.bin and firmware.bin from your own DS in {0}/bios. Playtendoh does not include a BIOS."
+msgstr "melonDSは独自のBIOS（FreeBIOS）とファームウェアでDSのゲームを動かし、ほとんどのゲームはそれで問題ありません。そうでない一部のゲームは、自分のDSから吸い出したbios7.bin、bios9.bin、firmware.binを{0}/biosに入れると動きます。PlaytendohにBIOSは付属しません。"
+
 #. the Setup check, a console's BIOS file: {0} is the file's name, {1} the console
-#: port/frontend/shell/setup.cpp:332
+#: port/frontend/shell/setup.cpp:399
 msgid "{0} found"
 msgstr ""
 
-#: port/frontend/shell/setup.cpp:333
+#: port/frontend/shell/setup.cpp:400
 msgid "{0} is missing: {1} games need it"
 msgstr ""
 
-#: port/frontend/shell/setup.cpp:334
+#: port/frontend/shell/setup.cpp:401
 msgid "Using the built-in BIOS. {0} is optional"
 msgstr ""
 
 #. the Setup check's panel for a console's BIOS file
-#: port/frontend/shell/setup.cpp:337
+#: port/frontend/shell/setup.cpp:404
 msgid "The console's own BIOS"
 msgstr ""
 
-#: port/frontend/shell/setup.cpp:340
+#: port/frontend/shell/setup.cpp:407
 msgid "{0} games need the console's BIOS: put {1} from your own console in {2}. Playtendoh does not include a BIOS."
 msgstr ""
 
-#: port/frontend/shell/setup.cpp:341
+#: port/frontend/shell/setup.cpp:408
 msgid "{0} games run on a built-in BIOS, which most games are fine with. To use the console's own, put {1} in {2}. Playtendoh does not include a BIOS."
 msgstr ""
 
-#: port/frontend/shell/setup.cpp:350
+#: port/frontend/shell/setup.cpp:422
 msgid "Switch keys"
 msgstr "Switchのキー"
 
-#: port/frontend/shell/setup.cpp:352
+#: port/frontend/shell/setup.cpp:424
 msgid "prod.keys found"
 msgstr "prod.keysがあります：Edenはゲームを読めます"
 
-#: port/frontend/shell/setup.cpp:354
+#: port/frontend/shell/setup.cpp:425
+msgid "prod.keys is empty: Switch games need your keys in it"
+msgstr ""
+
+#: port/frontend/shell/setup.cpp:428
 msgid "Your Switch's keys"
 msgstr "Switchのキー"
 
-#: port/frontend/shell/setup.cpp:358
-msgid "the Switch page"
-msgstr "Switchのページ"
-
-#: port/frontend/shell/setup.cpp:359
+#: port/frontend/shell/setup.cpp:433
 msgid "Switch firmware"
 msgstr "Switchのファームウェア"
 
-#: port/frontend/shell/setup.cpp:361
+#: port/frontend/shell/setup.cpp:435
 msgid "Firmware found"
 msgstr "ファームウェアがあります：システムファイルが必要なゲームも起動します"
 
-#: port/frontend/shell/setup.cpp:364
+#: port/frontend/shell/setup.cpp:438
 msgid "Your Switch's firmware"
 msgstr "Switchのファームウェア"
 
-#: port/frontend/shell/setup.cpp:374 port/main_ps5.cpp:591
+#: port/frontend/shell/setup.cpp:448 port/main_ps5.cpp:591
 msgid "Switch 2 keys"
 msgstr "Switch 2のキー"
 
-#: port/frontend/shell/setup.cpp:376
+#: port/frontend/shell/setup.cpp:450
 msgid "prod.keys found for Lichii"
 msgstr "Lichii用のprod.keysが見つかりました"
 
-#: port/frontend/shell/setup.cpp:378
+#: port/frontend/shell/setup.cpp:452
 msgid "Your Switch 2 keys"
 msgstr "お使いのSwitch 2エミュレーターのキー"
 
-#: port/frontend/shell/setup.cpp:381
-msgid "the Switch 2 page"
-msgstr "Switch 2のページ"
-
-#: port/frontend/shell/setup.cpp:382 port/main_ps5.cpp:593
+#: port/frontend/shell/setup.cpp:456 port/main_ps5.cpp:593
 msgid "Switch 2 firmware"
 msgstr "Switch 2のファームウェア"
 
-#: port/frontend/shell/setup.cpp:384
+#: port/frontend/shell/setup.cpp:458
 msgid "Firmware found for Lichii"
 msgstr "Lichii用のファームウェアが見つかりました"
 
-#: port/frontend/shell/setup.cpp:386
+#: port/frontend/shell/setup.cpp:460
 msgid "Your Switch 2 firmware"
 msgstr "お使いのSwitch 2エミュレーターのファームウェア"
 
-#: port/frontend/shell/setup.cpp:399
+#: port/frontend/shell/setup.cpp:473
 msgid "what Playtendoh fetches online"
 msgstr "Playtendohがオンラインで取得するもの"
 
-#: port/frontend/shell/setup.cpp:400
+#: port/frontend/shell/setup.cpp:474
 msgid "Covers from GameTDB"
 msgstr "GameTDBのパッケージ画像"
 
-#: port/frontend/shell/setup.cpp:401
+#: port/frontend/shell/setup.cpp:475
 msgid "Covers for new games come from GameTDB. Offline, game icons are shown and Playtendoh tries again next time."
 msgstr "ゲームが初めて表示されたときに、パッケージのIDでGameTDB（art.gametdb.com）からパッケージ画像を取得します。接続がなければゲームのアイコンが表示され、次回起動時にもう一度試します。"
 
-#: port/frontend/shell/setup.cpp:406
+#: port/frontend/shell/setup.cpp:480
 msgid "Off: the games' icons are shown instead"
 msgstr "オフ：代わりにゲームのアイコンを表示"
 
-#: port/frontend/shell/setup.cpp:407
+#: port/frontend/shell/setup.cpp:481
 msgid "Turn on"
 msgstr "オンにする"
 
-#: port/frontend/shell/setup.cpp:412
+#: port/frontend/shell/setup.cpp:486
 msgid "GameTDB did not answer: the games' icons are shown instead"
 msgstr "GameTDBが応答しませんでした：代わりにゲームのアイコンを表示"
 
-#: port/frontend/shell/setup.cpp:417
+#: port/frontend/shell/setup.cpp:491
 msgid "GameTDB is reachable · {0} cover"
 msgid_plural "GameTDB is reachable · {0} covers"
 msgstr[0] "GameTDBにアクセスできます · パッケージ画像{0}枚"
 
-#: port/frontend/shell/setup.cpp:418
+#: port/frontend/shell/setup.cpp:492
 msgid "On · {0} cover"
 msgid_plural "On · {0} covers"
 msgstr[0] "オン · パッケージ画像{0}枚"
 
-#: port/frontend/shell/setup.cpp:419
+#: port/frontend/shell/setup.cpp:493
 msgid "On: covers download as games are added"
 msgstr "オン：ゲームが表示されるたびにパッケージ画像を取得"
 
-#: port/frontend/shell/setup.cpp:426
+#: port/frontend/shell/setup.cpp:500
 msgid "System folders"
 msgstr ""
 
-#: port/frontend/shell/setup.cpp:429
+#: port/frontend/shell/setup.cpp:503
 msgid "Together in {0}"
 msgstr ""
 
 #. the Setup check: how many of the systems that can move have a folder of their own
-#: port/frontend/shell/setup.cpp:431
+#: port/frontend/shell/setup.cpp:505
 msgid "{0} system in its own folder"
 msgid_plural "{0} systems in their own folders"
 msgstr[0] ""
 
-#: port/frontend/shell/setup.cpp:433
+#: port/frontend/shell/setup.cpp:507
 msgid "Where each system's files go"
 msgstr ""
 
-#: port/frontend/shell/setup.cpp:434
+#: port/frontend/shell/setup.cpp:508
 msgid "Saves, BIOS files and settings for every system are kept together in {0}. You can give the Wii U, 3DS, DS or Switch a folder of its own instead. Cross shows them, each with its own switch."
 msgstr ""
 
-#: port/frontend/shell/setup.cpp:531
+#. what the QR code opens: "Scan it for where your files go"
+#: port/frontend/shell/setup.cpp:513
+msgid "where your files go"
+msgstr ""
+
+#: port/frontend/shell/setup.cpp:533
+msgid "Another copy of Playtendoh"
+msgstr ""
+
+#. the Setup check, another copy of the app: {0} is its version, {1} where it is
+#: port/frontend/shell/setup.cpp:536
+msgid "In {0}: the home screen may start it instead"
+msgstr ""
+
+#: port/frontend/shell/setup.cpp:537
+msgid "{0} in {1}: the home screen may start it instead"
+msgstr ""
+
+#: port/frontend/shell/setup.cpp:538
+msgid "Why an old version comes back"
+msgstr ""
+
+#. {0} is where the other copies are
+#: port/frontend/shell/setup.cpp:540
+msgid "Playtendoh is also in {0}. The PS5's home screen can start that copy instead of this one, so an older version seems to come back after a restart. Keep one: delete the copy you don't use, with FTP or a file manager."
+msgstr ""
+
+#: port/frontend/shell/setup.cpp:544
+msgid "the troubleshooting page"
+msgstr ""
+
+#: port/frontend/shell/setup.cpp:640
 msgid "Checked again"
 msgstr "再チェックしました"
 
-#: port/frontend/shell/setup.cpp:555
+#: port/frontend/shell/setup.cpp:664
 msgid "Welcome to Playtendoh"
 msgstr "Playtendohへようこそ"
 
-#: port/frontend/shell/setup.cpp:555
+#: port/frontend/shell/setup.cpp:664
 msgid "Help"
 msgstr "ヘルプ"
 
-#: port/frontend/shell/setup.cpp:556
+#: port/frontend/shell/setup.cpp:665
 msgid "Let’s check your setup"
 msgstr "セットアップをチェックしましょう"
 
 #. the Setup check's summary: how many checks need the player, or that every one is ready
-#: port/frontend/shell/setup.cpp:567
+#: port/frontend/shell/setup.cpp:676
 msgid "{0} thing needs you"
 msgid_plural "{0} things need you"
 msgstr[0] ""
 
 #. the Setup check's summary: how many checks need the player, or that every one is ready
-#: port/frontend/shell/setup.cpp:567
+#: port/frontend/shell/setup.cpp:676
 msgid "Everything is ready"
 msgstr ""
 
 #. the Setup check's summary: {0} checks ready of {1}
-#: port/frontend/shell/setup.cpp:570
+#: port/frontend/shell/setup.cpp:679
 msgid "{0} of {1} ready"
 msgstr ""
 
-#: port/frontend/shell/setup.cpp:584
+#: port/frontend/shell/setup.cpp:693
 msgid "{0} · same as the PS5"
 msgstr "{0} · PS5と同じ"
 
 #. the Setup check's groups: what needs the player, what is optional, what is ready; {0} how many
-#: port/frontend/shell/setup.cpp:639
+#: port/frontend/shell/setup.cpp:748
 msgid "Needs you · {0}"
 msgstr ""
 
 #. the Setup check's groups: what needs the player, what is optional, what is ready; {0} how many
-#: port/frontend/shell/setup.cpp:639
+#: port/frontend/shell/setup.cpp:748
 msgid "Optional · {0}"
 msgstr ""
 
 #. the Setup check's groups: what needs the player, what is optional, what is ready; {0} how many
-#: port/frontend/shell/setup.cpp:639
+#: port/frontend/shell/setup.cpp:748
 msgid "Ready · {0}"
 msgstr ""
 
-#: port/frontend/shell/setup.cpp:692
+#: port/frontend/shell/setup.cpp:801
 msgid "The menus' language"
 msgstr "メニューの言語"
 
-#: port/frontend/shell/setup.cpp:693
+#: port/frontend/shell/setup.cpp:802
 msgid "Playtendoh uses your PS5's language. Cross chooses another; you can change it any time in Settings > Language."
 msgstr "PlaytendohはPS5に設定されている言語で表示します。×ボタンで別の言語を選べ、「設定 > 言語」でいつでも変更できます。"
 
-#: port/frontend/shell/setup.cpp:760
+#: port/frontend/shell/setup.cpp:869
 msgid "The guide, on your phone"
 msgstr "ガイドをスマートフォンで"
 
-#: port/frontend/shell/setup.cpp:763
+#: port/frontend/shell/setup.cpp:872
 msgid "Scan it for {0}: {1}"
 msgstr "読み取って{0}へ：{1}"
 
