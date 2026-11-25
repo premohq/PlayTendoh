@@ -6,7 +6,7 @@
 
 <!-- See CONTRIBUTING.md. Tick what applies, and say why for anything left unticked. -->
 
-- [ ] From a branch of my fork, rebased on the newest `PS5-ECAM` branch, fix-up commits squashed
+- [ ] From a branch of my fork, against and rebased on the newest `nightly`, fix-up commits squashed
 - [ ] On docs/ROADMAP.md, or the owner agreed to it in an issue first
 - [ ] Works the same on every side it can, not on one alone
 - [ ] A new or changed emulator is the system's best, from its official upstream, pinned in `tools/deps.json`, run through Playtendoh's own frontend

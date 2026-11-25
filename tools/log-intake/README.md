@@ -15,7 +15,7 @@ D1 database:
   what came since, oldest first), `before` (the page after the newest), `since`, `side`, `emulator`, `title`, `app`,
   `commit` (its first characters), `result` (a comma between), `limit` (200 at most) and `logs=0`.
 - Once a day, reports older than 180 days are deleted.
-- Every hour, the site is built again (the Pages workflow started on `Playtendoh`), so the console's
+- Every hour, the site is built again (the Pages workflow started on `main`), so the console's
   `status.json` and the table baked into the site are never more than an hour old. GitHub's own hourly
   schedule in `pages.yml` stays, but GitHub runs it only every few hours.
 

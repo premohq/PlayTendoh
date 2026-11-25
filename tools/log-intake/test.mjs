@@ -169,8 +169,8 @@ const github = async (url, init) => { asked.push({ url, init }); return new Resp
 check((await rebuildSite({}, github)) === false && asked.length === 0, 'Worker: no token, no rebuild asked for');
 check((await rebuildSite({ PAGES_TOKEN: 't' }, github)) === true && asked.length === 1
 	&& asked[0].url === 'https://api.github.com/repos/premohq/PlayTendoh/actions/workflows/pages.yml/dispatches'
-	&& JSON.parse(asked[0].init.body).ref === 'Playtendoh' && asked[0].init.headers.authorization === 'Bearer t',
-	'Worker: with a token, the Pages workflow started on Playtendoh');
+	&& JSON.parse(asked[0].init.body).ref === 'main' && asked[0].init.headers.authorization === 'Bearer t',
+	'Worker: with a token, the Pages workflow started on main');
 let deleted = 0;
 const daily = { DB: { prepare(sql) { return { bind() { return { async run() { if (sql.startsWith('DELETE')) deleted++; } }; } }; } } };
 await worker.scheduled({ cron: '17 3 * * *' }, daily, ctx);

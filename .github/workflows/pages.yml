@@ -9,7 +9,7 @@ name: Pages
 
 on:
   push:
-    branches: [Playtendoh] # the github-pages environment allows it (Settings > Environments)
+    branches: [main] # the released app's site; the github-pages environment allows it (Settings > Environments)
     paths:
       - 'site/**'
       - 'tools/compat-list.json' # status.json, the console's (tools/compat_feed.py)

@@ -9,8 +9,8 @@ problems players still report added, and on 25 November all of them, with what 6
 
 ## 6.0: Playtendoh
 
-The app's first release under its new name (Playtendoh), on the working branch `integration-6.0`;
-`PS5-ECAM` takes it once a build of it has been played on a console. Its code is written; nothing of it
+The app's first release under its new name (Playtendoh), on `nightly`, where all pre-release work goes;
+`main` takes it once a build of it has been played on a console. Its code is written; nothing of it
 has run on a PS5 yet.
 
 ### Before it ships, in order
@@ -35,7 +35,7 @@ has run on a PS5 yet.
 5. **On a console:** the launchers and the first start's question, the Buttons on each side, the
    GameCube and Wii pages, the reports' question, a Switch 2 game (a NUP one too), and the list under
    *To check on a console* below.
-6. **Then** `PS5-ECAM` takes it, the release, and the branches cut back to `PS5-ECAM` and `releases`.
+6. **Then** `main` takes `nightly`, and the release is tagged on `main` (`v6.0.0`: a build from the tag is a release, not a nightly).
 
 ### After it, as the owner set out
 

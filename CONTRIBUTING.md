@@ -111,12 +111,13 @@ before writing one.
 
 ## Working together
 
-- **Start from the newest `PS5-ECAM` branch, and rebase before you open a pull request.** The owner
-  works on this branch every day; work on an old base re-does or undoes what changed since. If your
-  pull request has been open a while, rebase it before pushing more to it.
-- **Work in your own fork.** The branches in this repository are the owner's: `PS5-ECAM` and `releases`.
-  Open your pull request from a branch of your fork, named for what it does (`switch2-nup-games`), not for
-  the tool that wrote it.
+- **Start from the newest `nightly`, and rebase before you open a pull request.** All pre-release work
+  goes there every day; work on an old base re-does or undoes what changed since. If your pull request has
+  been open a while, rebase it before pushing more to it.
+- **Work in your own fork.** This repository has three branches, the owner's: `main` (what is released, the
+  docs and the site), `releases` (the release ZIPs) and `nightly` (the work before a release). Open your pull
+  request against `nightly`, from a branch of your fork named for what it does (`switch2-nup-games`), not
+  for the tool that wrote it.
 - **One topic a pull request**, small enough to read. A rewrite of the launcher's files mixed into a
   feature cannot be reviewed. Several things at once are several pull requests.
 - **Clean history:** squash fix-ups ("fix test", "fix patch hunk", "address review") into the commit
