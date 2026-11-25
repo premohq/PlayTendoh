@@ -178,7 +178,9 @@ What 6.0 waits on: data lost, the app hung, several players, the 6.0 test build'
      5.1.0's unstripped program to name. Its cheats file held a web page, which is not the app's: 5.1.0
      downloads no cheats, and 6.0's download writes only an answer of 200.
    - 3DS: Inazuma Eleven 3 loads forever (`.3ds` and `.cci`), and Yo-kai Watch loops from a
-     data-corruption error back to its logo (one player, 5.0.1, logs in the Discord post).
+     data-corruption error back to its logo (one player, 5.0.1, logs in the Discord post). A save the
+     game cannot write reads to it as corrupt, and 5.0.1 already had #90's cause (`3e91e0d`, below):
+     look in those logs for "Permission denied" under `/data/azahar` first.
    - Wii U: Hyrule Warriors loads forever (crash logs in the Discord's #logs, 19 November).
    - Switch: OpenBOR goes back to the library at once (5.0.1, logs in the Discord post).
    - 3DS: Metroid: Samus Returns and Dragon Quest VII stop on "Permission denied" under `/data/azahar`
