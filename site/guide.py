@@ -6,7 +6,8 @@ library only (site/build.py calls build()).
 Each page is Markdown with what the guide needs and nothing more: headings (an id of its own as
 `## Title {#id}`, else one made from the title), paragraphs, **bold**, *italics*, `code`, links, lists
 (numbered or not, nested by indenting), fenced code, tables, `---`, and GitHub's notes (`> [!NOTE]`,
-`[!TIP]`, `[!IMPORTANT]`, `[!WARNING]`, `[!CAUTION]`). A link to another page is written `install.md`
+`[!TIP]`, `[!IMPORTANT]`, `[!WARNING]`, `[!CAUTION]`), and pictures on a line of their own
+(`![caption](img/name.jpg)`, from site/guide/img). A link to another page is written `install.md`
 (it works on GitHub too) and becomes `install.html`.
 
 PAGES is the guide's order: its sidebar, and each page's "Continue to" the next. The build stops on a
@@ -19,6 +20,7 @@ there (port/frontend/shell/setup.cpp's Guide("page#id")), so its QR codes never 
 import html
 import os
 import re
+import shutil
 import sys
 
 SITE = os.path.dirname(os.path.abspath(__file__))
@@ -36,19 +38,21 @@ PAGES = [
     ("install", "Install Playtendoh", "Set up"),
     ("setup-check", "The first start", "Set up"),
     ("files", "Where your files go", "Set up"),
-    ("wii-u", "Wii U", "Your systems"),
-    ("3ds", "Nintendo 3DS", "Your systems"),
-    ("ds", "Nintendo DS", "Your systems"),
-    ("switch", "Nintendo Switch", "Your systems"),
-    ("switch-2", "Switch 2", "Your systems"),
-    ("gamecube-wii", "GameCube and Wii", "Your systems"),
-    ("classics", "The classics", "Your systems"),
+    ("using", "Using Playtendoh", "Playing"),
+    ("wii-u", "Wii U", "Playing"),
+    ("3ds", "Nintendo 3DS", "Playing"),
+    ("ds", "Nintendo DS", "Playing"),
+    ("switch", "Nintendo Switch", "Playing"),
+    ("switch-2", "Switch 2", "Playing"),
+    ("gamecube-wii", "GameCube and Wii", "Playing"),
+    ("classics", "The classics", "Playing"),
     ("updating", "Updating", "When something's wrong"),
     ("troubleshooting", "Troubleshooting", "When something's wrong"),
     ("help", "Getting help", "When something's wrong"),
 ]
 
 NOTES = {"NOTE": "Note", "TIP": "Tip", "IMPORTANT": "Important", "WARNING": "Warning", "CAUTION": "Caution"}
+PICTURE = re.compile(r"^\s*!\[([^\]]*)\]\(([^)\s]+)\)\s*$")
 HEADING = re.compile(r"^(#{1,4})\s+(.+?)(?:\s+\{#([A-Za-z0-9_-]+)\})?\s*$")
 LIST = re.compile(r"^(\s*)([-*]|\d+\.)\s+(.*)$")
 FENCE = re.compile(r"^\s*```")
@@ -73,6 +77,7 @@ class Page:
         self.title = ""
         self.ids = set()
         self.links = []  # (page, id) of the guide's own links, to check
+        self.pictures = []  # img/... the page shows
 
     # -- inline ---------------------------------------------------------------------------------------
 
@@ -128,6 +133,13 @@ class Page:
                     i += 1
                 i += 1
                 out.append("<pre><code>" + html.escape("\n".join(code), quote=False) + "</code></pre>")
+            elif m := PICTURE.match(line):
+                caption, source = m.group(1), m.group(2)
+                self.pictures.append(source)
+                alt = html.escape(re.sub(r"[*`]", "", caption))
+                out.append(f'<figure><img src="{html.escape(source)}" alt="{alt}" loading="lazy" width="1280" height="720">'
+                           f"<figcaption>{self.inline(caption)}</figcaption></figure>")
+                i += 1
             elif m := HEADING.match(line):
                 level = len(m.group(1))
                 text = self.inline(m.group(2))
@@ -171,7 +183,7 @@ class Page:
             else:
                 para = []
                 while i < len(lines) and lines[i].strip() and not (
-                        FENCE.match(lines[i]) or HEADING.match(lines[i]) or LIST.match(lines[i]) or RULE.match(lines[i])
+                        FENCE.match(lines[i]) or HEADING.match(lines[i]) or LIST.match(lines[i]) or RULE.match(lines[i]) or PICTURE.match(lines[i])
                         or lines[i].lstrip().startswith(("|", ">"))):
                     para.append(lines[i].strip())
                     i += 1
@@ -345,8 +357,14 @@ def build(out):
             missing.append(f"setup.cpp opens guide/{target}, which is not a page of the guide")
         elif anchor and anchor not in pages[target][0].ids:
             missing.append(f"setup.cpp opens guide/{target}#{anchor}, which has no such heading")
+    for page, (doc, _, _) in pages.items():
+        for picture in doc.pictures:
+            if not os.path.isfile(os.path.join(SOURCE, picture)):
+                missing.append(f"{page}.md shows {picture}, which is not in site/guide")
     if missing:
         sys.exit("guide:\n  " + "\n  ".join(missing))
+    if os.path.isdir(os.path.join(SOURCE, "img")):
+        shutil.copytree(os.path.join(SOURCE, "img"), os.path.join(out, "img"), dirs_exist_ok=True)
     for page, (doc, body, description) in pages.items():
         with open(os.path.join(out, page + ".html"), "w", encoding="utf-8", newline="\n") as f:
             f.write(template(page, doc.title, body, description))

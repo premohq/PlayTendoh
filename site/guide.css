@@ -53,6 +53,11 @@
 .guide-main th { font-weight: 600; background: var(--surface-2); }
 .guide-main tr:last-child td { border-bottom: 0; }
 
+/* the app's own screens, as the PC preview draws them (tools/preview-shell.sh) */
+.guide-main figure { margin: 0 0 1.6em; }
+.guide-main figure img { display: block; width: 100%; height: auto; border-radius: var(--radius-sm); border: 1px solid var(--line); box-shadow: var(--shadow); background: var(--surface-2); }
+.guide-main figcaption { margin-top: 8px; font-size: 0.86rem; color: var(--text-3); }
+
 /* notes, tips and warnings, as GitHub draws them: a colour each */
 .note-box { margin: 0 0 1.4em; padding: 14px 18px 4px; border: 1px solid var(--line); border-left: 4px solid var(--wiiu); border-radius: var(--radius-sm); background: var(--wiiu-soft); }
 .note-title { margin: 0 0 6px !important; font-weight: 600; font-size: 0.86rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--wiiu); }

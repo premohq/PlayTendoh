@@ -1,8 +1,8 @@
 # Troubleshooting
 
 The problems people bring to the Discord most, each with its fix. Start with the Setup check
-(**Settings > Diagnostics > Setup check**): it often names the problem. If nothing here helps,
-[ask for help](help.md) with your logs.
+(**Settings > Diagnostics > Setup check**): it often names the problem, with a QR code to its fix. If
+nothing here helps, [ask for help](help.md) with your logs.
 
 ## Starting the app
 
@@ -19,7 +19,8 @@ The problems people bring to the Discord most, each with its fix. Start with the
 
 No HEN opened `/data` for the app, and no ELF loader was there to do it. Put `PPSA99360` on your HEN's
 list, or start an ELF loader on port 9021, then start Playtendoh again
-([Let Playtendoh in](jailbreak.md#app-jailbreak)).
+([Let Playtendoh in](jailbreak.md#app-jailbreak)). **Settings > Diagnostics** shows what it got
+([reading it](jailbreak.md#check)).
 
 ### OnionHEN never jailbreaks the app {#onionhen}
 
@@ -33,34 +34,47 @@ power-off ([After every restart](jailbreak.md#after-restart)).
 
 ### An old version comes back {#old-version}
 
-There are two copies of Playtendoh on the console: say one in `/data/homebrew` and one on a USB drive,
-or an old one you never deleted. The home screen can start the old copy. **Delete every copy but the
-one you use.** The Setup check's **Another copy of Playtendoh** row says where the other one is.
+There are two copies of Playtendoh on the console: say one in `/data/homebrew` and one on a USB drive, or
+an old one you never deleted. The home screen can start the old copy, even after you updated the other.
+**Delete every copy but the one you use.** The Setup check's **Another copy of Playtendoh** row says
+where the other one is, and its version.
+
+### It opens EmulationStation, not Playtendoh's launcher {#esde}
+
+You picked EmulationStation as the layout. Hold **L1** while Playtendoh starts to get its own launcher,
+then **Settings > Launcher > Layout** to switch back for good.
 
 ## Games not found
 
-### A console's Library is empty {#library-empty}
+### I can't find the GameCube, Wii, NES, N64... {#hidden-systems}
 
-- Check the games are in that console's folder ([Where your files go](files.md)), or that the folder
-  you chose in **Settings > Game files** is the one they're in.
+They start hidden. Turn them on in **Settings > Launcher > Systems** ([how](setup-check.md#systems)).
+
+### A system's Library is empty {#library-empty}
+
+- Check the games are in that system's folder ([Where your files go](files.md)), or that the folder you
+  chose in **Settings > Game files** is the one they're in.
+- Check their format is one the system plays (each system's page lists them).
 - **Settings > Game files > Look for games now** looks again.
-- The Setup check's row for that console says how many games it found, and where.
+- The Setup check's row for that system says how many games it found, and where.
 
 ### Wii U: an unpacked game is found but not listed {#wii-u-not-listed}
 
-Name its three folders `code`, `content` and `meta`, in small letters. A `.wua` of the same game plays
-meanwhile. Still missing? Send `cemu.log`: it says why a game was left out.
+Check it has all three folders, `code`, `content` and `meta`, with the game's files in them (5.1.0 also
+missed them when they were named in capitals; 6.0 doesn't). A `.wua` of the same game plays meanwhile.
+Still missing? Send `cemu.log`: it says why a game was left out.
 
 ### Wii U: encrypted games vanished, or keys.txt is empty {#wii-u-keys}
 
-Version 5.1.0 can empty `keys.txt` as it starts, and then every encrypted `.wud` and `.wux` leaves the
-Library. Copy your keys back into `/data/cemu/keys.txt` and keep a copy on your computer; a fix is on its
-way ([disc keys](wii-u.md#disc-keys)).
+Version 5.1.0 could empty `keys.txt` as it started, and then every encrypted `.wud` and `.wux` left the
+Library. Copy your keys back into `/data/cemu/keys.txt`, and keep a copy on your computer
+([disc keys](wii-u.md#disc-keys)).
 
 ### Switch: games are counted but not listed {#switch-not-listed}
 
-Usually the keys: without working `prod.keys` the side can't read a game. Check the Setup check's
-**Switch keys** row. With firmware 23 and its keys, this is a known problem being looked at.
+Usually the keys: without working `prod.keys` the side can't read a game. Check **Settings > Game files >
+Keys and firmware** and the Setup check's **Switch keys** row. With firmware 23 and its keys, this is a
+known problem being looked at.
 
 ## Games that won't start
 
@@ -76,19 +90,23 @@ Install the game's own update (v1.6.0 or later), from **Settings > Game files > 
 
 ### Wii games for the Wii U don't start {#wii-on-wii-u}
 
-Cemu doesn't play Wii games, the Wii U eShop's included. Play them on the
-[GameCube and Wii](gamecube-wii.md) side.
+Cemu doesn't play Wii games, the Wii U eShop's included. Play them on the [GameCube and Wii](gamecube-wii.md)
+side.
 
 ### Switch: a black screen from a USB drive {#switch-usb}
 
-On some consoles, Switch games on a USB drive or in a folder of your own go to a black screen, where
-the same file plays from `/data/eden/roms`. Play from there for now.
+On some consoles, Switch games on a USB drive or in a folder of your own go to a black screen, where the
+same file plays from `/data/eden/roms`. Play from there for now.
 
 ### Nothing starts after rest mode {#rest-mode}
 
 Close Playtendoh and start it again.
 
-## Speed and crashes
+### A Famicom Disk System or Satellaview game won't start {#bios}
+
+They need their console's BIOS: `disksys.rom` or `BS-X.bin` ([the classics' BIOS](classics.md#bios)).
+
+## Speed, freezes and crashes
 
 ### Wii U games are very slow {#slow}
 
@@ -96,21 +114,44 @@ The Setup check's **Game speed** row, or **Settings > Diagnostics**, probably sa
 `JIT unavailable (interpreter only)`. Put `PPSA99360` on your HEN's app jailbreak list
 ([game speed](jailbreak.md#game-speed)).
 
+### A game takes minutes to start the first time {#first-start-slow}
+
+A Wii U, 3DS or Switch game builds its shaders the first time, with the loading screen counting them. The
+next starts are quick. A Switch 2 game can sit on a black screen for a long time while it does.
+
+### A game froze {#frozen}
+
+- **A Switch or Switch 2 game, its menu too:** hold **L1** and click the touchpad's left side (any of the
+  touchpad, on the Switch 2). That leaves the game, and if it won't stop, Playtendoh starts again by itself
+  within half a minute.
+- **On the other systems:** close Playtendoh from the PS button's menu.
+
+### One game crashes or misbehaves {#one-game}
+
+Look the game up on the [compatibility list](../compatibility.html): someone may have found the setting
+that fixes it. If not, report it with its logs ([Getting help](help.md)).
+
 ### Games on a USB drive "cannot be read" {#usb-cannot-be-read}
 
-Your HEN opened `/data` but not the drives. Make sure an ELF loader is running on port 9021, and start
-the app again: it opens the drive through it.
+Your HEN opened `/data` but not the drives. Make sure an ELF loader is running on port 9021, and start the
+app again: it opens the drive through it.
 
-### One game crashes or freezes {#one-game}
+### A network share's games don't show {#network-share}
 
-Look the game up on the [compatibility list](../compatibility.html): someone may have found the
-setting that fixes it. If not, report it with its logs ([Getting help](help.md)).
+A share is looked through only when you ask: **Settings > Game files > Look for games now**, or turn on
+**Look on network shares at every start**. Check the PS5 and the computer are on the same network, and
+that the share's address, name and login are right. Switch and Switch 2 games can't play from a share.
 
-A Switch or Switch 2 game that froze, its menu too: hold **L1** and click the touchpad's left side. That
-leaves the game, and if it won't stop, Playtendoh starts again by itself within half a minute. On the
-other consoles, close Playtendoh from the PS button's menu.
+## Phones and the network
 
-### The app freezes looking through a network share {#network-share}
+### The phone can't open the remote touch screen page {#remote-touch}
 
-A share that holds ES-DE's `covers`, `manuals` or `videos` folders beside the games can make the search
-never end. Point the share at a folder that holds only games.
+- The phone must be on the **same network** as the PS5. Guest Wi-Fi often keeps devices apart: use the
+  main one.
+- Use the address the setting shows, with its port (`:8080`).
+- The page says "Waiting for video" until a game is running; that's normal.
+
+### Covers are missing {#covers}
+
+Box art downloads in the background as games are added, and needs the PS5 online. **Settings > Online >
+Download missing box art** tries again ([box art](setup-check.md#box-art)).
