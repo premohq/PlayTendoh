@@ -29,6 +29,10 @@ jobs:
       - name: What the tests need
         run: python3 -B tools/deps.py fetch pacbrew pugixml dr_mp3 rapidjson prosperoedenx melonds libretro-common reshade
 
+      # every page and heading the Setup check's QR codes open (setup.cpp's Guide("page#id")) is in site/guide
+      - name: The setup guide's pages
+        run: python3 -B site/guide.py --out "$RUNNER_TEMP/guide"
+
       - name: String tables
         run: |
           python3 -B tools/tests/test-lang.py

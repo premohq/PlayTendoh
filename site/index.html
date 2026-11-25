@@ -54,6 +54,7 @@
       <a href="#systems">Systems</a>
       <a href="#release">Latest release</a>
       <a href="#install">Install</a>
+      <a href="guide/">Guide</a>
       <a href="#controls">Controls</a>
       <a href="#community">Discord</a>
       <a href="#credits">Credits</a>
@@ -194,11 +195,12 @@
       <h2>On your PS5 in four steps</h2>
     </header>
     <ol class="steps">
-      <li class="reveal"><h3>A PS5 that runs homebrew</h3><p>Any firmware up to 13.60, with etaHEN, OnionHEN, or an ELF loader on port 9021. See the <a href="https://github.com/premohq/PlayTendoh/blob/PS5-ECAM/docs/HEN-SETUP.md">firmware and setup guide</a>.</p></li>
+      <li class="reveal"><h3>A PS5 that runs homebrew</h3><p>Any firmware up to 13.60, with etaHEN, OnionHEN, or an ELF loader on port 9021. Check yours in the <a href="guide/get-started.html">setup guide</a>.</p></li>
       <li class="reveal"><h3>Copy the app</h3><p>Download the <a href="%ZIP_URL%" data-zip><span data-version>%VERSION%</span> ZIP</a>, extract it and copy the <code>PPSA99360</code> folder to <code>/data/homebrew/PPSA99360</code>.</p></li>
       <li class="reveal"><h3>Let your HEN in</h3><p>etaHEN: add <code>PPSA99360</code> to its app jailbreak list. OnionHEN: add <code>PPSA99360</code> at the end of <code>exact_title_ids</code> in <code>config.ini</code>, with no comma after it. Any other: have an ELF loader on port 9021.</p></li>
-      <li class="reveal"><h3>Add your games</h3><p>Put them in each system's folder (below) and start Playtendoh from the home screen. The Setup check shows what's ready and what to do about the rest.</p></li>
+      <li class="reveal"><h3>Add your games</h3><p>Put them in each system's folder (below, and <a href="guide/files.html">every folder</a> in the guide) and start Playtendoh from the home screen. The Setup check shows what's ready and what to do about the rest.</p></li>
     </ol>
+    <p class="guide-cta reveal"><a class="btn primary" href="guide/"><span>New to this? Follow the step-by-step setup guide</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
 
     <h3 class="sub-head reveal" id="games">Your games</h3>
     <div class="games reveal" role="table" aria-label="Where each system's games go">
@@ -217,7 +219,7 @@
       </div>
       <div class="callout reveal">
         <h3>On a USB drive or the extended storage</h3>
-        <p>A <code>PS5CEMU-HAR-data</code> folder at the top of that drive (its name from before 5.0.0, kept so nothing moves) keeps the launcher's files there instead of in <code>/data</code>, with <code>cemu</code>, <code>azahar</code>, <code>melonds</code> and <code>eden</code> beside it. <a href="https://github.com/premohq/PlayTendoh/blob/PS5-ECAM/docs/GUIDE.md#everything-on-the-apps-drive">The guide</a> says how.</p>
+        <p>A <code>PS5CEMU-HAR-data</code> folder at the top of that drive (its name from before 5.0.0, kept so nothing moves) keeps the launcher's files there instead of in <code>/data</code>, with <code>cemu</code>, <code>azahar</code>, <code>melonds</code> and <code>eden</code> beside it. <a href="guide/files.html#app-on-a-drive">The guide</a> says how.</p>
       </div>
     </div>
   </div>

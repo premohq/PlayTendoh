@@ -139,13 +139,14 @@ code { font-size: 0.86em; background: var(--code); border-radius: 6px; padding: 
 .brand { display: inline-flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; font-weight: 600; font-size: 1.06rem; letter-spacing: 0.01em; }
 .brand-mark { width: 28px; height: 28px; }
 .nav-links { display: none; gap: 4px; margin-left: auto; }
-.nav-links a { color: var(--text-2); text-decoration: none; font-size: 0.92rem; padding: 8px 12px; border-radius: 999px; }
+.nav-links a { color: var(--text-2); text-decoration: none; font-size: 0.92rem; padding: 8px 12px; border-radius: 999px; white-space: nowrap; }
 .nav-links a:hover { color: var(--text); background: var(--code); }
 .nav-actions { display: flex; gap: 6px; margin-left: auto; }
 .icon-btn { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--text-2); cursor: pointer; padding: 0; }
 .icon-btn:hover { color: var(--text); background: var(--code); }
 .icon-btn svg { width: 18px; height: 18px; }
-@media (min-width: 900px) {
+/* the links once they fit on one line, the Guide's included */
+@media (min-width: 1060px) {
   .nav-links { display: flex; }
   .nav-links + .nav-actions { margin-left: 8px; }
 }
@@ -197,6 +198,7 @@ code { font-size: 0.86em; background: var(--code); border-radius: 6px; padding: 
 .section-lede { margin-top: 14px; color: var(--text-2); font-size: 1.05rem; }
 .sub-head { font-size: 1.3rem; margin: clamp(44px, 6vw, 64px) 0 16px; }
 .fine { color: var(--text-3); font-size: 0.92rem; margin-top: 14px; }
+.guide-cta { margin-top: 24px; }
 
 /* Systems */
 .systems { display: grid; gap: 16px; grid-template-columns: 1fr; }

@@ -1,0 +1,71 @@
+/* The setup guide's pages (site/guide.py makes them from site/guide/*.md), on style.css's colours and type:
+   the guide's pages in a column beside the page, a page's steps, notes and warnings in their own boxes. */
+
+.guide-links { display: none; gap: 4px; margin-left: auto; }
+.guide-links a { color: var(--text-2); text-decoration: none; font-size: 0.92rem; padding: 8px 12px; border-radius: 999px; }
+.guide-links a:hover, .guide-links a[aria-current="page"] { color: var(--text); background: var(--code); }
+@media (min-width: 760px) { .guide-links { display: flex; } }
+
+.guide-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; padding-top: 32px; padding-bottom: 72px; }
+@media (min-width: 980px) { .guide-layout { grid-template-columns: 240px minmax(0, 1fr); gap: 56px; padding-top: 48px; } }
+
+/* the guide's pages: a column beside the page on a wide screen, a list to open above it on a small one */
+.guide-toc { display: none; }
+@media (min-width: 980px) {
+  .guide-toc { display: block; position: sticky; top: 88px; align-self: start; max-height: calc(100vh - 104px); overflow-y: auto; padding-right: 8px; }
+  .guide-toc-small { display: none; }
+}
+.toc-group { margin: 22px 0 8px; font-size: 0.74rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-3); }
+.toc-group:first-child { margin-top: 0; }
+.guide-toc ul, .guide-toc-small ul { list-style: none; margin: 0; padding: 0; }
+.guide-toc a, .guide-toc-small a { display: block; padding: 7px 12px; border-radius: 10px; color: var(--text-2); text-decoration: none; font-size: 0.94rem; border-left: 3px solid transparent; }
+.guide-toc a:hover, .guide-toc-small a:hover { color: var(--text); background: var(--code); }
+.guide-toc a[aria-current="page"], .guide-toc-small a[aria-current="page"] { color: var(--text); background: var(--code); border-left-color: var(--primary-2); font-weight: 600; }
+.guide-toc-small { margin-bottom: 28px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); padding: 4px 12px; }
+.guide-toc-small summary { cursor: pointer; padding: 10px 2px; font-weight: 600; }
+.guide-toc-small[open] { padding-bottom: 12px; }
+
+/* the page */
+.guide-main { max-width: 780px; min-width: 0; font-size: 1.02rem; line-height: 1.65; }
+.guide-kicker { margin: 0 0 6px; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--primary-2); }
+:root[data-theme="dark"] .guide-kicker { color: var(--link); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .guide-kicker { color: var(--link); } }
+.guide-main h1 { font-size: clamp(2rem, 1.5rem + 2vw, 2.7rem); letter-spacing: -0.025em; line-height: 1.1; margin: 0 0 20px; }
+.guide-main h2 { font-size: 1.5rem; letter-spacing: -0.015em; line-height: 1.25; margin: 2.4em 0 0.6em; padding-top: 1.2em; border-top: 1px solid var(--line); scroll-margin-top: 84px; }
+.guide-main h3 { font-size: 1.15rem; line-height: 1.3; margin: 1.8em 0 0.5em; scroll-margin-top: 84px; }
+.guide-main h4 { font-size: 1rem; margin: 1.4em 0 0.4em; scroll-margin-top: 84px; }
+.guide-main h2 .anchor, .guide-main h3 .anchor, .guide-main h4 .anchor { float: left; margin-left: -1.1em; width: 1.1em; color: var(--text-3); text-decoration: none; opacity: 0; }
+.guide-main h2:hover .anchor, .guide-main h3:hover .anchor, .guide-main h4:hover .anchor { opacity: 1; }
+.guide-main p, .guide-main ul, .guide-main ol { margin: 0 0 1em; }
+.guide-main li { margin: 0.35em 0; }
+.guide-main li > ul, .guide-main li > ol { margin: 0.4em 0 0.2em; }
+.guide-main ol > li::marker { font-weight: 600; color: var(--text-2); }
+.guide-main a { color: var(--link); }
+.guide-main strong { font-weight: 600; }
+.guide-main hr { border: 0; border-top: 1px solid var(--line); margin: 2.2em 0; }
+.guide-main code { font-family: var(--mono); font-size: 0.88em; background: var(--code); padding: 0.12em 0.4em; border-radius: 6px; overflow-wrap: break-word; }
+.guide-main pre { margin: 0 0 1.2em; padding: 16px 18px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface-2); overflow-x: auto; line-height: 1.5; }
+.guide-main pre code { background: none; padding: 0; font-size: 0.86rem; overflow-wrap: normal; }
+
+.guide-main .table { margin: 0 0 1.4em; overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); }
+.guide-main table { width: 100%; border-collapse: collapse; font-size: 0.94rem; line-height: 1.5; }
+.guide-main th, .guide-main td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+.guide-main th { font-weight: 600; background: var(--surface-2); }
+.guide-main tr:last-child td { border-bottom: 0; }
+
+/* notes, tips and warnings, as GitHub draws them: a colour each */
+.note-box { margin: 0 0 1.4em; padding: 14px 18px 4px; border: 1px solid var(--line); border-left: 4px solid var(--wiiu); border-radius: var(--radius-sm); background: var(--wiiu-soft); }
+.note-title { margin: 0 0 6px !important; font-weight: 600; font-size: 0.86rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--wiiu); }
+.note-box.tip { border-left-color: var(--nds); background: var(--nds-soft); }
+.note-box.tip .note-title { color: var(--nds); }
+.note-box.important { border-left-color: #8957e5; background: rgba(137, 87, 229, 0.1); }
+.note-box.important .note-title { color: #8957e5; }
+.note-box.warning { border-left-color: var(--n3ds); background: var(--n3ds-soft); }
+.note-box.warning .note-title { color: var(--n3ds); }
+.note-box.caution { border-left-color: var(--nx); background: var(--nx-soft); }
+.note-box.caution .note-title { color: var(--nx); }
+
+/* back, and on to the next page */
+.guide-pager { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--line); }
+.guide-pager .btn.primary { margin-left: auto; }
+.guide-foot { margin-top: 28px; font-size: 0.88rem; color: var(--text-3); }

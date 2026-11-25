@@ -35,10 +35,11 @@ ART = {  # the repository's own files the page uses, and their names in it
     "docs/banner.png": "banner.png",
     "docs/support-qr.svg": "support-qr.svg",
 }
-SKIP = {"build.py", "__pycache__"}
+SKIP = {"build.py", "guide.py", "guide", "__pycache__"}  # guide/: its Markdown made into pages (guide.py)
 
 sys.path.insert(0, os.path.join(REPO_ROOT, "tools"))
 import compat_feed  # noqa: E402 (tools/, beside this folder)
+import guide  # noqa: E402 (site/guide.py: the setup guide's pages)
 
 
 def facts(release):
@@ -158,6 +159,9 @@ def main():
         os.makedirs(os.path.dirname(os.path.join(args.out, dst)), exist_ok=True)
         shutil.copy2(os.path.join(REPO_ROOT, src), os.path.join(args.out, dst))
 
+    # the step-by-step setup guide, from site/guide/*.md (it stops the build on a missing page or heading)
+    guide_pages = guide.build(os.path.join(args.out, "guide"))
+
     with open(os.path.join(SITE, "index.html"), encoding="utf-8") as f:
         page = f.read()
     values = {k: html.escape(v) for k, v in facts(release).items()}
@@ -188,7 +192,7 @@ def main():
     with open(os.path.join(args.out, "status.json"), "w", encoding="utf-8", newline="\n") as f:
         json.dump(status, f, ensure_ascii=False, separators=(",", ":"))
     print(f"build.py: {args.out}, with {release.get('tag_name') or 'no release'} baked in, {len(games['games'])} games reported, "
-          f"{len(status['games'])} with a status")
+          f"{len(status['games'])} with a status, {guide_pages} guide pages")
 
 
 if __name__ == "__main__":
