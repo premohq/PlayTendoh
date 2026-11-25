@@ -3,6 +3,7 @@
 #include "archive.h"
 #include "melonds.h"
 #include "../app/lang.h"
+#include "../app/media_folders.h"
 #include "../app/paths.h"
 #include "../ps5/log.h"
 
@@ -512,7 +513,8 @@ namespace ps5melonds
 			{
 				if (entry.is_directory(ec))
 				{
-					if (depth < kScanDepth)
+					// (not a front end's covers, manuals or videos: app/media_folders.h)
+					if (depth < kScanDepth && !ps5files::MediaFolder(entry.path().filename().string()))
 						Scan(entry.path(), depth + 1, games, probes);
 					continue;
 				}

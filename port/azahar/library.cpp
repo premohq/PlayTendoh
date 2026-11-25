@@ -2,6 +2,7 @@
 #include "library.h"
 #include "azahar.h"
 #include "../app/game_archives.h"
+#include "../app/media_folders.h"
 #include "../app/lang.h"
 #include "../app/paths.h"
 #include "../ps5/log.h"
@@ -705,8 +706,9 @@ namespace ps5azahar
 			{
 				if (entry.is_directory(ec))
 				{
-					// (the copies unpacked from archives are not games of their own)
-					if (depth < kScanDepth && entry.path() != ps5archive::UnpackedRoot())
+					// (the copies unpacked from archives are not games of their own, nor a front end's covers,
+					// manuals or videos beside them: app/media_folders.h)
+					if (depth < kScanDepth && entry.path() != ps5archive::UnpackedRoot() && !ps5files::MediaFolder(entry.path().filename().string()))
 						Scan(entry.path(), depth + 1, games, probes);
 					continue;
 				}

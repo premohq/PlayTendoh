@@ -14,6 +14,7 @@
 #include "ingame.h"
 #include "pack_updates.h"
 #include "lang.h"
+#include "media_folders.h"
 #include "paths.h"
 #include "updates.h"
 #include "usb_devices.h"
@@ -1167,6 +1168,12 @@ uint32 PS5Cemu_FrameGeneration()
 uint32 PS5Cemu_ReShade()
 {
 	return ps5emu::s_reshade.load(std::memory_order_relaxed);
+}
+
+// patches/cemu 0054, Cemu's game scan: a front end's covers, manuals and videos are not looked into
+bool PS5Cemu_MediaFolder(std::string_view name)
+{
+	return ps5files::MediaFolder(name);
 }
 
 uint32 PS5Cemu_RefreshMilliHz()

@@ -37,6 +37,9 @@ int main(int argc, char** argv)
 	Put(root / "roms/nested/E.unif"); Put(root / "roms/one/two/three/four/five/too-deep.nes"); fs::create_directory_symlink(root / "roms", root / "roms/loop");
 	const auto nes = ps5retro::Scan("nes", (root / "roms").string(), error);
 	Check(nes.size() == 2 && error.empty(), "NES scan accepts upper-case/nested formats and ignores symlinks");
+	// a front end's media beside the games (ES-DE's covers, manuals, videos): not looked into
+	Put(root / "roms/covers/F.nes", std::string("NES\x1a", 4) + std::string(12, '\0')); Put(root / "roms/Videos/G.nes", std::string("NES\x1a", 4) + std::string(12, '\0'));
+	Check(ps5retro::Scan("nes", (root / "roms").string(), error).size() == 2, "a front end's covers and videos folders are not searched");
 	Check(ps5retro::Scan("n64", (root / "roms").string(), error).size() == 1, "N64 scan isolates its ROM formats");
 	Check(ps5retro::Scan("gamecube", (root / "roms").string(), error).size() == 1, "GameCube scan excludes Wii channels");
 	Check(ps5retro::Scan("wii", (root / "roms").string(), error).size() == 1, "Wii scan excludes GameCube discs and includes channels");

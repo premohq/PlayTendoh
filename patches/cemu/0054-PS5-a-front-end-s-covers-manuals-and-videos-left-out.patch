@@ -1,0 +1,50 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: premohq <48417750+premohq@users.noreply.github.com>
+Date: Tue, 24 Nov 2026 18:00:00 +0000
+Subject: [PATCH] PS5: a front end's covers, manuals and videos left out of the
+ game scan
+
+ScanGamePath went into every folder under a games folder. A collection kept for ES-DE has covers,
+manuals and videos beside its games, thousands of files that are no games, and on a network share
+each folder of them cost the scan calls to the computer: such a share was looked through for ever.
+The port names those folders (PS5Cemu_MediaFolder, port/app/media_folders.h), and the scan passes
+them by.
+---
+ src/Cafe/TitleList/TitleList.cpp | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/src/Cafe/TitleList/TitleList.cpp b/src/Cafe/TitleList/TitleList.cpp
+index c057373..ccd8f50 100644
+--- a/src/Cafe/TitleList/TitleList.cpp
++++ b/src/Cafe/TitleList/TitleList.cpp
+@@ -374,6 +374,10 @@ bool _IsKnownFileNameOrExtension(const fs::path& path)
+ 	// note: To detect extracted titles with RPX we rely on the presence of the content,code,meta directory structure
+ }
+ 
++// PS5: a front end's covers, manuals and videos beside the games (port/app/media_folders.h), not looked into:
++// on a network share their thousands of files kept the scan going for ever
++bool PS5Cemu_MediaFolder(std::string_view name);
++
+ void CafeTitleList::ScanGamePath(const fs::path& path)
+ {
+ 	// scan the whole directory first to determine if this is a title folder
+@@ -429,7 +433,8 @@ void CafeTitleList::ScanGamePath(const fs::path& path)
+ 				std::string dirName = _pathToUtf8(it.filename());
+ 				if (!boost::iequals(dirName, "content") &&
+ 					!boost::iequals(dirName, "code") &&
+-					!boost::iequals(dirName, "meta"))
++					!boost::iequals(dirName, "meta") &&
++					!PS5Cemu_MediaFolder(dirName))
+ 					ScanGamePath(it);
+ 			}
+ 		}
+@@ -438,7 +443,8 @@ void CafeTitleList::ScanGamePath(const fs::path& path)
+ 	{
+ 		// scan subdirectories
+ 		for (auto& it : dirsInDirectory)
+-			ScanGamePath(it);
++			if (!PS5Cemu_MediaFolder(_pathToUtf8(it.filename())))
++				ScanGamePath(it);
+ 	}
+ }
+ 

@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "library.h"
 #include "../app/lang.h"
+#include "../app/media_folders.h"
 #include "../app/own_status.h"
 #if defined(__PROSPERO__)
 #include "../ps5/log.h"
@@ -358,9 +359,14 @@ namespace ps5retro
 		{
 			if (++inspected > 100000) { error = TrF("Only the first {0} files in {1} were searched. Choose a folder with fewer files.", 100000, folder); break; }
 			if (it.depth() >= 4) it.disable_recursion_pending();
+			// the name first, which costs nothing: a status is a call to the computer on a network share,
+			// and a front end's covers, manuals and videos (app/media_folders.h) are not looked into
+			const std::string name = it->path().filename().string();
+			if (ps5files::MediaFolder(name)) { it.disable_recursion_pending(); continue; }
+			if (!HasExtension(side, name)) continue;
 			std::error_code statusError;
 			const auto status = ps5files::OwnStatus(it->path(), statusError);
-			if (statusError || !fs::is_regular_file(status) || !HasExtension(side, it->path().filename().string()) || !DiscMatches(side, it->path())) continue;
+			if (statusError || !fs::is_regular_file(status) || !DiscMatches(side, it->path())) continue;
 			ps5emu::Game game;
 			game.path = it->path(); game.name = game.path.stem().string();
 			game.format = game.path.extension().string().substr(1); for (char& c : game.format) c = char(std::toupper((unsigned char)c));

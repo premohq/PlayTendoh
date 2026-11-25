@@ -6,6 +6,7 @@
 #include "nx_files.h"
 #include "../eglantine/launch.h"
 #include "../app/gameinfo.h"
+#include "../app/media_folders.h"
 #include "../app/paths.h"
 #include "../ps5/log.h"
 
@@ -256,7 +257,8 @@ namespace ps5eden
 			for (const auto& entry : fs::directory_iterator(folder, ec))
 			{
 				const std::string name = entry.path().filename().string();
-				if (name.empty() || name[0] == '.')
+				// (nor a front end's covers, manuals or videos: app/media_folders.h)
+				if (name.empty() || name[0] == '.' || ps5files::MediaFolder(name))
 					continue;
 				if (entry.is_directory(ec))
 				{

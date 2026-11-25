@@ -5,6 +5,7 @@
 #include "wiiu_archives.h"
 #include "game_archives.h"
 #include "lang.h"
+#include "media_folders.h"
 #include "paths.h"
 #include "../ps5/log.h"
 
@@ -273,8 +274,9 @@ namespace ps5emu
 						return;
 					if (entry.is_directory(ec))
 					{
-						// (the copies unpacked from archives are no games of their own)
-						if (depth < kScanDepth && entry.path() != ps5archive::UnpackedRoot())
+						// (the copies unpacked from archives are no games of their own, nor a front end's
+						// covers, manuals or videos beside them: media_folders.h)
+						if (depth < kScanDepth && entry.path() != ps5archive::UnpackedRoot() && !ps5files::MediaFolder(entry.path().filename().string()))
 							Scan(entry.path(), depth + 1, games, probes);
 						continue;
 					}
