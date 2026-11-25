@@ -608,6 +608,25 @@ namespace ps5reports
 		return Url()[0] != 0;
 	}
 
+	bool Prerelease()
+	{
+#ifdef PLAYTENDOH_PRERELEASE
+		return true;
+#else
+		return false;
+#endif
+	}
+
+	bool Unanswered(bool yes, bool asked, bool askedPrerelease)
+	{
+		return Prerelease() ? !askedPrerelease && !(asked && yes) : !asked;
+	}
+
+	bool Wanted(bool yes, bool asked, bool askedPrerelease)
+	{
+		return Available() && (Unanswered(yes, asked, askedPrerelease) ? Prerelease() : yes);
+	}
+
 	std::string Scrub(std::string_view text, const std::vector<std::string>& secrets)
 	{
 		const std::string known = RemoveSecrets(text, secrets);

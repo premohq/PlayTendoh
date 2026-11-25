@@ -27,6 +27,7 @@ namespace ps5shell
 	{
 		m_settings.ui.reports = yes;
 		m_settings.ui.reportsAsked = true;
+		m_settings.ui.reportsAskedPrerelease |= ps5reports::Prerelease();
 		SaveSettings();
 		ps5reports::SetEnabled(ps5reports::Available() && yes);
 		ps5log::Line("[reports] {}", yes ? "the player said yes" : "the player said not now");

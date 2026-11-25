@@ -179,9 +179,11 @@ namespace ps5settings
 		int layout = 0;				 // the Library's layout: 0 Classic, 1 Orbit (Make it yours, Settings > Launcher)
 		bool layoutChosen = false;	 // asked once, on a first start or the first start of 6.0
 		bool setupDone = false;		 // the Setup check was shown once
-		// reports to the project (app/reports.h): off until the player says yes, asked once (6.0)
+		// reports to the project (app/reports.h): off until the player says yes, asked once (6.0); in a
+		// nightly, on until the player says no in one (ps5reports::Wanted)
 		bool reports = false;
 		bool reportsAsked = false;
+		bool reportsAskedPrerelease = false; // answered in a nightly
 		// the sides the bar offers, Wii U 1, 3DS 2, DS 4, Switch 8 (Settings > Launcher > Sides, and the
 		// first start's Make it yours); at least one
 		int sides = 15 | (1 << ps5retro::kSideCount); // the first four and Switch 2, after every ps5retro::kSystems side

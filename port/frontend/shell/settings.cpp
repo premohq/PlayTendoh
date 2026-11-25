@@ -1520,7 +1520,7 @@ namespace ps5shell
 					notices->dimmed = true;
 				// reports to the project (app/reports.h): the first start's question, changed here
 				if (ps5reports::Available())
-					toggle("reports", Tr("Send reports"), settings.ui.reports, Tr("How games run, with nothing about you."),
+					toggle("reports", Tr("Send reports"), ps5reports::Wanted(settings.ui.reports, settings.ui.reportsAsked, settings.ui.reportsAskedPrerelease), Tr("How games run, with nothing about you."),
 						// tr: {0} is the address of the page that lists every field a report has
 						TrF("When a game ends, a short report is sent: the game, how it ended, its settings, the PS5's firmware and model, and the end of the log with addresses and folder names removed. Never your PSN name, serial, addresses, accounts or saves. Nothing is sent while you play. Off deletes reports waiting to be sent. Every field: {0}",
 							ps5reports::kExplained));
@@ -2550,6 +2550,7 @@ namespace ps5shell
 			{
 				settings.ui.reports = on;
 				settings.ui.reportsAsked = true;
+				settings.ui.reportsAskedPrerelease |= ps5reports::Prerelease();
 			}
 			else if (id == "accountperuser")
 				settings.accountPerUser = on;
@@ -2718,7 +2719,7 @@ namespace ps5shell
 		if (id == "remote")
 			ps5stream::Configure(m_settings.remoteScreen);
 		if (id == "reports")
-			ps5reports::SetEnabled(ps5reports::Available() && m_settings.ui.reports); // off: what waits is deleted now
+			ps5reports::SetEnabled(ps5reports::Wanted(m_settings.ui.reports, m_settings.ui.reportsAsked, m_settings.ui.reportsAskedPrerelease)); // off: what waits is deleted now
 		if (id == "boxart")
 		{
 			ps5boxart::SetEnabled(m_settings.boxArt);

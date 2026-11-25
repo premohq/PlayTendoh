@@ -162,6 +162,7 @@ namespace ps5shell
 		case StartStep::Reports:
 			m_settings.ui.reports = focus == 0;
 			m_settings.ui.reportsAsked = true;
+			m_settings.ui.reportsAskedPrerelease |= ps5reports::Prerelease();
 			SaveSettings();
 			ps5reports::SetEnabled(ps5reports::Available() && m_settings.ui.reports);
 			break;

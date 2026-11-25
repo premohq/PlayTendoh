@@ -398,7 +398,7 @@ int main(int argc, char* argv[])
 		ps5reports::SetSecrets(secrets);
 	}
 	// before anything below can end a game's report (Eden's result, ps5reports::Ended)
-	ps5reports::SetEnabled(ps5reports::Available() && privileges.filesystem && settings.ui.reports);
+	ps5reports::SetEnabled(privileges.filesystem && ps5reports::Wanted(settings.ui.reports, settings.ui.reportsAsked, settings.ui.reportsAskedPrerelease));
 	if (!tile.rom.empty())
 		ps5log::Line("[main] a home screen tile: --rom {}{} ({} side)", tile.rom, tile.exitAfterGame ? " --exit-after-game" : "",
 			ps5launcher::SideTitle(tile.side));

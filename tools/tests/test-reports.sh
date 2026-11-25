@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # The reports on a PC (tools/tests/test-reports.cpp, port/app/reports.cpp): the scrubber, a report made
 # from a log full of made-up personal data, the session's endings, the player's no, the outbox's limits,
-# the emulator's own logs; then the intake's own checks (tools/log-intake/test.mjs) when node is there,
+# the emulator's own logs, the answers' rules in a release and in a nightly; then the intake's own checks (tools/log-intake/test.mjs) when node is there,
 # with a report the app wrote posted to the Worker. Needs clang-18 (or g++) and RapidJSON (tools/deps.py
 # fetch rapidjson, else the system's). Prints PASS lines; exits 1 on a failure.
 set -euo pipefail
@@ -19,6 +19,12 @@ mkdir -p "$work/reports" "$work/data"
     -o "$work/test-reports-plain"
 "${CC:-cc}" -shared -fPIC "$root/tools/tests/refuse-lstat.c" -o "$work/refuse-lstat.so" -ldl
 REFUSE_LSTAT_UNDER="$work/data" LD_PRELOAD="$work/refuse-lstat.so" "$work/test-reports-plain" "$work/data" | grep -v '^PASS' || true
+[[ ${PIPESTATUS[0]} -eq 0 ]]
+# again as a nightly with an intake (Prerelease, Available), for the answers' rules (Answers)
+"$compiler" -std=c++20 -O1 -DPLAYTENDOH_PRERELEASE=1 '-DPLAYTENDOH_REPORT_URL="https://reports.example.invalid/v1/report"' -I"$root/port" \
+    -I"$root/.deps/rapidjson/include" "$root/tools/tests/test-reports.cpp" "$root/port/app/reports.cpp" -o "$work/test-reports-nightly"
+mkdir -p "$work/nightly"
+"$work/test-reports-nightly" "$work/nightly" | grep -E '^FAIL|before the answer|asked again|not asked again' || true
 [[ ${PIPESTATUS[0]} -eq 0 ]]
 if command -v node >/dev/null; then
     node "$root/tools/log-intake/test.mjs" "$work/reports/sample-report.json"

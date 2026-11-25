@@ -40,14 +40,14 @@ namespace ps5shell
 			m_screenAt = m_now;
 		};
 		auto reports = [this, back] {
-			if (ps5reports::Available() && !m_settings.ui.reportsAsked)
+			if (ps5reports::Available() && ps5reports::Unanswered(m_settings.ui.reports, m_settings.ui.reportsAsked, m_settings.ui.reportsAskedPrerelease))
 				ReportsOpen(back);
 			else
 				back();
 		};
 		if (!m_settings.ui.layoutChosen)
 			LayoutOpen(reports);
-		else if (ps5reports::Available() && !m_settings.ui.reportsAsked)
+		else if (ps5reports::Available() && ps5reports::Unanswered(m_settings.ui.reports, m_settings.ui.reportsAsked, m_settings.ui.reportsAskedPrerelease))
 			ReportsOpen(back);
 	}
 

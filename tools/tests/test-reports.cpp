@@ -422,11 +422,25 @@ static void SwitchLogs(const std::string& root)
 	SetEnabled(false);
 }
 
+// The player's answers (Unanswered, Wanted): a release asks and sends nothing until a yes; a nightly
+// (Prerelease) sends until a no in one, and asks once more a player who said no in a release
+static void Answers()
+{
+	const bool nightly = Prerelease(), sends = Available();
+	Check(Unanswered(false, false, false), "never asked: the question is asked");
+	Check(Wanted(false, false, false) == (sends && nightly),
+		nightly ? "a nightly sends before the answer" : "a release sends nothing before the answer");
+	Check(!Unanswered(true, true, false) && Wanted(true, true, false) == sends, "a yes from any build: not asked again, on");
+	Check(Unanswered(false, true, false) == nightly && Wanted(false, true, false) == (sends && nightly),
+		nightly ? "a release's no: asked again in a nightly, on until then" : "a no: off, not asked again");
+	Check(!Unanswered(false, true, true) && !Wanted(false, true, true), "a nightly's no: off, not asked again");
+}
 
 int main(int argc, char* argv[])
 {
 	if (argc != 2)
 		return 2;
+	Answers();
 	Scrubbing();
 	Sessions(argv[1]);
 	EmulatorLogs(argv[1]);

@@ -146,7 +146,7 @@ namespace ps5shell
 		ps5boxart::SetSpines(m_settings.ui.boxArt3d);
 		// reports to the project: kept in the data folder's reports/, and only with the player's yes
 		ps5reports::SetFolder(ps5paths::Root() + "/reports");
-		ps5reports::SetEnabled(ps5reports::Available() && m_settings.ui.reports);
+		ps5reports::SetEnabled(ps5reports::Wanted(m_settings.ui.reports, m_settings.ui.reportsAsked, m_settings.ui.reportsAskedPrerelease));
 		ps5catalog::Load();
 		m_start = m_now = m_lastFrame = host.clock();
 		m_sideMix.Snap(1); // the backdrop shows from the first frame; switching sides fades it in again
@@ -229,7 +229,7 @@ namespace ps5shell
 		{
 			// reports to the project, never asked yet (a start that went to the Setup check instead): asked
 			// before the side, on a fresh start only
-			if (ps5reports::Available() && !m_settings.ui.reportsAsked && !returning && m_status.autoLaunch.empty())
+			if (ps5reports::Available() && ps5reports::Unanswered(m_settings.ui.reports, m_settings.ui.reportsAsked, m_settings.ui.reportsAskedPrerelease) && !returning && m_status.autoLaunch.empty())
 				ReportsOpen([this] { OpenSide(m_side, true); });
 			else
 			{

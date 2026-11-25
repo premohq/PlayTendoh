@@ -27,6 +27,15 @@ namespace ps5reports
 	// Wii's, the systems' own programs) lost its report, and each start made a new install ID.
 	const char* Url();
 	bool Available();
+	// A nightly (a pre-release build, make's CHANNEL; PLAYTENDOH_PRERELEASE) sends reports from its first
+	// start, until the player says no in a nightly; a release sends nothing until a yes. Read in reports.cpp.
+	bool Prerelease();
+	// Whether the question is still to be asked, by the player's answers (ps5cemu.json's reports,
+	// reportsAsked and reportsAskedPrerelease): in a release, until answered; in a nightly, until answered
+	// in one, a yes from any build counting
+	bool Unanswered(bool yes, bool asked, bool askedPrerelease);
+	// Whether reports are on, by those answers: a nightly's unanswered question is a yes
+	bool Wanted(bool yes, bool asked, bool askedPrerelease);
 	// docs/REPORTS.md, field by field what a report holds: the question and Settings point to it
 	constexpr const char* kExplained = "https://github.com/premohq/PlayTendoh/blob/HEAD/docs/REPORTS.md";
 	constexpr int kSchema = 1;

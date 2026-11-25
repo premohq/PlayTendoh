@@ -7,9 +7,14 @@ scrubbed), `port/app/report_send.cpp` (sending) and `tools/log-intake` (where it
 
 ## When
 
-- **Only with your yes.** Playtendoh asks once, on its first start (or the first start of 6.0), and
-  Settings > Online > *Send reports* changes it at any time. Turning it off deletes the reports
+- **In a release, only with your yes.** Playtendoh asks once, on its first start (or the first start of
+  6.0), and Settings > Online > *Send reports* changes it at any time. Turning it off deletes the reports
   waiting to be sent and the install ID at once.
+- **In a nightly** (a test build of what comes next, made from the `nightly` branch: `make`'s `CHANNEL`,
+  and its ZIP is named `-nightly`), reports are on from its first start, so the problems testers hit
+  reach the project. It still asks once, and *Not now* there, or Settings > Online > *Send reports*,
+  turns them off in every nightly after. A no given in a release is asked once more in a nightly; a yes
+  from any build counts.
 - **Never while you play.** As a game starts, the launcher notes it; when the launcher is back, that
   becomes a report in the data folder's `reports/outbox/`, and the outbox is sent a few seconds later,
   on its own, while the launcher is idle. Starting a game stops a send.
