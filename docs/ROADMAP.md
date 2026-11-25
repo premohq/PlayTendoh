@@ -121,7 +121,8 @@ checked by reading and compiling. Before a release:
 
 Every bug players report on the Discord server and GitHub that no commit on GitHub fixes yet: a sweep of
 the server (20 October to 24 November 2026, 146 people) and the open issues, checked against `Playtendoh`
-at `f896fc1` on 24 November and brought up to date on 25 November. About sixty reports, fifty-three bugs.
+at `f896fc1` on 24 November and brought up to date on 25 November. About sixty reports, fifty-three bugs;
+below them, the features players asked for.
 Players are counted, never named ([CRASH-TRIAGE.md](CRASH-TRIAGE.md)). Versions are the build each report
 was made on: 5.1.0 is the public release, the 6.0 test build is 13 November's, the Switch 2 alpha the
 testers' of 23 November. For logs, ask for **Settings > Diagnostics > Copy logs to USB**. Pick one up and
@@ -216,12 +217,44 @@ One report each and no log yet: ask for one before anything else.
     ([#15](https://github.com/premohq/PlayTendoh/issues/15)); on the Switch, Mario & Luigi: Brothership
     (a minute of low frames at a time), Monster Hunter Generations Ultimate (under 30 fps), Metroid Prime
     Remastered (48 to 54 fps at area changes) and Yo-kai Watch (crackle and judder); on the 3DS,
-    Majora's Mask 3D (17 to 20 fps in cutscenes). Three players asked for settings that suit each game:
-    [Settings for each game, picked by the app](#settings-for-each-game-picked-by-the-app).
+    Majora's Mask 3D (17 to 20 fps in cutscenes).
 12. **Wii U, from before:** a renamed account's name in games: Tekken Tag Tournament 2 still showed
     `player1:default`, Cemu's first account's name, after `patches/cemu/0045`, even with a new account:
     check on a console which account it ran on. Breath of the Wild's 60 fps packs: one makes the game
     slow motion, the other does nothing (5.0.1).
+
+#### Asked for: features, after the bugs
+
+What players asked for on the server, with how many: below every bug above. Where the roadmap already has
+it, the link.
+
+- **The DS's 3D above its own resolution, at 60 fps** (3 players, #100): [D5](#d5).
+- **Settings that suit each game, picked for it** (3): [Settings for each game, picked by the
+  app](#settings-for-each-game-picked-by-the-app).
+- **Network shares for the Switch and the Switch 2** (2, #101): [N0](#n0), then [N5](#n5).
+- **The Wii Balance Board** (2): it pairs through the DolphinBar and the games do not see it. For Porpoise
+  X; Phononenom has it on their list.
+- **Netplay on the classics, and RetroAchievements' hardcore mode** (2 between them): hardcore is
+  [T2](#t2).
+- **Saves other emulators can use, and RomM's sync seeing the Switch's saves** (2, and #104's second
+  comment).
+- **Wii U discs, a real GamePad, and a disc drive for Wii discs** (2 between them): the GamePad was left
+  out (#44, closed as not planned).
+- **Switch 2 dumps as `.nsp`, not only `.nup`** (1): the side should take either; check that its library
+  lists them.
+- **A European Wii U game in a language of the player's choosing** (1), as the Switch has.
+- **The PS Move and PS Navigation controllers** (1): the owner will look.
+- **Breath of the Wild in split screen** (1): needs an example of how it is done elsewhere.
+- **The app closed when it stops answering** (1): with [S3](#s3).
+- **A check that a game's files are not damaged** (1).
+- **GBA link through Porpoise's own mGBA** (the team: Phononenom has a patch): for Porpoise X.
+- **The Persona-style launcher back** (1): 5.1.0 made themes skins of one layout; as a theme,
+  [L12](#l12).
+- **Every system's files under one folder, `/data/playtendoh/<system>`** (1): [Next: a folder for each
+  emulator](#next-a-folder-for-each-emulator).
+
+Declined: other companies' systems (PlayStation, Genesis, Dreamcast, Neo Geo, MAME; 2 asked): Playtendoh
+plays Nintendo's.
 
 **Fixed in code, in no public build yet:** the Wii U installs stuck at 0% (#96; six players hit it on the
 Discord, its most common Wii U complaint), the crash on reaching Settings > Play time (`724f692`; 2), the
