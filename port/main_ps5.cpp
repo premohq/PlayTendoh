@@ -30,6 +30,7 @@
 #include "azahar/library.h"
 #include "eden/eden.h"
 #include "eden/library.h"
+#include "eden/switch_file.h"
 #include "eglantine/launch.h"
 #include "esde/esde.h"
 #include "frontend/launcher.h"
@@ -271,9 +272,14 @@ namespace
 		for (const char* nx : {".nsp", ".xci"})
 			if (extension == nx)
 				tile.side = ps5launcher::System::Switch;
-		// a game folder's ExeFS main (a Switch 2 title, eden/library.h)
-		if (ps5eden::IsExeFsMain(tile.rom))
+		// a Switch 2 game: a .nup, an .nsp or .xci its library listed (a Switch 2 dump), or a game folder's
+		// ExeFS main (eden/library.h). Not the Wii U's, whose start asked for a disc key in Cemu's keys.txt
+		if (ps5eden::IsSwitch2PackageName(tile.rom) || ps5eden::IsExeFsMain(tile.rom))
 			tile.side = ps5launcher::System::Switch2;
+		else if (tile.side == ps5launcher::System::Switch)
+			for (const ps5catalog::Entry& entry : ps5catalog::Games(ps5catalog::System::Switch2))
+				if (entry.game.path.string() == tile.rom)
+					tile.side = ps5launcher::System::Switch2;
 		// the other sides' games, by their file type (a GameCube or Wii disc by its header)
 		if (const int retro = ps5retro::IdentifySystem(tile.rom); ps5retro::IsRetro(retro))
 			tile.side = (ps5launcher::System)retro;
