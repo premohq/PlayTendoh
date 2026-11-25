@@ -40,6 +40,20 @@ int main(int argc, char** argv)
 	// a front end's media beside the games (ES-DE's covers, manuals, videos): not looked into
 	Put(root / "roms/covers/F.nes", std::string("NES\x1a", 4) + std::string(12, '\0')); Put(root / "roms/Videos/G.nes", std::string("NES\x1a", 4) + std::string(12, '\0'));
 	Check(ps5retro::Scan("nes", (root / "roms").string(), error).size() == 2, "a front end's covers and videos folders are not searched");
+	// the Game Boy's and the Game Boy Color's shared folder: a .zip on the side of the game in it (none for no game), a .7z on both
+	auto zip = [](const std::string& member) {
+		std::string header("PK\x03\x04", 4); header += std::string(22, '\0');
+		header += char(member.size() & 0xff); header += char(member.size() >> 8); header += std::string(2, '\0');
+		return header + member + "data";
+	};
+	Put(root / "gb/Mono.zip", zip("Mono (World).gb")); Put(root / "gb/Color.ZIP", zip("Color (USA).GBC")); Put(root / "gb/Notes.zip", zip("readme.txt"));
+	Put(root / "gb/Either.7z", std::string("7z\xbc\xaf\x27\x1c", 6) + std::string(32, '\0')); Put(root / "gb/Plain.gb");
+	const auto mono = ps5retro::Scan("gb", (root / "gb").string(), error), color = ps5retro::Scan("gbc", (root / "gb").string(), error);
+	auto names = [](const std::vector<ps5emu::Game>& games) { std::string all; for (const auto& game : games) all += game.path.filename().string() + ","; return all; };
+	Check(names(mono) == "Either.7z,Mono.zip,Plain.gb,", "the Game Boy lists its games in .zip and .7z, not a Game Boy Color's .zip or one of no game");
+	Check(names(color) == "Color.ZIP,Either.7z,", "the Game Boy Color lists its games in .zip and .7z, not a Game Boy's .zip or one of no game");
+	Check(ps5retro::HasExtension("snes", "Game.ZIP") && ps5retro::HasExtension("vb", "Game.7z") && ps5retro::HasExtension("sgb", "Game.zip"),
+		"the Super NES, the Virtual Boy and the Super Game Boy take .zip and .7z");
 	Check(ps5retro::Scan("n64", (root / "roms").string(), error).size() == 1, "N64 scan isolates its ROM formats");
 	Check(ps5retro::Scan("gamecube", (root / "roms").string(), error).size() == 1, "GameCube scan excludes Wii channels");
 	Check(ps5retro::Scan("wii", (root / "roms").string(), error).size() == 1, "Wii scan excludes GameCube discs and includes channels");

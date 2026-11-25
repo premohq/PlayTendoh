@@ -113,8 +113,30 @@ namespace ps5retro
 			}
 		}
 
+		// The name of a ZIP's first file, from its local header (PK\3\4, the name's length at 26, the name
+		// at 30): empty when it cannot be read
+		std::string FirstZipName(const fs::path& path)
+		{
+			unsigned char header[30]{};
+			std::ifstream in(path, std::ios::binary);
+			if (!in.read(reinterpret_cast<char*>(header), sizeof(header)) || header[0] != 'P' || header[1] != 'K' || header[2] != 3 || header[3] != 4)
+				return {};
+			std::string name(size_t(header[26] | header[27] << 8), '\0');
+			if (name.empty() || !in.read(name.data(), (std::streamsize)name.size()))
+				return {};
+			for (char& c : name) c = char(std::tolower((unsigned char)c));
+			return name;
+		}
+
 		bool DiscMatches(std::string_view side, const fs::path& path)
 		{
+			// the Game Boy and the Game Boy Color share a games folder: a .zip goes to the side its game's
+			// file is for, and one that holds neither to none (a .7z, whose names are not at its start, to both)
+			if ((side == "gb" || side == "gbc") && Extension(path) == ".zip")
+			{
+				const std::string name = FirstZipName(path);
+				return side == "gbc" ? name.ends_with(".gbc") || name.ends_with(".cgb") : name.ends_with(".gb");
+			}
 			if (side != "gamecube" && side != "wii") return true;
 			const auto ext = Extension(path);
 			unsigned char header[0x100]{};
@@ -138,15 +160,15 @@ namespace ps5retro
 
 	std::string_view Formats(std::string_view side)
 	{
-		if (side == "gb") return ".gb";
-		if (side == "gbc") return ".gbc";
+		if (side == "gb") return ".gb .zip .7z";
+		if (side == "gbc") return ".gbc .zip .7z";
 		if (side == "gba") return ".gba .zip .7z";
 		if (side == "nes") return ".nes .unf .unif .fds .zip .7z";
-		if (side == "snes") return ".sfc .smc .swc .fig .bs .st";
-		if (side == "vb") return ".vb .vboy";
+		if (side == "snes") return ".sfc .smc .swc .fig .bs .st .zip .7z";
+		if (side == "vb") return ".vb .vboy .zip .7z";
 		if (side == "pokemini") return ".min";
 		if (side == "fds") return ".fds";
-		if (side == "sgb") return ".gb .gbc";
+		if (side == "sgb") return ".gb .gbc .zip .7z";
 		if (side == "gw") return ".mgw";
 		if (side == "satellaview") return ".bs";
 		if (side == "vs") return ".nes .zip .7z";
