@@ -401,6 +401,8 @@ namespace ps5shell
 		void LayoutClassicPreview(Canvas& canvas, const Box& box);
 		// Reports to the project (app/reports.h): asked once, then Settings > Online
 		void ReportsOpen(std::function<void()> then);
+		// the reports question, never answered yet, then then: before a start's Setup check
+		void ReportsAskThen(std::function<void()> then);
 		void ReportsUpdate(const ui::Press& press);
 		void ReportsDraw(Canvas& canvas);
 		void ReportsAnswer(bool yes);

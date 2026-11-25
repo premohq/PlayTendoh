@@ -223,7 +223,13 @@ namespace ps5shell
 		else if (then == NewsThen::Welcome)
 			StartOpen(false); // then the side
 		else if (then == NewsThen::Setup)
-			SetupOpen(true); // then the side (FinishStart)
+		{
+			// the reports question first, never asked yet: the Setup check goes on to the side (FinishStart)
+			if (!returning && m_status.autoLaunch.empty())
+				ReportsAskThen([this] { SetupOpen(true); });
+			else
+				SetupOpen(true); // then the side (FinishStart)
+		}
 		else if (then == NewsThen::NewOptions)
 			WelcomeOpen(); // then the side
 		else

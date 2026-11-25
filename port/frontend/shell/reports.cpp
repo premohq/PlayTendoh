@@ -7,6 +7,7 @@
 #include "shell_internal.h"
 #include "../../app/reports.h"
 #include "../../ps5/log.h"
+#include "../../ps5/privilege.h"
 
 #include <algorithm>
 
@@ -21,6 +22,17 @@ namespace ps5shell
 		m_onBar = false;
 		Show(ScreenId::Reports);
 		m_screenAt = m_now;
+	}
+
+	void Shell::ReportsAskThen(std::function<void()> then)
+	{
+		// a console whose start goes to the Setup check (no HEN, or no JIT) goes there every time, and from
+		// it to the side: the question comes first, where the answer can be kept (the storage is there)
+		if (ps5reports::Available() && ps5reports::Unanswered(m_settings.ui.reports, m_settings.ui.reportsAsked, m_settings.ui.reportsAskedPrerelease) &&
+			ps5privilege::Current().filesystem)
+			ReportsOpen(std::move(then));
+		else
+			then();
 	}
 
 	void Shell::ReportsAnswer(bool yes)

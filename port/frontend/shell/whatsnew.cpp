@@ -64,7 +64,7 @@ namespace ps5shell
 		switch (m_newsThen)
 		{
 		case NewsThen::Welcome: StartOpen(false); break; // then the side
-		case NewsThen::Setup: SetupOpen(true); break;	  // then the side (FinishStart)
+		case NewsThen::Setup: ReportsAskThen([this] { SetupOpen(true); }); break; // the reports question first, then the side (FinishStart)
 		case NewsThen::NewOptions: WelcomeOpen(); break;
 		case NewsThen::Side: OpenSide(m_side, !m_prepared); break;
 		}
