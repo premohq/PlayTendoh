@@ -385,6 +385,13 @@ namespace ps5actions
 			const std::string path = JoinPath(folder, name);
 			if (IsFolder(path + "/code") || IsFile(path + "/title.tmd"))
 				count++;
+			else
+			{
+				// Code in capitals, as some dumps name it (Cemu reads it so: patches/cemu 0053)
+				bool read = false;
+				const auto parts = ListEntries(path, true, read);
+				count += std::any_of(parts.begin(), parts.end(), [](const std::string& part) { return Lower(part) == "code"; });
+			}
 		}
 		return count;
 	}

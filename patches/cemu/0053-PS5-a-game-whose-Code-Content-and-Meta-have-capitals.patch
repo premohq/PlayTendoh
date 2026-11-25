@@ -1,0 +1,123 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: premohq <48417750+premohq@users.noreply.github.com>
+Date: Tue, 24 Nov 2026 17:00:00 +0000
+Subject: [PATCH] PS5: a game whose Code, Content and Meta have capitals is
+ listed
+
+The scan took a folder with code, content and meta in any case (boost::iequals), then DetectFormat
+looked for them in small letters, which the PS5's storage tells apart: an unpacked game dumped with
+Code, Content and Meta was found and left out, where a .wua beside it was listed. TitleInfo::PS5TitlePart
+finds each part as the folder names it, for DetectFormat, the MLC's titles and Mount, so the game is
+listed and its content and code mounted from the folders it has.
+---
+ src/Cafe/TitleList/TitleInfo.cpp | 19 +++++++++++++++----
+ src/Cafe/TitleList/TitleInfo.h   |  3 +++
+ src/Cafe/TitleList/TitleList.cpp | 16 ++++++++--------
+ 3 files changed, 26 insertions(+), 12 deletions(-)
+
+diff --git a/src/Cafe/TitleList/TitleInfo.cpp b/src/Cafe/TitleList/TitleInfo.cpp
+index 1213105..96fe13a 100644
+--- a/src/Cafe/TitleList/TitleInfo.cpp
++++ b/src/Cafe/TitleList/TitleInfo.cpp
+@@ -177,6 +177,17 @@ bool TitleInfo::ParseWuaTitleFolderName(std::string_view name, TitleId& titleIdO
+ 	return true;
+ }
+ 
++fs::path TitleInfo::PS5TitlePart(const fs::path& folder, std::string_view part)
++{
++	std::error_code ec;
++	if (fs::exists(folder / part, ec))
++		return folder / part;
++	for (fs::directory_iterator it(folder, ec), end; !ec && it != end; it.increment(ec))
++		if (boost::iequals(_pathToUtf8(it->path().filename()), part))
++			return it->path();
++	return folder / part;
++}
++
+ bool TitleInfo::DetectFormat(const fs::path& path, fs::path& pathOut, TitleDataFormat& formatOut)
+ {
+ 	std::error_code ec;
+@@ -192,7 +203,7 @@ bool TitleInfo::DetectFormat(const fs::path& path, fs::path& pathOut, TitleDataF
+ 				parentPath = parentPath.parent_path();
+ 				// next to content and meta?
+ 				std::error_code ec;
+-				if (fs::exists(parentPath / "content", ec) && fs::exists(parentPath / "meta", ec))
++				if (fs::exists(PS5TitlePart(parentPath, "content"), ec) && fs::exists(PS5TitlePart(parentPath, "meta"), ec))
+ 				{
+ 					formatOut = TitleDataFormat::HOST_FS;
+ 					pathOut = parentPath;
+@@ -275,7 +286,7 @@ bool TitleInfo::DetectFormat(const fs::path& path, fs::path& pathOut, TitleDataF
+ 	{
+ 		// does it point to the root folder of a title?
+ 		std::error_code ec;
+-		if (fs::exists(path / "content", ec) && fs::exists(path / "meta", ec) && fs::exists(path / "code", ec))
++		if (fs::exists(PS5TitlePart(path, "content"), ec) && fs::exists(PS5TitlePart(path, "meta"), ec) && fs::exists(PS5TitlePart(path, "code"), ec))
+ 		{
+ 			formatOut = TitleDataFormat::HOST_FS;
+ 			pathOut = path;
+@@ -395,8 +406,8 @@ bool TitleInfo::Mount(std::string_view virtualPath, std::string_view subfolder,
+ 	cemu_assert(m_isValid);
+ 	if (m_titleFormat == TitleDataFormat::HOST_FS)
+ 	{
+-		fs::path hostFSPath = m_fullPath;
+-		hostFSPath.append(subfolder);
++		// PS5: code, content or meta as the folder names it (PS5TitlePart)
++		fs::path hostFSPath = subfolder.empty() || subfolder.find('/') != std::string_view::npos ? m_fullPath / subfolder : PS5TitlePart(m_fullPath, subfolder);
+ 		bool r = FSCDeviceHostFS_Mount(std::string(virtualPath).c_str(), _pathToUtf8(hostFSPath), mountPriority);
+ 		cemu_assert_debug(r);
+ 		if (!r)
+diff --git a/src/Cafe/TitleList/TitleInfo.h b/src/Cafe/TitleList/TitleInfo.h
+index 7937947..086dd46 100644
+--- a/src/Cafe/TitleList/TitleInfo.h
++++ b/src/Cafe/TitleList/TitleInfo.h
+@@ -249,6 +249,9 @@ public:
+ 
+ 	static std::string GetUniqueTempMountingPath();
+ 	static bool ParseWuaTitleFolderName(std::string_view name, TitleId& titleIdOut, uint16& titleVersionOut);
++	// PS5: a title folder's code, content or meta as the drive names it: Code, Content and Meta too,
++	// which the PS5's storage, unlike Windows', tells apart from code, content and meta
++	static fs::path PS5TitlePart(const fs::path& folder, std::string_view part);
+ 
+ private:
+ 	void Copy(const TitleInfo& other)
+diff --git a/src/Cafe/TitleList/TitleList.cpp b/src/Cafe/TitleList/TitleList.cpp
+index 4917784..c057373 100644
+--- a/src/Cafe/TitleList/TitleList.cpp
++++ b/src/Cafe/TitleList/TitleList.cpp
+@@ -211,9 +211,8 @@ void _RemoveTitleFromMultimap(TitleInfo* titleInfo)
+ }
+ 
+ // PS5: a title found but left out, and why, in log.txt: the games a library does not list are said
+-// there instead of nowhere. The PS5's storage tells capitals from small letters, so a folder whose
+-// code, content and meta folders are named otherwise is found by the scan, which ignores case, and
+-// then refused by DetectFormat, which does not.
++// there instead of nowhere. Code, Content and Meta in capitals are read as they are named
++// (TitleInfo::PS5TitlePart).
+ static void PS5LogUnusableTitle(const fs::path& path, const TitleInfo* titleInfo)
+ {
+ 	std::error_code ec;
+@@ -224,8 +223,9 @@ static void PS5LogUnusableTitle(const fs::path& path, const TitleInfo* titleInfo
+ 	case TitleInfo::InvalidReason::NO_DISC_KEY: why = "its disc key is not in keys.txt"; break;
+ 	case TitleInfo::InvalidReason::NO_TITLE_TIK: why = "its title.tik, or its meta, app or cos XML, is missing"; break;
+ 	default:
+-		if (fs::is_directory(path, ec) && !(fs::exists(path / "code", ec) && fs::exists(path / "content", ec) && fs::exists(path / "meta", ec)))
+-			why = "its code, content and meta folders must be named in small letters";
++		if (fs::is_directory(path, ec) && !(fs::is_directory(TitleInfo::PS5TitlePart(path, "code"), ec) &&
++			fs::is_directory(TitleInfo::PS5TitlePart(path, "content"), ec) && fs::is_directory(TitleInfo::PS5TitlePart(path, "meta"), ec)))
++			why = "its code, content and meta are not all folders";
+ 		break;
+ 	}
+ 	cemuLog_log(LogType::Force, "Title not listed: {}: {}", _pathToUtf8(path), why);
+@@ -466,9 +466,9 @@ void CafeTitleList::ScanMLCPath(const fs::path& path)
+ 		if(containsNoHexCharacter)
+ 			continue;
+ 
+-		if (fs::is_directory(it.path() / "code", ec) &&
+-			fs::is_directory(it.path() / "content", ec) &&
+-			fs::is_directory(it.path() / "meta", ec))
++		if (fs::is_directory(TitleInfo::PS5TitlePart(it.path(), "code"), ec) &&
++			fs::is_directory(TitleInfo::PS5TitlePart(it.path(), "content"), ec) &&
++			fs::is_directory(TitleInfo::PS5TitlePart(it.path(), "meta"), ec))
+ 		{
+ 			TitleInfo* titleInfo = new TitleInfo(it);
+ 			if (titleInfo->IsValid() && titleInfo->ParseXmlInfo())
