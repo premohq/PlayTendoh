@@ -144,8 +144,11 @@ Playtendoh is free. If it brings your games back, you can support it:
 
 ## Install
 
+**New to this? Follow the [step-by-step setup guide](https://premohq.github.io/PlayTendoh/guide/)**: every PS5 and HEN, where each file goes,
+and the fixes for what people run into most. In short:
+
 1. **A PS5 that runs homebrew.** Any firmware up to 13.60, with etaHEN, OnionHEN, or an ELF loader on
-   port 9021. See the [firmware and setup guide](docs/HEN-SETUP.md).
+   port 9021. [Check yours](https://premohq.github.io/PlayTendoh/guide/get-started.html).
 2. **Copy the app.** Download the [6.0.0 ZIP](https://github.com/premohq/PS5-ECAM/raw/releases/PS5-ECAM-v6.0.0.zip) ([release notes](https://github.com/premohq/PlayTendoh/releases/tag/v6.0.0)),
    extract it and copy the `PPSA99360` folder to `/data/homebrew/PPSA99360`.
 3. **Let your HEN in.** etaHEN: add `PPSA99360` to its app jailbreak list. OnionHEN: add `PPSA99360`
@@ -210,11 +213,12 @@ Every shortcut, the in-game menu and the rest are in the [guide](docs/GUIDE.md).
 
 ## Documentation
 
+- [Setup guide](https://premohq.github.io/PlayTendoh/guide/): step by step, from a PS5 to playing, with troubleshooting ([its pages](site/guide))
 - [Guide](docs/GUIDE.md): the launcher, each system, controls, saves, mods, the remote touch screen and where files are kept
 - [Firmware and setup](docs/HEN-SETUP.md) · [Mods](docs/GUIDE.md#mods) · [Compatibility](https://premohq.github.io/PlayTendoh/compatibility.html)
 - [Building from source](docs/BUILDING.md) · [Driver performance](docs/DRIVER-PERFORMANCE.md) · [Roadmap](docs/ROADMAP.md) · [Reports](docs/REPORTS.md)
 - [Contributing](CONTRIBUTING.md): where the app is going, its look and voice, and how to send a change
-- Problems: **Settings > Diagnostics > Copy logs to USB**, then [open an issue](https://github.com/premohq/PlayTendoh/issues/new/choose)
+- Problems: [Troubleshooting](https://premohq.github.io/PlayTendoh/guide/troubleshooting.html) first, then **Settings > Diagnostics > Copy logs to USB** and [open an issue](https://github.com/premohq/PlayTendoh/issues/new/choose)
 
 ## Building
 

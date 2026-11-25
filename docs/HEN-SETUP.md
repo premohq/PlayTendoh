@@ -1,5 +1,10 @@
 # Getting Playtendoh running on any firmware and HEN
 
+> [!TIP]
+> **Setting up for the first time?** The [step-by-step setup guide](https://premohq.github.io/PlayTendoh/guide/) walks through it in order,
+> with a page for each system and the fixes for what people run into most. This page is the detail
+> behind its HEN steps.
+
 Playtendoh is a homebrew app. It does not jailbreak your console; it runs on top of whatever
 jailbreak and HEN you already have, and it is written to work with **any** of them. This page covers
 two separate questions:
