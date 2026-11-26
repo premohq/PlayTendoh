@@ -510,6 +510,14 @@ namespace ui
 				for (float x : {0.16f, 0.54f})
 					Ring({X(x), Y(y), s * 0.3f, s * 0.3f}, s * 0.07f, stroke * 0.85f, colour);
 			break;
+		case Icon::Access: // the accessibility figure: a head, open arms, a body and legs, in a ring
+			Ring({X(0.06f), Y(0.06f), s * 0.88f, s * 0.88f}, s, stroke * 0.85f, colour);
+			dot(0.5f, 0.27f, 0.075f);
+			line(0.27f, 0.41f, 0.73f, 0.41f, 0.07f);
+			line(0.5f, 0.41f, 0.5f, 0.6f, 0.07f);
+			line(0.5f, 0.6f, 0.37f, 0.78f, 0.07f);
+			line(0.5f, 0.6f, 0.63f, 0.78f, 0.07f);
+			break;
 		}
 	}
 

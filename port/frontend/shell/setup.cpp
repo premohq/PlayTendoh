@@ -96,20 +96,6 @@ namespace ps5shell
 			return TrF("{0} GB free", ps5lang::Decimal(gigabytes, gigabytes >= 10 ? 0 : 1));
 		}
 
-		// where a folder is, as a person names it: "USB drive 1 / 3DS"
-		std::string Place(const std::string& folder)
-		{
-			for (const std::string& drive : ConnectedDrives())
-				if (folder == drive || folder.starts_with(drive + "/"))
-				{
-					std::string place = DriveName(drive);
-					for (char c : folder.substr(drive.size()))
-						place += c == '/' ? std::string(" / ") : std::string(1, c);
-					return place;
-				}
-			return folder;
-		}
-
 		// the covers fetched so far, both sides'
 		int Covers()
 		{
@@ -135,8 +121,6 @@ namespace ps5shell
 	void Shell::SetupOpen(bool first)
 	{
 		m_setupFirst = first;
-		// the first start's first question is the language (the PS5's, unless another is chosen)
-		m_setupOnLanguage = first && !m_settings.ui.setupDone;
 		if (!first)
 			m_setupFrom = m_screen == ScreenId::Settings ? ScreenId::Settings : ScreenId::Library;
 		else if (!m_settings.ui.setupDone)
@@ -146,16 +130,42 @@ namespace ps5shell
 			SaveSettings();
 		}
 		RunChecks();
-		// the focus on the first that needs a look
+		// what needs you open, Optional and Ready folded; the focus on the first item (the first that needs you)
+		m_setupOpen[1] = m_setupOpen[2] = false;
 		m_setupRow = 0;
-		for (int i = 0; i < (int)m_checks.size(); i++)
-			if (m_checks[i].state == 1)
-			{
-				m_setupRow = i;
-				break;
-			}
 		m_onBar = false;
 		Show(ScreenId::Setup);
+	}
+
+	std::vector<Shell::SetupItem> Shell::SetupItems() const
+	{
+		// what needs you, a row each; then Optional and Ready, a row each that opens on the rows it holds
+		std::vector<SetupItem> items;
+		for (int i = 0; i < (int)m_checks.size(); i++)
+			if (CheckGroup(m_checks[i]) == 0)
+				items.push_back({i, 0});
+		for (int group : {1, 2})
+		{
+			bool any = false;
+			for (const Check& check : m_checks)
+				any = any || CheckGroup(check) == group;
+			if (!any)
+				continue;
+			items.push_back({-1, group});
+			if (m_setupOpen[group])
+				for (int i = 0; i < (int)m_checks.size(); i++)
+					if (CheckGroup(m_checks[i]) == group)
+						items.push_back({i, group});
+		}
+		return items;
+	}
+
+	const Shell::Check* Shell::SetupFocused() const
+	{
+		const std::vector<SetupItem> items = SetupItems();
+		if (m_setupRow < 0 || m_setupRow >= (int)items.size() || items[m_setupRow].check < 0)
+			return nullptr;
+		return &m_checks[items[m_setupRow].check];
 	}
 
 	void Shell::FinishStart()
@@ -241,15 +251,24 @@ namespace ps5shell
 				const bool runtime = ps5retro::Available(index, Handheld(side).retroBackend);
 				Check games{std::string(ps5launcher::SideName(side)) + "-games", TrF("{0} games", SystemName(side))};
 				games.action = Tr("Choose a folder");
-				games.state = count > 0 && runtime ? 0 : 1;
-				const std::string where = ShortPath(Place(folder), 44);
+				// and where Playtendoh found more of them (discover.cpp); its own folder not made yet reads as none
+				count = std::max(count, FoundGames(side));
+				readable = readable || !ps5settings::ChoseGamesFolder(m_settings, ps5launcher::SideName(side));
+				// no games yet is no problem (the player may have none for it); an emulator missing or a folder
+				// that can't be read is
+				games.state = !runtime || !readable ? 1 : count > 0 ? 0 : 2;
+				// where they are: the place they were found, when all of them were found there
+				const std::string where = ShortPath(FoundGames(side) >= count && !FoundWhere(side).empty() ? FoundWhere(side) : PlaceName(folder), 44);
 				games.detail = !runtime ? Tr("This system's emulator is not in this copy of Playtendoh.") :
 					count > 0			? TrP(count, "{0} game in {1}", "{0} games in {1}", where) :
 					readable			? TrF("None in {0} yet", where) :
 										  TrF("{0} cannot be read", where);
 				games.games = runtime ? count : 0;
 				games.aboutTitle = TrF("{0} games", SystemName(side));
-				games.about = TrF("Put this system's games in {0}, or choose any folder, such as one on a USB drive. Subfolders are searched too.", folder);
+				games.about = ps5settings::ChoseGamesFolder(m_settings, ps5launcher::SideName(side)) ?
+					TrF("This system's games are in {0}, the folder you chose. Subfolders are searched too.", folder) :
+					// tr: {0} is the drop folder, /data/playtendoh
+					TrF("Put this system's games anywhere on a USB drive or in {0}: Playtendoh finds them. Or choose a folder of your own.", "/data/playtendoh");
 				const bool porpoise = ps5retro::Is(index, "gamecube") || ps5retro::Is(index, "wii");
 				games.guide = Guide(porpoise ? "gamecube-wii#games" : "classics#games");
 				// tr: what the QR code opens: "Scan it for the GameCube and Wii page"
@@ -267,13 +286,20 @@ namespace ps5shell
 				count = n3ds ? Count3dsGames(folder) : nds ? CountDsGames(folder) : nx ? ps5eden::CountGames(folder) : nx2 ? ps5eden::CountGames(folder, true) : CountGames(folder);
 				readable = count >= 0;
 			}
+			// and where Playtendoh found more of them (discover.cpp)
+			count = std::max(count, FoundGames(side));
 			// the side's own words, so each keeps its translation
 			const char* gamesTitle = n3ds ? Tr("3DS games") : nds ? Tr("DS games") : nx ? Tr("Switch games") : nx2 ? Tr("Switch 2 games") : Tr("Wii U games");
 			Check games{std::string(ps5launcher::SideName(side)) + "-games", gamesTitle};
 			games.action = Tr("Choose a folder");
-			games.state = count > 0 ? 0 : 1;
+			// the side's own folder not made yet (a side not opened yet) reads as no games; one the player chose
+			// that can't be read needs a look
+			readable = readable || !ps5settings::ChoseGamesFolder(m_settings, ps5launcher::SideName(side));
+			count = std::max(count, 0);
+			games.state = !readable ? 1 : count > 0 ? 0 : 2;
 			games.games = count;
-			const std::string where = ShortPath(Place(folder), 44);
+			// where they are: the place they were found, when all of them were found there
+			const std::string where = ShortPath(FoundGames(side) >= count && !FoundWhere(side).empty() ? FoundWhere(side) : PlaceName(folder), 44);
 			// tr: {1} is a folder
 			games.detail = count > 0 ? TrP(count, "{0} game in {1}", "{0} games in {1}", where) :
 				readable		   ? TrF("None in {0} yet", where) :
@@ -494,26 +520,6 @@ namespace ps5shell
 		}
 		m_checks.push_back(boxArt);
 
-		// where each system's files go: together by default, any of them in a folder of its own when picked
-		// (Settings > Game files > A folder for each system, app/reorganize.h)
-		{
-			Check folders{"folders", Tr("System folders")};
-			folders.state = 2;
-			const ps5reorganize::Layout layout = ps5reorganize::Look(ps5paths::Root(), ps5paths::kDefaultRoot);
-			folders.detail = layout.separated.empty() ? TrF("Together in {0}", ps5paths::Root()) :
-				// tr: the Setup check: how many of the systems that can move have a folder of their own
-				TrP((long long)layout.separated.size(), "{0} system in its own folder", "{0} systems in their own folders");
-			folders.action = Tr("Choose");
-			folders.aboutTitle = Tr("Where each system's files go");
-			folders.about = TrF("Saves, BIOS files and settings for every system are kept together in {0}. You can give the Wii U, 3DS, DS or "
-								"Switch a folder of its own instead. Cross shows them, each with its own switch.",
-				ps5paths::Root());
-			folders.guide = Guide("files");
-			// tr: what the QR code opens: "Scan it for where your files go"
-			folders.guideTitle = Tr("where your files go");
-			m_checks.push_back(folders);
-		}
-
 		// another copy of the app in /data/homebrew or a drive's homebrew folder, beside the one running: the
 		// home screen's tile can start that one instead, so an older version seems to come back after a
 		// restart. Told apart by their eboot.bin, as updates are (ps5paths::RunsFrom: none when the running
@@ -527,9 +533,9 @@ namespace ps5shell
 			{
 				std::string places;
 				for (const std::string& folder : others)
-					places += (places.empty() ? "" : ", ") + Place(folder);
+					places += (places.empty() ? "" : ", ") + PlaceName(folder);
 				const std::string version = CopyVersion(others.front());
-				const std::string where = ShortPath(Place(others.front()), 40);
+				const std::string where = ShortPath(PlaceName(others.front()), 40);
 				Check copies{"copies", Tr("Another copy of Playtendoh")};
 				copies.state = 1;
 				// tr: the Setup check, another copy of the app: {0} is its version, {1} where it is
@@ -545,6 +551,50 @@ namespace ps5shell
 				m_checks.push_back(copies);
 			}
 		}
+		// the look for games and files everywhere (discover.cpp): how it went, Cross looks again
+		{
+			Check look{"discover", Tr("Find games and files")};
+			look.action = Tr("Look now");
+			int found = 0;
+			for (const ps5discover::Place& place : m_discovery.found.places)
+				found += place.games;
+			look.state = m_discovery.ran || ps5discover::Busy() ? 0 : 2;
+			// tr: the Setup check's row for the look for games: what the last look found
+			look.detail = ps5discover::Busy() ? DiscoverStatus() :
+				m_discovery.ran				 ? TrP(found, "Found {0} game on your drives and the PS5", "Found {0} games on your drives and the PS5") :
+											   std::string(Tr("Looks on your USB drives and in /data for games, BIOS and keys"));
+			look.aboutTitle = Tr("Put your games anywhere");
+			// tr: {0} is the drop folder, /data/playtendoh
+			look.about = TrF("Playtendoh looks on your USB drives and extended storage, in /data/homebrew and in {0}, in any folders, for every system's games, BIOS files, Switch keys and firmware, and Wii U disc keys. Games are played where they are. A folder you chose in Settings > Game files is used as it is.",
+				"/data/playtendoh");
+			look.guide = Guide("setup-check#finding-games");
+			// tr: what the QR code opens: "Scan it for the Setup check page"
+			look.guideTitle = Tr("the Setup check page");
+			m_checks.push_back(look);
+			if (!m_discovery.found.files.empty())
+			{
+				Check files{"files", Tr("Files to copy")};
+				files.state = 1;
+				files.action = m_discovery.copying ? "" : Tr("Copy");
+				files.detail = m_discovery.copying ?
+					TrF("Copying your files into place: {0}", ps5lang::Percent((int)(ps5discover::CopyFraction() * 100))) :
+					FilesSummary(m_discovery.found.files);
+				files.aboutTitle = Tr("Found, and not in place yet");
+				std::string list;
+				for (const ps5discover::File& file : m_discovery.found.files)
+				{
+					const std::string to = file.kind == ps5discover::File::Kind::Firmware ? file.to.front() : file.to.front().substr(0, file.to.front().find_last_of('/'));
+					// tr: a file found and where it goes: "Switch keys: from USB drive 1 / switch / prod.keys to /data/eden/keys"
+					list += (list.empty() ? "" : "\n") + TrF("{0}: from {1} to {2}", FileWords(file), PlaceName(file.from), PlaceName(to));
+				}
+				files.about = Tr("Their emulators only read these from folders of their own. Cross copies them there: yours stay where they are, and nothing already there is replaced.") +
+					std::string("\n\n") + list;
+				files.guide = Guide("setup-check#files-to-copy");
+				files.guideTitle = Tr("the Setup check page");
+				m_checks.push_back(files);
+			}
+		}
+
 		// 6.0: what needs a look first, then what is optional, then what is ready, each in the order made
 		std::stable_sort(m_checks.begin(), m_checks.end(), [](const Check& a, const Check& b) {
 			auto rank = [](int state) { return state == 1 ? 0 : state == 2 ? 1 : 2; };
@@ -554,32 +604,15 @@ namespace ps5shell
 
 	void Shell::SetupUpdate(const ui::Press& press)
 	{
-		const int count = (int)m_checks.size();
+		const std::vector<SetupItem> items = SetupItems();
+		const int count = (int)items.size();
 		switch (press.button)
 		{
 		case Button::Up:
 		case Button::Down:
 		{
-			const bool down = press.button == Button::Down;
-			if (m_setupOnLanguage)
-			{
-				if (down && count > 0)
-				{
-					m_setupOnLanguage = false;
-					m_setupRow = 0;
-					m_feedback.Play(ui::Cue::Focus);
-				}
-				else
-					m_feedback.Play(ui::Cue::Edge, press.repeat);
-				break;
-			}
-			const int next = m_setupRow + (down ? 1 : -1);
-			if (next < 0)
-			{
-				m_setupOnLanguage = true; // the language, above the checks
-				m_feedback.Play(ui::Cue::Focus);
-			}
-			else if (next >= count)
+			const int next = m_setupRow + (press.button == Button::Down ? 1 : -1);
+			if (next < 0 || next >= count)
 				m_feedback.Play(ui::Cue::Edge, press.repeat);
 			else
 			{
@@ -590,18 +623,25 @@ namespace ps5shell
 		}
 		case Button::Cross:
 		{
-			if (m_setupOnLanguage)
-			{
-				m_feedback.Play(ui::Cue::Select);
-				OpenLanguagePicker(Tr("Setup"));
-				break;
-			}
-			if (m_setupRow >= count || m_checks[m_setupRow].action.empty())
+			if (m_setupRow < 0 || m_setupRow >= count)
 			{
 				m_feedback.Play(ui::Cue::Denied);
 				break;
 			}
-			const Check& check = m_checks[m_setupRow];
+			// a folded group: opened, or folded again
+			if (items[m_setupRow].check < 0)
+			{
+				bool& open = m_setupOpen[items[m_setupRow].group];
+				open = !open;
+				m_feedback.Play(open ? ui::Cue::Select : ui::Cue::Back);
+				break;
+			}
+			const Check& check = m_checks[items[m_setupRow].check];
+			if (check.action.empty())
+			{
+				m_feedback.Play(ui::Cue::Denied);
+				break;
+			}
 			m_feedback.Play(ui::Cue::Select);
 			if (check.id.ends_with("-games"))
 			{
@@ -610,18 +650,16 @@ namespace ps5shell
 			}
 			else if (check.id == "3ds-system")
 				ArticOpen();
-			else if (check.id == "folders" && !IsRetro())
+			else if (check.id == "discover")
 			{
-				// Settings > Game files, on its A folder for each system
-				SettingsOpen("files", true);
-				const auto rows = SettingRows("files");
-				for (int i = 0; i < (int)rows.size(); i++)
-					if (rows[i].opens == "systemfolders")
-					{
-						m_settingRow = i;
-						OpenSubPage(rows[i]);
-						break;
-					}
+				m_discovery.announce = true;
+				DiscoverStart();
+				RunChecks();
+			}
+			else if (check.id == "files")
+			{
+				DiscoverCopy();
+				RunChecks();
 			}
 			else if (check.id == "boxart")
 			{
@@ -656,15 +694,15 @@ namespace ps5shell
 	{
 		if (m_checks.empty())
 			RunChecks();
-		const int count = (int)m_checks.size();
+		const std::vector<SetupItem> items = SetupItems();
+		const int count = (int)items.size();
 		m_setupRow = std::clamp(m_setupRow, 0, std::max(0, count - 1));
 
-		// what this is, and how far along: a card of glass with one bar, rather than a dash for each check
+		// what this is, and in one line whether anything needs you (6.0: no bar, no count of every check)
 		canvas.PushAlpha(Enter(0));
 		canvas.Text(Style(kOverlineStyle), kSafeX, 92, m_setupFirst ? Tr("Welcome to Playtendoh") : Tr("Help"), Secondary(), 1100, 1);
 		canvas.Text(Style({56, ui::Weight::Bold, 1.1f, -0.8f}), kSafeX, 122, Tr("Let’s check your setup"), kText, 1100, 1);
-		const int ready = (int)std::count_if(m_checks.begin(), m_checks.end(), [](const Check& check) { return check.state != 1; });
-		const int needs = count - ready;
+		const int needs = (int)std::count_if(m_checks.begin(), m_checks.end(), [](const Check& check) { return check.state == 1; });
 		{
 			const Box card{kSafeX, 206, kListWidth, 64};
 			Glass(canvas, card, 32, Surface());
@@ -675,54 +713,29 @@ namespace ps5shell
 			// tr: the Setup check's summary: how many checks need the player, or that every one is ready
 			const std::string headline = needs ? TrP(needs, "{0} thing needs you", "{0} things need you") : std::string(Tr("Everything is ready"));
 			const ui::TextBlock head = canvas.Text(Style({24, ui::Weight::SemiBold, 1.0f}), dot.Right() + 16, card.CentreY() - 13, headline, kText, 420, 1);
-			// tr: the Setup check's summary: {0} checks ready of {1}
-			const std::string counted = TrF("{0} of {1} ready", ready, count);
-			const float countedW = m_fonts.Width(Style({20, ui::Weight::Medium, 1.0f}), counted);
-			canvas.Text(Style({20, ui::Weight::Medium, 1.0f}), card.Right() - 28 - countedW, card.CentreY() - 11, counted, Secondary(), countedW + 1, 1);
-			const float barX = dot.Right() + 16 + head.width + 28, barW = card.Right() - 28 - countedW - 24 - barX;
-			if (barW > 40)
-			{
-				canvas.Rect({barX, card.CentreY() - 4, barW, 8}, 4, Wash(0.10f));
-				canvas.Rect({barX, card.CentreY() - 4, barW * (count ? (float)ready / count : 1.0f), 8}, 4, tone);
-			}
-		}
-
-		// the language, at the right: the PS5's own, until another is chosen
-		{
-			const ui::TextStyle style = Style({24, ui::Weight::Medium, 1.0f});
-			const std::string name = m_settings.ui.language.empty() ? TrF("{0} · same as the PS5", ps5lang::NameOf(ps5lang::Current())) :
-																	  std::string(ps5lang::NameOf(ps5lang::Current()));
-			const float textWidth = std::min(m_fonts.Width(style, name), 520.0f);
-			const float width = 28 + 30 + 14 + textWidth + 14 + 24 + 26;
-			const Box pill{1920 - kSafeX - width, 132, width, 64};
-			const Box drawn = pill.Scaled(1.0f + 0.03f * FocusMix(FocusKey("setup-language"), m_setupOnLanguage));
-			Glass(canvas, drawn, drawn.h / 2, m_setupOnLanguage ? Surface2() : Surface());
-			canvas.Draw(Icon::Globe, {drawn.x + 28, drawn.CentreY() - 15, 30, 30}, kText);
-			canvas.Text(style, drawn.x + 28 + 30 + 14, drawn.CentreY() - 13, name, kText, textWidth + 1, 1);
-			canvas.Draw(Icon::ChevronDown, {drawn.Right() - 26 - 24, drawn.CentreY() - 12, 24, 24}, Secondary());
-			if (m_setupOnLanguage)
-				Focus(drawn, drawn.h / 2);
+			// tr: the Setup check's summary, after how many things need the player: what fixing them does
+			const std::string line = needs ? Tr("Fix these and your games can play.") : Tr("Your games can play.");
+			canvas.Text(Style({20, ui::Weight::Regular, 1.0f}), dot.Right() + 16 + head.width + 18, card.CentreY() - 11, line, Secondary(),
+				card.Right() - 28 - (dot.Right() + 16 + head.width + 18), 1);
 		}
 		canvas.PopAlpha();
 
-		// the checks, in three groups (RunChecks' order): what needs you as full rows, then the optional, then
-		// what is ready, each a slimmer row; a group's name above it. The list glides with the focus.
+		// what needs you, a full row each; then Optional and Ready, a slim row each, folded until opened
+		// (SetupItems). The list glides with the focus.
 		canvas.PushAlpha(Enter(1));
 		canvas.PushOffset(0, (1 - Enter(1)) * 24);
 		constexpr float kListBottom = 1080 - 96, kSlim = 60, kGroupGap = 46;
 		std::vector<float> tops(count);
 		float at = 0;
-		int lastGroup = -1;
 		for (int i = 0; i < count; i++)
 		{
-			const int group = m_checks[i].state == 1 ? 0 : m_checks[i].state == 2 ? 1 : 2;
-			if (group != lastGroup)
-			{
+			// "Needs you" above its rows; a little room before each folded group's row
+			if (i == 0 && items[i].group == 0)
 				at += kGroupGap;
-				lastGroup = group;
-			}
+			else if (items[i].check < 0)
+				at += i == 0 ? 12 : 24;
 			tops[i] = at;
-			at += (group == 0 ? kRowHeight : kSlim) + kRowGap;
+			at += (items[i].group == 0 ? kRowHeight : kSlim) + kRowGap;
 		}
 		const float listHeight = at - kRowGap;
 		const float view = kListBottom - kListTop;
@@ -731,36 +744,55 @@ namespace ps5shell
 		m_setupScroll.Update(m_dt);
 		const float listScroll = m_setupScroll.value;
 		canvas.PushClip({0, kListTop - 12, kSafeX + kListWidth + 24, kListBottom - kListTop + 24});
-		lastGroup = -1;
+		auto inGroup = [&](int group) {
+			return (int)std::count_if(m_checks.begin(), m_checks.end(), [&](const Check& check) { return CheckGroup(check) == group; });
+		};
 		for (int i = 0; i < count; i++)
 		{
-			const Check& check = m_checks[i];
-			const int group = check.state == 1 ? 0 : check.state == 2 ? 1 : 2;
-			const bool slim = group != 0;
-			const Box row{kSafeX, kListTop + tops[i] - listScroll, kListWidth, slim ? kSlim : kRowHeight};
-			if (group != lastGroup)
-			{
-				lastGroup = group;
-				int inGroup = 0;
-				for (const Check& c : m_checks)
-					inGroup += (c.state == 1 ? 0 : c.state == 2 ? 1 : 2) == group;
-				// tr: the Setup check's groups: what needs the player, what is optional, what is ready; {0} how many
-				const std::string name = group == 0 ? TrF("Needs you · {0}", inGroup) : group == 1 ? TrF("Optional · {0}", inGroup) : TrF("Ready · {0}", inGroup);
-				canvas.Text(Style(kOverlineStyle), row.x + 6, row.y - 32, name, group == 0 ? kWarn : Tertiary(), 600, 1);
-			}
-			const bool focused = i == m_setupRow && !m_setupOnLanguage;
+			const SetupItem& item = items[i];
+			const bool slim = item.group != 0;
+			const bool focused = i == m_setupRow;
+			const Box row{kSafeX + (item.check >= 0 && slim ? 24.0f : 0.0f), kListTop + tops[i] - listScroll, kListWidth - (item.check >= 0 && slim ? 24.0f : 0.0f),
+				slim ? kSlim : kRowHeight};
+			if (i == 0 && item.group == 0)
+				// tr: the Setup check: above what needs the player; {0} how many
+				canvas.Text(Style(kOverlineStyle), row.x + 6, row.y - 32, TrF("Needs you · {0}", inGroup(0)), kWarn, 600, 1);
 			Glass(canvas, row, slim ? 18 : kRadiusCard, focused ? Surface2() : slim ? ui::WithAlpha(Surface(), 0.7f) : Surface(), focused ? 1.0f : 0.6f);
 			if (focused && !m_settings.ui.highContrast)
 				canvas.Rect(row, slim ? 18 : kRadiusCard, ui::SetAlpha(Accent(), LightGround() ? 0.07f : 0.10f));
-			// its status
-			const uint32_t colour = check.state == 0 ? kGood : check.state == 1 ? kWarn : Tertiary();
 			const float iconSize = slim ? 34 : 44;
 			const Box icon{row.x + 20, row.CentreY() - iconSize * 0.5f, iconSize, iconSize};
+			if (item.check < 0)
+			{
+				// a folded group: what it is in a word, how many, and Show or Hide
+				const bool ready = item.group == 2, open = m_setupOpen[item.group];
+				const uint32_t colour = ready ? kGood : Tertiary();
+				canvas.Rect(icon, iconSize * 0.5f, ready ? ui::SetAlpha(colour, 0.16f) : Wash(0.08f));
+				canvas.Draw(ready ? Icon::Check : Icon::Dash, icon.Inset(8), colour);
+				const float tx = icon.Right() + 20;
+				// tr: the Setup check's folded groups: optional checks and ready ones
+				const ui::TextBlock title = canvas.Text(Style({23, ui::Weight::SemiBold, 1.0f}), tx, row.CentreY() - 12, ready ? Tr("Ready") : Tr("Optional"), kText, 300, 1);
+				// tr: beside the Setup check's folded groups' names: {0} how many checks each holds
+				const std::string words = ready ? TrP(inGroup(2), "{0} thing works", "{0} things work") : TrP(inGroup(1), "{0} thing only some games need", "{0} things only some games need");
+				canvas.Text(Style({19, ui::Weight::Regular, 1.0f}), tx + title.width + 16, row.CentreY() - 10, words, Secondary(), 520, 1);
+				// tr: the Setup check's folded groups: what Cross does
+				const ui::TextBlock action = m_fonts.Layout(Style({21, ui::Weight::SemiBold, 1.0f}), open ? Tr("Hide") : Tr("Show"), 200, 1);
+				float right = row.Right() - 28 - 24;
+				canvas.Draw(open ? Icon::ChevronDown : Icon::ChevronRight, {right, row.CentreY() - 12, 24, 24}, focused ? kText : Secondary());
+				right -= 12 + action.width;
+				canvas.Text(action, right, row.CentreY() - action.height * 0.5f, focused ? kText : Secondary());
+				if (focused)
+					Focus(row, 18);
+				continue;
+			}
+			const Check& check = m_checks[item.check];
+			// its status
+			const uint32_t colour = check.state == 0 ? kGood : check.state == 1 ? kWarn : Tertiary();
 			canvas.Rect(icon, iconSize * 0.5f, check.state == 2 ? Wash(0.08f) : ui::SetAlpha(colour, 0.16f));
 			canvas.Draw(check.state == 0 ? Icon::Check : check.state == 1 ? Icon::Warning : Icon::Dash, icon.Inset(slim ? 8 : 10), colour);
-			// what Cross does, on the right (a ready row's, only while it has the focus)
+			// what Cross does, on the right (an opened group's row's, only while it has the focus)
 			float right = row.Right() - 28;
-			if (!check.action.empty() && (!slim || focused || group == 1))
+			if (!check.action.empty() && (!slim || focused))
 			{
 				const ui::TextBlock action = m_fonts.Layout(Style({21, ui::Weight::SemiBold, 1.0f}), check.action, 280, 1);
 				right -= action.width;
@@ -772,19 +804,23 @@ namespace ps5shell
 				}
 				right -= 24;
 			}
-			// what it is, and what was found: under it on a full row, after it on a slim one
+			// what it is, and what was found: under it on a full row, after it on a slim one (the look's and the
+			// copy's as they go)
+			const std::string detail = check.id == "discover" && ps5discover::Busy() ? DiscoverStatus() :
+				check.id == "files" && m_discovery.copying ? TrF("Copying your files into place: {0}", ps5lang::Percent((int)(ps5discover::CopyFraction() * 100))) :
+															 check.detail;
 			const float tx = icon.Right() + 20;
 			if (slim)
 			{
 				const ui::TextBlock title = canvas.Text(Style({23, ui::Weight::SemiBold, 1.0f}), tx, row.CentreY() - 12, check.title, kText,
 					std::max(100.0f, (right - tx) * 0.45f), 1);
-				canvas.Text(Style({19, ui::Weight::Regular, 1.0f}), tx + title.width + 16, row.CentreY() - 10, check.detail, Secondary(),
+				canvas.Text(Style({19, ui::Weight::Regular, 1.0f}), tx + title.width + 16, row.CentreY() - 10, detail, Secondary(),
 					std::max(60.0f, right - tx - title.width - 16), 1);
 			}
 			else
 			{
 				canvas.Text(Style({25, ui::Weight::SemiBold, 1.2f}), tx, row.y + 11, check.title, kText, std::max(100.0f, right - tx), 1);
-				canvas.Text(Style({20, ui::Weight::Regular, 1.25f}), tx, row.y + 45, check.detail, Secondary(), std::max(100.0f, right - tx), 1);
+				canvas.Text(Style({20, ui::Weight::Regular, 1.25f}), tx, row.y + 45, detail, Secondary(), std::max(100.0f, right - tx), 1);
 			}
 			if (focused)
 				Focus(row, slim ? 18 : kRadiusCard);
@@ -795,12 +831,14 @@ namespace ps5shell
 		if (count == 0)
 			return;
 
-		// the focused check, beside the list: what it means, what to do, and the guide's page (the
-		// language's has none)
-		Check language{"language", Tr("Language")};
-		language.aboutTitle = Tr("The menus' language");
-		language.about = Tr("Playtendoh uses your PS5's language. Cross chooses another; you can change it any time in Settings > Language.");
-		const Check& check = m_setupOnLanguage ? language : m_checks[m_setupRow];
+		// the focused check, beside the list: what it means, what to do, and the guide's page; a folded group's,
+		// what it holds
+		Check group{"group", items[m_setupRow].group == 2 ? Tr("Ready") : Tr("Optional")};
+		group.aboutTitle = items[m_setupRow].group == 2 ? Tr("Nothing to do") : Tr("Only for some games");
+		group.about = items[m_setupRow].group == 2 ?
+			Tr("Each of these works as it is. Cross shows them, with what was found: your games, keys and box art.") :
+			Tr("These matter only to a few games or features: a console's own BIOS, the 3DS's system files and the like. Cross shows them.");
+		const Check& check = items[m_setupRow].check >= 0 ? m_checks[items[m_setupRow].check] : group;
 		const float inner = kAsideWidth - 2 * kAsidePad;
 		const ui::TextBlock heading = m_fonts.Layout(Style({32, ui::Weight::SemiBold, 1.2f}), check.aboutTitle, inner, 2);
 		const ui::TextBlock about = m_fonts.Layout(Style({21, ui::Weight::Regular, 1.55f}), check.about, inner, 9);

@@ -14,6 +14,7 @@
 #include "../../app/catalog.h"
 #include "../../app/cheats.h"
 #include "../../app/compatibility.h"
+#include "../../app/discovery.h"
 #include "../../app/game_archives.h"
 #include "../../app/gameinfo.h"
 #include "../../app/lang.h"
@@ -458,10 +459,12 @@ namespace ps5shell
 		enum class StartStep
 		{
 			Language,
+			Easier,	 // larger text, high contrast, less motion
 			Layout,
-			Covers,
 			Buttons,
 			Reports,
+			Finding, // while the look for games goes on (discover.cpp), once the questions are answered
+			Files,	 // copy the keys and BIOS found into place?
 			Ready,
 		};
 		void StartOpen(bool fromSettings);
@@ -476,8 +479,18 @@ namespace ps5shell
 		Box StartCard(Canvas& canvas, const Box& box, bool focused, bool chosen, std::string_view key);
 		void StartHeader(Canvas& canvas, const std::string& question, const std::string& line);
 		void StartFooter(Canvas& canvas, const std::string& note);
+		void StartLookDone(); // the look ended: on from Finding, to what it found
+		void StartToggleEasier(int which); // 0 larger text, 1 high contrast, 2 reduce motion
+		void StartEasierDraw(Canvas& canvas);
+		void StartFindingDraw(Canvas& canvas);
+		void StartFilesDraw(Canvas& canvas);
+		void StartReadyDraw(Canvas& canvas);
 		int m_startStep = 0;
-		int m_startFocus[6] = {};		 // each step's focus, kept going back and forth
+		int m_startFocus[8] = {};		 // each step's focus, kept going back and forth
+		// the look for games, as the questions end: waited for (Finding) while it goes on, then the files it
+		// found to copy, asked about once (Files); kept as they were when asked, while the look goes on
+		bool m_startWaiting = false;
+		std::vector<ps5discover::File> m_startFiles;
 		bool m_startForward = true;		 // the step came from the left (back) or the right
 		bool m_startFromSettings = false; // Settings > Make it yours: back there when done
 		float m_startShown = 0;			 // the layout cards, turning to the focused one
@@ -1025,9 +1038,34 @@ namespace ps5shell
 		float m_welcomeScroll = 0;
 		NewsThen m_newsThen = NewsThen::Side; // what follows What's new
 
+		// Finding games and files (discover.cpp, app/discovery.h)
+		static std::string DropFolder(); // /data/playtendoh: a player's games, BIOS and keys put anywhere in it are found
+		std::vector<ps5discover::Root> DiscoverRoots() const;
+		ps5discover::Targets DiscoverTargets() const;
+		void DiscoverStart(); // a look, in the background (none while one goes on)
+		void DiscoverPoll();  // each frame: a look or a copy finished, a drive plugged in
+		void DiscoverApply(const ps5discover::Found& found);
+		void DiscoverCopy(); // what was found to copy, into place
+		std::string DiscoverStatus() const; // "Looking in USB drive 1…"
+		std::string FileWords(const ps5discover::File& file) const; // "Switch keys", "GBA BIOS (gba_bios.bin)"
+		std::string FilesSummary(const std::vector<ps5discover::File>& files) const;
+		std::string FoundWhere(System side) const; // where most of the side's games were found
+		int FoundGames(System side) const;		   // and how many, everywhere
+		void FoundFolderRow(Row& row) const;	   // Settings > Game files' folder row, with where its games were found
+		bool AnyGames() const;					   // a console shown has games (Orbit's Home: else where they can go)
+		struct Discovery
+		{
+			bool ran = false;	   // a look finished this session
+			bool wanted = false;   // a later start's look, once the side's games are listed
+			bool announce = false; // what it finds said in toasts (a later start's, a drive plugged in)
+			bool copying = false;
+			ps5discover::Found found; // the last look's
+			std::vector<std::string> drives; // the drives at the last look at them
+			double drivesAt = 0;
+		} m_discovery;
+
 		// Setup check
 		bool m_setupFirst = false; // as the app starts, before a side opens
-		bool m_setupOnLanguage = false; // the focus on the language, above the checks
 		int m_setupRow = 0;
 		ui::Spring m_setupScroll; // the Setup check's list, gliding with the focus
 		ScreenId m_setupFrom = ScreenId::Settings; // where Circle goes back to, when not at the start
@@ -1041,6 +1079,17 @@ namespace ps5shell
 			int games = -1;						  // a console's games check: how many were found
 		};
 		std::vector<Check> m_checks;
+		// the Setup check's list as it shows (6.0): what needs you, then Optional and Ready, each folded into one
+		// row until opened; check: m_checks' index, -1 for a group's own row
+		struct SetupItem
+		{
+			int check;
+			int group; // 0 needs you, 1 optional, 2 ready
+		};
+		static int CheckGroup(const Check& check) { return check.state == 1 ? 0 : check.state == 2 ? 1 : 2; }
+		std::vector<SetupItem> SetupItems() const;
+		const Check* SetupFocused() const; // null on a group's own row
+		bool m_setupOpen[3] = {true, false, false};
 		std::vector<const Check*> StartNeeds() const; // the setup's summary: what stands in the way of playing
 		void RunChecks();
 		std::unordered_map<std::string, ui::QrCode> m_qrCodes; // made once each

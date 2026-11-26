@@ -218,6 +218,12 @@ namespace ps5shell
 			SaveSettings();
 		}
 		const NewsThen then = firstStart ? NewsThen::Welcome : SetupNeeded() ? NewsThen::Setup : updated ? NewsThen::NewOptions : NewsThen::Side;
+		// the games and files the player put anywhere, looked for again at each fresh start (the first start's
+		// look begins with its questions), once the side's own games are listed (discover.cpp)
+		ps5settings::ApplyFound(m_settings);
+		m_discovery.wanted = !firstStart && !returning && m_status.autoLaunch.empty() && m_settings.ui.discover;
+		m_discovery.drives = ConnectedDrives();
+		m_discovery.drivesAt = m_now;
 		if (news)
 			WhatsNewOpen(then);
 		else if (then == NewsThen::Welcome)
@@ -299,6 +305,7 @@ namespace ps5shell
 			return Outcome::Restart;
 		}
 		// the background work stops behind the launch (4.2, rule 4), the screen kept drawn
+		ps5discover::Stop(); // a look for games or a copy: never while a game runs
 		ps5boxart::Stop();
 		ps5cheats::Stop();
 		ps5packs::Stop();
@@ -453,6 +460,7 @@ namespace ps5shell
 		if (m_status.coreStarting)
 			PollCore();
 		PollGames();
+		DiscoverPoll();
 		// how games run: the site's newer feed, fetched as the app started, or the badges turned on or off
 		if (ps5compat::Generation() != m_compatGeneration || m_compatShown != m_settings.ui.compatBadges)
 			FindReports();
@@ -1711,6 +1719,14 @@ namespace ps5shell
 		float right = 1920 - kSafeX;
 		canvas.Text(clockText, right - clockText.width, y + h / 2 - clockText.height * 0.5f, Secondary());
 		right -= clockText.width + 28;
+		// a look for games or a copy of the files it found going on (discover.cpp): its sign beside the clock,
+		// in every layout and over Settings, breathing while it lasts (still when motion is reduced)
+		if (ps5discover::Busy() || m_discovery.copying)
+		{
+			const float breath = m_settings.ui.reduceMotion ? 1.0f : 0.55f + 0.45f * (float)std::sin(m_now * 3.5);
+			canvas.Draw(m_discovery.copying ? Icon::Download : Icon::Search, {right - 30, y + h / 2 - 15, 30, 30}, ui::SetAlpha(kText, 0.75f * breath));
+			right -= 30 + 20;
+		}
 		bool pads = false;
 		for (int player = ps5pad::kMaxPlayers - 1; player >= 0; player--)
 		{
@@ -1901,10 +1917,16 @@ namespace ps5shell
 		case ScreenId::Setup:
 		{
 			std::vector<Hint> hints;
-			if (m_setupOnLanguage)
-				hints.push_back({Icon::Cross, Tr("Change the language")});
-			else if (m_setupRow < (int)m_checks.size() && !m_checks[m_setupRow].action.empty())
-				hints.push_back({Icon::Cross, m_checks[m_setupRow].action});
+			if (const Check* check = SetupFocused())
+			{
+				if (!check->action.empty())
+					hints.push_back({Icon::Cross, check->action});
+			}
+			else if (!SetupItems().empty())
+			{
+				const std::vector<SetupItem> items = SetupItems();
+				hints.push_back({Icon::Cross, m_setupOpen[items[std::clamp(m_setupRow, 0, (int)items.size() - 1)].group] ? Tr("Hide") : Tr("Show")});
+			}
 			hints.push_back({Icon::Triangle, Tr("Check again")});
 			hints.push_back({Icon::Circle, !m_setupFirst ? Tr("Back") : Tr("Continue to the Library")});
 			return hints;

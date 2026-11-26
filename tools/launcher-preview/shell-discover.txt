@@ -1,0 +1,66 @@
+# Finding games and files (PREVIEW_FIRST=1 PREVIEW_CONSOLE=1 tools/preview-shell.sh tools/launcher-preview/shell-discover.txt):
+# the first start answered quickly, the files left for later; then what that leaves: the summary's row for them,
+# the systems found in the bar, Settings' Accessibility and Finding games pages, the Setup check's rows, an
+# empty Library, and a classic console's found games and its Game files page.
+wait 90
+press cross                   # the PS5's language
+wait 40
+press cross                   # nothing to make easier: Continue
+wait 40
+press cross                   # Classic
+wait 40
+press cross                   # A on Circle
+wait 40
+press cross                   # reports: yes
+wait 60
+press right                   # the files found: Not now
+wait 20
+press cross
+wait 60
+shot discover-ready-files     # the summary, the files still to copy in its list
+press cross                   # start playing
+wait 120
+shot discover-library         # the bar with every system that has games
+press r2
+wait 40
+press down down down down down down down # Accessibility, a page of its own
+press right
+wait 25
+shot discover-accessibility
+press circle
+press down down               # Finding games
+press right
+wait 25
+shot discover-finding         # find by itself, look now, copy found files, where, the drop folder
+press down down down
+press cross                   # Where games were found
+wait 30
+shot discover-found-places
+press circle
+wait 20
+press circle
+press down down down down     # Diagnostics
+press right cross             # the Setup check
+wait 45
+shot discover-setup           # Files to copy needs you; Find games and files is ready
+press down
+wait 25
+shot discover-setup-look
+press circle
+wait 20
+press circle
+press l2                      # the Library
+wait 40
+press r1 r1                   # the Switch 2 side: no games
+wait 60
+shot discover-empty
+press r1 r1 r1 r1             # the SNES side: the games found on the USB drive
+wait 90
+shot discover-snes
+press r2
+wait 40
+press up up up up up up up up up up up up # to the top of the SNES side's pages
+press down down               # Game files
+press right
+wait 25
+shot discover-snes-files

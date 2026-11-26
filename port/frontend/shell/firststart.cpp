@@ -1,9 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// Playtendoh: the first start's setup, one question a screen (6.0). The language, the layout, the covers,
-// where A is and the reports, each its own step with a few cards to choose from, then a summary that asks
-// nothing: the games found, and only what stands in the way of playing them. Cross chooses and goes on,
-// Circle goes back a step; the bar at the top right says how far along it is. Everything else keeps its
-// default and is in Settings. Settings > Make it yours runs it again, and comes back there.
+// Playtendoh: the first start's setup, one question a screen (6.0). The language, what makes it easier to
+// see, the layout, where A is and the reports, each its own step with a few cards to choose from; meanwhile
+// Playtendoh looks for the player's games and files everywhere they might be (discover.cpp). Then, while the
+// look goes on, a screen that waits for it (Cross goes on without waiting); the files it found to copy into
+// place, asked once; and a summary that asks nothing: the games found and where, and only what stands in
+// the way of playing them. Cross chooses and goes on, Circle goes back a step; the bar at the top right says
+// how far along it is. Everything else keeps its default and is in Settings. Settings > Make it yours runs
+// it again, and comes back there.
 
 #include "shell_internal.h"
 #include "../../app/esde_get.h"
@@ -17,6 +20,7 @@
 namespace ps5shell
 {
 	using namespace ui::tokens;
+	using namespace ps5actions;
 
 	namespace
 	{
@@ -24,22 +28,28 @@ namespace ps5shell
 		constexpr float kQr = 150;
 
 		// tr: the first start's steps, as the bar at the top right names them
-		constexpr const char* kStepNames[] = {TrMark("Language"), TrMark("Layout"), TrMark("Covers"), TrMark("Buttons"), TrMark("Reports"), TrMark("Ready")};
+		constexpr const char* kStepNames[] = {TrMark("Language"), TrMark("Accessibility"), TrMark("Layout"), TrMark("Buttons"), TrMark("Reports"),
+			TrMark("Looking"), TrMark("Files"), TrMark("Ready")};
 
-		// covers for the covers' question, as two colours each
-		constexpr uint32_t kCovers[4][2] = {{0xff8a3a1e, 0xff4816e1}, {0xff0da365, 0xffed3a7c}, {0xff3a1a0c, 0xffe9a50e}, {0xff2626dc, 0xff0b9ef5}};
+		// the steps that ask something, before the look's
+		bool Question(Shell::StartStep step)
+		{
+			return step != Shell::StartStep::Finding && step != Shell::StartStep::Files && step != Shell::StartStep::Ready;
+		}
 	}
 
 	// -- which steps, and moving between them ---------------------------------------------------------
 
 	std::vector<Shell::StartStep> Shell::StartSteps() const
 	{
-		std::vector<StartStep> steps{StartStep::Language, StartStep::Layout};
-		if (m_startFocus[(int)StartStep::Layout] < 2)
-			steps.push_back(StartStep::Covers); // EmulationStation has its own
-		steps.push_back(StartStep::Buttons);
+		std::vector<StartStep> steps{StartStep::Language, StartStep::Easier, StartStep::Layout, StartStep::Buttons};
 		if (ps5reports::Available())
 			steps.push_back(StartStep::Reports);
+		// then the look's: waited for while it goes on, then what it found to copy, as it was when asked
+		if (m_startWaiting)
+			steps.push_back(StartStep::Finding);
+		if (!m_startFiles.empty())
+			steps.push_back(StartStep::Files);
 		steps.push_back(StartStep::Ready);
 		return steps;
 	}
@@ -60,18 +70,24 @@ namespace ps5shell
 		m_startFromSettings = fromSettings;
 		m_startStep = 0;
 		m_startForward = true;
+		m_startWaiting = false;
+		m_startFiles.clear();
 		// each step's focus on what is set now
 		const std::vector<std::string> codes = StartLanguages();
 		m_startFocus[(int)StartStep::Language] =
 			std::max(0, (int)(std::find(codes.begin(), codes.end(), m_settings.ui.language) - codes.begin()) % (int)codes.size());
+		m_startFocus[(int)StartStep::Easier] = 3; // Continue: one press for those who need none of them
 		m_startFocus[(int)StartStep::Layout] = m_settings.ui.emulationStation ? 2 : std::clamp(m_settings.ui.layout, 0, 1);
-		m_startFocus[(int)StartStep::Covers] = m_settings.ui.boxArt3d ? 1 : 0;
 		m_startFocus[(int)StartStep::Buttons] = ps5azahar::MappedInput(m_settings.n3ds, ps5azahar::Button::A) == ps5emu::PadInput::Circle ? 0 : 1;
 		m_startFocus[(int)StartStep::Reports] = m_settings.ui.reportsAsked && !m_settings.ui.reports ? 1 : 0; // Yes first (the owner's choice)
+		m_startFocus[(int)StartStep::Finding] = 0;
+		m_startFocus[(int)StartStep::Files] = 0; // Copy them
 		m_startFocus[(int)StartStep::Ready] = 0;
 		m_startShown = (float)m_startFocus[(int)StartStep::Layout];
 		m_onBar = false;
 		m_message.clear();
+		// the player's games and files, looked for while the questions are answered
+		DiscoverStart();
 		RunChecks();
 		Show(ScreenId::Start);
 		m_screenAt = m_now;
@@ -79,7 +95,7 @@ namespace ps5shell
 
 	void Shell::StartGo(int by)
 	{
-		const std::vector<StartStep> steps = StartSteps();
+		std::vector<StartStep> steps = StartSteps();
 		const int next = m_startStep + by;
 		if (next < 0)
 		{
@@ -92,6 +108,13 @@ namespace ps5shell
 				m_feedback.Play(ui::Cue::Edge);
 			return;
 		}
+		// past the last question: the look's outcome, or a wait for it
+		if (by > 0 && Question(steps[m_startStep]) && (next >= (int)steps.size() || !Question(steps[next])))
+		{
+			m_startWaiting = ps5discover::Busy();
+			m_startFiles = m_startWaiting ? std::vector<ps5discover::File>() : m_discovery.found.files;
+			steps = StartSteps();
+		}
 		if (next >= (int)steps.size())
 		{
 			StartFinish();
@@ -103,6 +126,23 @@ namespace ps5shell
 			RunChecks(); // as things are now, with the choices made
 		m_feedback.Play(by > 0 ? ui::Cue::Select : ui::Cue::Back);
 		m_screenAt = m_now; // the step arrives as a screen does
+	}
+
+	void Shell::StartLookDone()
+	{
+		// the look finished while the player waited for it: on to what it found
+		if (m_screen != ScreenId::Start || !m_startWaiting)
+			return;
+		const std::vector<StartStep> before = StartSteps();
+		const bool waitingHere = m_startStep < (int)before.size() && before[m_startStep] == StartStep::Finding;
+		m_startWaiting = false;
+		m_startFiles = m_discovery.found.files;
+		if (!waitingHere)
+			return;
+		m_startForward = true;
+		m_screenAt = m_now;
+		RunChecks();
+		m_feedback.Play(ui::Cue::Select);
 	}
 
 	void Shell::StartFinish()
@@ -121,13 +161,33 @@ namespace ps5shell
 				Toast(Tr("Downloading EmulationStation. It opens next time Playtendoh starts."));
 			}
 		}
+		// a look still going on says what it finds as it ends
+		m_discovery.announce = ps5discover::Busy();
 		ApplyTheme();
 		m_feedback.SetLight(Accent());
 		m_feedback.Play(ui::Cue::Select);
 		if (m_startFromSettings)
 			SettingsOpen("launcher", true);
 		else
+		{
+			// the first side with games found, unless the one open has some (a side found only now was hidden)
+			if (FoundGames(m_side) == 0)
+				for (System side : kBarOrder)
+					if (SideShown(side) && FoundGames(side) > 0)
+					{
+						m_side = side;
+						break;
+					}
 			OpenSide(m_side, true);
+		}
+	}
+
+	void Shell::StartToggleEasier(int which)
+	{
+		bool& on = which == 0 ? m_settings.ui.largerText : which == 1 ? m_settings.ui.highContrast : m_settings.ui.reduceMotion;
+		on = !on;
+		SaveSettings();
+		m_feedback.Play(ui::Cue::Select);
 	}
 
 	void Shell::StartChoose()
@@ -144,15 +204,17 @@ namespace ps5shell
 			ApplyLanguage();
 			break;
 		}
+		case StartStep::Easier:
+			if (focus < 3)
+			{
+				StartToggleEasier(focus);
+				return; // a card is turned on or off; Continue goes on
+			}
+			break;
 		case StartStep::Layout:
 			m_settings.ui.emulationStation = focus == 2;
 			if (focus < 2)
 				m_settings.ui.layout = focus;
-			SaveSettings();
-			break;
-		case StartStep::Covers:
-			m_settings.ui.boxArt3d = focus == 1;
-			ps5boxart::SetSpines(m_settings.ui.boxArt3d);
 			SaveSettings();
 			break;
 		case StartStep::Buttons:
@@ -166,12 +228,28 @@ namespace ps5shell
 			SaveSettings();
 			ps5reports::SetEnabled(ps5reports::Available() && m_settings.ui.reports);
 			break;
+		case StartStep::Finding:
+		{
+			// on without waiting: what it finds shows up as it ends (the Library, the Setup check)
+			m_startWaiting = false;
+			m_startFiles.clear();
+			m_startForward = true;
+			m_screenAt = m_now;
+			RunChecks();
+			m_feedback.Play(ui::Cue::Select);
+			return;
+		}
+		case StartStep::Files:
+			if (focus == 0)
+				DiscoverCopy();
+			break;
 		case StartStep::Ready: break;
 		}
 		StartGo(1);
 	}
 
-	// what the summary says needs the player: what stops games, and the files of a console that has games
+	// what the summary says needs the player: what stops games, the files of a console that has games, another
+	// copy of the app, and what was found to copy and not copied yet
 	std::vector<const Shell::Check*> Shell::StartNeeds() const
 	{
 		std::vector<const Check*> needs;
@@ -185,7 +263,8 @@ namespace ps5shell
 		{
 			if (check.state != 1)
 				continue;
-			if (check.id == "storage" || check.id == "recompilers" || ((check.id == "switch-keys" || check.id == "switch-firmware") && hasGames("switch")) ||
+			if (check.id == "storage" || check.id == "recompilers" || check.id == "copies" || check.id == "files" || check.id.ends_with("-bios") ||
+				((check.id == "switch-keys" || check.id == "switch-firmware") && hasGames("switch")) ||
 				((check.id == "switch2-keys" || check.id == "switch2-firmware") && hasGames("switch2")))
 				needs.push_back(&check);
 		}
@@ -198,6 +277,8 @@ namespace ps5shell
 		int& focus = m_startFocus[(int)step];
 		const int count = step == StartStep::Language ? (int)StartLanguages().size() :
 			step == StartStep::Layout				  ? 3 :
+			step == StartStep::Easier				  ? 4 :
+			step == StartStep::Finding				  ? 1 :
 			step == StartStep::Ready				  ? (int)StartNeeds().size() :
 														2;
 		auto move = [&](int by) {
@@ -215,7 +296,20 @@ namespace ps5shell
 		{
 		case Button::Left:
 		case Button::Right:
-			if (step != StartStep::Ready)
+			if (step == StartStep::Easier && focus == 3)
+				m_feedback.Play(ui::Cue::Edge, press.repeat);
+			else if (step == StartStep::Easier)
+			{
+				const int next = focus + (press.button == Button::Right ? 1 : -1);
+				if (next < 0 || next > 2)
+					m_feedback.Play(ui::Cue::Edge, press.repeat);
+				else
+				{
+					focus = next;
+					m_feedback.Play(ui::Cue::Focus);
+				}
+			}
+			else if (step != StartStep::Ready && step != StartStep::Finding)
 				move(press.button == Button::Right ? 1 : -1);
 			break;
 		case Button::Up:
@@ -236,6 +330,17 @@ namespace ps5shell
 					m_feedback.Play(ui::Cue::Focus);
 				}
 			}
+			else if (step == StartStep::Easier)
+			{
+				// the cards above, Continue below them
+				if ((by > 0) == (focus == 3))
+					m_feedback.Play(ui::Cue::Edge, press.repeat);
+				else
+				{
+					focus = by > 0 ? 3 : 0;
+					m_feedback.Play(ui::Cue::Focus);
+				}
+			}
 			else if (step == StartStep::Ready)
 				move(by);
 			else
@@ -248,6 +353,11 @@ namespace ps5shell
 			else
 				StartChoose();
 			break;
+		case Button::Triangle:
+			// larger text from the first screen on, for those who need it to read the rest
+			if (step == StartStep::Language || step == StartStep::Easier)
+				StartToggleEasier(0);
+			break;
 		case Button::Circle: StartGo(-1); break;
 		default: break;
 		}
@@ -256,13 +366,20 @@ namespace ps5shell
 	std::vector<Hint> Shell::StartHints() const
 	{
 		const StartStep step = StartSteps()[m_startStep];
+		const int focus = m_startFocus[(int)step];
 		std::vector<Hint> hints;
 		if (step == StartStep::Language)
 			hints.push_back({Icon::UpDown, Tr("Move")});
-		else if (step != StartStep::Ready)
+		else if (step != StartStep::Ready && step != StartStep::Finding)
 			hints.push_back({Icon::LeftRight, Tr("Move")});
+		if (step == StartStep::Language || step == StartStep::Easier)
+			// tr: the first start: Triangle makes every word a size larger, or back
+			hints.push_back({Icon::Triangle, m_settings.ui.largerText ? Tr("Normal text") : Tr("Larger text")});
 		// tr: the first start's setup: Cross on its last step
-		hints.push_back({Icon::Cross, step == StartStep::Ready ? Tr("Start playing") : Tr("Choose")});
+		hints.push_back({Icon::Cross, step == StartStep::Ready ? Tr("Start playing") :
+				step == StartStep::Finding					   ? Tr("Go on without waiting") :
+				step == StartStep::Easier && focus < 3		   ? Tr("Turn on or off") :
+																 Tr("Choose")});
 		if (m_startStep > 0 || m_startFromSettings)
 			hints.push_back({Icon::Circle, Tr("Back")});
 		return hints;
@@ -445,60 +562,6 @@ namespace ps5shell
 			StartFooter(canvas, Tr("Change it later in Settings > Launcher > Layout."));
 			break;
 		}
-		case StartStep::Covers:
-		{
-			// tr: the first start's question: covers flat, or as 3D boxes with a spine
-			StartHeader(canvas, Tr("How should covers look?"), Tr("As flat pictures, or as boxes on a shelf."));
-			const float width = 760, gap = 48, left = (1920 - 2 * width - gap) * 0.5f;
-			body(2);
-			for (int i = 0; i < 2; i++)
-			{
-				const bool on = i == focus;
-				const Box card = StartCard(canvas, {left + i * (width + gap), kTop + 10, width, 480}, on, (i == 1) == m_settings.ui.boxArt3d,
-					std::string("start-covers") + char('0' + i));
-				// four covers, flat or as boxes turned a little, with a spine
-				const float coverW = 132, coverH = 186, spacing = 160;
-				const float x0 = card.x + (card.w - (3 * spacing + coverW)) * 0.5f, floor = card.y + 70 + coverH;
-				for (int c = 0; c < 4; c++)
-				{
-					const float x = x0 + c * spacing;
-					if (i == 0)
-					{
-						const Box cover{x, floor - coverH, coverW, coverH};
-						canvas.Shadow(cover, 8, 10, 24, 0x40000000);
-						canvas.LinearGradient(cover, 8, kCovers[c][0], kCovers[c][1], cover.x, cover.y, cover.Right(), cover.Bottom());
-						continue;
-					}
-					// the box: a spine in shade, then the front, its far edge shorter (as DrawBox3d has it)
-					constexpr int kSlices = 16;
-					const float spine = coverW * 0.11f, front = coverW - spine;
-					canvas.Shadow({x + spine, floor - coverH * 0.95f, coverW - spine, coverH * 0.95f}, 6, 12, 26, 0x55000000);
-					for (int s = 0; s < 3; s++)
-					{
-						const float h = coverH * (0.94f + 0.02f * s);
-						canvas.Rect({x + spine * s / 3, floor - h - (coverH - h) * 0.35f, spine / 3 + 1, h}, 0, ui::Mix(kCovers[c][0], 0xff000000, 0.45f - 0.1f * s));
-					}
-					for (int s = 0; s < kSlices; s++)
-					{
-						const float t = (float)s / kSlices, h = coverH * (1.0f - 0.1f * t);
-						const uint32_t top = ui::Mix(ui::Mix(kCovers[c][0], kCovers[c][1], t * 0.6f), 0xff000000, 0.16f * t);
-						const uint32_t bottom = ui::Mix(ui::Mix(kCovers[c][0], kCovers[c][1], 0.4f + t * 0.6f), 0xff000000, 0.16f * t);
-						const float sx = x + spine + front * t;
-						canvas.LinearGradient({sx, floor - h - (coverH - h) * 0.35f, front / kSlices + 1, h}, 0, top, bottom, sx, floor - h, sx, floor);
-					}
-					canvas.Line(x + spine, floor - coverH + 1, x + spine, floor - 1, 1.5f, 0x66ffffff);
-				}
-				// tr: the first start's covers question: the two choices
-				canvas.Text(nameStyle, card.x + 36, card.y + 330, i == 0 ? Tr("Flat") : Tr("3D boxes"), kText, card.w - 72, 1);
-				canvas.Text(aboutStyle, card.x + 36, card.y + 376,
-					i == 0 ? Tr("Each game's cover as a picture. Shows the most games at once.") :
-							 Tr("Each game as its box, with the spine. Covers come from GameTDB."),
-					Secondary(), card.w - 72, 2);
-			}
-			bodyEnd();
-			StartFooter(canvas, Tr("Change it later in Settings > Launcher > 3D box art."));
-			break;
-		}
 		case StartStep::Buttons:
 		{
 			// tr: the first start's question: which of the PS5's buttons is a Nintendo controller's A
@@ -585,117 +648,334 @@ namespace ps5shell
 			StartFooter(canvas, Tr("Change it later in Settings > Accounts and updates > Send reports."));
 			break;
 		}
-		case StartStep::Ready:
+		case StartStep::Easier: StartEasierDraw(canvas); break;
+		case StartStep::Finding: StartFindingDraw(canvas); break;
+		case StartStep::Files: StartFilesDraw(canvas); break;
+		case StartStep::Ready: StartReadyDraw(canvas); break;
+		}
+	}
+
+	// -- the steps drawn in a function of their own ------------------------------------------------------
+
+	void Shell::StartEasierDraw(Canvas& canvas)
+	{
+		const int focus = m_startFocus[(int)StartStep::Easier];
+		// tr: the first start's question: larger text, high contrast, less motion
+		StartHeader(canvas, Tr("Make Playtendoh easier to see?"),
+			Tr("Turn on whatever helps, or go on. Triangle makes the text larger on any of these screens."));
+		const float slide = (m_startForward ? 1 : -1) * 60.0f;
+		canvas.PushAlpha(Enter(2));
+		canvas.PushOffset((1 - Enter(2)) * slide, 0);
+		struct Card
 		{
-			const std::vector<const Check*> needs = StartNeeds();
-			// tr: the first start's last step: a summary, nothing to answer
-			StartHeader(canvas, needs.empty() ? Tr("You're ready to play") : Tr("Almost ready"),
-				needs.empty() ? Tr("Everything Playtendoh needs is here.") :
-								TrP((long long)needs.size(), "One thing to sort out before some games will play.", "{0} things to sort out before some games will play."));
-			body(2);
-			// the games found, a console each
-			struct Found
+			const char* name;
+			const char* about;
+			bool on;
+		};
+		const Card cards[3] = {
+			{Tr("Larger text"), Tr("Every word a size larger, in every menu."), m_settings.ui.largerText},
+			{Tr("High contrast"), Tr("Solid panels, text at full strength and a thicker focus ring."), m_settings.ui.highContrast},
+			{Tr("Reduce motion"), Tr("Fades instead of movement, and a background that keeps still."), m_settings.ui.reduceMotion},
+		};
+		constexpr float kGap = 40, kHeight = 430;
+		const float width = (1920 - 2 * kSafeX - 2 * kGap) / 3;
+		for (int i = 0; i < 3; i++)
+		{
+			const bool on = focus == i;
+			const Box card = StartCard(canvas, {kSafeX + i * (width + kGap), kTop, width, kHeight}, on, false, std::string("start-easier") + char('0' + i));
+			// what it does, shown: the letters larger, ink on paper, a ball that keeps still
+			const Box art{card.x + 32, card.y + 32, card.w - 64, 140};
+			canvas.Rect(art, 16, Wash(0.06f));
+			if (i == 0)
 			{
-				System side;
-				int games;
-			};
-			std::vector<Found> found;
-			for (const Check& check : m_checks)
-				if (check.id.ends_with("-games") && check.games > 0)
-					found.push_back({ps5launcher::SideNamed(check.id.substr(0, check.id.size() - 6)), check.games});
-			const Box games{kSafeX, kTop, 1000, 520};
-			Glass(canvas, games, kRadiusSheet, Surface(), 0.7f);
-			canvas.Text(Style(kOverlineStyle), games.x + 36, games.y + 34, Tr("Your games"), Secondary(), games.w - 72, 1);
-			if (found.empty())
+				const ui::TextBlock small = m_fonts.Layout({44, ui::Weight::SemiBold, 1.0f}, "Aa");
+				const ui::TextBlock large = m_fonts.Layout({92, ui::Weight::Bold, 1.0f}, "Aa");
+				const float x = art.CentreX() - (small.width + 36 + large.width) * 0.5f;
+				canvas.Text(small, x, art.CentreY() + large.height * 0.32f - small.height, Secondary());
+				canvas.Text(large, x + small.width + 36, art.CentreY() - large.height * 0.5f, kText);
+			}
+			else if (i == 1)
 			{
-				const Box icon{games.x + 36, games.y + 90, 72, 72};
-				canvas.Rect(icon, 36, Wash(0.08f));
-				canvas.Draw(Icon::Folder, icon.Inset(18), Secondary());
-				canvas.Text(nameStyle, games.x + 36, games.y + 190, Tr("No games yet"), kText, games.w - 72, 1);
-				canvas.Text(aboutStyle, games.x + 36, games.y + 238,
-					Tr("Copy your games to the PS5 or a USB drive, each console's in its own folder. They show up the next time you open its library. Settings > Game files says where each one goes."),
-					Secondary(), games.w - 72, 4);
+				const float size = 96;
+				const Box dark{art.CentreX() - size - 8, art.CentreY() - size / 2, size, size}, light{art.CentreX() + 8, art.CentreY() - size / 2, size, size};
+				canvas.Rect(dark, 18, 0xff000000);
+				canvas.Rect(light, 18, 0xffffffff);
+				canvas.Ring(light, 18, 2, 0xff000000);
+				const ui::TextBlock letter = m_fonts.Layout({56, ui::Weight::Bold, 1.0f}, "A");
+				canvas.Text(letter, dark.CentreX() - letter.width / 2, dark.CentreY() - letter.height / 2, 0xffffffff);
+				canvas.Text(letter, light.CentreX() - letter.width / 2, light.CentreY() - letter.height / 2, 0xff000000);
 			}
 			else
 			{
-				constexpr int kColumns = 3;
-				const float cellW = (games.w - 72) / kColumns, cellH = 112;
-				int total = 0;
-				for (int i = 0; i < (int)found.size() && i < 12; i++)
-				{
-					total += found[i].games;
-					const float x = games.x + 36 + (i % kColumns) * cellW, y = games.y + 82 + (i / kColumns) * cellH;
-					DrawBareConsole(canvas, found[i].side, {x, y + 8, 76, 76}, true);
-					canvas.Text(Style({22, ui::Weight::SemiBold, 1.0f}), x + 94, y + 18, SystemName(found[i].side), kText, cellW - 108, 1);
-					canvas.Text(Style({19, ui::Weight::Regular, 1.0f}), x + 94, y + 52, TrP(found[i].games, "{0} game", "{0} games", found[i].games), Secondary(),
-						cellW - 108, 1);
-				}
-				for (int i = 12; i < (int)found.size(); i++)
-					total += found[i].games;
-				canvas.Text(aboutStyle, games.x + 36, games.Bottom() - 62,
-					TrP(total, "{0} game found. Add more any time: each console has its own folder.", "{0} games found. Add more any time: each console has its own folder.", total),
-					Secondary(), games.w - 72, 1);
+				// a ball and its fading trail, the trail gone when motion is reduced
+				const float r = 26, cy = art.CentreY();
+				for (int t = 3; t >= 1 && !m_settings.ui.reduceMotion; t--)
+					canvas.Rect({art.CentreX() - r - t * 46.0f, cy - r, 2 * r, 2 * r}, r, ui::SetAlpha(Accent(), 0.10f * (4 - t)));
+				canvas.Rect({art.CentreX() - r, cy - r, 2 * r, 2 * r}, r, Accent());
 			}
-			// what stands in the way, or that nothing does
-			const Box side{kSafeX + 1000 + 40, kTop, 1920 - kSafeX - (kSafeX + 1000 + 40), 520};
-			Glass(canvas, side, kRadiusSheet, Surface(), 0.7f);
-			canvas.Text(Style(kOverlineStyle), side.x + 36, side.y + 34, needs.empty() ? Tr("Checked") : Tr("Before you play"), needs.empty() ? kGood : kWarn,
-				side.w - 72, 1);
-			float y = side.y + 76;
-			if (needs.empty())
-			{
-				const Box icon{side.x + 36, y + 10, 72, 72};
-				canvas.Rect(icon, 36, ui::SetAlpha(kGood, 0.16f));
-				canvas.Draw(Icon::Check, icon.Inset(18), kGood);
-				canvas.Text(Style({24, ui::Weight::SemiBold, 1.2f}), side.x + 36, y + 110, Tr("Storage and game speed are fine"), kText, side.w - 72, 2);
-				y += 160;
-			}
-			for (int i = 0; i < (int)needs.size(); i++)
-			{
-				const Check& check = *needs[i];
-				const bool on = i == focus;
-				const Box row{side.x + 20, y, side.w - 40, 84};
-				if (on)
-				{
-					canvas.Rect(row, 18, ui::SetAlpha(Accent(), LightGround() ? 0.08f : 0.14f));
-					Focus(row, 18);
-				}
-				const Box icon{row.x + 16, row.CentreY() - 20, 40, 40};
-				canvas.Rect(icon, 20, ui::SetAlpha(kWarn, 0.16f));
-				canvas.Draw(Icon::Warning, icon.Inset(9), kWarn);
-				canvas.Text(Style({22, ui::Weight::SemiBold, 1.1f}), icon.Right() + 16, row.y + 14, check.title, kText, row.Right() - icon.Right() - 32, 1);
-				canvas.Text(Style({18, ui::Weight::Regular, 1.2f}), icon.Right() + 16, row.y + 46, check.detail, Secondary(), row.Right() - icon.Right() - 32, 1);
-				y += 92;
-			}
-			// EmulationStation's download, said before it starts
-			if (m_settings.ui.emulationStation && !ps5esde::Available())
-			{
-				y += 8;
-				canvas.Draw(Icon::Download, {side.x + 36, y + 2, 28, 28}, Secondary());
-				canvas.Text(Style({19, ui::Weight::Regular, 1.35f}), side.x + 76, y,
-					Tr("EmulationStation downloads when you start (about 850 MB). It opens next time Playtendoh starts."), Secondary(), side.w - 112, 3);
-			}
-			// the focused one's guide, on a phone
-			if (!needs.empty())
-			{
-				const Check& check = *needs[std::clamp(focus, 0, (int)needs.size() - 1)];
-				const Box qrBox{side.x + 36, side.Bottom() - 36 - kQr, kQr, kQr};
-				auto code = m_qrCodes.find(check.guide);
-				if (code == m_qrCodes.end())
-					code = m_qrCodes.emplace(check.guide, ui::QrCode(check.guide)).first;
-				canvas.Rect(qrBox.Inset(-8), 12, 0xffffffff);
-				ui::DrawQr(canvas, code->second, qrBox, 8);
-				const float tx = qrBox.Right() + 28, tw = side.Right() - 36 - tx;
-				const ui::TextBlock title = m_fonts.Layout(Style({22, ui::Weight::SemiBold, 1.3f}), check.aboutTitle, tw, 2);
-				const ui::TextBlock about = m_fonts.Layout(Style({18, ui::Weight::Regular, 1.4f}), Tr("Scan it for how, on your phone."), tw, 2);
-				const float ty = qrBox.y + (kQr - title.height - 6 - about.height) * 0.5f;
-				canvas.Text(title, tx, ty, kText);
-				canvas.Text(about, tx, ty + title.height + 6, Secondary());
-			}
-			bodyEnd();
-			StartFooter(canvas, Tr("Settings > Setup check has the details any time."));
-			break;
+			const float tx = card.x + 36, tw = card.w - 72;
+			canvas.Text(Style({32, ui::Weight::SemiBold, 1.1f}), tx, card.y + 200, cards[i].name, kText, tw, 1);
+			canvas.Text(Style({21, ui::Weight::Regular, 1.4f}), tx, card.y + 248, cards[i].about, Secondary(), tw, 3);
+			DrawToggle(canvas, tx, card.Bottom() - 36 - 36, cards[i].on, on);
+			canvas.Text(Style({22, ui::Weight::SemiBold, 1.0f}), tx + 64 + 16, card.Bottom() - 36 - 31, cards[i].on ? Tr("On") : Tr("Off"),
+				cards[i].on ? kText : Secondary(), tw - 80, 1);
 		}
+		// and on, below them, where the focus starts
+		const std::string label = Tr("Continue");
+		const float buttonWidth = m_fonts.Width(Style({28, ui::Weight::SemiBold, 1.0f}), label) + 2 * 72 * 0.55f;
+		PillButton(canvas, 960 - buttonWidth / 2, kTop + kHeight + 52, label, true, focus == 3);
+		canvas.PopOffset();
+		canvas.PopAlpha();
+		StartFooter(canvas, Tr("Change it later in Settings > Accessibility."));
+	}
+
+	void Shell::StartFindingDraw(Canvas& canvas)
+	{
+		// tr: the first start, while Playtendoh looks for games on the drives and in /data
+		StartHeader(canvas, Tr("Looking for your games"),
+			Tr("On your USB drives and the PS5's storage, in any folder. It takes a moment the first time."));
+		const float slide = (m_startForward ? 1 : -1) * 60.0f;
+		canvas.PushAlpha(Enter(2));
+		canvas.PushOffset((1 - Enter(2)) * slide, 0);
+		const std::vector<ps5discover::Root> roots = DiscoverRoots();
+		const std::string where = ps5discover::Where();
+		int at = -1;
+		for (int i = 0; i < (int)roots.size(); i++)
+			if (roots[i].folder == where)
+				at = i;
+		constexpr float kRow = 84;
+		const Box panel{kSafeX, kTop, 1040, 56 + roots.size() * kRow};
+		Glass(canvas, panel, kRadiusSheet, Surface(), 0.7f);
+		const std::string data = ConsoleRoot() + "/data";
+		for (int i = 0; i < (int)roots.size(); i++)
+		{
+			const std::string& folder = roots[i].folder;
+			const bool drive = folder.starts_with(ConsoleRoot() + "/mnt/");
+			const float y = panel.y + 28 + i * kRow;
+			const Box icon{panel.x + 32, y + 14, 52, 52};
+			canvas.Rect(icon, 26, Wash(0.08f));
+			canvas.Draw(drive ? (folder.find("/usb") != std::string::npos ? Icon::Usb : Icon::Drive) : Icon::Folder, icon.Inset(13), kText);
+			// tr: the first start's look: the PS5's own storage, as a row of where it looks
+			const std::string name = drive ? DriveName(folder) : folder == data ? std::string(Tr("The PS5's storage (/data)")) : PlaceName(folder);
+			canvas.Text(Style({24, ui::Weight::SemiBold, 1.0f}), icon.Right() + 20, y + 26, name, kText, 640, 1);
+			// how far it is: looked through, being looked through, next
+			const Box state{panel.Right() - 32 - 40, y + 20, 40, 40};
+			if (at > i || (at < 0 && !ps5discover::Busy()))
+			{
+				canvas.Rect(state, 20, ui::SetAlpha(kGood, 0.16f));
+				canvas.Draw(Icon::Check, state.Inset(9), kGood);
+			}
+			else if (at == i)
+			{
+				// a ring of dots, turning (still when motion is reduced)
+				const float turn = m_settings.ui.reduceMotion ? 0.0f : (float)std::fmod(m_now * 1.2, 1.0);
+				for (int k = 0; k < 8; k++)
+				{
+					const float angle = 6.2831853f * k / 8, fade = std::fmod(1.0f + k / 8.0f - turn, 1.0f);
+					const float dx = std::cos(angle) * 14, dy = std::sin(angle) * 14;
+					canvas.Rect({state.CentreX() + dx - 4, state.CentreY() + dy - 4, 8, 8}, 4, ui::SetAlpha(Accent(), 0.25f + 0.75f * fade));
+				}
+			}
+			else
+				canvas.Draw(Icon::Dash, state.Inset(10), Tertiary());
 		}
+		// beside it: how much it has looked at, and what happens to what it finds
+		const Box aside{panel.Right() + 40, kTop, 1920 - kSafeX - panel.Right() - 40, 360};
+		Glass(canvas, aside, kRadiusSheet, Surface(), 0.7f);
+		const float ax = aside.x + 36, aw = aside.w - 72;
+		canvas.Text(Style(kOverlineStyle), ax, aside.y + 34, Tr("So far"), Secondary(), aw, 1);
+		canvas.Text(Style({44, ui::Weight::Bold, 1.0f}), ax, aside.y + 72, ps5lang::Decimal(ps5discover::Looked(), 0), kText, aw, 1);
+		// tr: under a number: how many files and folders the look has seen so far
+		canvas.Text(Style({21, ui::Weight::Regular, 1.3f}), ax, aside.y + 132, Tr("files and folders looked at"), Secondary(), aw, 1);
+		canvas.Text(Style({21, ui::Weight::Regular, 1.45f}), ax, aside.y + 200,
+			Tr("Games are played where they are. Nothing is moved, renamed or deleted."), Secondary(), aw, 4);
+		canvas.PopOffset();
+		canvas.PopAlpha();
+		StartFooter(canvas, Tr("Settings > Finding games looks again any time."));
+	}
+
+	void Shell::StartFilesDraw(Canvas& canvas)
+	{
+		const int focus = m_startFocus[(int)StartStep::Files];
+		// tr: the first start's question: the BIOS files, keys and firmware found, copied where their emulators read them
+		StartHeader(canvas, Tr("Copy your keys and BIOS into place?"),
+			Tr("Their emulators only read them from folders of their own. Copies go there: yours stay where they are, and nothing already there is replaced."));
+		const float slide = (m_startForward ? 1 : -1) * 60.0f;
+		canvas.PushAlpha(Enter(2));
+		canvas.PushOffset((1 - Enter(2)) * slide, 0);
+		const float width = 760, gap = 48, left = (1920 - 2 * width - gap) * 0.5f, height = 500;
+		for (int i = 0; i < 2; i++)
+		{
+			const bool on = focus == i;
+			const Box card = StartCard(canvas, {left + i * (width + gap), kTop + 10, width, height}, on, false, std::string("start-files") + char('0' + i));
+			const Box icon{card.x + 36, card.y + 40, 64, 64};
+			canvas.Rect(icon, 32, ui::SetAlpha(i == 0 ? kGood : Tertiary(), 0.16f));
+			canvas.Draw(i == 0 ? Icon::Download : Icon::Dash, icon.Inset(16), i == 0 ? kGood : Tertiary());
+			// tr: the first start's files question: the two choices
+			canvas.Text(Style({34, ui::Weight::SemiBold, 1.1f}), card.x + 36, card.y + 130, i == 0 ? Tr("Copy them") : Tr("Not now"), kText, card.w - 72, 1);
+			if (i == 1)
+			{
+				canvas.Text(Style({21, ui::Weight::Regular, 1.4f}), card.x + 36, card.y + 180, Tr("Settings > Finding games can copy them any time."), Secondary(),
+					card.w - 72, 2);
+				continue;
+			}
+			// what, and from where
+			float y = card.y + 186;
+			for (size_t f = 0; f < m_startFiles.size() && f < 5; f++)
+			{
+				const ps5discover::File& file = m_startFiles[f];
+				canvas.Rect({card.x + 40, y + 10, 8, 8}, 4, Secondary());
+				const ui::TextBlock what = canvas.Text(Style({22, ui::Weight::SemiBold, 1.0f}), card.x + 62, y, FileWords(file), kText, 330, 1);
+				const std::string from = file.kind == ps5discover::File::Kind::Firmware ? file.from : file.from.substr(0, file.from.find_last_of('/'));
+				canvas.Text(Style({19, ui::Weight::Regular, 1.0f}), card.x + 62 + what.width + 14, y + 2, ShortPath(PlaceName(from), 36), Secondary(),
+					card.Right() - 36 - (card.x + 62 + what.width + 14), 1);
+				y += 50;
+			}
+			if (m_startFiles.size() > 5)
+				canvas.Text(Style({19, ui::Weight::Regular, 1.0f}), card.x + 62, y, TrP((long long)m_startFiles.size() - 5, "and {0} more", "and {0} more"), Secondary(),
+					card.w - 98, 1);
+		}
+		canvas.PopOffset();
+		canvas.PopAlpha();
+		StartFooter(canvas, Tr("Settings > Setup check shows each file and where it goes."));
+	}
+
+	void Shell::StartReadyDraw(Canvas& canvas)
+	{
+		const int focus = m_startFocus[(int)StartStep::Ready];
+		const std::vector<const Check*> needs = StartNeeds();
+		const ui::TextStyle nameStyle = Style({34, ui::Weight::SemiBold, 1.1f});
+		const ui::TextStyle aboutStyle = Style({21, ui::Weight::Regular, 1.4f});
+		// the games found, a console each: in its own folder and wherever else they were found
+		struct Found
+		{
+			System side;
+			int games;
+			std::string where;
+		};
+		std::vector<Found> found;
+		int total = 0;
+		for (const Check& check : m_checks)
+			if (check.id.ends_with("-games"))
+			{
+				const System side = ps5launcher::SideNamed(check.id.substr(0, check.id.size() - 6));
+				const int games = std::max(check.games, FoundGames(side));
+				if (games > 0)
+				{
+					found.push_back({side, games, FoundWhere(side)});
+					total += games;
+				}
+			}
+		// tr: the first start's last step: a summary, nothing to answer
+		StartHeader(canvas, !needs.empty() ? Tr("Almost ready") : total > 0 ? Tr("You're ready to play") : Tr("Now add your games"),
+			!needs.empty() ? TrP((long long)needs.size(), "One thing to sort out before some games will play.", "{0} things to sort out before some games will play.") :
+			total > 0	   ? TrP(total, "Found {0} game. Every system with games is in the bar.", "Found {0} games. Every system with games is in the bar.") :
+							 Tr("Everything else Playtendoh needs is here."));
+		const float slide = (m_startForward ? 1 : -1) * 60.0f;
+		canvas.PushAlpha(Enter(2));
+		canvas.PushOffset((1 - Enter(2)) * slide, 0);
+		const Box games{kSafeX, kTop, 1000, 520};
+		Glass(canvas, games, kRadiusSheet, Surface(), 0.7f);
+		canvas.Text(Style(kOverlineStyle), games.x + 36, games.y + 34, Tr("Your games"), Secondary(), games.w - 72, 1);
+		const bool looking = ps5discover::Busy();
+		if (found.empty())
+		{
+			const Box icon{games.x + 36, games.y + 90, 72, 72};
+			canvas.Rect(icon, 36, Wash(0.08f));
+			canvas.Draw(looking ? Icon::Search : Icon::Folder, icon.Inset(18), Secondary());
+			canvas.Text(nameStyle, games.x + 36, games.y + 190, looking ? Tr("Still looking…") : Tr("No games found yet"), kText, games.w - 72, 1);
+			canvas.Text(aboutStyle, games.x + 36, games.y + 238,
+				// tr: {0} is the drop folder, /data/playtendoh
+				TrF("Put your games anywhere on a USB drive or in {0}, in any folders: each console's in one, or all together. Playtendoh finds them each time it starts, and when you plug in a drive.",
+					"/data/playtendoh"),
+				Secondary(), games.w - 72, 5);
+		}
+		else
+		{
+			constexpr int kColumns = 3;
+			const float cellW = (games.w - 72) / kColumns, cellH = 112;
+			for (int i = 0; i < (int)found.size() && i < 12; i++)
+			{
+				const float x = games.x + 36 + (i % kColumns) * cellW, y = games.y + 82 + (i / kColumns) * cellH;
+				DrawBareConsole(canvas, found[i].side, {x, y + 8, 76, 76}, true);
+				canvas.Text(Style({22, ui::Weight::SemiBold, 1.0f}), x + 94, y + 18, SystemName(found[i].side), kText, cellW - 108, 1);
+				canvas.Text(Style({19, ui::Weight::Regular, 1.0f}), x + 94, y + 50, TrP(found[i].games, "{0} game", "{0} games", found[i].games), Secondary(),
+					cellW - 108, 1);
+				if (!found[i].where.empty())
+					canvas.Text(Style({17, ui::Weight::Regular, 1.0f}), x + 94, y + 76, ShortPath(found[i].where, 30), Tertiary(), cellW - 108, 1);
+			}
+			canvas.Text(aboutStyle, games.x + 36, games.Bottom() - 62,
+				looking ? DiscoverStatus() + " " + Tr("What it finds joins the Library.") :
+						  std::string(Tr("Games are played where they are. Add more anywhere on a drive, any time.")),
+				Secondary(), games.w - 72, 1);
+		}
+		// what stands in the way, or that nothing does
+		const Box side{kSafeX + 1000 + 40, kTop, 1920 - kSafeX - (kSafeX + 1000 + 40), 520};
+		Glass(canvas, side, kRadiusSheet, Surface(), 0.7f);
+		canvas.Text(Style(kOverlineStyle), side.x + 36, side.y + 34, needs.empty() ? Tr("Checked") : Tr("Before you play"), needs.empty() ? kGood : kWarn,
+			side.w - 72, 1);
+		float y = side.y + 76;
+		if (needs.empty())
+		{
+			const Box icon{side.x + 36, y + 10, 72, 72};
+			canvas.Rect(icon, 36, ui::SetAlpha(kGood, 0.16f));
+			canvas.Draw(Icon::Check, icon.Inset(18), kGood);
+			canvas.Text(Style({24, ui::Weight::SemiBold, 1.2f}), side.x + 36, y + 110, Tr("Storage and game speed are fine"), kText, side.w - 72, 2);
+			y += 160;
+		}
+		for (int i = 0; i < (int)needs.size() && i < 3; i++)
+		{
+			const Check& check = *needs[i];
+			const bool on = i == focus;
+			const Box row{side.x + 20, y, side.w - 40, 84};
+			if (on)
+			{
+				canvas.Rect(row, 18, ui::SetAlpha(Accent(), LightGround() ? 0.08f : 0.14f));
+				Focus(row, 18);
+			}
+			const Box icon{row.x + 16, row.CentreY() - 20, 40, 40};
+			canvas.Rect(icon, 20, ui::SetAlpha(kWarn, 0.16f));
+			canvas.Draw(Icon::Warning, icon.Inset(9), kWarn);
+			canvas.Text(Style({22, ui::Weight::SemiBold, 1.1f}), icon.Right() + 16, row.y + 14, check.title, kText, row.Right() - icon.Right() - 32, 1);
+			canvas.Text(Style({18, ui::Weight::Regular, 1.2f}), icon.Right() + 16, row.y + 46, check.detail, Secondary(), row.Right() - icon.Right() - 32, 1);
+			y += 92;
+		}
+		// the files being copied, and EmulationStation's download, said before it starts
+		if (m_discovery.copying)
+		{
+			y += 8;
+			canvas.Draw(Icon::Download, {side.x + 36, y + 2, 28, 28}, Secondary());
+			// tr: the first start's summary, while the files found are copied into place: {0} is how far, "40%"
+			canvas.Text(Style({19, ui::Weight::Regular, 1.35f}), side.x + 76, y, TrF("Copying your files into place: {0}", ps5lang::Percent((int)(ps5discover::CopyFraction() * 100))),
+				Secondary(), side.w - 112, 2);
+			y += 44;
+		}
+		if (m_settings.ui.emulationStation && !ps5esde::Available())
+		{
+			y += 8;
+			canvas.Draw(Icon::Download, {side.x + 36, y + 2, 28, 28}, Secondary());
+			canvas.Text(Style({19, ui::Weight::Regular, 1.35f}), side.x + 76, y,
+				Tr("EmulationStation downloads when you start (about 850 MB). It opens next time Playtendoh starts."), Secondary(), side.w - 112, 3);
+		}
+		// the focused one's guide, on a phone
+		if (!needs.empty())
+		{
+			const Check& check = *needs[std::clamp(focus, 0, (int)needs.size() - 1)];
+			const Box qrBox{side.x + 36, side.Bottom() - 36 - kQr, kQr, kQr};
+			auto code = m_qrCodes.find(check.guide);
+			if (code == m_qrCodes.end())
+				code = m_qrCodes.emplace(check.guide, ui::QrCode(check.guide)).first;
+			canvas.Rect(qrBox.Inset(-8), 12, 0xffffffff);
+			ui::DrawQr(canvas, code->second, qrBox, 8);
+			const float tx = qrBox.Right() + 28, tw = side.Right() - 36 - tx;
+			const ui::TextBlock title = m_fonts.Layout(Style({22, ui::Weight::SemiBold, 1.3f}), check.aboutTitle, tw, 2);
+			const ui::TextBlock about = m_fonts.Layout(Style({18, ui::Weight::Regular, 1.4f}), Tr("Scan it for how, on your phone."), tw, 2);
+			const float ty = qrBox.y + (kQr - title.height - 6 - about.height) * 0.5f;
+			canvas.Text(title, tx, ty, kText);
+			canvas.Text(about, tx, ty + title.height + 6, Secondary());
+		}
+		canvas.PopOffset();
+		canvas.PopAlpha();
+		StartFooter(canvas, Tr("Settings > Setup check has the details any time."));
 	}
 }

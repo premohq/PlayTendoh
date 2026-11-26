@@ -1,46 +1,40 @@
-# The new launcher's first start (PREVIEW_FIRST=1 tools/preview-shell.sh tools/launcher-preview/shell-first.txt):
-# the setup, a question a screen (firststart.cpp), then the Library of the first side with games.
+# The new launcher's first start (PREVIEW_FIRST=1 PREVIEW_CONSOLE=1 tools/preview-shell.sh tools/launcher-preview/shell-first.txt):
+# the setup, a question a screen (firststart.cpp), while Playtendoh looks for games on the console's drives and
+# in /data (discover.cpp); then the files it found to copy, the summary, and the Library of the first side.
 wait 90
 shot first-1-language         # which language: the PS5's first, in focus
 press right down              # another, to see the focus move
 wait 25
 shot first-1-language-focus
 press up left
-press cross                   # the PS5's: on to the layout
+press cross                   # the PS5's: on to what makes it easier to see
 wait 60
-shot first-2-layout           # Classic, Orbit, EmulationStation
-press right
-wait 40
-shot first-2-layout-orbit
-press left
+shot first-2-easier           # larger text, high contrast, less motion; Continue in focus
+press up                      # the cards
+press cross                   # larger text on
+wait 30
+shot first-2-easier-larger
+press cross                   # and off again
+press down
+press cross                   # Continue
+wait 60
+shot first-3-layout           # Classic, Orbit, EmulationStation
 press cross                   # Classic
 wait 60
-shot first-3-covers           # flat or 3D boxes
-press right
-wait 30
-shot first-3-covers-boxes
-press left
-press cross                   # flat
-wait 60
 shot first-4-buttons          # which button is A
-press right
-wait 30
-shot first-4-buttons-cross
-press left
 press cross                   # A on Circle
 wait 60
 shot first-5-reports          # reports: Yes in focus
 press cross                   # yes
 wait 60
-shot first-6-ready            # the summary
-press down
-wait 25
-shot first-6-ready-next
-press circle                  # back a step: the reports again, as answered
-wait 60
-shot first-back
-press cross
-wait 40
-press cross                   # start playing
+shot first-6-files            # the keys, BIOS and firmware found: copy them?
+press cross                   # copy them
 wait 90
+shot first-7-ready            # what was found and where, and what still stands in the way
+press circle                  # back a step: the files again
+wait 40
+press cross
+wait 60
+press cross                   # start playing
+wait 120
 shot first-library

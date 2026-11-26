@@ -178,8 +178,30 @@ namespace ps5shell
 			return true;
 		}
 		const std::string& folder = GamesFolder(m_side);
+		// a look for games everywhere going on (discover.cpp): what it is doing
+		if (ps5discover::Busy())
+		{
+			kicker = SystemName(m_side);
+			title = Tr("Looking for games…");
+			text = DiscoverStatus();
+			return true;
+		}
 		kicker = Tr("Welcome");
 		title = Tr("Your games go here");
+		// the side's folder still its own: anywhere is fine, Playtendoh finds them
+		if (!ps5settings::ChoseGamesFolder(m_settings, SideName(m_side)))
+		{
+			// tr: the Library of a system with no games yet; {0} is the drop folder, /data/playtendoh
+			text = TrF("Put this system's games anywhere on a USB drive or in {0}, in any folder. Playtendoh finds them each time it starts and when you plug in a drive. Or choose a folder of your own.",
+				"/data/playtendoh");
+			if (IsSwitch() && !IsSwitch2())
+				text += " " + TrF("You also need your Switch's keys in {0}/keys and firmware in {0}/firmware.", ps5eden::GameFilesFolder());
+			// tr: the empty Library's button: Playtendoh looks on the drives and in /data now
+			buttons = {Tr("Look for games"), Tr("Choose a folder"), Tr("Setup check")};
+			if (Is3ds())
+				buttons.insert(buttons.begin() + 2, Tr("Play from your 3DS")); // Artic Base needs no games here
+			return true;
+		}
 		// tr: {0} is the games folder
 		text = IsRetro() ? TrF("Put this system's games in {0}, or choose any folder, such as one on a USB drive. Subfolders are searched too.", folder) : Is3ds() ? TrF("Put your decrypted 3DS games (.3ds, .cci, .cxi, .3dsx, or in .zip, .7z or .rar) in {0}, or choose any folder, such as one on a USB drive.",
 							 folder) :
@@ -227,6 +249,11 @@ namespace ps5shell
 			const std::string& chosen = buttons[std::clamp(m_stateButton, 0, count - 1)];
 			if (chosen == Tr("Setup check"))
 				SetupOpen(false);
+			else if (chosen == Tr("Look for games"))
+			{
+				m_discovery.announce = true;
+				DiscoverStart();
+			}
 			else if (chosen == Tr("Play from your 3DS"))
 			{
 				m_pageFrom = ScreenId::Library;

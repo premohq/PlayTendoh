@@ -5,7 +5,8 @@
 #
 #   tools/preview-shell.sh [SCRIPT]    default: tools/launcher-preview/shell-screens.txt
 #
-# PREVIEW_FIRST=1 starts it as on a first start, PREVIEW_REMOTE=1 with the remote touch screen on,
+# PREVIEW_FIRST=1 starts it as on a first start, PREVIEW_CONSOLE=1 with a console's drives and /data to find
+# games in (tools/launcher-preview/make-console.py), PREVIEW_REMOTE=1 with the remote touch screen on,
 # PREVIEW_UPDATE=1 with a newer release found, PREVIEW_NO_DATA=1 with /data out of reach,
 # PREVIEW_LAYOUT=1 in Orbit, PREVIEW_PRERELEASE=C as pre-release C (its watermark), PREVIEW_BOXART3D=1 with 3D box art, PREVIEW_NO_BADGES=1 with How games run off, PREVIEW_LAUNCH_ERROR=1 after a game that did not start; PREVIEW_LANGUAGE=de (a code of app/lang.cpp's, or
 # qps, tools/lang.py pseudo's longer text) in that language, PREVIEW_SYSTEM_LANGUAGE=4 with the PS5 set to
@@ -98,6 +99,15 @@ for save in 80000001:4100000 80000002:3800000 common:12000; do
     head -c "${save#*:}" /dev/zero >"$folder/game_data.sav"
 done
 
+# PREVIEW_CONSOLE=1: a folder standing for the console's / (a USB drive and /data with games, BIOS files and
+# keys put where a newcomer might), every side's games folder its own, for Playtendoh to find them
+# (PREVIEW_CONSOLE=empty: with nothing on them)
+if [[ ${PREVIEW_CONSOLE:-} == 1 || ${PREVIEW_CONSOLE:-} == empty ]]; then
+    rm -rf "$out/console"
+    python3 -B tools/launcher-preview/make-console.py "$out/console" $([[ $PREVIEW_CONSOLE == empty ]] && echo --empty)
+    export PREVIEW_CONSOLE=$out/console
+fi
+
 # the app's folder as the console has it, for the pictures the launcher reads from its assets: the
 # sides' tiles (from the last `make package`, when there was one: tools/render-icons.py draws them)
 app=$out/app
@@ -133,9 +143,9 @@ if [[ $(cat "$out/obj/flags" 2>/dev/null) != "${flags[*]}" ]]; then
 fi
 sources=(tools/launcher-preview/shell.cpp tools/launcher-preview/console.cpp
     port/frontend/shell/hub.cpp port/frontend/shell/installs.cpp port/frontend/shell/library.cpp port/frontend/shell/pages.cpp
-    port/frontend/shell/settings.cpp port/frontend/shell/consoles.cpp port/frontend/shell/orbit.cpp port/frontend/shell/timeline.cpp port/frontend/shell/porpoise_rows.cpp port/frontend/shell/switch_extras.cpp port/frontend/shell/setup.cpp port/frontend/shell/shares.cpp port/frontend/shell/shell.cpp port/frontend/shell/welcome.cpp port/frontend/shell/firststart.cpp port/frontend/shell/reports.cpp port/frontend/shell/whatsnew.cpp port/frontend/shell/widgets.cpp port/frontend/shell/cheat_rows.cpp
+    port/frontend/shell/settings.cpp port/frontend/shell/consoles.cpp port/frontend/shell/orbit.cpp port/frontend/shell/timeline.cpp port/frontend/shell/porpoise_rows.cpp port/frontend/shell/switch_extras.cpp port/frontend/shell/setup.cpp port/frontend/shell/discover.cpp port/frontend/shell/shares.cpp port/frontend/shell/shell.cpp port/frontend/shell/welcome.cpp port/frontend/shell/firststart.cpp port/frontend/shell/reports.cpp port/frontend/shell/whatsnew.cpp port/frontend/shell/widgets.cpp port/frontend/shell/cheat_rows.cpp
     port/ui/canvas.cpp port/ui/feedback.cpp port/ui/gfx.cpp port/ui/images.cpp port/ui/input.cpp port/ui/qr.cpp port/ui/text.cpp port/ui/theme.cpp
-    port/ui/vkfn.cpp port/app/catalog.cpp port/app/cheats.cpp port/app/reports.cpp port/app/prerelease.cpp port/app/saves.cpp port/app/reorganize.cpp port/app/gameinfo.cpp port/app/lang.cpp port/app/compatibility.cpp port/app/keyboard.cpp port/frontend/actions.cpp
+    port/ui/vkfn.cpp port/app/catalog.cpp port/app/cheats.cpp port/app/reports.cpp port/app/prerelease.cpp port/app/saves.cpp port/app/reorganize.cpp port/app/discovery.cpp port/app/gameinfo.cpp port/app/lang.cpp port/app/compatibility.cpp port/app/keyboard.cpp port/frontend/actions.cpp
     port/frontend/settings.cpp port/azahar/library.cpp port/azahar/controls.cpp port/azahar/unavailable.cpp
     port/retro/library.cpp port/retro/launch.cpp port/retro/porpoise_settings.cpp port/retro/porpoise_saves.cpp port/retro/porpoise_game.cpp port/retro/porpoise_banner.cpp port/retro/porpoise_disc.cpp port/melonds/library.cpp port/melonds/unavailable.cpp port/eden/library.cpp port/eden/nx_files.cpp port/eden/controls.cpp port/eden/extras.cpp port/eden/save_transfer.cpp)
 

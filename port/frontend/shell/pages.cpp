@@ -1189,6 +1189,8 @@ namespace ps5shell
 		if (m_filesMode == 0)
 		{
 			GamesFolder(m_filesSide) = m_browseFolder;
+			// a folder of the player's own is the side's only one; its own folder again, and what was found joins it
+			ps5settings::ApplyFound(m_settings);
 			const bool saved = ps5settings::Save(m_settings);
 			const bool here = m_filesSide == m_side;
 			if (here)

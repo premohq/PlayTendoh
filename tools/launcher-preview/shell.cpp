@@ -31,7 +31,9 @@
 // PREVIEW_WHATSNEW starts as after an update (Make it yours, with what the version brings); PREVIEW_THEME
 // names a theme (ui/theme.h's id: link-jack, midnight...); PREVIEW_SIDES the sides shown (1 Wii U, 2 3DS, 4 DS);
 // PREVIEW_FILTERS turns the Library's filters' row on; PREVIEW_LARGER_TEXT, PREVIEW_REDUCE_MOTION and
-// PREVIEW_HIGH_CONTRAST turn on Settings > Launcher's accessibility rows.
+// PREVIEW_HIGH_CONTRAST turn on Settings > Launcher's accessibility rows. PREVIEW_CONSOLE names a folder that
+// stands for the console's / (mnt/usb0..., data/), every side's folder its own, for Playtendoh to find games
+// and files in (app/discovery.h): tools/launcher-preview/make-console.py makes one.
 
 #include "console.h"
 
@@ -103,13 +105,18 @@ int main(int argc, char* argv[])
 	preview::LoadScript(argv[2]);
 
 	ps5settings::Launcher settings;
-	settings.gamesFolder = argv[3];
-	settings.n3ds.gamesFolder = argv[4];
-	settings.nds.gamesFolder = argv[5];
-	// the other sides' games in the games folder's folder of their key (gba/: preview-shell.sh puts a few there)
-	for (size_t i = 0; i < ps5retro::kSystems.size(); i++)
-		settings.retro[i].gamesFolder = std::string(argv[3]) + "/" + std::string(ps5retro::kSystems[i].key);
-	settings.nx2.gamesFolder = std::string(argv[3]) + "/switch2"; // preview-shell.sh's Switch 2 game
+	// PREVIEW_CONSOLE: a folder standing for the console's / (its mnt/usb0... and data/), every side's games
+	// folder its own, as on a new install, for Playtendoh to find what is put there (app/discovery.h)
+	if (!std::getenv("PREVIEW_CONSOLE"))
+	{
+		settings.gamesFolder = argv[3];
+		settings.n3ds.gamesFolder = argv[4];
+		settings.nds.gamesFolder = argv[5];
+		// the other sides' games in the games folder's folder of their key (gba/: preview-shell.sh puts a few there)
+		for (size_t i = 0; i < ps5retro::kSystems.size(); i++)
+			settings.retro[i].gamesFolder = std::string(argv[3]) + "/" + std::string(ps5retro::kSystems[i].key);
+		settings.nx2.gamesFolder = std::string(argv[3]) + "/switch2"; // preview-shell.sh's Switch 2 game
+	}
 	if (!std::getenv("PREVIEW_FIRST"))
 	{
 		// earlier sessions: the side last used, the games last played, the counts their scans saved

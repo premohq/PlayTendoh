@@ -90,6 +90,7 @@ namespace ui
 		Heart,	  // About's support card
 		Home,	  // a house: Eden's rail
 		Grid,	  // four squares: Eden's Library
+		Access,	  // a figure with open arms in a ring: Accessibility
 	};
 
 	class Canvas

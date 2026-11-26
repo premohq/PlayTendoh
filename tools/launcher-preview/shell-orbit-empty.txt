@@ -1,0 +1,7 @@
+# Orbit with no games on any console (PREVIEW_CONSOLE=empty PREVIEW_LAYOUT=1 PREVIEW_SIDES=1048576
+# tools/preview-shell.sh tools/launcher-preview/shell-orbit-empty.txt): Home says where games can go, and
+# looks for them.
+wait 120
+press circle                  # Home
+wait 60
+shot orbit-empty-home

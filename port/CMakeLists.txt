@@ -249,6 +249,7 @@ add_library(CemuPS5 STATIC
 	frontend/shell/cheat_rows.cpp
 	frontend/shell/switch_extras.cpp
 	frontend/shell/setup.cpp
+	frontend/shell/discover.cpp
 	frontend/shell/shares.cpp
 	frontend/shell/shell.cpp
 	frontend/shell/shell_internal.h
@@ -388,6 +389,7 @@ set_source_files_properties(
 	frontend/shell/cheat_rows.cpp
 	frontend/shell/switch_extras.cpp
 	frontend/shell/setup.cpp
+	frontend/shell/discover.cpp
 	frontend/shell/shares.cpp
 	frontend/shell/shell.cpp
 	frontend/shell/welcome.cpp

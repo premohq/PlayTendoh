@@ -178,6 +178,13 @@ namespace ps5shell
 					const SideGame chosen = m_homeGames[std::clamp(m_homeIndex, 0, count - 1)];
 					StartFromAnySide(chosen.side, chosen.game);
 				}
+				else if (!AnyGames() && !ps5discover::Busy())
+				{
+					// no games on any console yet: Home's Look for games
+					m_feedback.Play(ui::Cue::Select);
+					m_discovery.announce = true;
+					DiscoverStart();
+				}
 				else
 					m_feedback.Play(ui::Cue::Denied);
 				break;
@@ -369,9 +376,22 @@ namespace ps5shell
 			const Box play = PillButton(canvas, x, y, Tr("Play"), true, false, Icon::Cross, true, 64);
 			PillButton(canvas, play.Right() + 16, y, Tr("Options"), false, false, Icon::Options, true, 64);
 		}
-		else if (m_orbitHome)
+		else if (m_orbitHome && AnyGames())
 			// tr: Orbit's Home before any game was played
 			canvas.Text(Style(kBodyStyle), x, 410, Tr("The games you play show up here."), Secondary(), width, 2);
+		else if (m_orbitHome)
+		{
+			// no games on any console yet: where they can go, and a look for them now (discover.cpp)
+			const bool looking = ps5discover::Busy();
+			const ui::TextBlock text = canvas.Text(Style(kBodyStyle), x, 410,
+				looking ? DiscoverStatus() :
+						  // tr: Orbit's Home with no games on any console; {0} is the drop folder, /data/playtendoh
+						  TrF("Put your games anywhere on a USB drive or in {0}, in any folders. Playtendoh finds them each time it starts and when you plug in a drive.",
+							  "/data/playtendoh"),
+				Secondary(), width, 4);
+			if (!looking)
+				PillButton(canvas, x, 410 + text.height + 32, Tr("Look for games"), true, !m_onBar, Icon::Search, true, 64);
+		}
 
 		// the row of games, slid as far as the one in focus needs
 		const int offset = m_orbitHome ? 0 : ArticTiles();
@@ -461,6 +481,12 @@ namespace ps5shell
 			items.push_back({{Icon::Cross}, nullptr, Tr("Open")});
 		else if (state)
 			items.push_back({{Icon::Cross}, nullptr, Tr("Choose")});
+		else if (m_orbitHome && m_homeGames.empty() && !AnyGames())
+		{
+			// no games on any console yet: Home's Look for games
+			if (!ps5discover::Busy())
+				items.push_back({{Icon::Cross}, nullptr, Tr("Look for games")});
+		}
 		else
 		{
 			items.push_back({{Icon::Cross}, nullptr, Tr("Play")});

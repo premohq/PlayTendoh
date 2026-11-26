@@ -213,7 +213,11 @@ namespace ps5shell
 		std::vector<SettingsPage> pages = SidePages();
 		// the menus' language first, with a globe, which reads in any language
 		pages.push_back({"ui-language", Tr("Language"), Tr("The menu language. Uses the PS5's unless you choose another."), Icon::Globe, true});
-		pages.push_back({"launcher", Tr("Launcher"), Tr("Theme, layout, systems, music and text."), Icon::Sparkle, true});
+		// tr: Settings: the page of larger text, high contrast, reduced motion and the hold to confirm
+		pages.push_back({"accessibility", Tr("Accessibility"), Tr("Larger text, high contrast, less motion and the hold to confirm."), Icon::Access, true});
+		pages.push_back({"launcher", Tr("Launcher"), Tr("Theme, layout, systems and music."), Icon::Sparkle, true});
+		// tr: Settings: the page of the look for games, BIOS and keys on the drives and the PS5 (discover.cpp)
+		pages.push_back({"finding", Tr("Finding games"), Tr("Games, BIOS and keys put anywhere on your drives or the PS5."), Icon::Search, true});
 		// RetroAchievements, reports and the app's updates: one account and one app for every side (and the
 		// cheats' downloads, when the app has them)
 		pages.push_back({"accounts", Tr("Accounts and updates"), Tr("RetroAchievements, reports and Playtendoh's updates."), Icon::Download, true});
@@ -553,7 +557,9 @@ namespace ps5shell
 			}
 			if (page == "files")
 			{
-				Row folder; folder.id = "folder"; folder.kind = Kind::Link; folder.label = Tr("Games folder"); folder.value = GamesFolder(m_side); folder.description = Tr("Where this system's games are. Changing it doesn't move any games or saves."); rows.push_back(folder);
+				Row folder; folder.id = "folder"; folder.kind = Kind::Link; folder.label = Tr("Games folder"); folder.value = GamesFolder(m_side); folder.description = Tr("Where this system's games are. Changing it doesn't move any games or saves.");
+				FoundFolderRow(folder);
+				rows.push_back(folder);
 				Row scan; scan.id = "rescan"; scan.kind = Kind::Action; scan.label = Tr("Look for games now"); rows.push_back(scan);
 				// network shares, added from this side's page as from the Wii U's, DS's and 3DS's: the folder
 				// browser has a tab for each on every side
@@ -1177,7 +1183,7 @@ namespace ps5shell
 		else if (page == "files")
 		{
 			const std::string& folder = GamesFolder(m_side);
-			action(Kind::Link, "folder", Is3ds() ? Tr("3DS games") : IsDs() ? Tr("DS games") : IsSwitch2() ? Tr("Switch 2 games") : IsSwitch() ? Tr("Switch games") : Tr("Wii U games"),
+			Row* folderRow = action(Kind::Link, "folder", Is3ds() ? Tr("3DS games") : IsDs() ? Tr("DS games") : IsSwitch2() ? Tr("Switch 2 games") : IsSwitch() ? Tr("Switch games") : Tr("Wii U games"),
 				ShortPath(IsSwitch() && !IsSwitch2() ? ps5eden::ScanFolder(folder) : folder, 34),
 				Tr("Where your games are. Cross picks another."),
 				// tr: {0} is the app's data folder: /data/ps5cemu, or the PS5CEMU-HAR-data folder on the drive the app is installed on
@@ -1186,6 +1192,7 @@ namespace ps5shell
 				IsSwitch2() ? Tr("Switch 2 game folders need ExeFS and RomFS. Put each game in its own folder; keep updates and DLC where Lichii expects them.") :
 				IsSwitch() ? Tr("Switch games: .nsp and .xci files, each alone or in its own folder with its update and DLC.") :
 						   Tr("DS games: .nds files, or in .zip, .7z or .rar, here or in subfolders."));
+			FoundFolderRow(*folderRow);
 			action(Kind::Action, "rescan", Tr("Look for games now"), m_scanning ? Tr("Looking…") : "", Tr("Search this system's folder again."),
 				Tr("Searches this system's folder again for added or removed games."));
 			// #75: a large library on a share is a long look at every start
@@ -1645,32 +1652,6 @@ namespace ps5shell
 			// tr: Settings > Launcher: a game's badge, Playable, Issues or Not playable, from players' reports
 			toggle("compatbadges", Tr("How games run"), settings.ui.compatBadges, Tr("Playable, Issues or Not playable on each game."),
 				Tr("A badge on each game that has been reported: Playable, Issues or Not playable, from the compatibility list and players' reports, updated when the app starts. Off: no badges."));
-			int hold = 2;
-			for (int i = 0; i < 6; i++)
-				if (kHolds[i] <= settings.ui.holdMs)
-					hold = i;
-			const std::vector<std::string> holds = Options({"0.4 s", "0.6 s", "0.8 s", "1.0 s", "1.2 s", "1.5 s"});
-			// what is on, and the hold when it is not the 0.8 s it starts at
-			std::string easier;
-			for (const auto& [on, name] : {std::pair{settings.ui.largerText, Tr("Larger text")}, std::pair{settings.ui.highContrast, Tr("High contrast")},
-					 std::pair{settings.ui.reduceMotion, Tr("Reduce motion")}})
-				if (on)
-					easier += (easier.empty() ? "" : " · ") + std::string(name);
-			if (hold != 2)
-				easier += (easier.empty() ? "" : " · ") + holds[hold];
-			// tr: Settings > Launcher: a row that opens Larger text, High contrast, Reduce motion and Hold to confirm
-			sub("accessibility", Tr("Accessibility"), easier.empty() ? std::string(Tr("Default")) : easier,
-				Tr("Larger text, high contrast, reduced motion and hold to confirm."),
-				Tr("Text size, contrast, motion, and how long to hold Cross to confirm. Press Triangle on each for more."));
-			toggle("largertext", Tr("Larger text"), settings.ui.largerText, Tr("Makes all text a step larger."),
-				Tr("Makes every text size one step larger."));
-			toggle("highcontrast", Tr("High contrast"), settings.ui.highContrast, Tr("Opaque panels, full-strength text, a thicker ring."),
-				Tr("Opaque panels instead of glass, all text at full strength, a thicker focus ring and no grain or pictures behind the menus."));
-			toggle("reducemotion", Tr("Reduce motion"), settings.ui.reduceMotion, Tr("Fades instead of motion."),
-				Tr("Animations become short fades, and the background stays still."));
-			choice("holdms", Tr("Hold to confirm"), holds, hold, Tr("How long to hold Cross for actions that can't be undone."),
-				Tr("Actions like clearing caches or resetting controls need Cross held to confirm. This sets how long."), Kind::Stepper);
-			endSub();
 			// the launcher's music and menu sounds, the same on every side
 			std::vector<std::string> musicNames;
 			const std::vector<std::string> musicValues = MusicValues(&musicNames);
@@ -1690,6 +1671,73 @@ namespace ps5shell
 			endSub();
 			action(Kind::Link, "makeityours", Tr("Make it yours"), "", Tr("Run first-time setup again."),
 				Tr("Shows the first-time setup again: language, systems, theme, buttons, music, vibration and game pictures."));
+		}
+		else if (page == "accessibility")
+		{
+			// what makes the launcher easier to see and use, for every side and the in-game menus' text
+			toggle("largertext", Tr("Larger text"), settings.ui.largerText, Tr("Every word a size larger, in every menu."),
+				Tr("Makes every text size one step larger, in the launcher and its menus. The first start's screens take Triangle for it too."));
+			toggle("highcontrast", Tr("High contrast"), settings.ui.highContrast, Tr("Solid panels, text at full strength and a thicker focus ring."),
+				Tr("Opaque panels instead of glass, all text at full strength, a thicker focus ring and no grain or pictures behind the menus."));
+			toggle("reducemotion", Tr("Reduce motion"), settings.ui.reduceMotion, Tr("Fades instead of movement, and a background that keeps still."),
+				Tr("Animations become short fades, and the background stays still."));
+			int hold = 2;
+			for (int i = 0; i < 6; i++)
+				if (kHolds[i] <= settings.ui.holdMs)
+					hold = i;
+			choice("holdms", Tr("Hold to confirm"), Options({"0.4 s", "0.6 s", "0.8 s", "1.0 s", "1.2 s", "1.5 s"}), hold,
+				Tr("How long to hold Cross for actions that can't be undone."),
+				Tr("Actions like clearing caches or resetting controls need Cross held to confirm. This sets how long."), Kind::Stepper);
+		}
+		else if (page == "finding")
+		{
+			// the look for games, BIOS and keys everywhere (discover.cpp): on or off, now, what it found to copy, and where
+			// tr: Settings > Finding games: Playtendoh looks for games, BIOS and keys on the drives and in /data by itself
+			toggle("discover", Tr("Find games by itself"), settings.ui.discover, Tr("On your drives and the PS5, at each start and when a drive is plugged in."),
+				// tr: {0} is the drop folder, /data/playtendoh
+				TrF("Playtendoh looks on your USB drives and extended storage, in /data/homebrew and in {0}, in any folders, for every system's games, BIOS files, Switch keys and firmware, and Wii U disc keys. Games are played where they are, and each system with games is shown in the bar unless you hid it. BIOS files and keys are copied into place only when you say so. A folder you chose in Game files is used as it is. Off: only when you press Look now.",
+					"/data/playtendoh"));
+			int found = 0;
+			for (const ps5discover::Place& place : m_discovery.found.places)
+				found += place.games;
+			// tr: Settings > Finding games: what the last look found
+			const std::string status = ps5discover::Busy() ? DiscoverStatus() : m_discovery.ran ? TrP(found, "{0} game found", "{0} games found") : std::string();
+			action(Kind::Action, "lookfornow", Tr("Look now"), status, Tr("On your USB drives and the PS5's storage."),
+				Tr("Looks on your USB drives, the extended storage and /data for every system's games, BIOS files, Switch keys and firmware, and Wii U disc keys. Games are played where they are."));
+			const std::vector<ps5discover::File>& files = m_discovery.found.files;
+			Row* copy = action(Kind::Action, "copyfound", Tr("Copy found files"),
+				m_discovery.copying ? TrF("Copying your files into place: {0}", Percent((int)(ps5discover::CopyFraction() * 100))) :
+				files.empty()		? std::string(Tr("Nothing to copy")) :
+									  FilesSummary(files),
+				Tr("BIOS files, keys and firmware, into their emulators' folders."),
+				Tr("Each emulator reads its BIOS, keys and firmware from a folder of its own. Cross copies what was found there: your files stay where they are, and a file already there is never replaced. Settings > Diagnostics > Setup check lists each one, from where and to where."));
+			copy->dimmed = files.empty() || m_discovery.copying;
+			// each system's places, behind a › row
+			std::vector<std::string> systems;
+			for (const ps5discover::Place& place : m_discovery.found.places)
+				if (std::find(systems.begin(), systems.end(), place.side) == systems.end())
+					systems.push_back(place.side);
+			// tr: Settings > Finding games: a row that opens where each system's games were found
+			sub("foundplaces", Tr("Where games were found"), systems.empty() ? std::string() : TrP((long long)systems.size(), "{0} system", "{0} systems"),
+				Tr("Each system's games, and the folders they are in."),
+				Tr("Where the last look found each system's games. A system whose games folder you chose in its Settings > Game files uses that folder only."));
+			for (size_t i = 0; i < m_discovery.found.places.size(); i++)
+			{
+				const ps5discover::Place& place = m_discovery.found.places[i];
+				Row* row = action(Kind::Action, "foundplace", SystemName(ps5launcher::SideNamed(place.side)),
+					TrP(place.games, "{0} game", "{0} games") + " · " + ShortPath(PlaceName(place.folder), 40),
+					ps5settings::ChoseGamesFolder(settings, place.side) ? Tr("Not used: you chose this system's folder in its Game files.") : std::string(), "");
+				row->dimmed = ps5settings::ChoseGamesFolder(settings, place.side);
+			}
+			if (m_discovery.found.places.empty())
+			{
+				Row* none = action(Kind::Action, "foundplace", m_discovery.ran ? Tr("No games found yet") : Tr("Not looked yet"), "", "", "");
+				none->dimmed = true;
+			}
+			endSub();
+			// tr: Settings > Finding games: the folder made for the player's games, BIOS and keys
+			action(Kind::Action, "dropfolder", Tr("Drop folder"), "/data/playtendoh", Tr("Put games, BIOS and keys here, in any folders."),
+				Tr("A folder Playtendoh makes for you: copy anything into it with FTP or a file manager, in any folders, each console's or all together. It is looked through as Playtendoh starts. USB drives are looked through too, whatever their folders are called."));
 		}
 		else if (page == "diagnostics")
 		{
@@ -2283,6 +2331,10 @@ namespace ps5shell
 				text += line + "\n";
 			return text;
 		}
+		if (page == "finding")
+			// tr: {0} is the drop folder, /data/playtendoh
+			return TrF("Where Playtendoh looks: every USB drive and the extended storage, {0}, /data/homebrew and the rest of /data, in any folders, and never inside another app's folder. What it finds: every system's games by their file types (a .zip by the file in it), BIOS files by their names and sizes, prod.keys, title.keys, a folder of firmware .nca files, and keys.txt with Wii U disc keys. It looks at each start, once the Library is up, and when a drive is plugged in, and stops whenever a game starts.",
+				"/data/playtendoh");
 		if (page == "launcher")
 			return TrF("Your own theme: put a file such as sunset.json in {0}/themes. It appears under Theme by its name:\n{{\"name\": \"Sunset\", \"base\": \"midnight\", \"colours\": {{\"wiiu\": \"#ff7a59\", \"ink-0\": \"#120806\"}}, \"corners\": 0.5, \"motif\": \"none\"}}\nbase: a theme to start from (light, link-jack, classic, midnight, eden). colours: ink-0 to ink-2 (the background), text, wiiu, n3ds, nds and nx (each system's), glass, line, good, warn, bad and focus, as #rrggbb. corners: 0 square to 1.5 round. motif: side, none or eden.",
 				ps5paths::Root());
@@ -2532,7 +2584,11 @@ namespace ps5shell
 					return false;
 				}
 				settings.ui.sides = sides;
+				// hidden by the player: Playtendoh never shows it again by itself, whatever games it finds for it
+				settings.ui.sidesHidden = on ? settings.ui.sidesHidden & ~bit : settings.ui.sidesHidden | bit;
 			}
+			else if (id == "discover")
+				settings.ui.discover = on;
 			else if (id == "pictures")
 				settings.ui.gamePictures = on;
 			else if (id == "boxart3d")
@@ -3120,6 +3176,13 @@ namespace ps5shell
 			SharesOpen(ScreenId::Settings);
 		else if (id == "rescan")
 			LookForGames();
+		else if (id == "lookfornow")
+		{
+			m_discovery.announce = true;
+			DiscoverStart();
+		}
+		else if (id == "copyfound")
+			DiscoverCopy();
 		else if ((id == "boxartmissing" || id == "boxartall") && IsRetro() && !IsPorpoise())
 		{
 			// a libretro side's: libretro's thumbnails, by name, those it had none for asked again
