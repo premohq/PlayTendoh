@@ -5,6 +5,7 @@
 #include "switch_file.h"
 #include "nx_files.h"
 #include "../eglantine/launch.h"
+#include "../app/found_folders.h"
 #include "../app/gameinfo.h"
 #include "../app/media_folders.h"
 #include "../app/paths.h"
@@ -315,11 +316,12 @@ namespace ps5eden
 		// once) and name. Without keys, or for a file they do not open, its name says. covers: the games
 		// whose icons are to be read after (no cover yet). The updates and DLC there and in Eden's updates/
 		// and dlc/ go with their games (addons.h): the update's version and how many DLC, on its page.
-		void ScanWithKeys(const std::string& folder, std::vector<ps5emu::Game>& games, std::vector<fs::path>& covers,
+		void ScanWithKeys(const std::vector<std::string>& folders, std::vector<ps5emu::Game>& games, std::vector<fs::path>& covers,
 			std::vector<addons::File>& found, bool switch2Side)
 		{
 			std::vector<fs::path> files;
-			Collect(folder, files);
+			for (const std::string& folder : folders)
+				Collect(folder, files);
 			const size_t inFolder = files.size();
 			{
 				std::set<std::string> seen;
@@ -531,12 +533,17 @@ namespace ps5eden
 		for (const char* sub : {"keys", "firmware", "roms", "updates", "dlc"})
 			fs::create_directories(fs::path(files) / sub, ec);
 		const std::string scanned = ScanFolder(folder, switch2Side);
-		std::thread([scanned, switch2Side] {
+		// the side's folder, then those Playtendoh found its games in (app/found_folders.h)
+		std::vector<std::string> folders;
+		for (const std::string& each : ps5found::With(switch2Side ? "switch2" : "switch", scanned))
+			if (each == scanned || fs::is_directory(each, ec))
+				folders.push_back(each);
+		std::thread([scanned, folders, switch2Side] {
 			const auto started = std::chrono::steady_clock::now();
 			std::vector<ps5emu::Game> games;
 			std::vector<fs::path> covers;
 			std::vector<addons::File> addOns;
-			ScanWithKeys(scanned, games, covers, addOns, switch2Side);
+			ScanWithKeys(folders, games, covers, addOns, switch2Side);
 			// the same game twice (an NSP and an XCI, a copy in a folder): listed once
 			std::set<uint64_t> listed;
 			std::erase_if(games, [&](const ps5emu::Game& game) { return !listed.insert(game.titleId).second; });

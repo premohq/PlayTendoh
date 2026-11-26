@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "library.h"
 #include "../app/lang.h"
+#include "../app/found_folders.h"
 #include "../app/media_folders.h"
 #include "../app/own_status.h"
 #if defined(__PROSPERO__)
@@ -16,6 +17,7 @@
 #include <rapidjson/document.h>
 #include <memory>
 #include <map>
+#include <set>
 #include <thread>
 // Wii banner extraction
 #include "porpoise_banner.h"
@@ -126,6 +128,19 @@ namespace ps5retro
 				return {};
 			for (char& c : name) c = char(std::tolower((unsigned char)c));
 			return name;
+		}
+
+		// a found folder's game in a .zip: the side its first file is for, as in a mixed folder of every console's
+		// archives; a .7z, whose names are not at its start, none
+		bool ArchiveMatches(std::string_view side, const fs::path& path)
+		{
+			const auto ext = Extension(path);
+			if (ext == ".7z")
+				return false;
+			if (ext != ".zip")
+				return true;
+			const std::string name = FirstZipName(path);
+			return !name.empty() && Extension(name) != ".zip" && HasExtension(side, name);
 		}
 
 		bool DiscMatches(std::string_view side, const fs::path& path)
@@ -369,7 +384,20 @@ namespace ps5retro
 		}
 		error.clear(); return true;
 	}
+	namespace
+	{
+		std::vector<ps5emu::Game> ScanFolder(const std::string& side, const std::string& folder, std::string& error, bool found);
+	}
+
 	std::vector<ps5emu::Game> Scan(const std::string& side, const std::string& folder, std::string& error)
+	{
+		return ScanFolder(side, folder, error, false);
+	}
+
+	namespace
+	{
+	// found: a folder Playtendoh found the side's games in, where an archive goes by its first file
+	std::vector<ps5emu::Game> ScanFolder(const std::string& side, const std::string& folder, std::string& error, bool found)
 	{
 		std::vector<ps5emu::Game> result;
 		if (!Find(side)) { error = "Unknown emulator system."; return result; }
@@ -388,7 +416,7 @@ namespace ps5retro
 			if (!HasExtension(side, name)) continue;
 			std::error_code statusError;
 			const auto status = ps5files::OwnStatus(it->path(), statusError);
-			if (statusError || !fs::is_regular_file(status) || !DiscMatches(side, it->path())) continue;
+			if (statusError || !fs::is_regular_file(status) || !DiscMatches(side, it->path()) || (found && !ArchiveMatches(side, it->path()))) continue;
 			ps5emu::Game game;
 			game.path = it->path(); game.name = game.path.stem().string();
 			game.format = game.path.extension().string().substr(1); for (char& c : game.format) c = char(std::toupper((unsigned char)c));
@@ -419,6 +447,19 @@ namespace ps5retro
 		}
 		std::sort(result.begin(), result.end(), [](const auto& a, const auto& b) { return a.name < b.name; });
 		return result;
+	}
+	}
+
+	int DiscSystem(const std::string& path)
+	{
+		const auto ext = Extension(path);
+		unsigned char header[0x100]{};
+		if (!ReadDiscHeader(path, ext, header))
+			return -1;
+		for (int side = kFirst; side < kSideCount; side++)
+			if (Disc(side) && CheckDiscHeader(header, Of(side).key))
+				return side;
+		return -1;
 	}
 
 	int IdentifySystem(const std::string& path)
@@ -462,7 +503,28 @@ namespace ps5retro
 			for (;;)
 			{
 				std::string error; std::vector<ps5emu::Game> games;
-				try { games = Scan(Of(side).key, current, error); } catch (const std::exception& e) { error = e.what(); }
+				try
+				{
+					// the side's own folder, then those its games were found in (app/found_folders.h): each game once
+					const std::string key = Of(side).key;
+					std::set<std::string> listed;
+					for (const std::string& scanned : ps5found::With(key, current))
+					{
+						std::string why;
+						const bool own = scanned == current;
+						std::error_code ec;
+						if (!own && !fs::is_directory(scanned, ec))
+							continue; // a drive taken out: its games come back with it
+						for (ps5emu::Game& game : ScanFolder(key, scanned, why, !own))
+							if (listed.insert(game.path.string()).second)
+								games.push_back(std::move(game));
+						// the side's own folder not made yet is no error while its games are found elsewhere
+						if (own && (fs::is_directory(scanned, ec) || ps5found::Of(key).empty()))
+							error = why;
+					}
+					std::sort(games.begin(), games.end(), [](const auto& a, const auto& b) { return a.name < b.name; });
+				}
+				catch (const std::exception& e) { error = e.what(); }
 				std::lock_guard lock(state.mutex);
 				if (state.pending)
 				{

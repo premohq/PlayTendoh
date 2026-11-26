@@ -189,6 +189,15 @@ namespace ps5settings
 		int sides = 15 | (1 << ps5retro::kSideCount); // the first four and Switch 2, after every ps5retro::kSystems side
 		bool switchOffered = true;	 // the Switch side was offered: those whose sides predate it (4.0.2) see it once
 		bool switch2Offered = true;
+		// the sides the player hid in Settings > Launcher > Systems (sides' bits): Playtendoh never shows one
+		// again by itself, games found for it or not
+		int sidesHidden = 0;
+		// Playtendoh looks for games and files by itself (app/discovery.h): at each start and when a drive is
+		// plugged in (Settings > Launcher > Find games by itself); off, only when asked (the Setup check)
+		bool discover = true;
+		// where it found each side's games, by the side's name ("snes": its folders), looked through beside the
+		// side's own folder while that is still the side's own (FoundFolders)
+		std::map<std::string, std::vector<std::string>> found;
 		std::string lastVersion;	 // the version that ran last: a newer one says what it brings, once (Make it yours)
 		// a release the start does not offer (the update's Skip this version, or one gone back from), as
 		// ps5update::Readable writes it; Settings > Online still finds it
@@ -381,6 +390,20 @@ namespace ps5settings
 
 	Launcher Load();
 	bool Save(const Launcher& settings);
+
+	// -- where each side's games are -----------------------------------------------------------------
+	// A side's own games folder, as a new install has it (the Switch's: Eden's roms); side as ps5cemu.json
+	// names it
+	std::string DefaultGamesFolder(const std::string& side);
+	// The player chose the side's games folder (Settings > Game files): it is the side's only folder, and
+	// Playtendoh adds none it finds
+	bool ChoseGamesFolder(const Launcher& settings, const std::string& side);
+	// The folders Playtendoh found the side's games in that its library looks through too: none once the
+	// player chose a folder
+	std::vector<std::string> FoundFolders(const Launcher& settings, const std::string& side);
+	// Every side's, given to the libraries (app/found_folders.h) before they look: at the start, and when
+	// they change
+	void ApplyFound(const Launcher& settings);
 	// A ps5cemu.json Load could not read is moved to ps5cemu.json.broken, and the defaults used, so the
 	// next Save does not write over it (a hand edit's slip costs nothing): where it went, once, then empty
 	std::string TakeBrokenFile();

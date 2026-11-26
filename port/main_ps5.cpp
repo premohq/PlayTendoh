@@ -385,6 +385,8 @@ int main(int argc, char* argv[])
 	ps5threads::Initialize(); // before any thread starts: they inherit the main thread's CPUs
 
 	ps5settings::Launcher settings = ps5settings::Load();
+	// where Playtendoh found each side's games (app/found_folders.h), before any library looks
+	ps5settings::ApplyFound(settings);
 	// the update notice, on a fresh start only (not each time a game hands back to the library)
 	const bool freshStart = settings.side.empty();
 	const TileGame tile = ReadArguments(argc, argv, settings);

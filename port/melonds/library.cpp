@@ -3,6 +3,7 @@
 #include "archive.h"
 #include "melonds.h"
 #include "../app/lang.h"
+#include "../app/found_folders.h"
 #include "../app/media_folders.h"
 #include "../app/paths.h"
 #include "../ps5/log.h"
@@ -541,7 +542,13 @@ namespace ps5melonds
 			std::vector<ps5emu::Game> games;
 			Probes probes;
 			LoadProbes(probes);
-			Scan(folder, 0, games, probes);
+			// the side's folder, then those Playtendoh found its games in (app/found_folders.h)
+			for (const std::string& scanned : ps5found::With("ds", folder))
+			{
+				std::error_code missing;
+				if (scanned == folder || fs::is_directory(scanned, missing))
+					Scan(scanned, 0, games, probes);
+			}
 			SaveProbes(probes);
 			std::sort(games.begin(), games.end(), [](const ps5emu::Game& a, const ps5emu::Game& b) { return Lower(a.name) < Lower(b.name); });
 			// the same game twice (a copy in another folder): listed once, as the 3DS's title IDs are

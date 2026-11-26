@@ -43,6 +43,11 @@ namespace ps5actions
 	// the drives plugged in (USB, the PS5's extended storage)
 	std::vector<std::string> ConnectedDrives();
 	std::string DriveName(const std::string& path); // "USB drive 1"
+	// where a folder is, as a person names it: a drive's "USB drive 1 / roms", the PS5's its path
+	std::string PlaceName(const std::string& folder);
+	// the console's / (empty); on the PC preview a folder standing for it, with mnt/ and data/ in it
+	// (PREVIEW_CONSOLE, tools/preview-shell.sh), so the drives and /data can be tried there
+	std::string ConsoleRoot();
 	// a folder's subfolders (folders) or files, sorted without regard to case; ok false when it
 	// cannot be read
 	std::vector<std::string> ListEntries(const std::string& path, bool folders, bool& ok);

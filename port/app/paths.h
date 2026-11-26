@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include "found_folders.h"
 #include "system_layout.h"
 
 #include <algorithm>
@@ -156,6 +157,16 @@ namespace ps5paths
 			}
 			else
 				add(folder); // custom local, USB and network paths remain explicit choices
+		}
+		// and where Playtendoh found Wii U games by itself (app/found_folders.h: only while the folder is the
+		// side's own), the games played where they are
+		for (const std::string& found : ps5found::Of("wiiu"))
+		{
+			bool covered = false;
+			for (const std::string& folder : folders)
+				covered = covered || ps5found::detail::Inside(found, folder);
+			if (!covered)
+				add(found);
 		}
 		return folders;
 	}

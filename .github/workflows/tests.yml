@@ -41,6 +41,10 @@ jobs:
       - name: System paths and legacy discovery
         run: bash tools/tests/test-paths.sh
 
+      # games, BIOS files, keys and firmware put anywhere on a drive or in /data, found and used in place
+      - name: Finding games and files anywhere
+        run: bash tools/tests/test-discovery.sh
+
       - name: Separate Eden program paths
         run: |
           bash tools/eden-patches.sh apply

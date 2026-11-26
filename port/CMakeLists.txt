@@ -155,6 +155,9 @@ add_library(CemuPS5 STATIC
 	app/updates.h
 	app/reorganize.cpp
 	app/reorganize.h
+	app/discovery.cpp
+	app/discovery.h
+	app/found_folders.h
 	app/usb_devices.cpp
 	app/usb_devices.h
 	app/wiiu_archives.cpp
@@ -342,6 +345,7 @@ set_source_files_properties(
 	app/shots.cpp
 	app/saves.cpp
 	app/reorganize.cpp
+	app/discovery.cpp
 	app/catalog.cpp
 	app/compatibility.cpp
 	app/prerelease.cpp

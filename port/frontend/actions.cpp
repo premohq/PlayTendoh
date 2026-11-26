@@ -100,11 +100,22 @@ namespace ps5actions
 		return folder == "/" ? "/" + name : folder + "/" + name;
 	}
 
+	std::string ConsoleRoot()
+	{
+#ifdef PS5CEMU_LAUNCHER_PREVIEW
+		if (const char* root = std::getenv("PREVIEW_CONSOLE"))
+			return root;
+#endif
+		return {};
+	}
+
 	// A drive mounted at path: a folder on a file system of its own, not /mnt's. An empty mount point
 	// (/mnt/usb0 with the drive in another port) is /mnt's, and what is written there never reaches a drive
 	static bool MountedDrive(const std::string& path)
 	{
 		struct stat info{}, mnt{};
+		if (!ConsoleRoot().empty()) // the preview's stand-ins: folders on the PC's disk
+			return stat(path.c_str(), &info) == 0 && S_ISDIR(info.st_mode);
 		return stat(path.c_str(), &info) == 0 && S_ISDIR(info.st_mode) && (stat("/mnt", &mnt) != 0 || info.st_dev != mnt.st_dev);
 	}
 
@@ -113,12 +124,30 @@ namespace ps5actions
 	std::vector<std::string> ConnectedDrives()
 	{
 		std::vector<std::string> drives;
+		const std::string mnt = ConsoleRoot() + "/mnt";
 		for (int i = 0; i < 8; i++)
-			drives.push_back(fmt::format("/mnt/usb{}", i));
-		drives.push_back("/mnt/ext0");
-		drives.push_back("/mnt/ext1");
+			drives.push_back(fmt::format("{}/usb{}", mnt, i));
+		drives.push_back(mnt + "/ext0");
+		drives.push_back(mnt + "/ext1");
 		std::erase_if(drives, [](const std::string& drive) { return !MountedDrive(drive); });
 		return drives;
+	}
+
+	std::string PlaceName(const std::string& folder)
+	{
+		for (const std::string& drive : ConnectedDrives())
+			if (folder == drive || folder.starts_with(drive + "/"))
+			{
+				std::string place = DriveName(drive);
+				for (char c : folder.substr(drive.size()))
+					place += c == '/' ? std::string(" / ") : std::string(1, c);
+				return place;
+			}
+		// the preview's stand-in for the console's /: the console's own path
+		const std::string root = ConsoleRoot();
+		if (!root.empty() && folder.starts_with(root + "/"))
+			return folder.substr(root.size());
+		return folder;
 	}
 
 	// from copied to to, and on the drive when it returns true: written out (fsync) and closed, so a drive
@@ -263,10 +292,11 @@ namespace ps5actions
 	// How the browser names a drive: "USB drive 1", "Extended storage 1"
 	std::string DriveName(const std::string& path)
 	{
-		if (path.starts_with("/mnt/usb"))
-			return TrF("USB drive {0}", std::atoi(path.c_str() + 8) + 1);
-		if (path.starts_with("/mnt/ext"))
-			return TrF("Extended storage {0}", std::atoi(path.c_str() + 8) + 1);
+		const std::string mnt = ConsoleRoot() + "/mnt/";
+		if (path.starts_with(mnt + "usb"))
+			return TrF("USB drive {0}", std::atoi(path.c_str() + mnt.size() + 3) + 1);
+		if (path.starts_with(mnt + "ext"))
+			return TrF("Extended storage {0}", std::atoi(path.c_str() + mnt.size() + 3) + 1);
 		if (path.starts_with("/net/"))
 			return path.substr(5, path.find('/', 5) == std::string::npos ? std::string::npos : path.find('/', 5) - 5); // a share, by its name
 		return path;

@@ -509,6 +509,23 @@ namespace ps5settings
 			ReadBool(ui, "switch2Offered", switch2Offered);
 			if (!switch2Offered)
 				out.sides |= 1 << ps5retro::kSideCount;
+			// the sides the player hid; from before 6.0 kept it, a side shown by default and hidden now (the others
+			// started hidden, so their being hidden says nothing)
+			if (ui.HasMember("sidesHidden"))
+				ReadInt(ui, "sidesHidden", out.sidesHidden, 0, (1 << (ps5retro::kSideCount + 1)) - 1);
+			else
+				out.sidesHidden = Ui{}.sides & ~out.sides;
+			ReadBool(ui, "discover", out.discover);
+			if (ui.HasMember("found") && ui["found"].IsObject())
+				for (const auto& side : ui["found"].GetObject())
+				{
+					if (!side.value.IsArray())
+						continue;
+					std::vector<std::string>& folders = out.found[side.name.GetString()];
+					for (const auto& folder : side.value.GetArray())
+						if (folder.IsString() && folder.GetStringLength() > 1 && folder.GetString()[0] == '/' && folders.size() < 16)
+							folders.push_back(folder.GetString());
+				}
 			ReadString(ui, "lastVersion", out.lastVersion);
 			ReadString(ui, "skipVersion", out.skipVersion);
 			ReadInt(ui, "reorganizeAsked", out.reorganizeAsked, 0, 10000000);
@@ -731,6 +748,23 @@ namespace ps5settings
 		writer.Bool(settings.ui.switchOffered);
 		writer.Key("switch2Offered");
 		writer.Bool(settings.ui.switch2Offered);
+		writer.Key("sidesHidden");
+		writer.Int(settings.ui.sidesHidden);
+		writer.Key("discover");
+		writer.Bool(settings.ui.discover);
+		writer.Key("found");
+		writer.StartObject();
+		for (const auto& [side, folders] : settings.ui.found)
+		{
+			if (folders.empty())
+				continue;
+			writer.Key(side.c_str());
+			writer.StartArray();
+			for (const std::string& folder : folders)
+				writer.String(folder.c_str());
+			writer.EndArray();
+		}
+		writer.EndObject();
 		writer.Key("lastVersion");
 		writer.String(settings.ui.lastVersion.c_str());
 		writer.Key("skipVersion");
@@ -765,6 +799,57 @@ namespace ps5settings
 			file << buffer.GetString() << '\n';
 		}
 		return std::rename(temporary.c_str(), ps5paths::LauncherSettings().c_str()) == 0;
+	}
+
+	std::string DefaultGamesFolder(const std::string& side)
+	{
+		if (side == "wiiu")
+			return ps5paths::Games();
+		if (side == "3ds")
+			return ps5paths::Azahar() + "/games";
+		if (side == "ds")
+			return ps5paths::MelonDs() + "/games";
+		if (side == "switch")
+			return ps5paths::Eden() + "/roms";
+		if (side == "switch2")
+			return Switch2Defaults().gamesFolder;
+		if (const ps5retro::System* system = ps5retro::Find(side))
+			return system->games;
+		return {};
+	}
+
+	bool ChoseGamesFolder(const Launcher& settings, const std::string& side)
+	{
+		std::string folder = side == "wiiu" ? settings.gamesFolder : Handheld(settings, side).gamesFolder;
+		while (folder.size() > 1 && folder.back() == '/')
+			folder.pop_back();
+		if (folder.empty())
+			return false;
+		// the side's own, wherever the data is (on the app's drive, #52), and the Wii U's from before its folder
+		const std::string own = DefaultGamesFolder(side);
+		if (folder == own || folder == ps5paths::Relocated(own))
+			return false;
+		if (side == "wiiu" && (folder == ps5paths::Root() + "/games" || folder == ps5paths::Root() + "/cemu/games"))
+			return false;
+		if (side == "switch" && (folder == std::string(ps5paths::kDefaultRoot) + "/eden/roms" || folder == "/data/eden/roms"))
+			return false;
+		return true;
+	}
+
+	std::vector<std::string> FoundFolders(const Launcher& settings, const std::string& side)
+	{
+		const auto found = settings.ui.found.find(side);
+		if (found == settings.ui.found.end() || ChoseGamesFolder(settings, side))
+			return {};
+		return found->second;
+	}
+
+	void ApplyFound(const Launcher& settings)
+	{
+		for (const char* side : {"wiiu", "3ds", "ds", "switch", "switch2"})
+			ps5found::Set(side, FoundFolders(settings, side));
+		for (const ps5retro::System& system : ps5retro::kSystems)
+			ps5found::Set(system.key, FoundFolders(settings, system.key));
 	}
 
 	std::string TakeBrokenFile()

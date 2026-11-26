@@ -2,6 +2,7 @@
 #include "library.h"
 #include "azahar.h"
 #include "../app/game_archives.h"
+#include "../app/found_folders.h"
 #include "../app/media_folders.h"
 #include "../app/lang.h"
 #include "../app/paths.h"
@@ -853,7 +854,13 @@ namespace ps5azahar
 			const auto started = std::chrono::steady_clock::now();
 			std::vector<ps5emu::Game> games;
 			ps5archive::Probes probes(Root() + "/archives.bin");
-			Scan(folder, 0, games, probes);
+			// the side's folder, then those Playtendoh found its games in (app/found_folders.h)
+			for (const std::string& scanned : ps5found::With("3ds", folder))
+			{
+				std::error_code missing;
+				if (scanned == folder || fs::is_directory(scanned, missing))
+					Scan(scanned, 0, games, probes);
+			}
 			probes.Save();
 			// a game in an archive and in a file of its own too: the file's, which starts without unpacking
 			std::set<uint64_t> files;
