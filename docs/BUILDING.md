@@ -219,6 +219,13 @@ buttons and says when to save a screen. It needs `make deps` first, and zlib's h
 `PREVIEW_FIRST=1`) and `shell-remote.txt` (the remote touch screen's page on each side, with
 `PREVIEW_REMOTE=1`).
 
+`tools/settings-check.sh` builds the same code with a check of every console's Settings in place of the
+screens: each row that holds a value is changed as Left or Right changes it, and must show the change,
+keep it past a restart and leave every other console's settings as they were (but those every console
+shares); each game's own settings likewise. Run it after a change to Settings' pages or rows, or to how
+settings are kept. With bubblewrap (`bwrap`) it runs in a sandbox with a `/data` of its own, so
+Porpoise's rows, which write `/data/porpoise`, are checked too.
+
 ## The remote touch screen on a PC
 
 The remote touch screen's server (`port/stream`) builds on a Linux PC too, with a stand-in for its
