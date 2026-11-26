@@ -41,7 +41,8 @@ from any of them is the same as above, and nothing moves:
 - An install from before keeps all its files in `/data/ps5cemu`, and goes on working there. A start then
   offers to give each system its own folder (**Reorganize**, or **Later**); see
   [an install from before](files.md#older-install).
-- **Updating to 6.0:** after the update, turn on the new systems you want (GameCube, Wii and the
-  classics) in **Settings > Launcher > Systems**, and look at **Settings > Launcher > Make it yours** for
-  6.0's layouts and covers.
+- **Updating to 6.0:** at its first start Playtendoh looks for games on your drives and in `/data`, and the
+  new systems it finds games for (GameCube, Wii and the classics) appear in the bar by themselves; a system
+  you had hidden stays hidden. A folder you chose for a system before is kept as it is. **Settings >
+  Launcher > Make it yours** shows 6.0's layouts and the accessibility choices.
 - Older versions' updaters (up to 4.0.1) still find the new release.

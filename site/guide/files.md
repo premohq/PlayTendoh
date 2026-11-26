@@ -1,8 +1,27 @@
 # Where your files go
 
-Each system keeps its files in a folder of its own in `/data`, and Playtendoh's launcher keeps its own in
-`/data/ps5cemu`. The app makes every folder itself the first time it starts, so you only copy files in.
-This page is the whole map; each system's page has the detail.
+**Put your games anywhere.** On a USB drive, the extended storage, in `/data/playtendoh` (a folder made for
+you) or `/data/homebrew`, in any folders: one per console, or all together. Playtendoh finds them as it
+starts and when you plug in a drive, and plays them where they are ([how it looks](setup-check.md#finding-games)).
+BIOS files, Switch keys and firmware, and the Wii U's `keys.txt` can go anywhere too: Playtendoh finds them
+and, when you say so, copies each into its emulator's own folder ([copying](setup-check.md#files-to-copy)).
+
+Each system still has a folder of its own in `/data`, the one its emulator reads its BIOS, keys and saves
+from, and Playtendoh's launcher keeps its own in `/data/ps5cemu`. The app makes every folder itself the first
+time it starts. This page is the whole map; each system's page has the detail.
+
+## Anywhere, and the drop folder {#anywhere}
+
+| Put it in... | And Playtendoh... |
+|---|---|
+| any folder on a **USB drive** or the **extended storage** | finds it at the next start, or as soon as you plug the drive in |
+| **`/data/playtendoh`**, in any folders | finds it at the next start |
+| `/data/homebrew`, or a folder of your own in `/data` | finds it at the next start (another app's own folder is never looked into) |
+| a system's own folder (below) | lists it as always |
+
+A game is listed on its system's side, which is turned on in the bar if it was hidden (unless you hid it
+yourself). Take a drive out and its games leave the Library; put it back and they return. A system whose
+games folder you chose in **Settings > Game files** uses that folder only.
 
 ## Every system at a glance {#folders}
 
@@ -17,9 +36,10 @@ This page is the whole map; each system's page has the detail.
 | [Wii](gamecube-wii.md) | `/data/porpoise/games/Wii` | none | none |
 | [The classics](classics.md) | `/data/PS5NES/games`, `/data/PS5SNES/games`... ([every one](classics.md#games)) | a BIOS in the system's `system` folder, for two of them | none |
 
-**Any other folder works too:** on each system's side, **Settings > Game files**, its first row (the
-games folder) chooses another, on the PS5, a USB drive or the extended storage, and subfolders are
-searched.
+**Your own folder instead:** on each system's side, **Settings > Game files**, its first row (the games
+folder) chooses one, on the PS5, a USB drive or the extended storage, and subfolders are searched. While a
+system uses its own folder, the row says where else its games were found ("Found in USB drive 1 / roms");
+once you choose one, that folder is the system's only one.
 
 ![The Wii U side's Settings > Game files: its games folder first, then Look for games now, Network shares, disc keys, and updates, DLC and mods.](img/game-files.jpg)
 

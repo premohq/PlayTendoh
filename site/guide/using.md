@@ -97,12 +97,14 @@ In any game, **touchpad click + Options** opens Playtendoh's in-game menu, on ev
   OLED TVs), or your own JSON in `/data/ps5cemu/themes`.
 - **Music and menu sounds:** **Settings > Launcher**: the original theme, or your own MP3 or WAV files from
   `/data/ps5cemu/music`.
-- **Larger text, High contrast, Reduce motion** and **Hold to confirm** are on **Settings > Launcher** too.
+- **Larger text, High contrast, Reduce motion** and **Hold to confirm** have a page of their own:
+  **Settings > Accessibility**. The first start offers the first three, and Triangle makes the text larger on
+  its first screens.
 - **Home screen tiles:** **Add to home screen** in a game's Options menu makes it a tile on the PS5's home
   screen that starts the game straight away (it needs elfldr on port 9021).
 - **Play time:** **Settings > Play time**: each system's hours and your ten most played games.
 
-![Settings > Launcher, one of Playtendoh's own pages: below the line on the left, the same on every system.](img/launcher.jpg)
+![Settings > Launcher, one of Playtendoh's own pages: below the line on the left, the same on every system, with Accessibility and Finding games beside it.](img/launcher.jpg)
 
 ## Where Settings are {#settings}
 
@@ -115,7 +117,9 @@ system:
 | Page | What's there |
 |---|---|
 | **Language** | The menus' language |
-| **Launcher** | Theme, layout, which systems the bar shows, covers, filters, badges, music, text size, Make it yours |
+| **Accessibility** | Larger text, High contrast, Reduce motion and Hold to confirm |
+| **Launcher** | Theme, layout, which systems the bar shows, covers, filters, badges, music, Make it yours |
+| **Finding games** | Find games by itself, Look now, Copy found files, where each system's games were found, and the drop folder ([how it looks](setup-check.md#finding-games)) |
 | **Accounts and updates** | RetroAchievements, reports, a SteamGridDB key, and Playtendoh's updates |
 | **Backups** | Every system's saves, to a USB drive and back |
 | **Play time** | Time played per system, and your most played games |

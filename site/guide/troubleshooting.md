@@ -48,15 +48,24 @@ then **Settings > Launcher > Layout** to switch back for good.
 
 ### I can't find the GameCube, Wii, NES, N64... {#hidden-systems}
 
-They start hidden. Turn them on in **Settings > Launcher > Systems** ([how](setup-check.md#systems)).
+They appear in the bar as soon as Playtendoh finds their games. Before that, or if you hid one, turn it on
+in **Settings > Launcher > Systems** ([how](setup-check.md#systems)).
 
 ### A system's Library is empty {#library-empty}
 
-- Check the games are in that system's folder ([Where your files go](files.md)), or that the folder you
-  chose in **Settings > Game files** is the one they're in.
-- Check their format is one the system plays (each system's page lists them).
-- **Settings > Game files > Look for games now** looks again.
-- The Setup check's row for that system says how many games it found, and where.
+- Its empty Library's **Look for games** looks on your drives and in `/data` now. Games can be anywhere on a
+  USB drive or in `/data/playtendoh`, in any folders ([Where your files go](files.md#anywhere)).
+- Check their format is one the system plays (each system's page lists them): a game in a `.7z` or `.rar`
+  is only found in the system's own folder or one you chose, as which console it is for can't be told from
+  outside.
+- If you chose a folder in **Settings > Game files**, that folder is the system's only one: check the games
+  are in it, or choose its own folder again to have the ones found elsewhere back.
+- The Setup check's row for that system says how many games it found, and where most of them are.
+
+### A game on a USB drive is gone {#drive-games-gone}
+
+Its drive was taken out, or the PS5 gave it another number. Put it back: Playtendoh looks again as the
+drive comes in, and the games return. Nothing about them was forgotten.
 
 ### Wii U: an unpacked game is found but not listed {#wii-u-not-listed}
 
@@ -81,7 +90,10 @@ known problem being looked at.
 ### Switch: error 59, or "Loader status 28" {#switch-error-59}
 
 Your keys and firmware don't match: keys from an older system version than the firmware. Dump **both**
-again from your own Switch, at the same time ([keys and firmware](switch.md#keys-and-firmware)).
+again from your own Switch, at the same time ([keys and firmware](switch.md#keys-and-firmware)). Playtendoh
+copies keys and firmware it finds only where none are yet, so it never replaces a pair that doesn't match:
+take the old ones out of `/data/eden/keys` and `/data/eden/firmware`, put the new dump anywhere, and the
+Setup check's **Find games and files**, then **Files to copy**, puts it in place.
 
 ### Breath of the Wild asks for a system update {#botw-update}
 

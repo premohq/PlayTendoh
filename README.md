@@ -40,6 +40,13 @@
 
 ## What's new in 6.0
 
+- **Put your games anywhere:** on a USB drive, the extended storage, `/data/playtendoh` or `/data/homebrew`,
+  in any folders. Playtendoh finds every system's games as it starts and when a drive is plugged in, plays
+  them where they are, and shows each system it finds games for. BIOS files, Switch keys and firmware and
+  the Wii U's `keys.txt` are found too, and copied where their emulators read them once you say yes, never
+  over a file that's there. A folder you choose in **Settings > Game files** still wins.
+- **Easier to see:** the first start offers larger text, high contrast and reduced motion (Triangle makes
+  the text larger from its first screen), and they have a Settings page of their own, **Accessibility**.
 - **A new name and a new look:** Playtendoh, with a mark of every console's controller in a ring, on the
   PS5's home screen and at the launcher's top left. The consoles' marks are RetroArch's XMB Monochrome icons;
   the Switch 2's is the Switch's with a raised 2.
@@ -179,6 +186,11 @@ they are there already).
 [The guide](docs/GUIDE.md#everything-on-the-apps-drive) says how.
 
 ## Your games
+
+**Put them anywhere** on a USB drive, the extended storage, `/data/playtendoh` or `/data/homebrew`, in any
+folders: Playtendoh finds them and plays them where they are ([how](https://premohq.github.io/PlayTendoh/guide/files.html#anywhere)).
+Keys, firmware and BIOS files can go anywhere too: it copies them into each emulator's folder below, with
+your OK. Each system's own folders, for those who like to put things in place themselves:
 
 | | Games folder | Also needs |
 |---|---|---|
