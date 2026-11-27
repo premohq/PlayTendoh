@@ -7,16 +7,21 @@ Each page is Markdown with what the guide needs and nothing more: headings (an i
 `## Title {#id}`, else one made from the title), paragraphs, **bold**, *italics*, `code`, links, lists
 (numbered or not, nested by indenting), fenced code, tables, `---`, and GitHub's notes (`> [!NOTE]`,
 `[!TIP]`, `[!IMPORTANT]`, `[!WARNING]`, `[!CAUTION]`). A link to another page is written `install.md`
-(it works on GitHub too) and becomes `install.html`.
+(it works on GitHub too) and becomes `install.html`. A line `<!-- firmware-picker -->` is Get started's
+picker: a firmware and a disc drive in, that console's way in, HEN and steps out (site/guide.js, from
+guide/firmware.json); on GitHub it is a comment, and the table after it says the same.
 
-PAGES is the guide's order: its sidebar, and each page's "Continue to" the next. The build stops on a
-link to a page or a heading that is not there, and on any page the app's Setup check opens that is not
-there (port/frontend/shell/setup.cpp's Guide("page#id")), so its QR codes never open a missing page.
+PAGES is the guide's order: its sidebar, and each page's "Continue to" the next. A page with a fourth
+field is one of the choices of the step it names (a way in, under Get started): it sits under that step
+in the sidebar, goes back to it and on to the step after it. The build stops on a link to a page or a
+heading that is not there, firmware.json's among them, and on any page the app's Setup check opens that
+is not there (port/frontend/shell/setup.cpp's Guide("page#id")), so its QR codes never open a missing page.
 
     python3 site/guide.py [--out DIR]     the guide alone, into DIR (default _site/guide)
 """
 
 import html
+import json
 import os
 import re
 import sys
@@ -28,10 +33,14 @@ SETUP = os.path.join(REPO_ROOT, "port/frontend/shell/setup.cpp")
 DISCORD = "https://discord.gg/grrqkv4xWw"
 REPO = "https://github.com/premohq/PlayTendoh"
 
-# (page, its name in the sidebar, its group); the first group's pages are the numbered steps
+# (page, its name in the sidebar, its group[, the step it is a choice of]); the first group's pages are
+# the numbered steps
 PAGES = [
     ("index", "Start here", "Set up"),
     ("get-started", "Get started", "Set up"),
+    ("browser", "The web browser", "Set up", "get-started"),
+    ("youtube", "The YouTube app", "Set up", "get-started"),
+    ("blu-ray", "A Blu-ray disc", "Set up", "get-started"),
     ("jailbreak", "Jailbreak and HEN", "Set up"),
     ("install", "Install Playtendoh", "Set up"),
     ("setup-check", "The first start", "Set up"),
@@ -47,6 +56,11 @@ PAGES = [
     ("troubleshooting", "Troubleshooting", "When something's wrong"),
     ("help", "Getting help", "When something's wrong"),
 ]
+
+# what a step's choices are called: their kicker, and the step's "Continue to" until one is picked
+CHOICES = {"get-started": "Your way in"}
+FIRMWARE = os.path.join(SOURCE, "firmware.json")
+PICKER = re.compile(r"^\s*<!--\s*firmware-picker\s*-->\s*$")
 
 NOTES = {"NOTE": "Note", "TIP": "Tip", "IMPORTANT": "Important", "WARNING": "Warning", "CAUTION": "Caution"}
 HEADING = re.compile(r"^(#{1,4})\s+(.+?)(?:\s+\{#([A-Za-z0-9_-]+)\})?\s*$")
@@ -110,6 +124,37 @@ class Page:
         return re.sub(r"\x00(\d+)\x00",
                       lambda m: "<code>" + html.escape(codes[int(m.group(1))], quote=False).replace("/", "/<wbr>") + "</code>", text)
 
+    # -- Get started's firmware picker ----------------------------------------------------------------
+
+    def picker(self):
+        """The form guide.js answers, and firmware.json for it; its pages and headings checked as links are."""
+        with open(FIRMWARE, encoding="utf-8") as f:
+            data = json.load(f)
+        ways = {w["page"] for w in data["ways"]}
+        for exploit in data["exploits"]:
+            if exploit["way"] not in ways:
+                sys.exit(f"guide: firmware.json's {exploit['id']} is on a way in it doesn't list ({exploit['way']})")
+            self.links.append((exploit["way"], exploit["id"]))
+        for hen in data["hens"]:
+            self.links.append(("jailbreak", hen["id"]))
+        text = json.dumps(data, ensure_ascii=False, separators=(",", ":"))
+        # safe inside <script>: no "</script>" or "<!--" can end or bend it
+        text = text.replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026")
+        return f"""<form class="picker" id="picker" hidden>
+  <div class="picker-fields">
+    <label class="picker-field" for="pick-fw"><span>Your firmware</span>
+      <input id="pick-fw" name="fw" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" maxlength="5" placeholder="11.60" aria-describedby="pick-hint"></label>
+    <fieldset class="picker-field"><legend>A disc drive?</legend>
+      <label><input type="radio" name="disc" value="yes"> Yes</label>
+      <label><input type="radio" name="disc" value="no" checked> No, or not sure</label>
+    </fieldset>
+  </div>
+  <p class="picker-hint" id="pick-hint">As the console shows it, such as 11.60. A Slim or a Pro with its disc drive attached has one.</p>
+  <button class="btn primary" type="submit">Show my steps</button>
+</form>
+<div class="picker-result" id="pick-result" aria-live="polite" hidden></div>
+<script type="application/json" id="firmware-data">{text}</script>"""
+
     # -- blocks ---------------------------------------------------------------------------------------
 
     def blocks(self, lines):
@@ -128,6 +173,9 @@ class Page:
                     i += 1
                 i += 1
                 out.append("<pre><code>" + html.escape("\n".join(code), quote=False) + "</code></pre>")
+            elif PICKER.match(line):
+                out.append(self.picker())
+                i += 1
             elif m := HEADING.match(line):
                 level = len(m.group(1))
                 text = self.inline(m.group(2))
@@ -227,27 +275,46 @@ class Page:
 
 
 def sidebar(current):
-    groups = []
-    for page, name, group in PAGES:
+    groups = []  # (group, [[link, [a choice's link...]]...])
+    for page, name, group, *step in PAGES:
         if not groups or groups[-1][0] != group:
             groups.append((group, []))
         here = ' aria-current="page"' if page == current else ""
-        groups[-1][1].append(f'<li><a href="{page}.html"{here}>{html.escape(name)}</a></li>')
-    return "".join(f'<p class="toc-group">{html.escape(g)}</p><ul>{"".join(items)}</ul>' for g, items in groups)
+        link = f'<a href="{page}.html"{here}>{html.escape(name)}</a>'
+        if step:
+            groups[-1][1][-1][1].append(f"<li>{link}</li>")
+        else:
+            groups[-1][1].append([link, []])
+    return "".join(f'<p class="toc-group">{html.escape(g)}</p><ul>'
+                   + "".join(f'<li>{link}' + (f'<ul class="toc-choices">{"".join(choices)}</ul>' if choices else "") + "</li>"
+                             for link, choices in items) + "</ul>" for g, items in groups)
 
 
 def template(page, title, body, description):
-    index = [p[0] for p in PAGES].index(page)
-    name, group = PAGES[index][1], PAGES[index][2]
-    steps = [p[0] for p in PAGES if p[2] == PAGES[0][2]]
-    kicker = f"Step {steps.index(page)} of {len(steps) - 1}" if page in steps and page != "index" else (
-        "The Playtendoh guide" if page == "index" else group)
-    previous = PAGES[index - 1] if index > 0 else None
-    following = PAGES[index + 1] if index + 1 < len(PAGES) else None
+    names = [p[0] for p in PAGES]
+    index = names.index(page)
+    group = PAGES[index][2]
+    step = PAGES[index][3] if len(PAGES[index]) > 3 else None
+    # the steps and the pages between them, a step's choices left out: one of them is on the way
+    flow = [p for p in PAGES if len(p) == 3]
+    steps = [p[0] for p in flow if p[2] == PAGES[0][2]]
+    if step:
+        kicker = f"Step {steps.index(step)} of {len(steps) - 1}: {CHOICES[step].lower()}"
+    elif page in steps and page != "index":
+        kicker = f"Step {steps.index(page)} of {len(steps) - 1}"
+    else:
+        kicker = "The Playtendoh guide" if page == "index" else group
+    at = [p[0] for p in flow].index(step or page)
+    previous = PAGES[names.index(step)] if step else (flow[at - 1] if at > 0 else None)
+    following = flow[at + 1] if at + 1 < len(flow) else None
     pager = '<nav class="guide-pager" aria-label="Previous and next">'
     pager += (f'<a class="btn" href="{previous[0]}.html"><span aria-hidden="true">←</span> {html.escape(previous[1])}</a>'
               if previous else "<span></span>")
-    if following:
+    if page in CHOICES:
+        # on to the choice the picker gives (guide.js); without it, to the table of choices
+        pager += (f'<a class="btn primary" href="#can-it" data-continue>Continue to {html.escape(CHOICES[page].lower())} '
+                  '<span aria-hidden="true">→</span></a>')
+    elif following:
         pager += f'<a class="btn primary" href="{following[0]}.html">Continue to {html.escape(following[1])} <span aria-hidden="true">→</span></a>'
     pager += "</nav>"
     toc = sidebar(page)
@@ -271,6 +338,7 @@ def template(page, title, body, description):
 <link rel="stylesheet" href="../style.css">
 <link rel="stylesheet" href="../guide.css">
 <script src="../theme.js"></script>
+<script src="../guide.js" defer></script>
 </head>
 <body class="guide">
 <a class="skip" href="#content">Skip to the content</a>
@@ -322,7 +390,7 @@ def app_targets():
 def build(out):
     os.makedirs(out, exist_ok=True)
     pages = {}
-    for page, _, _ in PAGES:
+    for page, *_ in PAGES:
         path = os.path.join(SOURCE, page + ".md")
         with open(path, encoding="utf-8") as f:
             text = f.read().replace("\r\n", "\n")

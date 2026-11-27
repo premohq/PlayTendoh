@@ -6,21 +6,23 @@ HEN at all as long as an ELF loader is running.
 
 ## 1. Run the exploit {#exploit}
 
-Use the way in that the [table on the last page](get-started.md#can-it) gave for your firmware, and
-follow that project's own instructions: this guide doesn't host exploits. Good places to start:
-
-- [wololo.net's PS5 jailbreak page](https://wololo.net/ps5-jailbreak-and-custom-firmware/): every route,
-  kept up to date.
-- [Y2JB](https://github.com/Gezine/Y2JB) (the YouTube app) and [BD-JB](https://github.com/Gezine/BD-JB-1250) (a Blu-ray disc).
-- [PSFree and Lapse](https://github.com/EchoStretch/PSFree/blob/main/README.md) (the browser, older firmwares).
-- [Relapse, 7.00 to 13.60](https://gbatemp.net/threads/relapse-ps5-kernel-exploit-brings-homebrew-to-firmware-7-00-13-60.684829/) (the browser).
+Done on the last page: [the web browser](browser.md), [the YouTube app](youtube.md) or
+[a Blu-ray disc](blu-ray.md), whichever [fits your firmware](get-started.md#pick). Each page has what
+you need, the exploit's steps and what to do if it fails. For the latest on every route,
+[wololo.net's PS5 jailbreak page](https://wololo.net/ps5-jailbreak-and-custom-firmware/) is kept up to
+date.
 
 ## 2. Load a HEN {#hen}
 
-The exploit then loads a HEN, the part that runs homebrew. **etaHEN** covers firmwares up to 12.70;
-**Kstuff Lite** reaches 13.60. **OnionHEN** works too. Any of them will do for Playtendoh, as long as
+The exploit then loads a HEN, the part that runs homebrew. Any HEN will do for Playtendoh, as long as
 it also runs an **ELF loader (elfldr) on port 9021**: the etaHEN and OnionHEN payloads include one, and
 most exploit hosts can load `elfldr.elf`.
+
+| Your firmware | The HEN | What Playtendoh needs from it |
+|---|---|---|
+| up to 12.70 | **etaHEN**, the most tested | `PPSA99360` on its app jailbreak list ([etaHEN](#etahen)) |
+| above 12.70, to 13.60 | **Kstuff Lite** | Nothing to add: an ELF loader on port 9021 ([Kstuff](#kstuff)) |
+| where it runs | **OnionHEN** | `PPSA99360` at the end of its `exact_title_ids` ([OnionHEN](#onionhen)) |
 
 ## 3. Let Playtendoh in {#app-jailbreak}
 
@@ -54,7 +56,7 @@ your HEN:
 > (`...,PPSA99360,`), an empty entry, a space, or an ID that isn't exactly 9 capital letters and digits.
 > Then no app is jailbroken at all. It takes 20 entries at most.
 
-### Kstuff, or any HEN without an app jailbreak list
+### Kstuff, or any HEN without an app jailbreak list {#kstuff}
 
 Nothing to add: Playtendoh looks after itself. Make sure an **ELF loader is listening on port 9021**.
 Playtendoh then runs its own helper through it to open `/data`. If your loader listens on another port,

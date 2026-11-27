@@ -21,6 +21,8 @@
 .guide-toc a, .guide-toc-small a { display: block; padding: 7px 12px; border-radius: 10px; color: var(--text-2); text-decoration: none; font-size: 0.94rem; border-left: 3px solid transparent; }
 .guide-toc a:hover, .guide-toc-small a:hover { color: var(--text); background: var(--code); }
 .guide-toc a[aria-current="page"], .guide-toc-small a[aria-current="page"] { color: var(--text); background: var(--code); border-left-color: var(--primary-2); font-weight: 600; }
+/* a step's choices (the ways in, under Get started), a level in */
+.guide-toc .toc-choices a, .guide-toc-small .toc-choices a { padding: 5px 12px 5px 26px; font-size: 0.88rem; }
 .guide-toc-small { margin-bottom: 28px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); padding: 4px 12px; }
 .guide-toc-small summary { cursor: pointer; padding: 10px 2px; font-weight: 600; }
 .guide-toc-small[open] { padding-bottom: 12px; }
@@ -69,3 +71,25 @@
 .guide-pager { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--line); }
 .guide-pager .btn.primary { margin-left: auto; }
 .guide-foot { margin-top: 28px; font-size: 0.88rem; color: var(--text-3); }
+
+/* Get started's firmware picker (guide.js): a firmware and a disc drive in, that console's steps out */
+.picker[hidden], .picker-result[hidden] { display: none; }
+.picker { margin: 0 0 1.2em; padding: 20px 22px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); box-shadow: var(--shadow); }
+.picker-fields { display: flex; flex-wrap: wrap; gap: 16px 32px; }
+.picker-field { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; border: 0; min-width: 0; }
+.picker-field > span, .picker-field legend { padding: 0; font-size: 0.86rem; font-weight: 600; color: var(--text-2); }
+.picker input[type="text"] { width: 7em; padding: 10px 14px; border: 1px solid var(--line-2); border-radius: 10px; background: var(--surface-2); color: var(--text); font: 600 1.3rem/1.2 "Lexend", system-ui, sans-serif; }
+.picker fieldset.picker-field { flex-direction: row; flex-wrap: wrap; gap: 0 22px; }
+.picker fieldset legend { margin-bottom: 8px; }
+.picker fieldset label { display: inline-flex; align-items: center; gap: 8px; min-height: 48px; cursor: pointer; }
+.picker input[type="radio"] { width: 18px; height: 18px; margin: 0; accent-color: var(--primary-2); }
+.guide-main .picker-hint { margin: 12px 0 16px; font-size: 0.88rem; color: var(--text-3); }
+.picker-result { margin: 0 0 1.6em; padding: 18px 22px 6px; border: 1px solid var(--line); border-left: 4px solid var(--nds); border-radius: var(--radius-sm); background: var(--nds-soft); }
+.picker-result.ask { border-left-color: var(--wiiu); background: var(--wiiu-soft); }
+.picker-result.none { border-left-color: var(--nx); background: var(--nx-soft); }
+.guide-main .picker-verdict { font-weight: 600; font-size: 1.06rem; }
+.picker-steps > li { margin: 0.7em 0; }
+.picker-also { display: block; margin-top: 4px; font-size: 0.92rem; color: var(--text-2); }
+.guide-main .picker-note { padding-left: 12px; border-left: 3px solid var(--n3ds); font-size: 0.95rem; }
+.picker-result .btn { margin: 6px 0 14px; }
+.guide-main .picker-checked { font-size: 0.84rem; color: var(--text-3); }

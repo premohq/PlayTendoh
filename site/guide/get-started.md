@@ -1,7 +1,8 @@
 # Get started
 
-Before anything else, find out whether your PS5 can run homebrew. That depends on one thing only: its
-**firmware version**.
+Before anything else, find out whether your PS5 can run homebrew, and how. That depends on its
+**firmware version**, and on whether it has a disc drive. Give both below: the guide picks your way in
+and spells out every step from there.
 
 ## Find your firmware {#firmware}
 
@@ -13,6 +14,10 @@ On the PS5: **Settings > System > System Software > Console Information**. Write
 > Software > System Software Update and Settings**). A PS5 can't be put back on an older firmware, and
 > an update can take away the jailbreak for good.
 
+## Pick your firmware {#pick}
+
+<!-- firmware-picker -->
+
 ## Can it run Playtendoh? {#can-it}
 
 Every firmware from **1.00 to 13.60** has at least one public way to run homebrew, on every model,
@@ -21,18 +26,21 @@ change that.
 
 | Your firmware | The way in | What you need |
 |---|---|---|
-| 1.00 – 5.50 | The web browser (**UMTX**) | Nothing extra |
-| 4.03 – 10.01 | The YouTube app (**Y2JB**), then **Lapse** | An old version of the YouTube app |
-| 9.00 – 12.40 | The YouTube app (**Y2JB**), then **P2JB** | An old version of the YouTube app |
-| up to 7.61 | A Blu-ray disc (**BD-JB**), then **UMTX2** | A disc drive and a Blu-ray you burn |
-| up to 12.00 | A Blu-ray disc (**BD-JB**), then **Poopsploit** | A disc drive and a Blu-ray you burn |
-| 7.00 – 13.60 | The web browser (**Relapse**) | Nothing extra; Slim and Pro too |
+| 1.00 – 5.50 | [The web browser](browser.md#umtx), **UMTX** | Nothing extra |
+| 4.03 – 10.01 | [The YouTube app](youtube.md#lapse) (**Y2JB**), then **Lapse** | An old version of the YouTube app |
+| 9.00 – 12.40 | [The YouTube app](youtube.md#p2jb) (**Y2JB**), then **P2JB** | An old version of the YouTube app |
+| up to 7.61 | [A Blu-ray disc](blu-ray.md#umtx2) (**BD-JB**), then **UMTX2** | A disc drive and a Blu-ray you burn |
+| up to 12.00 | [A Blu-ray disc](blu-ray.md#poopsploit) (**BD-JB**), then **Poopsploit** | A disc drive and a Blu-ray you burn |
+| 7.00 – 13.60 | [The web browser](browser.md#relapse), **Relapse** | Nothing extra; Slim and Pro too |
 | **14.00 and newer** | **None yet** | Wait, and don't update |
 
-Where two rows fit your firmware, either works. The browser routes need the least. This table is a
-snapshot: the scene moves fast, so check a current source such as
-[wololo.net's PS5 jailbreak page](https://wololo.net/ps5-jailbreak-and-custom-firmware/) before you
-start.
+Where two rows fit your firmware, either works. The browser routes need the least; the YouTube app
+needs the most. This table was checked in October 2026: the scene moves fast, so check a current
+source such as [wololo.net's PS5 jailbreak page](https://wololo.net/ps5-jailbreak-and-custom-firmware/)
+before you start.
+
+Then the HEN, the part that runs homebrew: **etaHEN** up to 12.70, **Kstuff Lite** above it, to 13.60
+([Jailbreak and HEN](jailbreak.md#hen)).
 
 > [!WARNING]
 > **Y2JB on a console that isn't jailbroken yet** needs the YouTube app at an old version, and getting it
@@ -43,7 +51,7 @@ start.
 
 - **A PS5 on firmware 13.60 or lower**, any model.
 - **A HEN or an ELF loader:** etaHEN, OnionHEN, Kstuff, or any exploit host that runs `elfldr` on port
-  9021. The [next page](jailbreak.md) covers each.
+  9021. [Jailbreak and HEN](jailbreak.md) covers each.
 - **A way to copy files to the PS5:** an FTP client on a computer (etaHEN has an FTP server), a file
   manager on the PS5, or a USB drive. Once Playtendoh runs, your phone can send games to it too
   ([Where your files go](files.md#from-a-phone)).

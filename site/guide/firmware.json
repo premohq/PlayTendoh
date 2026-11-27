@@ -1,0 +1,58 @@
+{
+  "about": "Get started's firmware picker (site/guide.js): each way in and exploit with the firmwares it runs on, and the HEN for each firmware. site/guide.py checks every page and heading named here. The scene moves fast: change this file and get-started.md's table together, and the date with them.",
+  "checked": "October 2026",
+  "newest": "13.60",
+  "ways": [
+    {
+      "page": "browser",
+      "name": "the web browser",
+      "needs": "Nothing extra: no disc, no USB drive, nothing erased.",
+      "again": "open the exploit host again"
+    },
+    {
+      "page": "blu-ray",
+      "name": "a Blu-ray disc",
+      "disc": true,
+      "needs": "A disc drive, a computer with a Blu-ray burner, and a blank BD-R or BD-RE.",
+      "again": "start the disc again"
+    },
+    {
+      "page": "youtube",
+      "name": "the YouTube app",
+      "needs": "The YouTube app at an old version, from a backup on a USB drive.",
+      "again": "start the YouTube app again",
+      "caution": "Getting the old YouTube app onto a PS5 that isn't jailbroken yet means restoring a backup from USB, which erases the console. Back up your saves first."
+    }
+  ],
+  "exploits": [
+    { "id": "umtx", "name": "UMTX", "way": "browser", "from": "1.00", "to": "5.50" },
+    { "id": "relapse", "name": "Relapse", "way": "browser", "from": "7.00", "to": "13.60" },
+    { "id": "umtx2", "name": "UMTX2", "way": "blu-ray", "from": "1.00", "to": "7.61" },
+    { "id": "poopsploit", "name": "Poopsploit", "way": "blu-ray", "from": "1.00", "to": "12.00" },
+    { "id": "lapse", "name": "Lapse", "way": "youtube", "from": "4.03", "to": "10.01", "detail": "Its version: 01.000.003." },
+    { "id": "p2jb", "name": "P2JB", "way": "youtube", "from": "9.00", "to": "12.40", "detail": "Its version: 01.000.003." }
+  ],
+  "hens": [
+    {
+      "id": "etahen",
+      "name": "etaHEN",
+      "to": "12.70",
+      "why": "It covers firmwares up to 12.70, and it's the HEN Playtendoh is tested with most.",
+      "letIn": "Add `PPSA99360` to etaHEN's app jailbreak list, and turn its app jailbreak on."
+    },
+    {
+      "id": "kstuff",
+      "name": "Kstuff Lite",
+      "to": "13.60",
+      "why": "etaHEN stops at 12.70; Kstuff Lite reaches 13.60.",
+      "letIn": "Nothing to add. Keep an ELF loader running on port 9021: Playtendoh opens `/data` through it."
+    }
+  ],
+  "notes": [
+    {
+      "from": "13.00",
+      "to": "13.60",
+      "text": "On 13.xx some HENs open `/data` but not USB drives. Playtendoh opens them through the ELF loader on port 9021, so keep one running if your games are on a drive."
+    }
+  ]
+}
