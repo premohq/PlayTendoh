@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: GPL-3.0-or-later
-"""Put PS5-ECAM's site together for GitHub Pages, with nothing but the standard library.
+"""Put Playtendoh's site together for GitHub Pages, with nothing but the standard library.
 
     site/build.py [--release RELEASE_JSON] [--out DIR]
 
